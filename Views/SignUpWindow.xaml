@@ -1,0 +1,408 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
+    DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
+    x:Class="DominoTrainGame.Views.SignUpWindow"
+    Title="{Binding [RegisterTittle]}"
+    Width="1220"
+    Height="880"
+    MinWidth="960"
+    MinHeight="700"
+    WindowStartupLocation="CenterOwner"
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True"
+    ShowInTaskbar="False">
+    <Window.Resources>
+        <DrawingBrush
+            x:Key="NightGrid"
+            TileMode="Tile"
+            Stretch="None"
+            Viewport="0,0,24,24"
+            ViewportUnits="Absolute"
+            Viewbox="0,0,24,24"
+            ViewboxUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="{StaticResource NightGridLine}">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="0,23,24,1" />
+                            <RectangleGeometry Rect="23,0,1,24" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <Style x:Key="NightLabel" TargetType="TextBlock" BasedOn="{StaticResource PixelTextLight}">
+            <Setter Property="Foreground" Value="{StaticResource NightMuted}" />
+        </Style>
+
+        <Style x:Key="NightTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Foreground" Value="{StaticResource NightText}" />
+            <Setter Property="CaretBrush" Value="{StaticResource NightAccent}" />
+            <Setter Property="SelectionBrush" Value="{StaticResource NightBorder}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border
+                            x:Name="Frame"
+                            Background="{StaticResource NightInput}"
+                            BorderBrush="{StaticResource NightBorder}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Frame" Property="BorderBrush" Value="{StaticResource NightAccent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NightPasswordBox" TargetType="PasswordBox">
+            <Setter Property="Height" Value="44" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Foreground" Value="{StaticResource NightText}" />
+            <Setter Property="CaretBrush" Value="{StaticResource NightAccent}" />
+            <Setter Property="SelectionBrush" Value="{StaticResource NightBorder}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border
+                            x:Name="Frame"
+                            Background="{StaticResource NightInput}"
+                            BorderBrush="{StaticResource NightBorder}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Frame" Property="BorderBrush" Value="{StaticResource NightAccent}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="NightButton" TargetType="Button" BasedOn="{StaticResource PixelButton}">
+            <Setter Property="Background" Value="{StaticResource NightInput}" />
+            <Setter Property="Foreground" Value="{StaticResource NightAccent}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid SnapsToDevicePixels="True">
+                            <Border x:Name="Shadow" Background="{StaticResource NightBorder}" Margin="4,4,0,0" />
+                            <Border
+                                x:Name="Face"
+                                Margin="0,0,4,4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource NightAccent}"
+                                BorderThickness="3"
+                                Padding="{TemplateBinding Padding}">
+                                <TextBlock
+                                    Text="{TemplateBinding Content}"
+                                    Style="{StaticResource PixelText}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </Border>
+                            <Border
+                                x:Name="Glow"
+                                Margin="0,0,4,4"
+                                Background="White"
+                                Opacity="0"
+                                IsHitTestVisible="False" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="0.12" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Face" Property="BorderThickness" Value="4" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Face" Property="Margin" Value="4,4,0,0" />
+                                <Setter TargetName="Glow" Property="Margin" Value="4,4,0,0" />
+                                <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="NightPrimaryButton" TargetType="Button" BasedOn="{StaticResource NightButton}">
+            <Setter Property="Background" Value="{StaticResource NightAccent}" />
+            <Setter Property="Foreground" Value="{StaticResource NightOnAccent}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource NightBackground}">
+        <Rectangle Fill="{StaticResource NightGrid}" Opacity="0.6" IsHitTestVisible="False" />
+        <Viewbox Stretch="Uniform">
+            <Grid Width="1200" Height="820" Margin="0" TextOptions.TextFormattingMode="Display">
+                <Grid Margin="48,24">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="68" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <Grid VerticalAlignment="Top" Margin="0,6,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="40" Height="46" Margin="0,0,16,0">
+                                <Border Background="{StaticResource NightBorder}" Margin="4,4,0,0" />
+                                <Border
+                                    Background="{StaticResource NightInput}"
+                                    BorderBrush="{StaticResource NightAccent}"
+                                    BorderThickness="3"
+                                    Margin="0,0,4,4">
+                                    <Canvas>
+                                        <Path
+                                            Fill="{StaticResource NightAccent}"
+                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25 H18 V31 H12 Z" />
+                                    </Canvas>
+                                </Border>
+                            </Grid>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock
+                                    Text="{Binding [GameTitle]}"
+                                    Style="{StaticResource PixelTextLight}"
+                                    FontSize="16" />
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button
+                                Content="{Binding [OpenSettingsButtonLabel]}"
+                                Style="{StaticResource NightButton}"
+                                FontSize="9"
+                                Height="36"
+                                Padding="14,0"
+                                Margin="0,0,12,0"
+                                Click="OpenSettings"
+                                AutomationProperties.Name="{Binding [OpenSettingsAccessibleName]}" />
+                            <Border
+                                Background="{StaticResource NightInput}"
+                                BorderBrush="{StaticResource NightAccent}"
+                                BorderThickness="2"
+                                Padding="12,9">
+                                <TextBlock
+                                    Text="{Binding [RegisterSectionTitle]}"
+                                    Style="{StaticResource PixelTextDark}"
+                                    FontSize="9" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="0,4,0,8">
+                        <Border Background="{StaticResource NightShadow}" Margin="8,8,0,0" />
+                        <Border
+                            Margin="0,0,8,8"
+                            Background="{StaticResource NightCard}"
+                            BorderBrush="{StaticResource NightBorder}"
+                            BorderThickness="4">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="268" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                    Background="{StaticResource NightSidebar}"
+                                    BorderBrush="{StaticResource NightBorder}"
+                                    BorderThickness="0,0,4,0">
+                                    <Grid ClipToBounds="True">
+                                        <Canvas
+                                            Width="264"
+                                            Height="256"
+                                            VerticalAlignment="Bottom"
+                                            Margin="0,0,0,92"
+                                            IsHitTestVisible="False"
+                                            RenderOptions.EdgeMode="Aliased">
+                                            <Path
+                                                Fill="{StaticResource SceneCloud}"
+                                                Data="M24,46 H36 V34 H60 V40 H72 V52 H84 V58 H24 Z M166,18 H178 V6 H196 V12 H208 V24 H220 V30 H166 Z" />
+                                            <Path
+                                                Fill="{StaticResource SceneSkyline}"
+                                                Data="M0,150 H24 V132 H48 V114 H72 V126 H96 V150 H120 V138 H144 V114 H168 V90 H192 V114 H216 V138 H240 V150 H264 V232 H0 Z" />
+                                            <Path
+                                                Fill="{StaticResource SceneHill}"
+                                                Data="M0,202 H24 V190 H48 V178 H72 V190 H96 V202 H132 V178 H156 V166 H180 V178 H204 V190 H228 V178 H264 V232 H0 Z" />
+                                            <Path
+                                                Fill="{StaticResource SceneLight}"
+                                                Data="M148,90 H166 V102 H148 Z M170,66 H194 V78 H170 Z M198,48 H216 V60 H198 Z" />
+                                            <Canvas Canvas.Left="16" Canvas.Top="110" Width="116" Height="56">
+                                                <Canvas.RenderTransform>
+                                                    <ScaleTransform ScaleX="2" ScaleY="2" />
+                                                </Canvas.RenderTransform>
+                                                <Path Fill="{StaticResource SceneInk}" Data="M0,20 H34 V46 H0 Z M32,38 H42 V42 H32 Z" />
+                                                <Path Fill="{StaticResource SceneTile}" Data="M3,23 H31 V41 H3 Z" />
+                                                <Path
+                                                    Fill="{StaticResource SceneInk}"
+                                                    Data="M15,23 H18 V41 H15 Z M6,26 H10 V30 H6 Z M23,34 H27 V38 H23 Z M23,26 H27 V30 H23 Z M6,34 H10 V38 H6 Z" />
+                                                <Path
+                                                    Fill="{StaticResource SceneInk}"
+                                                    Data="M38,9 H70 V14 H67 V27 H79 V15 H76 V11 H91 V15 H88 V27 H98 V31 H104 V37 H109 V43 H113 V47 H38 Z" />
+                                                <Path Fill="{StaticResource SceneWindow}" Data="M43,14 H62 V31 H43 Z" />
+                                                <Path Fill="{StaticResource SceneInk}" Data="M47,17 H58 V27 H47 Z" />
+                                                <Path Fill="{StaticResource SceneBand}" Data="M43,34 H99 V40 H105 V43 H43 Z" />
+                                                <Path
+                                                    Fill="{StaticResource SceneLight}"
+                                                    Data="M72,30 H94 V33 H72 Z M44,35 H50 V38 H44 Z" />
+                                                <Path
+                                                    Fill="{StaticResource SceneInk}"
+                                                    Data="M5,44 H17 V53 H5 Z M22,44 H32 V53 H22 Z M46,43 H61 V56 H46 Z M77,43 H92 V56 H77 Z" />
+                                                <Path
+                                                    Fill="{StaticResource SceneLight}"
+                                                    Data="M9,47 H13 V50 H9 Z M25,47 H29 V50 H25 Z M50,47 H57 V52 H50 Z M81,47 H88 V52 H81 Z" />
+                                                <Path Fill="{StaticResource SceneLight}" Data="M54,47 H85 V49 H54 Z" />
+                                            </Canvas>
+                                            <Path
+                                                Fill="{StaticResource SceneHill}"
+                                                Data="M0,228 H264 V232 H0 Z M0,242 H264 V246 H0 Z M12,228 H20 V252 H12 Z M44,228 H52 V252 H44 Z M76,228 H84 V252 H76 Z M108,228 H116 V252 H108 Z M140,228 H148 V252 H140 Z M172,228 H180 V252 H172 Z M204,228 H212 V252 H204 Z M236,228 H244 V252 H236 Z" />
+                                        </Canvas>
+
+                                        <StackPanel VerticalAlignment="Top" Margin="24,28,24,0">
+                                            <TextBlock
+                                                Text="{Binding [NewPassagerSubtitule]}"
+                                                Style="{StaticResource PixelTextDark}"
+                                                FontSize="9" />
+                                            <TextBlock
+                                                Text="{Binding [JoinTableTitle]}"
+                                                Style="{StaticResource PixelTextLight}"
+                                                TextWrapping="Wrap"
+                                                FontSize="16"
+                                                LineHeight="28"
+                                                Margin="0,16,0,0" />
+                                            <TextBlock
+                                                Text="{Binding [RegisterDescription]}"
+                                                Foreground="{StaticResource NightMuted}"
+                                                TextWrapping="Wrap"
+                                                FontSize="13"
+                                                Margin="0,14,0,0" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Grid Grid.Column="1" Margin="36,28,36,24">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="74" />
+                                        <RowDefinition Height="32" />
+                                        <RowDefinition Height="100" />
+                                        <RowDefinition Height="100" />
+                                        <RowDefinition Height="100" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock
+                                            Text="{Binding [RegisterSectionTitle]}"
+                                            Style="{StaticResource PixelTextLight}"
+                                            FontSize="24"
+                                            Margin="0,2,0,0" />
+                                    </StackPanel>
+
+                                    <DockPanel Grid.Row="1" Margin="0,0,0,8">
+                                        <TextBlock
+                                            Text="{Binding [CredentialSectionLabel]}"
+                                            Style="{StaticResource PixelTextDark}"
+                                            FontSize="10"
+                                            VerticalAlignment="Center"
+                                            DockPanel.Dock="Left"
+                                            Margin="0,0,18,0" />
+                                        <Border
+                                            Background="{StaticResource NightBorder}"
+                                            Height="2"
+                                            VerticalAlignment="Center" />
+                                    </DockPanel>
+
+                                    <StackPanel Grid.Row="2" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
+                                        <TextBlock
+                                            Text="{Binding [EmailAdressLabel]}"
+                                            Style="{StaticResource NightLabel}"
+                                            FontSize="10"
+                                            Margin="0,0,0,8" />
+                                        <TextBox
+                                            x:Name="_emailTextBox"
+                                            Style="{StaticResource NightTextBox}"
+                                            AutomationProperties.Name="{Binding [EmailAccessibleName]}"
+                                            x:FieldModifier="private" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="3" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
+                                        <TextBlock
+                                            Text="{Binding [UsernameLabel]}"
+                                            Style="{StaticResource NightLabel}"
+                                            FontSize="10"
+                                            Margin="0,0,0,8" />
+                                        <TextBox
+                                            x:Name="_usernameTextBox"
+                                            Style="{StaticResource NightTextBox}"
+                                            AutomationProperties.Name="{Binding [UsernameAccessibleName]}"
+                                            x:FieldModifier="private" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="4" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
+                                        <TextBlock
+                                            Text="{Binding [PasswordLabel]}"
+                                            Style="{StaticResource NightLabel}"
+                                            FontSize="10"
+                                            Margin="0,0,0,8" />
+                                        <PasswordBox
+                                            x:Name="_passwordBox"
+                                            Style="{StaticResource NightPasswordBox}"
+                                            AutomationProperties.Name="{Binding [PasswordAccessibleName]}"
+                                            x:FieldModifier="private" />
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Row="5" Margin="0,26,0,0" VerticalAlignment="Bottom">
+                                        <Grid>
+                                            <Button
+                                                x:Name="_backButton"
+                                                Content="{Binding [BackButtonLabel]}"
+                                                Style="{StaticResource NightButton}"
+                                                HorizontalAlignment="Left"
+                                                Width="154"
+                                                Height="50"
+                                                AutomationProperties.Name="{Binding [BackButtonAccessibleName]}"
+                                                x:FieldModifier="private" />
+                                            <Button
+                                                x:Name="_registerButton"
+                                                Content="{Binding [SignUpBottonLabel]}"
+                                                Style="{StaticResource NightPrimaryButton}"
+                                                HorizontalAlignment="Right"
+                                                Width="188"
+                                                Height="50"
+                                                IsDefault="True"
+                                                AutomationProperties.Name="{Binding [SignUpButtonAccesibleName]}"
+                                                x:FieldModifier="private" />
+                                        </Grid>
+                                        <TextBlock HorizontalAlignment="Center" Margin="0,24,0,0" Style="{StaticResource NightLabel}" FontSize="13">
+                                        <Run Text="{Binding [AlreadyHaveAccountLabel], Mode=OneWay}" />
+                                        <Run Text=" " />
+                                        <Hyperlink Click="NavigateToLogin_Click" Foreground="{StaticResource NightAccent}" TextDecorations="None">
+                                            <Run Text="{Binding [GoToLoginLabel], Mode=OneWay}" />
+                                        </Hyperlink>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</Window>

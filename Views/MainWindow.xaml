@@ -1,0 +1,49 @@
+﻿<Window
+    x:Class="DominoTrainGame.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
+    DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
+    Title="{Binding [MainWindowTitle]}"
+    Width="800"
+    Height="520"
+    MinWidth="480"
+    MinHeight="320"
+    WindowStartupLocation="CenterScreen"
+    Background="{StaticResource Glacier}"
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock
+                Text="{Binding [GameTitle]}"
+                Style="{StaticResource PixelText}"
+                FontSize="24"
+                HorizontalAlignment="Center"
+                Margin="0,0,0,36" />
+            <Button
+                Content="{Binding [ChangePasswordTitle]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenChangePassword" />
+            <Button
+                Content="{Binding [DeleteAccountTitle]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenDeleteAccount" />
+            <Button
+                Content="{Binding [OpenSettingsButtonLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenSettings" />
+            <Button
+                Content="{Binding [OpenProfileButtonLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Click="OpenProfile" />
+        </StackPanel>
+    </Grid>
+</Window>

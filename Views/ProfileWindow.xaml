@@ -1,0 +1,691 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
+    DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
+    x:Class="DominoTrainGame.Views.ProfileWindow"
+    Title="{Binding [ProfileWindowTitle]}"
+    Width="1220"
+    Height="880"
+    MinWidth="960"
+    MinHeight="700"
+    WindowStartupLocation="CenterOwner"
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True"
+    ShowInTaskbar="False">
+    <Window.Resources>
+        <DrawingBrush
+            x:Key="ProfileGrid"
+            TileMode="Tile"
+            Stretch="None"
+            Viewport="0,0,24,24"
+            ViewportUnits="Absolute"
+            Viewbox="0,0,24,24"
+            ViewboxUnits="Absolute">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="{StaticResource Mint}">
+                    <GeometryDrawing.Geometry>
+                        <GeometryGroup>
+                            <RectangleGeometry Rect="0,23,24,1" />
+                            <RectangleGeometry Rect="23,0,1,24" />
+                        </GeometryGroup>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+        <!-- Dark text on the light palette -->
+        <Style x:Key="ProfileLabel" TargetType="TextBlock" BasedOn="{StaticResource PixelText}">
+            <Setter Property="Foreground" Value="{StaticResource Ink}" />
+        </Style>
+
+        <!-- Pixel icons drawn with rectangles -->
+        <Style x:Key="ProfileIconPath" TargetType="Path">
+            <Setter Property="Fill" Value="{StaticResource Ink}" />
+            <Setter Property="Stretch" Value="Uniform" />
+            <Setter Property="RenderOptions.EdgeMode" Value="Aliased" />
+        </Style>
+
+        <!-- Text inputs: editable is Frost, read-only is Mist, text is always Ink -->
+        <Style x:Key="ProfileTextBox" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="Background" Value="{StaticResource Frost}" />
+            <Setter Property="Foreground" Value="{StaticResource Ink}" />
+            <Setter Property="CaretBrush" Value="{StaticResource Ink}" />
+            <Setter Property="SelectionBrush" Value="{StaticResource Mint}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border
+                            x:Name="Frame"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Frame" Property="BorderThickness" Value="3" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsReadOnly" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Mist}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ProfileBiographyTextBox" TargetType="TextBox" BasedOn="{StaticResource ProfileTextBox}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="AcceptsReturn" Value="True" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border
+                            x:Name="Frame"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Top" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Frame" Property="BorderThickness" Value="3" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ProfileButton" TargetType="Button">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Foreground" Value="{StaticResource Ink}" />
+            <Setter Property="Background" Value="{StaticResource Frost}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="Root" SnapsToDevicePixels="True">
+                            <Border x:Name="Shadow" Background="{StaticResource Ink}" Margin="4,4,0,0" />
+                            <Border
+                                x:Name="Face"
+                                Margin="0,0,4,4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource Ink}"
+                                BorderThickness="3">
+                                <TextBlock
+                                    Text="{TemplateBinding Content}"
+                                    FontFamily="{StaticResource PixelFont}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    Foreground="{TemplateBinding Foreground}"
+                                    TextOptions.TextFormattingMode="Display"
+                                    TextOptions.TextRenderingMode="Aliased"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" />
+                            </Border>
+                            <Border
+                                x:Name="Glow"
+                                Margin="0,0,4,4"
+                                Background="White"
+                                Opacity="0"
+                                IsHitTestVisible="False" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="0.12" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Face" Property="BorderThickness" Value="4" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Face" Property="Margin" Value="4,4,0,0" />
+                                <Setter TargetName="Glow" Property="Margin" Value="4,4,0,0" />
+                                <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ProfilePrimaryButton" TargetType="Button" BasedOn="{StaticResource ProfileButton}">
+            <Setter Property="Background" Value="{StaticResource Ink}" />
+            <Setter Property="Foreground" Value="{StaticResource Glacier}" />
+        </Style>
+
+        <Style x:Key="ProfileIconButton" TargetType="Button">
+            <Setter Property="Width" Value="44" />
+            <Setter Property="Height" Value="44" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Foreground" Value="{StaticResource Ink}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="Root" SnapsToDevicePixels="True">
+                            <Border x:Name="Shadow" Background="{StaticResource Ink}" Margin="3,3,0,0" />
+                            <Border
+                                x:Name="Face"
+                                Margin="0,0,3,3"
+                                Background="{StaticResource Frost}"
+                                BorderBrush="{StaticResource Ink}"
+                                BorderThickness="2">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <Border
+                                x:Name="Glow"
+                                Margin="0,0,3,3"
+                                Background="White"
+                                Opacity="0"
+                                IsHitTestVisible="False" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Glow" Property="Opacity" Value="0.12" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Face" Property="BorderThickness" Value="3" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Face" Property="Margin" Value="3,3,0,0" />
+                                <Setter TargetName="Glow" Property="Margin" Value="3,3,0,0" />
+                                <Setter TargetName="Shadow" Property="Visibility" Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Root" Property="Opacity" Value="0.4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AvatarListBoxItem" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0,0,20,16" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border
+                            x:Name="Frame"
+                            Background="{StaticResource Frost}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="3">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Frame" Property="Background" Value="{StaticResource Seafoam}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Frame" Property="Background" Value="{StaticResource Aqua}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AvatarListBox" TargetType="ListBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource AvatarListBoxItem}" />
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <ItemsPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.55" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource Mist}">
+        <Rectangle Fill="{StaticResource ProfileGrid}" Opacity="0.6" IsHitTestVisible="False" />
+        <Viewbox Stretch="Uniform">
+            <Grid Width="1200" Height="820" Margin="0" TextOptions.TextFormattingMode="Display">
+                <Grid Margin="48,24">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="68" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Header -->
+                    <Grid VerticalAlignment="Top" Margin="0,6,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Grid Width="40" Height="46" Margin="0,0,16,0">
+                                <Border Background="{StaticResource Ink}" Margin="4,4,0,0" />
+                                <Border
+                                    Background="{StaticResource Frost}"
+                                    BorderBrush="{StaticResource Ink}"
+                                    BorderThickness="3"
+                                    Margin="0,0,4,4">
+                                    <Canvas>
+                                        <Path
+                                            Fill="{StaticResource Ink}"
+                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25
+                                                H18 V31 H12 Z" />
+                                    </Canvas>
+                                </Border>
+                            </Grid>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock
+                                    Text="{Binding [GameTitle]}"
+                                    Style="{StaticResource PixelText}"
+                                    FontSize="16" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Border
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="{StaticResource Frost}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Padding="12,9">
+                            <TextBlock
+                                Text="{Binding [ProfileSectionTitle]}"
+                                Style="{StaticResource PixelText}"
+                                FontSize="9" />
+                        </Border>
+                    </Grid>
+
+                    <!-- Card -->
+                    <Grid Grid.Row="1" Margin="0,4,0,8">
+                        <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                        <Border
+                            Margin="0,0,8,8"
+                            Background="{StaticResource Glacier}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="4">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="252" />
+                                    <RowDefinition Height="4" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Top band: avatar and player information -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="268" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border
+                                        Background="{StaticResource Aqua}"
+                                        BorderBrush="{StaticResource Ink}"
+                                        BorderThickness="0,0,4,0">
+                                        <Grid
+                                            Width="170"
+                                            Height="170"
+                                            AutomationProperties.Name="{Binding [AvatarAccessibleName]}">
+                                            <Border Background="{StaticResource Ink}" Margin="4,4,0,0" />
+                                            <Border
+                                                Background="{StaticResource Frost}"
+                                                BorderBrush="{StaticResource Ink}"
+                                                BorderThickness="3"
+                                                Margin="0,0,4,4">
+                                                <Image
+                                                    x:Name="_mainAvatarImage"
+                                                    Source="/Resources/Images/avatar_generic_preview.png"
+                                                    Width="160"
+                                                    Height="160"
+                                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                    x:FieldModifier="private" />
+                                            </Border>
+                                            <Button
+                                                x:Name="_editAvatarButton"
+                                                Style="{StaticResource ProfileIconButton}"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom"
+                                                Margin="0,0,-14,-12"
+                                                Click="EditButton_Click"
+                                                AutomationProperties.Name="{Binding [EditAvatarAccessibleName]}"
+                                                x:FieldModifier="private">
+                                                <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
+                                                    <Path.Data>
+                                                        <GeometryGroup FillRule="Nonzero">
+                                                            <RectangleGeometry Rect="6,1,2,2" />
+                                                            <RectangleGeometry Rect="5,2,2,2" />
+                                                            <RectangleGeometry Rect="4,3,2,2" />
+                                                            <RectangleGeometry Rect="3,4,2,2" />
+                                                            <RectangleGeometry Rect="2,5,2,2" />
+                                                            <RectangleGeometry Rect="1,6,2,2" />
+                                                            <RectangleGeometry Rect="1,7,1,2" />
+                                                            <RectangleGeometry Rect="2,8,1,1" />
+                                                        </GeometryGroup>
+                                                    </Path.Data>
+                                                </Path>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+
+                                    <Grid Grid.Column="1" Margin="28,20,28,16">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="44" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Username, edit pencil, social networks and close -->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBox
+                                                x:Name="_usernameTextBox"
+                                                Width="360"
+                                                Style="{StaticResource ProfileTextBox}"
+                                                IsReadOnly="True"
+                                                AutomationProperties.Name="{Binding [UsernameAccessibleName]}"
+                                                x:FieldModifier="private" />
+
+                                            <Button
+                                                x:Name="_editUsernameButton"
+                                                Grid.Column="1"
+                                                Margin="14,0,0,0"
+                                                Style="{StaticResource ProfileIconButton}"
+                                                Click="EditButton_Click"
+                                                AutomationProperties.Name="{Binding [EditUsernameAccessibleName]}"
+                                                x:FieldModifier="private">
+                                                <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
+                                                    <Path.Data>
+                                                        <GeometryGroup FillRule="Nonzero">
+                                                            <RectangleGeometry Rect="6,1,2,2" />
+                                                            <RectangleGeometry Rect="5,2,2,2" />
+                                                            <RectangleGeometry Rect="4,3,2,2" />
+                                                            <RectangleGeometry Rect="3,4,2,2" />
+                                                            <RectangleGeometry Rect="2,5,2,2" />
+                                                            <RectangleGeometry Rect="1,6,2,2" />
+                                                            <RectangleGeometry Rect="1,7,1,2" />
+                                                            <RectangleGeometry Rect="2,8,1,1" />
+                                                        </GeometryGroup>
+                                                    </Path.Data>
+                                                </Path>
+                                            </Button>
+
+                                            <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="28,0,0,0">
+                                                <Button
+                                                    Style="{StaticResource ProfileIconButton}"
+                                                    Margin="0,0,14,0"
+                                                    Click="InstagramButton_Click"
+                                                    AutomationProperties.Name="{Binding [InstagramAccessibleName]}">
+                                                    <Path
+                                                        Style="{StaticResource ProfileIconPath}"
+                                                        Width="22"
+                                                        Height="22">
+                                                        <Path.Data>
+                                                            <GeometryGroup FillRule="EvenOdd">
+                                                                <RectangleGeometry Rect="0,0,10,10" />
+                                                                <RectangleGeometry Rect="1,1,8,8" />
+                                                                <RectangleGeometry Rect="3,3,4,4" />
+                                                                <RectangleGeometry Rect="4,4,2,2" />
+                                                                <RectangleGeometry Rect="7,2,1,1" />
+                                                            </GeometryGroup>
+                                                        </Path.Data>
+                                                    </Path>
+                                                </Button>
+                                                <Button
+                                                    Style="{StaticResource ProfileIconButton}"
+                                                    Margin="0,0,14,0"
+                                                    Click="EditButton_Click"
+                                                    AutomationProperties.Name="{Binding [XAccessibleName]}">
+                                                    <Path
+                                                        Style="{StaticResource ProfileIconPath}"
+                                                        Width="20"
+                                                        Height="20">
+                                                        <Path.Data>
+                                                            <GeometryGroup FillRule="Nonzero">
+                                                                <RectangleGeometry Rect="1,1,3,2" />
+                                                                <RectangleGeometry Rect="2,2,3,2" />
+                                                                <RectangleGeometry Rect="3,3,3,2" />
+                                                                <RectangleGeometry Rect="4,4,3,2" />
+                                                                <RectangleGeometry Rect="5,5,3,2" />
+                                                                <RectangleGeometry Rect="6,6,3,2" />
+                                                                <RectangleGeometry Rect="7,7,3,2" />
+                                                                <RectangleGeometry Rect="7,1,2,2" />
+                                                                <RectangleGeometry Rect="6,2,2,2" />
+                                                                <RectangleGeometry Rect="5,3,2,2" />
+                                                                <RectangleGeometry Rect="2,6,2,2" />
+                                                                <RectangleGeometry Rect="1,7,2,2" />
+                                                            </GeometryGroup>
+                                                        </Path.Data>
+                                                    </Path>
+                                                </Button>
+                                                <Button
+                                                    Style="{StaticResource ProfileIconButton}"
+                                                    Click="FacebookButton_Click"
+                                                    AutomationProperties.Name="{Binding [FacebookAccessibleName]}">
+                                                    <Path
+                                                        Style="{StaticResource ProfileIconPath}"
+                                                        Width="22"
+                                                        Height="22">
+                                                        <Path.Data>
+                                                            <GeometryGroup FillRule="Nonzero">
+                                                                <RectangleGeometry Rect="5,2,2,8" />
+                                                                <RectangleGeometry Rect="3,4,5,2" />
+                                                                <RectangleGeometry Rect="5,1,4,2" />
+                                                            </GeometryGroup>
+                                                        </Path.Data>
+                                                    </Path>
+                                                </Button>
+                                            </StackPanel>
+
+                                            <Button
+                                                x:Name="_closeButton"
+                                                Grid.Column="4"
+                                                Style="{StaticResource ProfileIconButton}"
+                                                Click="CloseButton_Click"
+                                                AutomationProperties.Name="{Binding [CloseAccessibleName]}"
+                                                x:FieldModifier="private">
+                                                <Path Style="{StaticResource ProfileIconPath}" Width="16" Height="16">
+                                                    <Path.Data>
+                                                        <GeometryGroup FillRule="Nonzero">
+                                                            <RectangleGeometry Rect="1,1,2,2" />
+                                                            <RectangleGeometry Rect="5,1,2,2" />
+                                                            <RectangleGeometry Rect="3,3,2,2" />
+                                                            <RectangleGeometry Rect="1,5,2,2" />
+                                                            <RectangleGeometry Rect="5,5,2,2" />
+                                                        </GeometryGroup>
+                                                    </Path.Data>
+                                                </Path>
+                                            </Button>
+                                        </Grid>
+
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Text="{Binding [BiographyLabel]}"
+                                            Style="{StaticResource ProfileLabel}"
+                                            FontSize="9"
+                                            Margin="0,14,0,6" />
+
+                                        <TextBox
+                                            x:Name="_biographyTextBox"
+                                            Grid.Row="2"
+                                            Style="{StaticResource ProfileBiographyTextBox}"
+                                            IsReadOnly="True"
+                                            AutomationProperties.Name="{Binding [BiographyAccessibleName]}"
+                                            x:FieldModifier="private" />
+                                    </Grid>
+                                </Grid>
+
+                                <Rectangle Grid.Row="1" Fill="{StaticResource Ink}" />
+
+                                <!-- Bottom band: avatar gallery and player data -->
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition Width="320" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid Margin="28,20,28,12">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="32" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <DockPanel>
+                                            <TextBlock
+                                                Text="{Binding [AvatarSectionLabel]}"
+                                                Style="{StaticResource PixelText}"
+                                                FontSize="10"
+                                                VerticalAlignment="Center"
+                                                DockPanel.Dock="Left"
+                                                Margin="0,0,18,0" />
+                                            <Border
+                                                Background="{StaticResource Ink}"
+                                                Height="2"
+                                                VerticalAlignment="Center" />
+                                        </DockPanel>
+                                        <ListBox
+                                            x:Name="_avatarListBox"
+                                            Grid.Row="1"
+                                            Style="{StaticResource AvatarListBox}"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,10,0,0"
+                                            AutomationProperties.Name="{Binding [AvatarListAccessibleName]}"
+                                            x:FieldModifier="private">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Image
+                                                        Source="{Binding}"
+                                                        Width="80"
+                                                        Height="80"
+                                                        RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </Grid>
+
+                                    <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
+
+                                    <Border Grid.Column="2" Background="{StaticResource Aqua}">
+                                        <Grid Margin="24,20,24,24">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="32" />
+                                                <RowDefinition Height="*" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <DockPanel>
+                                                <TextBlock
+                                                    Text="{Binding [ProfileStatsSectionLabel]}"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="10"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Left"
+                                                    Margin="0,0,14,0" />
+                                                <Border
+                                                    Background="{StaticResource Ink}"
+                                                    Height="2"
+                                                    VerticalAlignment="Center" />
+                                            </DockPanel>
+
+                                            <StackPanel Grid.Row="1" Margin="0,14,0,0">
+                                                <TextBlock
+                                                    Text="{Binding [GamesPlayedLabel]}"
+                                                    Style="{StaticResource ProfileLabel}"
+                                                    FontSize="9" />
+                                                <TextBlock
+                                                    x:Name="_gamesPlayedValueTextBlock"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="18"
+                                                    Margin="0,8,0,20"
+                                                    x:FieldModifier="private" />
+                                                <TextBlock
+                                                    Text="{Binding [WinsLabel]}"
+                                                    Style="{StaticResource ProfileLabel}"
+                                                    FontSize="9" />
+                                                <TextBlock
+                                                    x:Name="_winsValueTextBlock"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="18"
+                                                    Margin="0,8,0,20"
+                                                    x:FieldModifier="private" />
+                                                <TextBlock
+                                                    Text="{Binding [MemberSinceLabel]}"
+                                                    Style="{StaticResource ProfileLabel}"
+                                                    FontSize="9" />
+                                                <TextBlock
+                                                    x:Name="_memberSinceValueTextBlock"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="18"
+                                                    Margin="0,8,0,0"
+                                                    x:FieldModifier="private" />
+                                            </StackPanel>
+
+                                            <Grid Grid.Row="2" Height="52">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="12" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Button
+                                                    x:Name="_editButton"
+                                                    Grid.ColumnSpan="3"
+                                                    Content="{Binding [EditButtonLabel]}"
+                                                    Style="{StaticResource ProfilePrimaryButton}"
+                                                    Click="EditButton_Click"
+                                                    AutomationProperties.Name="{Binding [EditProfileAccessibleName]}"
+                                                    x:FieldModifier="private" />
+                                                <Button
+                                                    x:Name="_cancelButton"
+                                                    Content="{Binding [CancelButtonLabel]}"
+                                                    Style="{StaticResource ProfileButton}"
+                                                    Visibility="Collapsed"
+                                                    Click="CancelButton_Click"
+                                                    AutomationProperties.Name="{Binding [CancelEditAccessibleName]}"
+                                                    x:FieldModifier="private" />
+                                                <Button
+                                                    x:Name="_saveButton"
+                                                    Grid.Column="2"
+                                                    Content="{Binding [SaveButtonLabel]}"
+                                                    Style="{StaticResource ProfilePrimaryButton}"
+                                                    Visibility="Collapsed"
+                                                    Click="SaveButton_Click"
+                                                    AutomationProperties.Name="{Binding [SaveProfileAccessibleName]}"
+                                                    x:FieldModifier="private" />
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</Window>
