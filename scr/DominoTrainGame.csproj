@@ -166,12 +166,20 @@
   <ItemGroup>
     <Resource Include="Assets\Fonts\OFL.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\TrashCan.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\avatar_generic_preview.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\PixelTrain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\MiniDominoTile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Lock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
