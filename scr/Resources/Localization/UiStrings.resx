@@ -357,4 +357,13 @@
   <data name="ButtonRemove" xml:space="preserve">
     <value>Eliminar</value>
   </data>
+  <data name="ButtonPlay" xml:space="preserve">
+    <value>JUGAR</value>
+  </data>
+  <data name="ButtonFriends" xml:space="preserve">
+    <value>AMIGOS</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>SALIR</value>
+  </data>
 </root>

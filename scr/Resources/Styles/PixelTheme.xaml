@@ -210,6 +210,61 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style
+    x:Key="PixelIconButton"
+    TargetType="Button"
+    BasedOn="{StaticResource PixelButton}">
+
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border
+                        Margin="4,4,0,0"
+                        Background="{StaticResource Ink}" />
+
+                        <Border
+                        x:Name="ButtonSurface"
+                        Margin="0,0,4,4"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{StaticResource Ink}"
+                        BorderThickness="2"
+                        Padding="{TemplateBinding Padding}">
+
+                            <ContentPresenter
+                            Content="{TemplateBinding Content}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter
+                            TargetName="ButtonSurface"
+                            Property="Background"
+                            Value="{StaticResource Frost}" />
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter
+                            TargetName="ButtonSurface"
+                            Property="BorderThickness"
+                            Value="4" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter
+                            TargetName="ButtonSurface"
+                            Property="Margin"
+                            Value="3,3,1,1" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style x:Key="LanguageOption" TargetType="RadioButton">
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
