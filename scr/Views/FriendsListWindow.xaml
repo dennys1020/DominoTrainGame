@@ -56,7 +56,7 @@
                                     <TextBlock Grid.Column="1" Text="{Binding Status}"
                                                Style="{StaticResource SectionLabel}" Margin="0,0,10,0"
                                                VerticalAlignment="Center"/>
-                                    <Button Grid.Column="2" Content="{Binding DataContext.[ButtonRemove],
+                                    <Button Grid.Column="2" Content="{Binding DataContext.ButtonRemove,
                                         RelativeSource={RelativeSource AncestorType=Window}}"
                                             Style="{StaticResource PixelButtonDangerStyle}"
                                             Click="RemoveFriend_Click" Tag="{Binding}"/>
@@ -101,7 +101,7 @@
                                         RelativeSource={RelativeSource AncestorType=Window}}"
                                             Style="{StaticResource PixelButton}"
                                             Margin="0,0,8,0" Click="AcceptRequest_Click" Tag="{Binding}"/>
-                                    <Button Grid.Column="2" Content="{Binding DataContext.[ButtonReject],
+                                    <Button Grid.Column="2" Content="{Binding DataContext.ButtonReject,
                                         RelativeSource={RelativeSource AncestorType=Window}}"
                                             Style="{StaticResource PixelButtonDangerStyle}"
                                             Click="RejectRequest_Click" Tag="{Binding}"/>

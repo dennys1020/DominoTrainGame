@@ -79,7 +79,7 @@
                                     Background="{StaticResource Aqua}"
                                     BorderBrush="{StaticResource Ink}"
                                     BorderThickness="0,0,4,0">
-                                    <Image Source="/Resources/Images/PixelTrain.png" Margin="0,67,0,-67" />
+                                    <Image Margin="0,364,0,0" Source="/Resources/Images/PixelTrain.png" Stretch="Fill"/>
                                 </Border>
 
                                 <Grid Grid.Column="1" Margin="36,28,36,24">
