@@ -49,5 +49,14 @@ namespace DominoTrainGame.Views
             };
             profileWindow.ShowDialog();
         }
+
+        private void OpenFriendsList(object sender, RoutedEventArgs e)
+        {
+            FriendsListWindow friendsListWindow = new FriendsListWindow
+            {
+                Owner = this
+            };
+            friendsListWindow.ShowDialog();
+        }
     }
 }

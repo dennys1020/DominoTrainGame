@@ -357,13 +357,46 @@
   <data name="ButtonRemove" xml:space="preserve">
     <value>Eliminar</value>
   </data>
-  <data name="ButtonPlay" xml:space="preserve">
-    <value>JUGAR</value>
+  <data name="TabFriends" xml:space="preserve">
+    <value>Amigos</value>
   </data>
-  <data name="ButtonFriends" xml:space="preserve">
+  <data name="TabRequests" xml:space="preserve">
+    <value>Solicitudes</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="VerificationWindowTitle" xml:space="preserve">
+    <value>Verificación</value>
+  </data>
+  <data name="VerificationTittle" xml:space="preserve">
+    <value>Ingrese el código</value>
+  </data>
+  <data name="VerificationPrompt" xml:space="preserve">
+    <value>Ingresa el código de 5 dígitos que enviamos a tu correo</value>
+  </data>
+  <data name="VerificationCodeAccessibleName" xml:space="preserve">
+    <value>Código de verificación</value>
+  </data>
+  <data name="VerificationNoEmail" xml:space="preserve">
+    <value>¿No recibiste el correo?</value>
+  </data>
+  <data name="ButtonResendCode" xml:space="preserve">
+    <value>Reenviar código</value>
+  </data>
+  <data name="BackToLoginLabel" xml:space="preserve">
+    <value>Volver a inicio de sesión</value>
+  </data>
+  <data name="ButtonVerify" xml:space="preserve">
+    <value> Verificar</value>
+  </data>
+  <data name="OpenFriendsListLabel" xml:space="preserve">
     <value>AMIGOS</value>
-  </data>
-  <data name="ButtonExit" xml:space="preserve">
-    <value>SALIR</value>
   </data>
 </root>
