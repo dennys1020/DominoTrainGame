@@ -1,53 +1,62 @@
-﻿using DominoTrainGame.Views;
 using System.Windows;
+using DominoTrainGame.Navigation;
 
-namespace DominoTrainGame.Views
+namespace DominoTrainGame.Views;
+
+public partial class MainWindow : Window
 {
-
-    public partial class MainWindow : Window
+    public MainWindow()
     {
-        public MainWindow()
+        InitializeComponent();
+    }
+
+    private void OpenNewGame(object sender, RoutedEventArgs e)
+    {
+        WindowNavigation.Navigate(this, new NewGameWindow());
+    }
+
+    private void OpenResults(object sender, RoutedEventArgs e)
+    {
+        WindowNavigation.Navigate(this, new MatchResultsWindow());
+    }
+
+    private void OpenRules(object sender, RoutedEventArgs e)
+    {
+        GameRulesWindow rulesWindow = new GameRulesWindow
         {
-            InitializeComponent();
-        }
+            Owner = this,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            ShowInTaskbar = false
+        };
+        rulesWindow.ShowDialog();
+    }
 
-        private void OpenChangePassword(object sender, RoutedEventArgs e)
+    private void OpenChangePassword(object sender, RoutedEventArgs e)
+    {
+        ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow
         {
-            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow
-            {
-                Owner = this
-            };
+            Owner = this
+        };
 
-            changePasswordWindow.ShowDialog();
-        }
+        changePasswordWindow.ShowDialog();
+    }
 
-        private void OpenDeleteAccount(object sender, RoutedEventArgs e)
+    private void OpenDeleteAccount(object sender, RoutedEventArgs e)
+    {
+        DeleteAccountWindow deleteAccountWindow = new DeleteAccountWindow
         {
-            DeleteAccountWindow deleteAccountWindow = new DeleteAccountWindow
-            {
-                Owner = this
-            };
+            Owner = this
+        };
 
-            deleteAccountWindow.ShowDialog();
-        }
+        deleteAccountWindow.ShowDialog();
+    }
 
-        private void OpenSettings(object sender, RoutedEventArgs e)
+    private void OpenProfile(object sender, RoutedEventArgs e)
+    {
+        ProfileWindow profileWindow = new ProfileWindow
         {
-            SettingsWindow settingsWindow = new SettingsWindow
-            {
-                Owner = this
-            };
-
-            settingsWindow.ShowDialog();
-        }
-
-        private void OpenProfile(object sender, RoutedEventArgs e)
-        {
-            ProfileWindow profileWindow = new ProfileWindow
-            {
-                Owner = this
-            };
-            profileWindow.ShowDialog();
-        }
+            Owner = this
+        };
+        profileWindow.ShowDialog();
     }
 }

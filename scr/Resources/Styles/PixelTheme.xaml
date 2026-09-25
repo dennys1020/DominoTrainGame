@@ -1,4 +1,4 @@
-﻿<ResourceDictionary
+<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:resources="clr-namespace:DominoTrainGame.Resources">
@@ -512,4 +512,58 @@
         </Setter>
     </Style>
 
+    <Style x:Key="MenuIconButton" TargetType="Button">
+        <Setter Property="Width" Value="64" />
+        <Setter Property="Height" Value="64" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="{StaticResource Glacier}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid SnapsToDevicePixels="True">
+                        <Border Margin="4,4,0,0" Background="{StaticResource Ink}" />
+                        <Border x:Name="Face" Margin="0,0,4,4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource Ink}" BorderThickness="2"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Face" Property="Background" Value="{StaticResource Frost}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Face" Property="Background" Value="{StaticResource Frost}" />
+                            <Setter TargetName="Face" Property="BorderThickness" Value="3" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Face" Property="Margin" Value="3,3,1,1" />
+                            <Setter TargetName="Face" Property="Background" Value="{StaticResource Seafoam}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.45" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <DrawingImage x:Key="MenuSettingsImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="Transparent" Geometry="M0,0 H32 V32 H0 Z" />
+                <GeometryDrawing Brush="{StaticResource Ink}"
+                    Geometry="M12,1 H20 V6 H23 L26,3 29,6 26,9 V12 H31 V20 H26 V23 L29,26 26,29
+                              23,26 H20 V31 H12 V26 H9 L6,29 3,26 6,23 V20 H1 V12 H6 V9 L3,6 6,3 9,6 H12 Z" />
+                <GeometryDrawing Brush="{StaticResource Glacier}"
+                    Geometry="M12,10 H20 V12 H22 V20 H20 V22 H12 V20 H10 V12 H12 Z" />
+                <GeometryDrawing Brush="{StaticResource Aqua}" Geometry="M13,13 H19 V19 H13 Z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 </ResourceDictionary>

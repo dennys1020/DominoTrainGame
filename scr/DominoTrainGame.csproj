@@ -181,5 +181,61 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Lock.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Navigation\WindowNavigation.cs" />
+    <Compile Include="Views\NewGameWindow.xaml.cs">
+      <DependentUpon>NewGameWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NewGameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\GameSetupWindow.xaml.cs">
+      <DependentUpon>GameSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\GameSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\WaitingRoomWindow.xaml.cs">
+      <DependentUpon>WaitingRoomWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\WaitingRoomWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\JoinGameWindow.xaml.cs">
+      <DependentUpon>JoinGameWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\JoinGameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\GameRulesWindow.xaml.cs">
+      <DependentUpon>GameRulesWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\GameRulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\MatchResultsWindow.xaml.cs">
+      <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\MatchResultsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\Controls\SettingsButton.xaml.cs">
+      <DependentUpon>SettingsButton.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\Controls\SettingsButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\MatchStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
