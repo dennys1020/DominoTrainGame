@@ -43,7 +43,20 @@
                 Content="{Binding [OpenProfileButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 Height="54"
+                Margin="0,0,0,16"
                 Click="OpenProfile" />
+            <Button
+                Content="{Binding [OpenFriendsListLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Click="OpenFriendsList"/>
         </StackPanel>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
     </Grid>
 </Window>
