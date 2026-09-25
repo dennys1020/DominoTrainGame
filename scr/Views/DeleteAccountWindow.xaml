@@ -117,17 +117,7 @@
                     <Grid Margin="0,6,8,0" VerticalAlignment="Top">
                         <StackPanel Orientation="Horizontal">
                             <Grid Width="40" Height="46" Margin="0,0,16,0">
-                                <Border Background="{StaticResource Ink}" Margin="4,4,0,0" />
-                                <Border
-                                    Background="{StaticResource Glacier}"
-                                    BorderBrush="{StaticResource Ink}"
-                                    BorderThickness="3"
-                                    Margin="0,0,4,4">
-                                    <Path
-                                        Fill="{StaticResource Ink}"
-                                        Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z
-                                            M12,25 H18 V31 H12 Z" />
-                                </Border>
+                                <Image Source="/Resources/Images/MiniDominoTile.png" Stretch="Fill"/>
                             </Grid>
                             <TextBlock
                                 Text="{Binding [GameTitle]}"
@@ -159,31 +149,7 @@
                                     Background="{StaticResource Aqua}"
                                     BorderBrush="{StaticResource Ink}"
                                     BorderThickness="0,0,4,0">
-                                    <Grid ClipToBounds="True">
-                                        <StackPanel Margin="24,60,24,0" VerticalAlignment="Top">
-                                            <Grid Width="80" Height="88" HorizontalAlignment="Left" Margin="0,0,0,28">
-                                                <Path
-                                                    Fill="{StaticResource Ink}"
-                                                    RenderOptions.EdgeMode="Aliased"
-                                                    Data="M24,0 H56 V8 H80 V16 H0 V8 H24 Z
-                                                        M8,24 H72 V80 H64 V88 H16 V80 H8 Z" />
-                                                <Path
-                                                    Fill="{StaticResource Glacier}"
-                                                    RenderOptions.EdgeMode="Aliased"
-                                                    Data="M16,24 H64 V76 H56 V80 H24 V76 H16 Z" />
-                                                <Path
-                                                    Fill="{StaticResource Ink}"
-                                                    Data="M26,34 H34 V68 H26 Z M46,34 H54 V68 H46 Z" />
-                                            </Grid>
-                                        </StackPanel>
-                                        <Image
-                                            Source="/DominoTrainGame/Resources/Images/PixelTrain.png"
-                                            Height="242"
-                                            Stretch="UniformToFill"
-                                            VerticalAlignment="Bottom"
-                                            RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                            IsHitTestVisible="False" />
-                                    </Grid>
+                                    <Image Margin="0,364,0,0" Source="/Resources/Images/PixelTrain.png" Stretch="Fill"/>
                                 </Border>
                                 <Grid Grid.Column="1" Margin="36,30,36,24">
                                     <Grid.RowDefinitions>
