@@ -378,6 +378,9 @@
   <data name="ButtonExit" xml:space="preserve">
     <value>EXIT</value>
   </data>
+  <data name="ButtonPlay" xml:space="preserve">
+    <value>PLAY</value>
+  </data>
   <data name="NewGameWindowTitle" xml:space="preserve">
     <value>Domino Train · New game</value>
   </data>

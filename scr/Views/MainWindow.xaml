@@ -135,8 +135,9 @@
                     </Button>
 
                     <Button Style="{StaticResource MenuIconButton}" Margin="0,0,0,14"
-                        ToolTip="{Binding [ButtonFriends]}"
-                        AutomationProperties.Name="{Binding [ButtonFriends]}">
+                        Click="OpenFriendsList"
+                        ToolTip="{Binding [OpenFriendsListLabel]}"
+                        AutomationProperties.Name="{Binding [OpenFriendsListLabel]}">
                         <Image Width="36" Height="36" Source="{StaticResource MenuFriendsImage}" />
                     </Button>
 
@@ -179,11 +180,11 @@
                         Width="380" Height="58" />
                 </StackPanel>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
+                <Image Source="{StaticResource MenuTrainImage}"
+                       Width="660" Height="228.8" Margin="0,404,0,0"
+                       HorizontalAlignment="Center" VerticalAlignment="Top"
+                       IsHitTestVisible="False" />
+            </Grid>
+        </Viewbox>
     </Grid>
 </Window>

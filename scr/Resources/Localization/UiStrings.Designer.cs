@@ -97,7 +97,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Volver a inicio de sesión.
+        ///   Looks up a localized string similar to Volver a inicio de sesión.
         /// </summary>
         public static string BackToLoginLabel {
             get {
@@ -106,7 +106,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Aceptar.
+        ///   Looks up a localized string similar to Aceptar.
         /// </summary>
         public static string ButtonAccept {
             get {
@@ -115,7 +115,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Agregar.
+        ///   Looks up a localized string similar to Agregar.
         /// </summary>
         public static string ButtonAdd {
             get {
@@ -124,16 +124,34 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Rechazar.
+        ///   Looks up a localized string similar to SALIR.
+        /// </summary>
+        public static string ButtonExit {
+            get {
+                return ResourceManager.GetString("ButtonExit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to JUGAR.
+        /// </summary>
+        public static string ButtonPlay {
+            get {
+                return ResourceManager.GetString("ButtonPlay", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Rechazar.
         /// </summary>
         public static string ButtonReject {
             get {
                 return ResourceManager.GetString("ButtonReject", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a Eliminar.
+        ///   Looks up a localized string similar to Eliminar.
         /// </summary>
         public static string ButtonRemove {
             get {
@@ -142,25 +160,25 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Reenviar código.
+        ///   Looks up a localized string similar to Reenviar código.
         /// </summary>
         public static string ButtonResendCode {
             get {
                 return ResourceManager.GetString("ButtonResendCode", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a  Verificar.
+        ///   Looks up a localized string similar to  Verificar.
         /// </summary>
         public static string ButtonVerify {
             get {
                 return ResourceManager.GetString("ButtonVerify", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a CANCELAR.
+        ///   Looks up a localized string similar to CANCELAR.
         /// </summary>
         public static string CancelButtonLabel {
             get {
@@ -901,16 +919,16 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a AMIGOS.
+        ///   Looks up a localized string similar to AMIGOS.
         /// </summary>
         public static string OpenFriendsListLabel {
             get {
                 return ResourceManager.GetString("OpenFriendsListLabel", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a PERFIL.
+        ///   Looks up a localized string similar to PERFIL.
         /// </summary>
         public static string OpenProfileButtonLabel {
             get {
@@ -1504,25 +1522,25 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Amigos.
+        ///   Looks up a localized string similar to Amigos.
         /// </summary>
         public static string TabFriends {
             get {
                 return ResourceManager.GetString("TabFriends", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a Solicitudes.
+        ///   Looks up a localized string similar to Solicitudes.
         /// </summary>
         public static string TabRequests {
             get {
                 return ResourceManager.GetString("TabRequests", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Busca una cadena traducida similar a ACTUALIZAR.
+        ///   Looks up a localized string similar to ACTUALIZAR.
         /// </summary>
         public static string UpdatePasswordButtonLabel {
             get {
@@ -1549,6 +1567,51 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Código de verificación.
+        /// </summary>
+        public static string VerificationCodeAccessibleName {
+            get {
+                return ResourceManager.GetString("VerificationCodeAccessibleName", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ¿No recibiste el correo?.
+        /// </summary>
+        public static string VerificationNoEmail {
+            get {
+                return ResourceManager.GetString("VerificationNoEmail", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ingresa el código de 5 dígitos que enviamos a tu correo.
+        /// </summary>
+        public static string VerificationPrompt {
+            get {
+                return ResourceManager.GetString("VerificationPrompt", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Ingrese el código.
+        /// </summary>
+        public static string VerificationTittle {
+            get {
+                return ResourceManager.GetString("VerificationTittle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Verificación.
+        /// </summary>
+        public static string VerificationWindowTitle {
+            get {
+                return ResourceManager.GetString("VerificationWindowTitle", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to PUNTAJES.
         /// </summary>
         public static string ViewScoresButtonLabel {
@@ -1558,52 +1621,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Busca una cadena traducida similar a Código de verificación.
-        /// </summary>
-        public static string VerificationCodeAccessibleName {
-            get {
-                return ResourceManager.GetString("VerificationCodeAccessibleName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a ¿No recibiste el correo?.
-        /// </summary>
-        public static string VerificationNoEmail {
-            get {
-                return ResourceManager.GetString("VerificationNoEmail", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Ingresa el código de 5 dígitos que enviamos a tu correo.
-        /// </summary>
-        public static string VerificationPrompt {
-            get {
-                return ResourceManager.GetString("VerificationPrompt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Ingrese el código.
-        /// </summary>
-        public static string VerificationTittle {
-            get {
-                return ResourceManager.GetString("VerificationTittle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a Verificación.
-        /// </summary>
-        public static string VerificationWindowTitle {
-            get {
-                return ResourceManager.GetString("VerificationWindowTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a {0:0}%.
+        ///   Looks up a localized string similar to {0:0}%.
         /// </summary>
         public static string VolumePercentageFormat {
             get {
