@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
@@ -15,6 +16,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,8 +42,17 @@
     <StartupObject>DominoTrainGame.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,12 +71,54 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Ban.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DominoGameModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DominoGameModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DominoGameModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="FriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Lobby.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LobbyPlayer.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Match.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MatchResult.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Player.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Resources\Localization\UiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\SettingsDefaults.cs" />
+    <Compile Include="StatusFriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +209,14 @@
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Assets\Fonts\PressStart2P-Regular.ttf" />
+    <EntityDeploy Include="DominoGameModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DominoGameModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DominoGameModel.edmx.diagram">
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -237,5 +299,28 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="DominoGameModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <LastGenOutput>DominoGameModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DominoGameModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <LastGenOutput>DominoGameModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
 </Project>
