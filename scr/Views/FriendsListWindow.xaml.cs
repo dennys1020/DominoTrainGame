@@ -44,9 +44,21 @@ namespace DominoTrainGame.Views
 
         }
 
+        //FIX 
         private void Tab_Checked(object sender, RoutedEventArgs e)
         {
+            if (FriendsPanel == null || RequestsPanel == null) return;
 
+            if (FriendsTab.IsChecked == true)
+            {
+                FriendsPanel.Visibility = Visibility.Visible;
+                RequestsPanel.Visibility = Visibility.Collapsed;
+            }
+            else if (RequestsTab.IsChecked == true)
+            {
+                FriendsPanel.Visibility = Visibility.Collapsed;
+                RequestsPanel.Visibility = Visibility.Visible;
+            }
         }
 
 

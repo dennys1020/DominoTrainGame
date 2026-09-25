@@ -179,11 +179,11 @@
                         Width="380" Height="58" />
                 </StackPanel>
 
-                <Image Source="{StaticResource MenuTrainImage}"
-                   Width="660" Height="228.8" Margin="0,404,0,0"
-                   HorizontalAlignment="Center" VerticalAlignment="Top"
-                   IsHitTestVisible="False" />
-            </Grid>
-        </Viewbox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
     </Grid>
 </Window>
