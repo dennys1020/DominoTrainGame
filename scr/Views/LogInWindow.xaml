@@ -56,8 +56,7 @@
                                 Height="36"
                                 Padding="14,0"
                                 Margin="0,0,12,0"
-                                Click="OpenSettings"
-                                AutomationProperties.Name="{Binding [OpenSettingsAccessibleName]}" />
+                                Click="OpenSettings" />
                             <Border
                                 Background="{StaticResource NightInput}"
                                 BorderBrush="{StaticResource NightAccent}"
@@ -201,16 +200,13 @@
                                             HorizontalAlignment="Left"
                                             Margin="0,2,0,0" />
                                         <Button
-                                            x:Name="_guestButton"
                                             Content="{Binding [GuestButtonLabel]}"
                                             Style="{StaticResource PixelButton}"
                                             FontSize="9"
                                             Height="36"
                                             Padding="14,0"
                                             HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            AutomationProperties.Name="{Binding [GuestButtonAccessibleName]}"
-                                            x:FieldModifier="private" />
+                                            VerticalAlignment="Top" />
                                     </Grid>
 
                                     <DockPanel Grid.Row="1" Margin="0,0,0,8">
@@ -234,10 +230,7 @@
                                             FontSize="10"
                                             Margin="0,0,0,8" />
                                         <TextBox
-                                            x:Name="_identifierTextBox"
-                                            Style="{StaticResource NightTextBox}"
-                                            AutomationProperties.Name="{Binding [LoginIdentifierAccessibleName]}"
-                                            x:FieldModifier="private" />
+                                            Style="{StaticResource NightTextBox}" />
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="3" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
@@ -247,22 +240,16 @@
                                             FontSize="10"
                                             Margin="0,0,0,8" />
                                         <PasswordBox
-                                            x:Name="_passwordBox"
-                                            Style="{StaticResource NightPasswordBox}"
-                                            AutomationProperties.Name="{Binding [PasswordAccessibleName]}"
-                                            x:FieldModifier="private" />
+                                            Style="{StaticResource NightPasswordBox}" />
                                     </StackPanel>
 
                                     <Button
-                                        x:Name="_forgotPasswordButton"
                                         Grid.Row="4"
                                         Content="{Binding [ForgotPasswordLabel]}"
                                         Style="{StaticResource NightLinkButton}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
-                                        Margin="0,4,0,0"
-                                        AutomationProperties.Name="{Binding [ForgotPasswordAccessibleName]}"
-                                        x:FieldModifier="private" />
+                                        Margin="0,4,0,0" />
 
                                     <Grid Grid.Row="5" Margin="0,26,0,0">
                                         <Grid VerticalAlignment="Bottom">
@@ -277,10 +264,8 @@
                                                     VerticalAlignment="Center"
                                                     Margin="0,0,10,0" />
                                                 <Button
-                                                    x:Name="_createAccountButton"
                                                     Content="{Binding [CreateAccountLinkLabel]}"
                                                     Style="{StaticResource NightLinkButton}"
-                                                    AutomationProperties.Name="{Binding [CreateAccountAccessibleName]}"
                                                     Click="NavigateToSignUp_Click" />
                                             </StackPanel>
                                             <Button
@@ -291,7 +276,6 @@
                                                 Width="220"
                                                 Height="50"
                                                 IsDefault="True"
-                                                AutomationProperties.Name="{Binding [LoginButtonAccessibleName]}"
                                                 Click="NavigateToMain_Click" />
                                         </Grid>
                                     </Grid>

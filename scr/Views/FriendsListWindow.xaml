@@ -40,7 +40,7 @@
         <StackPanel x:Name="FriendsPanel" Grid.Row="1" Margin="0,20,0,0">
             <Border Background="{StaticResource Glacier}" BorderBrush="{StaticResource Ink}"
                     BorderThickness="2" Padding="16" Margin="0,0,0,16">
-                <ItemsControl x:Name="FriendsList">
+                <ItemsControl>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="White" BorderBrush="{StaticResource Ink}"
@@ -81,13 +81,13 @@
                     BorderThickness="2" Padding="16">
                 <StackPanel>
                     <Grid>
-                        <TextBox x:Name="SearchUserTextBox" Height="40"
+                        <TextBox Height="40"
                                  FontFamily="Consolas" FontSize="14" Padding="34,8,8,8"/>
                         <Image Source="/Resources/Images/search.png" Width="18" Height="18" Margin="10,0,0,0"
                                HorizontalAlignment="Left" IsHitTestVisible="False"/>
                     </Grid>
                     
-                    <Grid x:Name="FoundUserPanel" Margin="0,14,0,0" Visibility="Collapsed">
+                    <Grid Margin="0,14,0,0" Visibility="Collapsed">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
@@ -96,14 +96,14 @@
                         <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20"
                                 BorderBrush="{StaticResource Ink}" BorderThickness="2" Margin="0,0,10,0">
                             <Border.Background>
-                                <ImageBrush x:Name="FoundUserAvatarBrush" Stretch="UniformToFill"/>
+                                <ImageBrush Stretch="UniformToFill"/>
                             </Border.Background>
                         </Border>
 
                         <Border Grid.Column="1" Background="Gold" BorderBrush="{StaticResource Ink}"
                                 BorderThickness="1" Padding="10,6"
                                 HorizontalAlignment="Left" VerticalAlignment="Center">
-                            <TextBlock x:Name="FoundUsernameText" Style="{StaticResource PixelText}"/>
+                            <TextBlock Style="{StaticResource PixelText}"/>
                         </Border>
                     </Grid>
 
@@ -119,7 +119,7 @@
         <StackPanel x:Name="RequestsPanel" Grid.Row="1" Margin="0,20,0,0" Visibility="Collapsed">
             <Border Background="{StaticResource Glacier}" BorderBrush="{StaticResource Ink}"
                     BorderThickness="2" Padding="16">
-                <ItemsControl x:Name="RequestsList">
+                <ItemsControl>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Background="White" BorderBrush="{StaticResource Ink}"
