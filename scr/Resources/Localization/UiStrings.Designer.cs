@@ -97,24 +97,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Volver a inicio de sesión.
-        /// </summary>
-        public static string BackToLoginLabel {
-            get {
-                return ResourceManager.GetString("BackToLoginLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Aceptar.
-        /// </summary>
-        public static string ButtonAccept {
-            get {
-                return ResourceManager.GetString("ButtonAccept", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Agregar.
         /// </summary>
         public static string ButtonAdd {
@@ -138,15 +120,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string ButtonPlay {
             get {
                 return ResourceManager.GetString("ButtonPlay", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Rechazar.
-        /// </summary>
-        public static string ButtonReject {
-            get {
-                return ResourceManager.GetString("ButtonReject", resourceCulture);
             }
         }
 
@@ -187,15 +160,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Cancelar.
-        /// </summary>
-        public static string CancelEditAccessibleName {
-            get {
-                return ResourceManager.GetString("CancelEditAccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to CAMBIAR CONTRASEÑA.
         /// </summary>
         public static string ChangePasswordTitle {
@@ -219,15 +183,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string ConfirmPasswordLabel {
             get {
                 return ResourceManager.GetString("ConfirmPasswordLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Ir al registro.
-        /// </summary>
-        public static string CreateAccountAccessibleName {
-            get {
-                return ResourceManager.GetString("CreateAccountAccessibleName", resourceCulture);
             }
         }
 
@@ -349,15 +304,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Doble doce.
-        /// </summary>
-        public static string Double12AccessibleName {
-            get {
-                return ResourceManager.GetString("Double12AccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to 12.
         /// </summary>
         public static string Double12Label {
@@ -367,29 +313,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Doble seis.
-        /// </summary>
-        public static string Double6AccessibleName {
-            get {
-                return ResourceManager.GetString("Double6AccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to 6.
         /// </summary>
         public static string Double6Label {
             get {
                 return ResourceManager.GetString("Double6Label", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Doble nueve.
-        /// </summary>
-        public static string Double9AccessibleName {
-            get {
-                return ResourceManager.GetString("Double9AccessibleName", resourceCulture);
             }
         }
 
@@ -412,29 +340,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Campo de correo electrónico.
-        /// </summary>
-        public static string EmailAccessibleName {
-            get {
-                return ResourceManager.GetString("EmailAccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to CORREO ELECTRÓNICO.
         /// </summary>
         public static string EmailAdressLabel {
             get {
                 return ResourceManager.GetString("EmailAdressLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Inglés / English.
-        /// </summary>
-        public static string EnglishLanguageAccessibleName {
-            get {
-                return ResourceManager.GetString("EnglishLanguageAccessibleName", resourceCulture);
             }
         }
 
@@ -475,29 +385,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Recuperar contraseña.
-        /// </summary>
-        public static string ForgotPasswordAccessibleName {
-            get {
-                return ResourceManager.GetString("ForgotPasswordAccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to ¿Olvidaste tu contraseña?.
         /// </summary>
         public static string ForgotPasswordLabel {
             get {
                 return ResourceManager.GetString("ForgotPasswordLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to LISTA DE AMIGOS.
-        /// </summary>
-        public static string FriendListWindowTitle {
-            get {
-                return ResourceManager.GetString("FriendListWindowTitle", resourceCulture);
             }
         }
 
@@ -538,15 +430,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Prepara la mesa y reúne a tus compañeros de viaje..
-        /// </summary>
-        public static string GameSetupDescription {
-            get {
-                return ResourceManager.GetString("GameSetupDescription", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to CONFIGURACIÓN DE PARTIDA.
         /// </summary>
         public static string GameSetupTitle {
@@ -579,15 +462,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string GoToLoginLabel {
             get {
                 return ResourceManager.GetString("GoToLoginLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Jugar como invitado.
-        /// </summary>
-        public static string GuestButtonAccessibleName {
-            get {
-                return ResourceManager.GetString("GuestButtonAccessibleName", resourceCulture);
             }
         }
 
@@ -721,29 +595,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Iniciar sesión.
-        /// </summary>
-        public static string LoginButtonAccessibleName {
-            get {
-                return ResourceManager.GetString("LoginButtonAccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to INICIAR SESIÓN.
         /// </summary>
         public static string LoginButtonLabel {
             get {
                 return ResourceManager.GetString("LoginButtonLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Campo de correo electrónico o usuario.
-        /// </summary>
-        public static string LoginIdentifierAccessibleName {
-            get {
-                return ResourceManager.GetString("LoginIdentifierAccessibleName", resourceCulture);
             }
         }
 
@@ -793,6 +649,15 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to MARCAR LISTO.
+        /// </summary>
+        public static string MarkReadyButtonLabel {
+            get {
+                return ResourceManager.GetString("MarkReadyButtonLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Puntos por ronda y total acumulado..
         /// </summary>
         public static string MatchResultsDescription {
@@ -834,6 +699,15 @@ namespace DominoTrainGame.Resources.Localization {
         public static string MaximumDoubleLabel {
             get {
                 return ResourceManager.GetString("MaximumDoubleLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Seleccionado por el anfitrión..
+        /// </summary>
+        public static string MaximumDoubleReadOnlyDescription {
+            get {
+                return ResourceManager.GetString("MaximumDoubleReadOnlyDescription", resourceCulture);
             }
         }
 
@@ -937,29 +811,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to +  Un lugar disponible.
-        /// </summary>
-        public static string OpenSeatLabel {
-            get {
-                return ResourceManager.GetString("OpenSeatLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to CONFIGURACIÓN.
         /// </summary>
         public static string OpenSettingsButtonLabel {
             get {
                 return ResourceManager.GetString("OpenSettingsButtonLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Campo de contraseña.
-        /// </summary>
-        public static string PasswordAccessibleName {
-            get {
-                return ResourceManager.GetString("PasswordAccessibleName", resourceCulture);
             }
         }
 
@@ -991,7 +847,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Todo listo para compartir una nueva ronda..
+        ///   Looks up a localized string similar to Cada jugador marca su estado. El anfitrión inicia la partida..
         /// </summary>
         public static string ReadyRoomNote {
             get {
@@ -1050,6 +906,42 @@ namespace DominoTrainGame.Resources.Localization {
         public static string RoomCodeLabel {
             get {
                 return ResourceManager.GetString("RoomCodeLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to ANFITRIÓN.
+        /// </summary>
+        public static string RoomHostLabel {
+            get {
+                return ResourceManager.GetString("RoomHostLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Todavía no hay jugadores en la sala..
+        /// </summary>
+        public static string RoomNoPlayersLabel {
+            get {
+                return ResourceManager.GetString("RoomNoPlayersLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to NO LISTO.
+        /// </summary>
+        public static string RoomNotReadyLabel {
+            get {
+                return ResourceManager.GetString("RoomNotReadyLabel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} / {1}.
+        /// </summary>
+        public static string RoomPlayerCountFormat {
+            get {
+                return ResourceManager.GetString("RoomPlayerCountFormat", resourceCulture);
             }
         }
 
@@ -1297,15 +1189,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to 3 / 4.
-        /// </summary>
-        public static string SamplePlayerCount {
-            get {
-                return ResourceManager.GetString("SamplePlayerCount", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to XXXXXX.
         /// </summary>
         public static string SampleRoomCode {
@@ -1365,15 +1248,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string SaveButtonLabel {
             get {
                 return ResourceManager.GetString("SaveButtonLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Guardar.
-        /// </summary>
-        public static string SaveProfileAccessibleName {
-            get {
-                return ResourceManager.GetString("SaveProfileAccessibleName", resourceCulture);
             }
         }
 
@@ -1459,29 +1333,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Registrar nueva cuenta.
-        /// </summary>
-        public static string SignUpButtonAccesibleName {
-            get {
-                return ResourceManager.GetString("SignUpButtonAccesibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to EFECTOS DE SONIDO.
         /// </summary>
         public static string SoundEffectsVolumeLabel {
             get {
                 return ResourceManager.GetString("SoundEffectsVolumeLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Español.
-        /// </summary>
-        public static string SpanishLanguageAccessibleName {
-            get {
-                return ResourceManager.GetString("SpanishLanguageAccessibleName", resourceCulture);
             }
         }
 
@@ -1549,29 +1405,11 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Campo de nombre de usuario.
-        /// </summary>
-        public static string UsernameAccessibleName {
-            get {
-                return ResourceManager.GetString("UsernameAccessibleName", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to NOMBRE DE USUARIO.
         /// </summary>
         public static string UsernameLabel {
             get {
                 return ResourceManager.GetString("UsernameLabel", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Código de verificación.
-        /// </summary>
-        public static string VerificationCodeAccessibleName {
-            get {
-                return ResourceManager.GetString("VerificationCodeAccessibleName", resourceCulture);
             }
         }
 
@@ -1590,15 +1428,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string VerificationPrompt {
             get {
                 return ResourceManager.GetString("VerificationPrompt", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Ingrese el código.
-        /// </summary>
-        public static string VerificationTittle {
-            get {
-                return ResourceManager.GetString("VerificationTittle", resourceCulture);
             }
         }
 
@@ -1630,15 +1459,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to La mesa está preparada. El próximo viaje está por comenzar..
-        /// </summary>
-        public static string WaitingRoomDescription {
-            get {
-                return ResourceManager.GetString("WaitingRoomDescription", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to SALA DE ESPERA.
         /// </summary>
         public static string WaitingRoomTitle {
@@ -1653,15 +1473,6 @@ namespace DominoTrainGame.Resources.Localization {
         public static string WaitingRoomWindowTitle {
             get {
                 return ResourceManager.GetString("WaitingRoomWindowTitle", resourceCulture);
-            }
-        }
-
-        /// <summary>
-        ///   Looks up a localized string similar to Tú (anfitrión).
-        /// </summary>
-        public static string YouHostLabel {
-            get {
-                return ResourceManager.GetString("YouHostLabel", resourceCulture);
             }
         }
 

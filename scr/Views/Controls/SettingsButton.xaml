@@ -5,8 +5,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}">
     <Button Style="{StaticResource MenuIconButton}" Click="OpenSettings"
-            ToolTip="{Binding [OpenSettingsButtonLabel]}"
-            AutomationProperties.Name="{Binding [OpenSettingsButtonLabel]}">
+            ToolTip="{Binding [OpenSettingsButtonLabel]}">
         <Image Source="{StaticResource MenuSettingsImage}" Width="36" Height="36" />
     </Button>
 </UserControl>
