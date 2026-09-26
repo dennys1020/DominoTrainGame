@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
@@ -16,8 +15,6 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,22 +40,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.4\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -77,44 +65,44 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bans.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
+    <Compile Include="Ban.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="FriendshipRequests.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Lobbies.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LobbyPlayers.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Matches.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MatchResults.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Northwind_model.Context.cs">
+    <Compile Include="DominoGameModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind_model.Context.tt</DependentUpon>
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind_model.cs">
+    <Compile Include="DominoGameModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind_model.tt</DependentUpon>
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Northwind_model.Designer.cs">
+    <Compile Include="DominoGameModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind_model.edmx</DependentUpon>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Players.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
+    <Compile Include="FriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Reports.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
+    <Compile Include="Lobby.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LobbyPlayer.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Match.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MatchResult.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Player.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Resources\Localization\UiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -122,8 +110,8 @@
       <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\SettingsDefaults.cs" />
-    <Compile Include="StatusFriendshipRequests.cs">
-      <DependentUpon>Northwind_model.tt</DependentUpon>
+    <Compile Include="StatusFriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
@@ -137,6 +125,9 @@
     <Compile Include="Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LeaderBoardWindow.xaml.cs">
+      <DependentUpon>LeaderBoardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogInWindow.xaml.cs">
       <DependentUpon>LogInWindow.xaml</DependentUpon>
     </Compile>
@@ -149,6 +140,9 @@
     </Compile>
     <Compile Include="Views\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RecoverPasswordWindow.xaml.cs">
+      <DependentUpon>RecoverPasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -175,6 +169,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LeaderBoardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LogInWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -184,6 +182,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProfileWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RecoverPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -224,25 +226,14 @@
       <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Assets\Fonts\PressStart2P-Regular.ttf" />
-    <EntityDeploy Include="Northwind_model.edmx">
+    <EntityDeploy Include="DominoGameModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Northwind_model.Designer.cs</LastGenOutput>
+      <LastGenOutput>DominoGameModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="Northwind_model.edmx.diagram">
-      <DependentUpon>Northwind_model.edmx</DependentUpon>
+    <None Include="DominoGameModel.edmx.diagram">
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\App.datasource" />
-    <None Include="Properties\DataSources\Bans.datasource" />
-    <None Include="Properties\DataSources\DominoGameDBEntities.datasource" />
-    <None Include="Properties\DataSources\FriendshipRequests.datasource" />
-    <None Include="Properties\DataSources\Lobbies.datasource" />
-    <None Include="Properties\DataSources\LobbyPlayers.datasource" />
-    <None Include="Properties\DataSources\Matches.datasource" />
-    <None Include="Properties\DataSources\MatchResults.datasource" />
-    <None Include="Properties\DataSources\Players.datasource" />
-    <None Include="Properties\DataSources\Reports.datasource" />
-    <None Include="Properties\DataSources\StatusFriendshipRequests.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -255,22 +246,87 @@
     <Resource Include="Assets\Fonts\OFL.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Northwind_model.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Northwind_model.edmx</DependentUpon>
-      <LastGenOutput>Northwind_model.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Northwind_model.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Northwind_model.edmx</DependentUpon>
-      <LastGenOutput>Northwind_model.cs</LastGenOutput>
-    </Content>
+    <Resource Include="Resources\Images\TrashCan.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\avatar_generic_preview.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\PixelTrain.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\MiniDominoTile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Navigation\WindowNavigation.cs" />
+    <Compile Include="Views\NewGameWindow.xaml.cs">
+      <DependentUpon>NewGameWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\NewGameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\GameSetupWindow.xaml.cs">
+      <DependentUpon>GameSetupWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\GameSetupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\WaitingRoomWindow.xaml.cs">
+      <DependentUpon>WaitingRoomWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\WaitingRoomWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\JoinGameWindow.xaml.cs">
+      <DependentUpon>JoinGameWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\JoinGameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\GameRulesWindow.xaml.cs">
+      <DependentUpon>GameRulesWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\GameRulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\MatchResultsWindow.xaml.cs">
+      <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\MatchResultsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="Views\Controls\SettingsButton.xaml.cs">
+      <DependentUpon>SettingsButton.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\Controls\SettingsButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles\MatchStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DominoGameModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <LastGenOutput>DominoGameModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DominoGameModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <LastGenOutput>DominoGameModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

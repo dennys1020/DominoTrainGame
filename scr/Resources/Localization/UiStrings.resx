@@ -372,4 +372,313 @@
   <data name="ButtonReject" xml:space="preserve">
     <value>Rechazar</value>
   </data>
+  <data name="VerificationWindowTitle" xml:space="preserve">
+    <value>Verificación</value>
+  </data>
+  <data name="VerificationTittle" xml:space="preserve">
+    <value>Ingrese el código</value>
+  </data>
+  <data name="VerificationPrompt" xml:space="preserve">
+    <value>Ingresa el código de 5 dígitos que enviamos a tu correo</value>
+  </data>
+  <data name="VerificationCodeAccessibleName" xml:space="preserve">
+    <value>Código de verificación</value>
+  </data>
+  <data name="VerificationNoEmail" xml:space="preserve">
+    <value>¿No recibiste el correo?</value>
+  </data>
+  <data name="ButtonResendCode" xml:space="preserve">
+    <value>Reenviar código</value>
+  </data>
+  <data name="BackToLoginLabel" xml:space="preserve">
+    <value>Volver a inicio de sesión</value>
+  </data>
+  <data name="ButtonVerify" xml:space="preserve">
+    <value> Verificar</value>
+  </data>
+  <data name="OpenFriendsListLabel" xml:space="preserve">
+    <value>AMIGOS</value>
+  </data>
+  <data name="ButtonExit" xml:space="preserve">
+    <value>SALIR</value>
+  </data>
+  <data name="ButtonPlay" xml:space="preserve">
+    <value>JUGAR</value>
+  </data>
+  <data name="NewGameWindowTitle" xml:space="preserve">
+    <value>Domino Train · Nueva partida</value>
+  </data>
+  <data name="NewGameTitle" xml:space="preserve">
+    <value>NUEVA PARTIDA</value>
+  </data>
+  <data name="NewGameDescription" xml:space="preserve">
+    <value>Elige cómo quieres comenzar tu próximo viaje.</value>
+  </data>
+  <data name="CreateGameTitle" xml:space="preserve">
+    <value>CREAR PARTIDA</value>
+  </data>
+  <data name="CreateGameDescription" xml:space="preserve">
+    <value>Prepara la mesa, elige el doble máximo y comparte el código con tus amigos.</value>
+  </data>
+  <data name="CreateGameButtonLabel" xml:space="preserve">
+    <value>CREAR</value>
+  </data>
+  <data name="JoinGameTitle" xml:space="preserve">
+    <value>UNIRSE A PARTIDA</value>
+  </data>
+  <data name="JoinGameDescription" xml:space="preserve">
+    <value>¿Ya tienes una invitación? Introduce el código y toma tu lugar en la sala.</value>
+  </data>
+  <data name="JoinGameButtonLabel" xml:space="preserve">
+    <value>UNIRSE</value>
+  </data>
+  <data name="JoinGameWindowTitle" xml:space="preserve">
+    <value>Domino Train · Código de invitación</value>
+  </data>
+  <data name="JoinSidebarTitle" xml:space="preserve">
+    <value>TU LUGAR
+EN EL TREN</value>
+  </data>
+  <data name="JoinSidebarDescription" xml:space="preserve">
+    <value>Una mesa compartida.
+Una nueva partida.</value>
+  </data>
+  <data name="InvitationTitle" xml:space="preserve">
+    <value>CÓDIGO DE
+INVITACIÓN</value>
+  </data>
+  <data name="InvitationDescription" xml:space="preserve">
+    <value>Introduce el código que te compartió el anfitrión de la partida.</value>
+  </data>
+  <data name="InvitationCodeLabel" xml:space="preserve">
+    <value>CÓDIGO DE LA SALA</value>
+  </data>
+  <data name="InvitationCodeHint" xml:space="preserve">
+    <value>Encontrarás el código en la pantalla de configuración de la partida.</value>
+  </data>
+  <data name="JoinRoomButtonLabel" xml:space="preserve">
+    <value>ENTRAR A LA SALA</value>
+  </data>
+  <data name="GameSetupWindowTitle" xml:space="preserve">
+    <value>Domino Train · Configuración de partida</value>
+  </data>
+  <data name="GameSetupTitle" xml:space="preserve">
+    <value>CONFIGURACIÓN DE PARTIDA</value>
+  </data>
+  <data name="GameSetupDescription" xml:space="preserve">
+    <value>Prepara la mesa y reúne a tus compañeros de viaje.</value>
+  </data>
+  <data name="WaitingRoomWindowTitle" xml:space="preserve">
+    <value>Domino Train · Sala de espera</value>
+  </data>
+  <data name="WaitingRoomTitle" xml:space="preserve">
+    <value>SALA DE ESPERA</value>
+  </data>
+  <data name="WaitingRoomDescription" xml:space="preserve">
+    <value>La mesa está preparada. El próximo viaje está por comenzar.</value>
+  </data>
+  <data name="RoomCodeLabel" xml:space="preserve">
+    <value>01 / CÓDIGO DE PARTIDA</value>
+  </data>
+  <data name="SampleRoomCode" xml:space="preserve">
+    <value>XXXXXX</value>
+  </data>
+  <data name="RoomCodeDescription" xml:space="preserve">
+    <value>Comparte este código con tus amigos.</value>
+  </data>
+  <data name="MaximumDoubleLabel" xml:space="preserve">
+    <value>02 / DOBLE MÁXIMO</value>
+  </data>
+  <data name="MaximumDoubleDescription" xml:space="preserve">
+    <value>El doble máximo define el conjunto de fichas de la partida.</value>
+  </data>
+  <data name="Double6Label" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="Double9Label" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="Double12Label" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="Double6AccessibleName" xml:space="preserve">
+    <value>Doble seis</value>
+  </data>
+  <data name="Double9AccessibleName" xml:space="preserve">
+    <value>Doble nueve</value>
+  </data>
+  <data name="Double12AccessibleName" xml:space="preserve">
+    <value>Doble doce</value>
+  </data>
+  <data name="PlayersLabel" xml:space="preserve">
+    <value>03 / JUGADORES</value>
+  </data>
+  <data name="SamplePlayerCount" xml:space="preserve">
+    <value>3 / 4</value>
+  </data>
+  <data name="YouHostLabel" xml:space="preserve">
+    <value>Tú (anfitrión)</value>
+  </data>
+  <data name="YouPlayerLabel" xml:space="preserve">
+    <value>Tú</value>
+  </data>
+  <data name="SampleFriendOne" xml:space="preserve">
+    <value>Amigo 1</value>
+  </data>
+  <data name="SampleFriendTwo" xml:space="preserve">
+    <value>Amigo 2</value>
+  </data>
+  <data name="SampleFriendThree" xml:space="preserve">
+    <value>Amigo 3</value>
+  </data>
+  <data name="AcceptReadyButtonLabel" xml:space="preserve">
+    <value>ACEPTAR</value>
+  </data>
+  <data name="ReadyStatusLabel" xml:space="preserve">
+    <value>LISTO</value>
+  </data>
+  <data name="OpenSeatLabel" xml:space="preserve">
+    <value>+  Un lugar disponible</value>
+  </data>
+  <data name="StartMatchButtonLabel" xml:space="preserve">
+    <value>INICIAR</value>
+  </data>
+  <data name="SetupRoomNote" xml:space="preserve">
+    <value>Acepta tu lugar para pasar a la sala de espera.</value>
+  </data>
+  <data name="ReadyRoomNote" xml:space="preserve">
+    <value>Todo listo para compartir una nueva ronda.</value>
+  </data>
+  <data name="GameRulesButtonLabel" xml:space="preserve">
+    <value>REGLAS DEL JUEGO</value>
+  </data>
+  <data name="GameRulesWindowTitle" xml:space="preserve">
+    <value>Domino Train · Reglas del juego</value>
+  </data>
+  <data name="GameRulesTitle" xml:space="preserve">
+    <value>REGLAS DEL JUEGO</value>
+  </data>
+  <data name="GameRulesDescription" xml:space="preserve">
+    <value>Una guía rápida para tu siguiente partida de Tren Mexicano.</value>
+  </data>
+  <data name="RulesObjectiveTitle" xml:space="preserve">
+    <value>OBJETIVO</value>
+  </data>
+  <data name="RulesObjectiveDescription" xml:space="preserve">
+    <value>Coloca tus fichas y termina con la menor cantidad de puntos. Al final de la partida, gana el menor total.</value>
+  </data>
+  <data name="RulesPreparationTitle" xml:space="preserve">
+    <value>PREPARACIÓN</value>
+  </data>
+  <data name="RulesPreparationDescription" xml:space="preserve">
+    <value>El doble inicial se coloca en el centro. Cada jugador tiene un tren y las fichas restantes forman el pozo.</value>
+  </data>
+  <data name="RulesTurnTitle" xml:space="preserve">
+    <value>EN TU TURNO</value>
+  </data>
+  <data name="RulesTurnDescription" xml:space="preserve">
+    <value>Une una ficha por un extremo del mismo valor. Puedes jugar en tu tren, en el tren mexicano o en un tren abierto.</value>
+  </data>
+  <data name="RulesDrawTitle" xml:space="preserve">
+    <value>ROBAR Y PASAR</value>
+  </data>
+  <data name="RulesDrawDescription" xml:space="preserve">
+    <value>Si no puedes jugar, roba una ficha. Si tampoco puedes colocarla, pasa y deja tu tren abierto a los demás.</value>
+  </data>
+  <data name="RulesDoublesTitle" xml:space="preserve">
+    <value>FICHAS DOBLES</value>
+  </data>
+  <data name="RulesDoublesDescription" xml:space="preserve">
+    <value>Después de colocar un doble, juega otra ficha. Un doble pendiente debe cubrirse antes de continuar en otros trenes.</value>
+  </data>
+  <data name="RulesScoringTitle" xml:space="preserve">
+    <value>FIN DE LA RONDA</value>
+  </data>
+  <data name="RulesScoringDescription" xml:space="preserve">
+    <value>La ronda termina al agotarse una mano o bloquearse la mesa. Suma los puntos de tus fichas restantes a tu total.</value>
+  </data>
+  <data name="MatchResultsWindowTitle" xml:space="preserve">
+    <value>Domino Train · Puntajes y resultados</value>
+  </data>
+  <data name="MatchResultsTitle" xml:space="preserve">
+    <value>PUNTAJES Y RESULTADOS</value>
+  </data>
+  <data name="MatchResultsDescription" xml:space="preserve">
+    <value>Puntos por ronda y total acumulado.</value>
+  </data>
+  <data name="ScorePlayerLabel" xml:space="preserve">
+    <value>JUGADOR</value>
+  </data>
+  <data name="ScoreRoundOneLabel" xml:space="preserve">
+    <value>RONDA 1</value>
+  </data>
+  <data name="ScoreRoundTwoLabel" xml:space="preserve">
+    <value>RONDA 2</value>
+  </data>
+  <data name="ScoreTotalLabel" xml:space="preserve">
+    <value>TOTAL</value>
+  </data>
+  <data name="SampleYouRoundOne" xml:space="preserve">
+    <value>47</value>
+  </data>
+  <data name="SampleYouRoundTwo" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="SampleYouTotal" xml:space="preserve">
+    <value>55</value>
+  </data>
+  <data name="SampleFriendOneRoundOne" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="SampleFriendOneRoundTwo" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="SampleFriendOneTotal" xml:space="preserve">
+    <value>21</value>
+  </data>
+  <data name="SampleWinnerScore" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="SampleFriendThreeRoundOne" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="SampleFriendThreeRoundTwo" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="SampleFriendThreeTotal" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="SampleWinnerLabel" xml:space="preserve">
+    <value>¡AMIGO 2 GANÓ!</value>
+  </data>
+  <data name="ScoreExplanation" xml:space="preserve">
+    <value>Menos puntos, mejor resultado.</value>
+  </data>
+  <data name="ExitToMenuButtonLabel" xml:space="preserve">
+    <value>SALIR AL MENÚ</value>
+  </data>
+  <data name="NextRoundButtonLabel" xml:space="preserve">
+    <value>SIGUIENTE RONDA</value>
+  </data>
+  <data name="ViewScoresButtonLabel" xml:space="preserve">
+    <value>PUNTAJES</value>
+  </data>
+  <data name="RuleStep1" xml:space="preserve">
+    <value>01</value>
+  </data>
+  <data name="RuleStep2" xml:space="preserve">
+    <value>02</value>
+  </data>
+  <data name="RuleStep3" xml:space="preserve">
+    <value>03</value>
+  </data>
+  <data name="RuleStep4" xml:space="preserve">
+    <value>04</value>
+  </data>
+  <data name="RuleStep5" xml:space="preserve">
+    <value>05</value>
+  </data>
+  <data name="RuleStep6" xml:space="preserve">
+    <value>06</value>
+  </data>
 </root>
