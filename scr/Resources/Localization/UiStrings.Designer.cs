@@ -97,34 +97,61 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Agregar.
+        ///   Busca una cadena traducida similar a Aceptar.
+        /// </summary>
+        public static string ButtonAccept {
+            get {
+                return ResourceManager.GetString("ButtonAccept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Agregar.
         /// </summary>
         public static string ButtonAdd {
             get {
                 return ResourceManager.GetString("ButtonAdd", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to SALIR.
+        ///   Busca una cadena traducida similar a Rechazar.
         /// </summary>
-        public static string ButtonExit {
+        public static string ButtonReject {
             get {
-                return ResourceManager.GetString("ButtonExit", resourceCulture);
+                return ResourceManager.GetString("ButtonReject", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to JUGAR.
+        ///   Busca una cadena traducida similar a Aceptar.
         /// </summary>
-        public static string ButtonPlay {
+        public static string ButtonAccept {
             get {
-                return ResourceManager.GetString("ButtonPlay", resourceCulture);
+                return ResourceManager.GetString("ButtonAccept", resourceCulture);
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to Eliminar.
+        ///   Busca una cadena traducida similar a Agregar.
+        /// </summary>
+        public static string ButtonAdd {
+            get {
+                return ResourceManager.GetString("ButtonAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Rechazar.
+        /// </summary>
+        public static string ButtonReject {
+            get {
+                return ResourceManager.GetString("ButtonReject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Eliminar.
         /// </summary>
         public static string ButtonRemove {
             get {
@@ -1396,7 +1423,43 @@ namespace DominoTrainGame.Resources.Localization {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to ACTUALIZAR.
+        ///   Busca una cadena traducida similar a Amigos.
+        /// </summary>
+        public static string TabFriends {
+            get {
+                return ResourceManager.GetString("TabFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solicitudes.
+        /// </summary>
+        public static string TabRequests {
+            get {
+                return ResourceManager.GetString("TabRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Amigos.
+        /// </summary>
+        public static string TabFriends {
+            get {
+                return ResourceManager.GetString("TabFriends", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Solicitudes.
+        /// </summary>
+        public static string TabRequests {
+            get {
+                return ResourceManager.GetString("TabRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ACTUALIZAR.
         /// </summary>
         public static string UpdatePasswordButtonLabel {
             get {

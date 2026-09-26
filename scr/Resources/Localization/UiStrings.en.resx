@@ -594,4 +594,34 @@ CODE</value>
   <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
     <value>Selected by the host.</value>
   </data>
+  <data name="TabFriends" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="TabRequests" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="TabFriends" xml:space="preserve">
+    <value>Friends</value>
+  </data>
+  <data name="TabRequests" xml:space="preserve">
+    <value>Requests</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
 </root>

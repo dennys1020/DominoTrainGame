@@ -594,4 +594,34 @@ INVITACIÓN</value>
   <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
     <value>Seleccionado por el anfitrión.</value>
   </data>
+  <data name="TabFriends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="TabRequests" xml:space="preserve">
+    <value>Solicitudes</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
+  <data name="TabFriends" xml:space="preserve">
+    <value>Amigos</value>
+  </data>
+  <data name="TabRequests" xml:space="preserve">
+    <value>Solicitudes</value>
+  </data>
+  <data name="ButtonAdd" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Rechazar</value>
+  </data>
 </root>
