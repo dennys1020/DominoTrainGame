@@ -459,8 +459,8 @@ INVITACIÓN</value>
   <data name="JoinRoomButtonLabel" xml:space="preserve">
     <value>ENTRAR A LA SALA</value>
   </data>
-  <data name="GameSetupWindowTitle" xml:space="preserve">
-    <value>Domino Train · Configuración de partida</value>
+  <data name="RoomWindowTitle" xml:space="preserve">
+    <value>Domino Train · Sala de partida</value>
   </data>
   <data name="GameSetupTitle" xml:space="preserve">
     <value>CONFIGURACIÓN DE PARTIDA</value>
@@ -478,7 +478,7 @@ INVITACIÓN</value>
     <value>La mesa está preparada. El próximo viaje está por comenzar.</value>
   </data>
   <data name="RoomCodeLabel" xml:space="preserve">
-    <value>01 / CÓDIGO DE PARTIDA</value>
+    <value>CÓDIGO DE PARTIDA</value>
   </data>
   <data name="SampleRoomCode" xml:space="preserve">
     <value>XXXXXX</value>
@@ -487,7 +487,7 @@ INVITACIÓN</value>
     <value>Comparte este código con tus amigos.</value>
   </data>
   <data name="MaximumDoubleLabel" xml:space="preserve">
-    <value>02 / DOBLE MÁXIMO</value>
+    <value>DOBLE MÁXIMO</value>
   </data>
   <data name="MaximumDoubleDescription" xml:space="preserve">
     <value>El doble máximo define el conjunto de fichas de la partida.</value>
@@ -511,7 +511,7 @@ INVITACIÓN</value>
     <value>Doble doce</value>
   </data>
   <data name="PlayersLabel" xml:space="preserve">
-    <value>03 / JUGADORES</value>
+    <value>JUGADORES</value>
   </data>
   <data name="SamplePlayerCount" xml:space="preserve">
     <value>3 / 4</value>
@@ -530,9 +530,6 @@ INVITACIÓN</value>
   </data>
   <data name="SampleFriendThree" xml:space="preserve">
     <value>Amigo 3</value>
-  </data>
-  <data name="AcceptReadyButtonLabel" xml:space="preserve">
-    <value>ACEPTAR</value>
   </data>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>LISTO</value>

@@ -117,7 +117,7 @@
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\LocalizationViewModel.cs" />
-    <Compile Include="ViewModels\GameSetupViewModel.cs" />
+    <Compile Include="ViewModels\RoomViewModel.cs" />
     <Compile Include="ViewModels\RoomPlayerViewModel.cs" />
     <Compile Include="Views\DeleteAccountWindow.xaml.cs">
       <DependentUpon>DeleteAccountWindow.xaml</DependentUpon>
@@ -269,17 +269,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Compile Include="Views\GameSetupWindow.xaml.cs">
-      <DependentUpon>GameSetupWindow.xaml</DependentUpon>
+    <Compile Include="Views\RoomWindow.xaml.cs">
+      <DependentUpon>RoomWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\GameSetupWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Compile Include="Views\WaitingRoomWindow.xaml.cs">
-      <DependentUpon>WaitingRoomWindow.xaml</DependentUpon>
-    </Compile>
-    <Page Include="Views\WaitingRoomWindow.xaml">
+    <Page Include="Views\RoomWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -4,11 +4,17 @@
     xmlns:controls="clr-namespace:DominoTrainGame.Views.Controls"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     xmlns:strings="clr-namespace:DominoTrainGame.Resources.Localization"
-    x:Class="DominoTrainGame.Views.GameSetupWindow"
+    x:Class="DominoTrainGame.Views.RoomWindow"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [GameSetupWindowTitle]}"
+    Title="{Binding [RoomWindowTitle]}"
     Style="{StaticResource MatchWindow}"
-    WindowStartupLocation="CenterScreen">
+    WindowStartupLocation="CenterScreen"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="HostVisibility" />
+    </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
         <Viewbox Stretch="Uniform">
@@ -44,9 +50,7 @@
                                     <RowDefinition Height="68" />
                                 </Grid.RowDefinitions>
                                 <StackPanel>
-                                    <TextBlock
-                                        Text="{Binding [GameSetupTitle]}"
-                                        Style="{StaticResource MatchHeading}" />
+                                    <TextBlock Text="{Binding [RoomTitle]}" Style="{StaticResource MatchHeading}" />
                                 </StackPanel>
                                 <Grid Grid.Row="1" Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
@@ -55,29 +59,38 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel>
-                                        <TextBlock
-                                            Text="{Binding [RoomCodeLabel]}"
-                                            Style="{StaticResource MatchSection}" />
-                                        <Border
-                                            Background="{StaticResource Frost}"
-                                            BorderBrush="{StaticResource Ink}"
-                                            BorderThickness="2"
-                                            Padding="18,19">
+                                        <StackPanel
+                                            Visibility="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource HostVisibility}}"
+                                            d:Visibility="Visible">
                                             <TextBlock
-                                                Text="{Binding [SampleRoomCode]}"
-                                                Style="{StaticResource PixelText}"
-                                                FontSize="26"
-                                                HorizontalAlignment="Center" />
-                                        </Border>
-                                        <TextBlock
-                                            Text="{Binding [RoomCodeDescription]}"
-                                            Style="{StaticResource MatchBody}"
-                                            Margin="0,10,0,24"
-                                            FontSize="16" />
+                                                Text="{Binding [RoomCodeLabel]}"
+                                                Style="{StaticResource MatchSection}" />
+                                            <Border
+                                                Background="{StaticResource Frost}"
+                                                BorderBrush="{StaticResource Ink}"
+                                                BorderThickness="2"
+                                                Padding="18,19">
+                                                <TextBlock
+                                                    Text="{Binding [SampleRoomCode]}"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="26"
+                                                    HorizontalAlignment="Center" />
+                                            </Border>
+                                            <TextBlock
+                                                Text="{Binding [RoomCodeDescription]}"
+                                                Style="{StaticResource MatchBody}"
+                                                Margin="0,10,0,24"
+                                                FontSize="16" />
+                                        </StackPanel>
                                         <TextBlock
                                             Text="{Binding [MaximumDoubleLabel]}"
                                             Style="{StaticResource MatchSection}" />
-                                        <UniformGrid Rows="1">
+                                        <UniformGrid
+                                            Rows="1"
+                                            Visibility="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource HostVisibility}}"
+                                            IsEnabled="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}}"
+                                            d:Visibility="Visible"
+                                            d:IsEnabled="True">
                                             <RadioButton
                                                 Content="{Binding [Double6Label]}"
                                                 GroupName="MaximumDouble"
@@ -86,7 +99,7 @@
                                                 FontSize="20"
                                                 Padding="18,20"
                                                 IsChecked="{Binding Room.IsDoubleSixSelected, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}"
-                                                AutomationProperties.Name="{Binding [Double6AccessibleName]}" />
+                                                d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [Double9Label]}"
                                                 GroupName="MaximumDouble"
@@ -95,7 +108,7 @@
                                                 FontSize="20"
                                                 Padding="18,20"
                                                 IsChecked="{Binding Room.IsDoubleNineSelected, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}"
-                                                AutomationProperties.Name="{Binding [Double9AccessibleName]}" />
+                                                d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [Double12Label]}"
                                                 GroupName="MaximumDouble"
@@ -104,8 +117,38 @@
                                                 FontSize="20"
                                                 Padding="18,20"
                                                 IsChecked="{Binding Room.IsDoubleTwelveSelected, RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}"
-                                                AutomationProperties.Name="{Binding [Double12AccessibleName]}" />
+                                                d:IsChecked="True" />
                                         </UniformGrid>
+                                        <Border
+                                            Background="{StaticResource Mist}"
+                                            Padding="18,20"
+                                            d:Visibility="Collapsed">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger
+                                                            Binding="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel>
+                                                <TextBlock
+                                                    Text="{Binding Room.MaximumDouble, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    Style="{StaticResource PixelText}"
+                                                    FontSize="24"
+                                                    HorizontalAlignment="Center" />
+                                                <TextBlock
+                                                    Text="{Binding [MaximumDoubleReadOnlyDescription]}"
+                                                    Style="{StaticResource MatchBody}"
+                                                    Margin="0,12,0,0"
+                                                    FontSize="16"
+                                                    TextAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
                                         <TextBlock
                                             Text="{Binding [MaximumDoubleDescription]}"
                                             Style="{StaticResource MatchBody}"
@@ -114,7 +157,8 @@
                                     </StackPanel>
                                     <Grid
                                         Grid.Column="2"
-                                        DataContext="{Binding Room, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        DataContext="{Binding Room, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        d:DataContext="{d:DesignInstance Type=viewModels:RoomViewModel, IsDesignTimeCreatable=True}">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="35" />
                                             <RowDefinition Height="*" />
@@ -123,8 +167,6 @@
                                             Text="{Binding [PlayersLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}"
                                             Style="{StaticResource MatchSection}" />
                                         <TextBlock
-                                            x:Name="_playerCountText"
-                                            x:FieldModifier="private"
                                             Style="{StaticResource PixelText}"
                                             HorizontalAlignment="Right"
                                             FontSize="13">
@@ -140,10 +182,7 @@
                                             Grid.Row="1"
                                             VerticalScrollBarVisibility="Auto"
                                             HorizontalScrollBarVisibility="Disabled">
-                                            <ItemsControl
-                                                x:Name="_playersItems"
-                                                x:FieldModifier="private"
-                                                ItemsSource="{Binding Players}">
+                                            <ItemsControl ItemsSource="{Binding Players}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <Border
@@ -183,10 +222,33 @@
                                                                     VerticalAlignment="Center"
                                                                     Margin="0,0,12,0">
                                                                     <TextBlock
-                                                                        Text="{Binding Username}"
                                                                         ToolTip="{Binding Username}"
-                                                                        Style="{StaticResource MatchBody}"
-                                                                        FontSize="19" />
+                                                                        FontSize="19">
+                                                                        <TextBlock.Style>
+                                                                            <Style
+                                                                                TargetType="TextBlock"
+                                                                                BasedOn="{StaticResource MatchBody}">
+                                                                                <Setter
+                                                                                    Property="Text"
+                                                                                    Value="{Binding Username}" />
+                                                                                <Style.Triggers>
+                                                                                    <MultiDataTrigger>
+                                                                                        <MultiDataTrigger.Conditions>
+                                                                                            <Condition
+                                                                                                Binding="{Binding IsCurrentPlayer}"
+                                                                                                Value="True" />
+                                                                                            <Condition
+                                                                                                Binding="{Binding Username}"
+                                                                                                Value="" />
+                                                                                        </MultiDataTrigger.Conditions>
+                                                                                        <Setter
+                                                                                            Property="Text"
+                                                                                            Value="{Binding [YouPlayerLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
+                                                                                    </MultiDataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
                                                                     <TextBlock
                                                                         Text="{Binding [RoomHostLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}">
                                                                         <TextBlock.Style>
@@ -238,9 +300,9 @@
                                                                         </TextBlock.Style>
                                                                     </TextBlock>
                                                                     <Button
-                                                                        Content="{Binding [AcceptReadyButtonLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}"
-                                                                        Click="OpenWaitingRoom"
-                                                                        MinWidth="150"
+                                                                        Content="{Binding [MarkReadyButtonLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}"
+                                                                        Click="MarkReady"
+                                                                        MinWidth="180"
                                                                         FontSize="9">
                                                                         <Button.Style>
                                                                             <Style
@@ -256,6 +318,13 @@
                                                                                         <Setter
                                                                                             Property="Visibility"
                                                                                             Value="Visible" />
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger
+                                                                                        Binding="{Binding IsReady}"
+                                                                                        Value="True">
+                                                                                        <Setter
+                                                                                            Property="IsEnabled"
+                                                                                            Value="False" />
                                                                                     </DataTrigger>
                                                                                 </Style.Triggers>
                                                                             </Style>
@@ -284,8 +353,6 @@
                                                 </Style>
                                             </Border.Style>
                                             <TextBlock
-                                                x:Name="_emptyPlayersText"
-                                                x:FieldModifier="private"
                                                 Text="{Binding [RoomNoPlayersLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}"
                                                 Style="{StaticResource MatchBody}"
                                                 FontSize="16" />
@@ -299,7 +366,11 @@
                                         Click="OpenResults"
                                         HorizontalAlignment="Right"
                                         Width="270"
-                                        Background="{StaticResource Aqua}" />
+                                        Background="{StaticResource Aqua}"
+                                        Visibility="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource HostVisibility}}"
+                                        IsEnabled="{Binding IsHost, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        d:Visibility="Visible"
+                                        d:IsEnabled="True" />
                                 </Grid>
                             </Grid>
                         </Border>

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace DominoTrainGame.ViewModels;
 
-public sealed class GameSetupViewModel : INotifyPropertyChanged
+public sealed class RoomViewModel : INotifyPropertyChanged
 {
     private const int DefaultMaximumPlayers = 4;
     private const int DoubleSix = 6;

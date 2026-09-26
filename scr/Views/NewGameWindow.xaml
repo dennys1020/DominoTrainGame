@@ -81,7 +81,7 @@
                                             <Button
                                                 Content="{Binding [CreateGameButtonLabel]}"
                                                 Style="{StaticResource MatchButton}"
-                                                Click="OpenGameSetup"
+                                                Click="OpenRoom"
                                                 Grid.Row="3"
                                                 Background="{StaticResource Aqua}" />
                                         </Grid>

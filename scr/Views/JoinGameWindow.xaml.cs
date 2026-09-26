@@ -1,6 +1,5 @@
 using System.Windows;
 using DominoTrainGame.Navigation;
-using DominoTrainGame.ViewModels;
 
 namespace DominoTrainGame.Views;
 
@@ -27,13 +26,8 @@ public partial class JoinGameWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenWaitingRoom(object sender, RoutedEventArgs e)
+    private void OpenRoom(object sender, RoutedEventArgs e)
     {
-        GameSetupViewModel room = new GameSetupViewModel();
-        room.Players.Add(new RoomPlayerViewModel("local-player", string.Empty)
-        {
-            IsCurrentPlayer = true
-        });
-        WindowNavigation.Navigate(this, new WaitingRoomWindow(room, false));
+        WindowNavigation.Navigate(this, new RoomWindow(false));
     }
 }
