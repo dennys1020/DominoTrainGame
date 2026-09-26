@@ -59,4 +59,13 @@ public partial class MainWindow : Window
         };
         profileWindow.ShowDialog();
     }
+
+    private void OpenFriendsList(object sender, RoutedEventArgs e)
+    {
+        FriendsListWindow friendsWindow = new FriendsListWindow
+        {
+            Owner = this
+        };
+        friendsWindow.ShowDialog();
+    }
 }

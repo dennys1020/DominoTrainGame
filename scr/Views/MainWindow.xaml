@@ -127,8 +127,7 @@
                         HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Button Style="{StaticResource MenuIconButton}" Margin="0,0,0,14"
                         Click="OpenProfile"
-                        ToolTip="{Binding [OpenProfileButtonLabel]}"
-                        AutomationProperties.Name="{Binding [OpenProfileButtonLabel]}">
+                        ToolTip="{Binding [OpenProfileButtonLabel]}">
                         <Image Width="41" Height="43" Stretch="Uniform"
                            Source="/Resources/Images/avatar_generic_preview.png"
                            RenderOptions.BitmapScalingMode="NearestNeighbor" />
@@ -136,8 +135,7 @@
 
                     <Button Style="{StaticResource MenuIconButton}" Margin="0,0,0,14"
                         Click="OpenFriendsList"
-                        ToolTip="{Binding [OpenFriendsListLabel]}"
-                        AutomationProperties.Name="{Binding [OpenFriendsListLabel]}">
+                        ToolTip="{Binding [OpenFriendsListLabel]}">
                         <Image Width="36" Height="36" Source="{StaticResource MenuFriendsImage}" />
                     </Button>
 
