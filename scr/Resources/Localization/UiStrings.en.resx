@@ -159,6 +159,12 @@
   <data name="EnglishLanguageDescription" xml:space="preserve">
     <value>English</value>
   </data>
+  <data name="SpanishLanguageAccessibleName" xml:space="preserve">
+    <value>Spanish / Español</value>
+  </data>
+  <data name="EnglishLanguageAccessibleName" xml:space="preserve">
+    <value>English</value>
+  </data>
   <data name="BackButtonLabel" xml:space="preserve">
     <value>BACK</value>
   </data>
@@ -201,11 +207,23 @@
   <data name="SignUpBottonLabel" xml:space="preserve">
     <value>SIGN UP</value>
   </data>
+  <data name="SignUpButtonAccesibleName" xml:space="preserve">
+    <value>Sign up new account</value>
+  </data>
+  <data name="RegisterSucessMessage" xml:space="preserve">
+    <value>Register successfully</value>
+  </data>
   <data name="ChangePasswordWindowTitle" xml:space="preserve">
     <value>Domino Train · Change password</value>
   </data>
   <data name="ChangePasswordTitle" xml:space="preserve">
     <value>CHANGE PASSWORD</value>
+  </data>
+  <data name="AccountSecuritySectionLabel" xml:space="preserve">
+    <value>01 / SECURITY</value>
+  </data>
+  <data name="ProtectAccountDescription" xml:space="preserve">
+    <value>Your next journey starts with a secure account.</value>
   </data>
   <data name="CurrentPasswordLabel" xml:space="preserve">
     <value>CURRENT PASSWORD</value>
@@ -221,6 +239,9 @@
   </data>
   <data name="PasswordPrivacyNote" xml:space="preserve">
     <value>Do not share your password with other players.</value>
+  </data>
+  <data name="CurrentPasswordRequiredMessage" xml:space="preserve">
+    <value>Enter your current password.</value>
   </data>
   <data name="NewPasswordHint" xml:space="preserve">
     <value>Choose a password different from your current one and confirm it.</value>
@@ -249,11 +270,17 @@
   <data name="CancelButtonLabel" xml:space="preserve">
     <value>CANCEL</value>
   </data>
+  <data name="SignUpWindowTitle" xml:space="preserve">
+    <value>Domino Train - Sign Up</value>
+  </data>
   <data name="LoginWindowTitle" xml:space="preserve">
     <value>Domino Train - Sign Up</value>
   </data>
   <data name="LoginSectionTitle" xml:space="preserve">
     <value>LOG IN</value>
+  </data>
+  <data name="LoginSiderBarLabel" xml:space="preserve">
+    <value>WELCOME BACK</value>
   </data>
   <data name="LoginSidebarDescription" xml:space="preserve">
     <value>Log in to continue your game.</value>
@@ -261,20 +288,50 @@
   <data name="LoginIdentifierLabel" xml:space="preserve">
     <value>EMAIL OR USERNAME</value>
   </data>
+  <data name="LoginIdentifierAccessibleName" xml:space="preserve">
+    <value>Email or username field</value>
+  </data>
   <data name="LoginButtonLabel" xml:space="preserve">
     <value>LOGIN</value>
+  </data>
+  <data name="LoginButtonAccessibleName" xml:space="preserve">
+    <value>Login</value>
   </data>
   <data name="GuestButtonLabel" xml:space="preserve">
     <value>PLAY AS A GUEST</value>
   </data>
+  <data name="GuestButtonAccessibleName" xml:space="preserve">
+    <value>Play as guest</value>
+  </data>
   <data name="ForgotPasswordLabel" xml:space="preserve">
     <value>Forgot your password?</value>
+  </data>
+  <data name="ForgotPasswordAccessibleName" xml:space="preserve">
+    <value>Recover password</value>
   </data>
   <data name="NoAccountLabel" xml:space="preserve">
     <value>Don't have an account?</value>
   </data>
   <data name="CreateAccountLinkLabel" xml:space="preserve">
     <value>Sign up</value>
+  </data>
+  <data name="CreateAccountAccessibleName" xml:space="preserve">
+    <value>Go to the sign up</value>
+  </data>
+  <data name="EmptyFieldsMessage" xml:space="preserve">
+    <value>Error: Required fields cannot be empty</value>
+  </data>
+  <data name="InvalidPasswordMessage" xml:space="preserve">
+    <value>Error: The password must have at least {0} characters</value>
+  </data>
+  <data name="EmailAccessibleName" xml:space="preserve">
+    <value>Email address field</value>
+  </data>
+  <data name="UsernameAccessibleName" xml:space="preserve">
+    <value>Username field</value>
+  </data>
+  <data name="PasswordAccessibleName" xml:space="preserve">
+    <value>Password field</value>
   </data>
   <data name="AlreadyHaveAccountLabel" xml:space="preserve">
     <value>Do you already have an account?</value>
@@ -288,6 +345,15 @@
   <data name="EditButtonLabel" xml:space="preserve">
     <value>EDIT</value>
   </data>
+  <data name="SaveProfileAccessibleName" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="CancelEditAccessibleName" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="FriendListWindowTitle" xml:space="preserve">
+    <value>FRIENDS LIST</value>
+  </data>
   <data name="ButtonRemove" xml:space="preserve">
     <value>Remove</value>
   </data>
@@ -300,17 +366,32 @@
   <data name="ButtonAdd" xml:space="preserve">
     <value>Add</value>
   </data>
+  <data name="ButtonAccept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="ButtonReject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
   <data name="VerificationWindowTitle" xml:space="preserve">
     <value>Verification</value>
   </data>
+  <data name="VerificationTittle" xml:space="preserve">
+    <value>Enter code</value>
+  </data>
   <data name="VerificationPrompt" xml:space="preserve">
     <value>Enter the 5-digit code we sent to your email</value>
+  </data>
+  <data name="VerificationCodeAccessibleName" xml:space="preserve">
+    <value>Verification code</value>
   </data>
   <data name="VerificationNoEmail" xml:space="preserve">
     <value>Didn't receive the email?</value>
   </data>
   <data name="ButtonResendCode" xml:space="preserve">
     <value>Resend code</value>
+  </data>
+  <data name="BackToLoginLabel" xml:space="preserve">
+    <value>Back to login</value>
   </data>
   <data name="ButtonVerify" xml:space="preserve">
     <value>Verify</value>
@@ -381,8 +462,20 @@ CODE</value>
   <data name="RoomWindowTitle" xml:space="preserve">
     <value>Domino Train · Game room</value>
   </data>
-  <data name="RoomTitle" xml:space="preserve">
-    <value>GAME ROOM</value>
+  <data name="GameSetupTitle" xml:space="preserve">
+    <value>GAME SETUP</value>
+  </data>
+  <data name="GameSetupDescription" xml:space="preserve">
+    <value>Set up the table and gather your fellow travelers.</value>
+  </data>
+  <data name="WaitingRoomWindowTitle" xml:space="preserve">
+    <value>Domino Train · Waiting room</value>
+  </data>
+  <data name="WaitingRoomTitle" xml:space="preserve">
+    <value>WAITING ROOM</value>
+  </data>
+  <data name="WaitingRoomDescription" xml:space="preserve">
+    <value>The table is ready. Your next journey is about to begin.</value>
   </data>
   <data name="RoomCodeLabel" xml:space="preserve">
     <value>GAME CODE</value>
@@ -408,8 +501,23 @@ CODE</value>
   <data name="Double12Label" xml:space="preserve">
     <value>12</value>
   </data>
+  <data name="Double6AccessibleName" xml:space="preserve">
+    <value>Double six</value>
+  </data>
+  <data name="Double9AccessibleName" xml:space="preserve">
+    <value>Double nine</value>
+  </data>
+  <data name="Double12AccessibleName" xml:space="preserve">
+    <value>Double twelve</value>
+  </data>
   <data name="PlayersLabel" xml:space="preserve">
     <value>PLAYERS</value>
+  </data>
+  <data name="SamplePlayerCount" xml:space="preserve">
+    <value>3 / 4</value>
+  </data>
+  <data name="YouHostLabel" xml:space="preserve">
+    <value>You (host)</value>
   </data>
   <data name="YouPlayerLabel" xml:space="preserve">
     <value>You</value>
@@ -426,8 +534,17 @@ CODE</value>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>READY</value>
   </data>
+  <data name="OpenSeatLabel" xml:space="preserve">
+    <value>+  One seat available</value>
+  </data>
   <data name="StartMatchButtonLabel" xml:space="preserve">
     <value>START</value>
+  </data>
+  <data name="SetupRoomNote" xml:space="preserve">
+    <value>Confirm your seat to go to the waiting room.</value>
+  </data>
+  <data name="ReadyRoomNote" xml:space="preserve">
+    <value>Ready to share a new round.</value>
   </data>
   <data name="GameRulesButtonLabel" xml:space="preserve">
     <value>GAME RULES</value>
@@ -560,23 +677,5 @@ CODE</value>
   </data>
   <data name="RuleStep6" xml:space="preserve">
     <value>06</value>
-  </data>
-  <data name="RoomPlayerCountFormat" xml:space="preserve">
-    <value>{0} / {1}</value>
-  </data>
-  <data name="RoomHostLabel" xml:space="preserve">
-    <value>HOST</value>
-  </data>
-  <data name="RoomNotReadyLabel" xml:space="preserve">
-    <value>NOT READY</value>
-  </data>
-  <data name="RoomNoPlayersLabel" xml:space="preserve">
-    <value>There are no players in the room yet.</value>
-  </data>
-  <data name="MarkReadyButtonLabel" xml:space="preserve">
-    <value>I'M READY</value>
-  </data>
-  <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
-    <value>Selected by the host.</value>
   </data>
 </root>

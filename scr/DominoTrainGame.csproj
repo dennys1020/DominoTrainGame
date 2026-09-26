@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
@@ -16,8 +15,6 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,10 +46,7 @@
       <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -131,6 +125,9 @@
     <Compile Include="Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LeaderBoardWindow.xaml.cs">
+      <DependentUpon>LeaderBoardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LogInWindow.xaml.cs">
       <DependentUpon>LogInWindow.xaml</DependentUpon>
     </Compile>
@@ -144,11 +141,17 @@
     <Compile Include="Views\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RecoverPasswordWindow.xaml.cs">
+      <DependentUpon>RecoverPasswordWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignUpWindow.xaml.cs">
       <DependentUpon>SignUpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VerificationCode.xaml.cs">
+      <DependentUpon>VerificationCode.xaml</DependentUpon>
     </Compile>
     <Page Include="Resources\Styles\PixelTheme.xaml">
       <SubType>Designer</SubType>
@@ -166,6 +169,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\LeaderBoardWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LogInWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,11 +185,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\RecoverPasswordWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SignUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VerificationCode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
