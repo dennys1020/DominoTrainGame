@@ -378,20 +378,14 @@ CODE</value>
   <data name="JoinRoomButtonLabel" xml:space="preserve">
     <value>ENTER ROOM</value>
   </data>
-  <data name="GameSetupWindowTitle" xml:space="preserve">
-    <value>Domino Train · Game setup</value>
+  <data name="RoomWindowTitle" xml:space="preserve">
+    <value>Domino Train · Game room</value>
   </data>
-  <data name="GameSetupTitle" xml:space="preserve">
-    <value>GAME SETUP</value>
-  </data>
-  <data name="WaitingRoomWindowTitle" xml:space="preserve">
-    <value>Domino Train · Waiting room</value>
-  </data>
-  <data name="WaitingRoomTitle" xml:space="preserve">
-    <value>WAITING ROOM</value>
+  <data name="RoomTitle" xml:space="preserve">
+    <value>GAME ROOM</value>
   </data>
   <data name="RoomCodeLabel" xml:space="preserve">
-    <value>01 / GAME CODE</value>
+    <value>GAME CODE</value>
   </data>
   <data name="SampleRoomCode" xml:space="preserve">
     <value>XXXXXX</value>
@@ -400,7 +394,7 @@ CODE</value>
     <value>Share this code with your friends.</value>
   </data>
   <data name="MaximumDoubleLabel" xml:space="preserve">
-    <value>02 / HIGHEST DOUBLE</value>
+    <value> HIGHEST DOUBLE</value>
   </data>
   <data name="MaximumDoubleDescription" xml:space="preserve">
     <value>The highest double defines the set of tiles for the game.</value>
@@ -415,7 +409,7 @@ CODE</value>
     <value>12</value>
   </data>
   <data name="PlayersLabel" xml:space="preserve">
-    <value>03 / PLAYERS</value>
+    <value>PLAYERS</value>
   </data>
   <data name="YouPlayerLabel" xml:space="preserve">
     <value>You</value>
@@ -429,20 +423,11 @@ CODE</value>
   <data name="SampleFriendThree" xml:space="preserve">
     <value>Friend 3</value>
   </data>
-  <data name="AcceptReadyButtonLabel" xml:space="preserve">
-    <value>READY</value>
-  </data>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>READY</value>
   </data>
   <data name="StartMatchButtonLabel" xml:space="preserve">
     <value>START</value>
-  </data>
-  <data name="SetupRoomNote" xml:space="preserve">
-    <value>Confirm your seat to go to the waiting room.</value>
-  </data>
-  <data name="ReadyRoomNote" xml:space="preserve">
-    <value>Each player sets their ready status. The host starts the game.</value>
   </data>
   <data name="GameRulesButtonLabel" xml:space="preserve">
     <value>GAME RULES</value>

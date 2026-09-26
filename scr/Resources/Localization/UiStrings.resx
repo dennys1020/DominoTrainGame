@@ -378,20 +378,14 @@ INVITACIÓN</value>
   <data name="JoinRoomButtonLabel" xml:space="preserve">
     <value>ENTRAR A LA SALA</value>
   </data>
-  <data name="GameSetupWindowTitle" xml:space="preserve">
-    <value>Domino Train · Configuración de partida</value>
+  <data name="RoomWindowTitle" xml:space="preserve">
+    <value>Domino Train · Sala de partida</value>
   </data>
-  <data name="GameSetupTitle" xml:space="preserve">
-    <value>CONFIGURACIÓN DE PARTIDA</value>
-  </data>
-  <data name="WaitingRoomWindowTitle" xml:space="preserve">
-    <value>Domino Train · Sala de espera</value>
-  </data>
-  <data name="WaitingRoomTitle" xml:space="preserve">
-    <value>SALA DE ESPERA</value>
+  <data name="RoomTitle" xml:space="preserve">
+    <value>SALA DE PARTIDA</value>
   </data>
   <data name="RoomCodeLabel" xml:space="preserve">
-    <value>01 / CÓDIGO DE PARTIDA</value>
+    <value>CÓDIGO DE PARTIDA</value>
   </data>
   <data name="SampleRoomCode" xml:space="preserve">
     <value>XXXXXX</value>
@@ -400,7 +394,7 @@ INVITACIÓN</value>
     <value>Comparte este código con tus amigos.</value>
   </data>
   <data name="MaximumDoubleLabel" xml:space="preserve">
-    <value>02 / DOBLE MÁXIMO</value>
+    <value>DOBLE MÁXIMO</value>
   </data>
   <data name="MaximumDoubleDescription" xml:space="preserve">
     <value>El doble máximo define el conjunto de fichas de la partida.</value>
@@ -415,7 +409,7 @@ INVITACIÓN</value>
     <value>12</value>
   </data>
   <data name="PlayersLabel" xml:space="preserve">
-    <value>03 / JUGADORES</value>
+    <value>JUGADORES</value>
   </data>
   <data name="YouPlayerLabel" xml:space="preserve">
     <value>Tú</value>
@@ -429,20 +423,11 @@ INVITACIÓN</value>
   <data name="SampleFriendThree" xml:space="preserve">
     <value>Amigo 3</value>
   </data>
-  <data name="AcceptReadyButtonLabel" xml:space="preserve">
-    <value>ACEPTAR</value>
-  </data>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>LISTO</value>
   </data>
   <data name="StartMatchButtonLabel" xml:space="preserve">
     <value>INICIAR</value>
-  </data>
-  <data name="SetupRoomNote" xml:space="preserve">
-    <value>Acepta tu lugar para pasar a la sala de espera.</value>
-  </data>
-  <data name="ReadyRoomNote" xml:space="preserve">
-    <value>Cada jugador marca su estado. El anfitrión inicia la partida.</value>
   </data>
   <data name="GameRulesButtonLabel" xml:space="preserve">
     <value>REGLAS DEL JUEGO</value>
