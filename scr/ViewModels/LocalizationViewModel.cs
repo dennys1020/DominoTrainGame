@@ -67,16 +67,13 @@ namespace DominoTrainGame.ViewModels
 
         private void ChangeLanguage(string languageCode)
         {
-            if (_culture.Name == languageCode)
+            if (_culture.Name != languageCode)
             {
-                return;
+                _culture = CultureInfo.GetCultureInfo(languageCode);
+                UiStrings.Culture = _culture;
+
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
             }
-
-            _culture = CultureInfo.GetCultureInfo(languageCode);
-            UiStrings.Culture = _culture;
-
-            // An empty property name refreshes every translated label and language selection.
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Empty));
         }
     }
 }

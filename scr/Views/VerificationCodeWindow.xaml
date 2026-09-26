@@ -95,12 +95,9 @@
                             Style="{StaticResource PixelButton}"
                             Height="46"
                             HorizontalAlignment="Right"
-                            AutomationProperties.Name="{Binding [OpenSettingsAccessibleName]}"
                             Click="OpenSettings" />
                             <Button
-                            x:Name="CloseButton"
                             Style="{StaticResource CloseButtonStyle}"
-                            AutomationProperties.Name="{Binding [CloseButtonAccessibleName]}"
                             Click="CloseWindow_Click">
                                 <Path
                                 Stroke="{StaticResource Glacier}"
@@ -173,10 +170,8 @@
                                             FontSize="14"
                                             Margin="0,0,0,28" />
                                         <StackPanel
-                                            x:Name="_codePanel"
                                             Orientation="Horizontal"
-                                            HorizontalAlignment="Center"
-                                            AutomationProperties.Name="{Binding [VerificationCodeAccessibleName]}">
+                                            HorizontalAlignment="Center">
                                             <TextBox x:Name="_codeBox1" x:FieldModifier="private" Style="{StaticResource CodeBox}"
                                                      TextChanged="CodeBox_TextChanged" PreviewKeyDown="CodeBox_PreviewKeyDown" />
                                             <TextBox x:Name="_codeBox2" x:FieldModifier="private" Style="{StaticResource CodeBox}"

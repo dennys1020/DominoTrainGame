@@ -343,8 +343,7 @@
                                         BorderThickness="0,0,4,0">
                                         <Grid
                                             Width="170"
-                                            Height="170"
-                                            AutomationProperties.Name="{Binding [AvatarAccessibleName]}">
+                                            Height="170">
                                             <Border Background="{StaticResource Ink}" Margin="4,4,0,0" />
                                             <Border
                                                 Background="{StaticResource Frost}"
@@ -352,22 +351,17 @@
                                                 BorderThickness="3"
                                                 Margin="0,0,4,4">
                                                 <Image
-                                                    x:Name="_mainAvatarImage"
                                                     Source="/Resources/Images/avatar_generic_preview.png"
                                                     Width="160"
                                                     Height="160"
-                                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                                    x:FieldModifier="private" />
+                                                    RenderOptions.BitmapScalingMode="NearestNeighbor" />
                                             </Border>
                                             <Button
-                                                x:Name="_editAvatarButton"
                                                 Style="{StaticResource ProfileIconButton}"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Bottom"
                                                 Margin="0,0,-14,-12"
-                                                Click="EditButton_Click"
-                                                AutomationProperties.Name="{Binding [EditAvatarAccessibleName]}"
-                                                x:FieldModifier="private">
+                                                Click="EditButton_Click">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -404,21 +398,15 @@
                                             </Grid.ColumnDefinitions>
 
                                             <TextBox
-                                                x:Name="_usernameTextBox"
                                                 Width="360"
                                                 Style="{StaticResource ProfileTextBox}"
-                                                IsReadOnly="True"
-                                                AutomationProperties.Name="{Binding [UsernameAccessibleName]}"
-                                                x:FieldModifier="private" />
+                                                IsReadOnly="True" />
 
                                             <Button
-                                                x:Name="_editUsernameButton"
                                                 Grid.Column="1"
                                                 Margin="14,0,0,0"
                                                 Style="{StaticResource ProfileIconButton}"
-                                                Click="EditButton_Click"
-                                                AutomationProperties.Name="{Binding [EditUsernameAccessibleName]}"
-                                                x:FieldModifier="private">
+                                                Click="EditButton_Click">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -439,8 +427,7 @@
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
                                                     Margin="0,0,14,0"
-                                                    Click="InstagramButton_Click"
-                                                    AutomationProperties.Name="{Binding [InstagramAccessibleName]}">
+                                                    Click="InstagramButton_Click">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="22"
@@ -459,8 +446,7 @@
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
                                                     Margin="0,0,14,0"
-                                                    Click="EditButton_Click"
-                                                    AutomationProperties.Name="{Binding [XAccessibleName]}">
+                                                    Click="EditButton_Click">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="20"
@@ -485,8 +471,7 @@
                                                 </Button>
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
-                                                    Click="FacebookButton_Click"
-                                                    AutomationProperties.Name="{Binding [FacebookAccessibleName]}">
+                                                    Click="FacebookButton_Click">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="22"
@@ -503,12 +488,9 @@
                                             </StackPanel>
 
                                             <Button
-                                                x:Name="_closeButton"
                                                 Grid.Column="4"
                                                 Style="{StaticResource ProfileIconButton}"
-                                                Click="CloseButton_Click"
-                                                AutomationProperties.Name="{Binding [CloseAccessibleName]}"
-                                                x:FieldModifier="private">
+                                                Click="CloseButton_Click">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="16" Height="16">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -531,12 +513,9 @@
                                             Margin="0,14,0,6" />
 
                                         <TextBox
-                                            x:Name="_biographyTextBox"
                                             Grid.Row="2"
                                             Style="{StaticResource ProfileBiographyTextBox}"
-                                            IsReadOnly="True"
-                                            AutomationProperties.Name="{Binding [BiographyAccessibleName]}"
-                                            x:FieldModifier="private" />
+                                            IsReadOnly="True" />
                                     </Grid>
                                 </Grid>
 
@@ -569,14 +548,11 @@
                                                 VerticalAlignment="Center" />
                                         </DockPanel>
                                         <ListBox
-                                            x:Name="_avatarListBox"
                                             Grid.Row="1"
                                             Style="{StaticResource AvatarListBox}"
                                             VerticalAlignment="Top"
                                             HorizontalAlignment="Left"
-                                            Margin="0,10,0,0"
-                                            AutomationProperties.Name="{Binding [AvatarListAccessibleName]}"
-                                            x:FieldModifier="private">
+                                            Margin="0,10,0,0">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Image
@@ -619,31 +595,25 @@
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
-                                                    x:Name="_gamesPlayedValueTextBlock"
                                                     Style="{StaticResource PixelText}"
                                                     FontSize="18"
-                                                    Margin="0,8,0,20"
-                                                    x:FieldModifier="private" />
+                                                    Margin="0,8,0,20" />
                                                 <TextBlock
                                                     Text="{Binding [WinsLabel]}"
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
-                                                    x:Name="_winsValueTextBlock"
                                                     Style="{StaticResource PixelText}"
                                                     FontSize="18"
-                                                    Margin="0,8,0,20"
-                                                    x:FieldModifier="private" />
+                                                    Margin="0,8,0,20" />
                                                 <TextBlock
                                                     Text="{Binding [MemberSinceLabel]}"
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
-                                                    x:Name="_memberSinceValueTextBlock"
                                                     Style="{StaticResource PixelText}"
                                                     FontSize="18"
-                                                    Margin="0,8,0,0"
-                                                    x:FieldModifier="private" />
+                                                    Margin="0,8,0,0" />
                                             </StackPanel>
 
                                             <Grid Grid.Row="2" Height="52">
@@ -653,30 +623,21 @@
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
                                                 <Button
-                                                    x:Name="_editButton"
                                                     Grid.ColumnSpan="3"
                                                     Content="{Binding [EditButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
-                                                    Click="EditButton_Click"
-                                                    AutomationProperties.Name="{Binding [EditProfileAccessibleName]}"
-                                                    x:FieldModifier="private" />
+                                                    Click="EditButton_Click" />
                                                 <Button
-                                                    x:Name="_cancelButton"
                                                     Content="{Binding [CancelButtonLabel]}"
                                                     Style="{StaticResource ProfileButton}"
                                                     Visibility="Collapsed"
-                                                    Click="CancelButton_Click"
-                                                    AutomationProperties.Name="{Binding [CancelEditAccessibleName]}"
-                                                    x:FieldModifier="private" />
+                                                    Click="CancelButton_Click" />
                                                 <Button
-                                                    x:Name="_saveButton"
                                                     Grid.Column="2"
                                                     Content="{Binding [SaveButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
                                                     Visibility="Collapsed"
-                                                    Click="SaveButton_Click"
-                                                    AutomationProperties.Name="{Binding [SaveProfileAccessibleName]}"
-                                                    x:FieldModifier="private" />
+                                                    Click="SaveButton_Click" />
                                             </Grid>
                                         </Grid>
                                     </Border>

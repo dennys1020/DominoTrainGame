@@ -159,7 +159,6 @@
                                                 x:Name="_musicVolumeSlider"
                                                 Value="{x:Static resources:SettingsDefaults.DefaultMusicVolume}"
                                                 Style="{StaticResource PixelSlider}"
-                                                AutomationProperties.Name="{Binding [MusicVolumeAccessibleName]}"
                                                 Margin="0,24,0,22"
                                                 Grid.RowSpan="3"
                                                 x:FieldModifier="private" />
@@ -239,12 +238,9 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <RadioButton
-                                            x:Name="_spanishLanguageOption"
                                             GroupName="Language"
                                             IsChecked="{Binding IsSpanishSelected, Mode=TwoWay}"
-                                            Style="{StaticResource LanguageOption}"
-                                            AutomationProperties.Name="{Binding [SpanishLanguageAccessibleName]}"
-                                            x:FieldModifier="private">
+                                            Style="{StaticResource LanguageOption}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Border
                                                     Width="40"
@@ -273,13 +269,10 @@
                                             </StackPanel>
                                         </RadioButton>
                                         <RadioButton
-                                            x:Name="_englishLanguageOption"
                                             Grid.Column="2"
                                             GroupName="Language"
                                             IsChecked="{Binding IsEnglishSelected, Mode=TwoWay}"
-                                            Style="{StaticResource LanguageOption}"
-                                            AutomationProperties.Name="{Binding [EnglishLanguageAccessibleName]}"
-                                            x:FieldModifier="private">
+                                            Style="{StaticResource LanguageOption}">
                                             <StackPanel Orientation="Horizontal">
                                                 <Border
                                                     Width="40"
@@ -317,7 +310,6 @@
                                                 Width="154"
                                                 Height="50"
                                                 IsCancel="True"
-                                                AutomationProperties.Name="{Binding [ReturnToPreviousScreenAccessibleName]}"
                                                 Click="CloseSettings" />
                                             <Button
                                                 Content="{Binding [SaveButtonLabel]}"
@@ -327,7 +319,6 @@
                                                 Height="50"
                                                 Background="{StaticResource Ink}"
                                                 Foreground="{StaticResource Glacier}"
-                                                AutomationProperties.Name="{Binding [ApplySettingsAccessibleName]}"
                                                 Click="CloseSettings" />
                                         </Grid>
                                     </Grid>

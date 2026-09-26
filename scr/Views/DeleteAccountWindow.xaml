@@ -130,7 +130,6 @@
                             Style="{StaticResource PixelButton}"
                             Height="46"
                             HorizontalAlignment="Right"
-                            AutomationProperties.Name="{Binding [OpenSettingsButtonLabel]}"
                             Click="OpenSettings" />
                     </Grid>
                     <Grid Grid.Row="1" Margin="0,4,0,8">
@@ -195,9 +194,7 @@
                                         <PasswordBox
                                             x:Name="_currentPasswordBox"
                                             x:FieldModifier="private"
-                                            Style="{StaticResource PasswordField}"
-                                            AutomationProperties.Name="{Binding [CurrentPasswordLabel]}"
-                                            AutomationProperties.HelpText="{Binding [DeleteAccountPasswordHint]}" />
+                                            Style="{StaticResource PasswordField}" />
                                         <TextBlock
                                             Text="{Binding [DeleteAccountPasswordHint]}"
                                             TextWrapping="Wrap"
@@ -209,8 +206,7 @@
                                         Content="{Binding [DeleteAccountConfirmationLabel]}"
                                         Style="{StaticResource ConfirmationOption}"
                                         VerticalAlignment="Top"
-                                        Margin="0,8,0,24"
-                                        AutomationProperties.Name="{Binding [DeleteAccountConfirmationLabel]}" />
+                                        Margin="0,8,0,24" />
                                     <Grid Grid.Row="4">
                                         <Button
                                             Content="{Binding [CancelButtonLabel]}"
