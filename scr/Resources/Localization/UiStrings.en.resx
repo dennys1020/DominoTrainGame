@@ -678,4 +678,145 @@ CODE</value>
   <data name="RuleStep6" xml:space="preserve">
     <value>06</value>
   </data>
+  <data name="MarkReadyButtonLabel" xml:space="preserve">
+    <value>I'M READY</value>
+  </data>
+  <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
+    <value>Selected by the host.</value>
+  </data>
+  <data name="RoomHostLabel" xml:space="preserve">
+    <value>HOST</value>
+  </data>
+  <data name="RoomNoPlayersLabel" xml:space="preserve">
+    <value>There are no players in the room yet.</value>
+  </data>
+  <data name="RoomNotReadyLabel" xml:space="preserve">
+    <value>NOT READY</value>
+  </data>
+  <data name="RoomPlayerCountFormat" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="RoomTitle" xml:space="preserve">
+    <value>GAME ROOM</value>
+  </data>
+  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
+    <value>Connected players: {0}</value>
+  </data>
+  <data name="ScoreNoPlayersLabel" xml:space="preserve">
+    <value>No players or results to display yet.</value>
+  </data>
+  <data name="ScorePendingResultsLabel" xml:space="preserve">
+    <value>RESULTS PENDING</value>
+  </data>
+  <data name="ScoreRoundCountFormat" xml:space="preserve">
+    <value>Rounds: {0}</value>
+  </data>
+  <data name="ScoreRoundFormat" xml:space="preserve">
+    <value>ROUND {0}</value>
+  </data>
+  <data name="ScoreTieFormat" xml:space="preserve">
+    <value>TIE: {0}</value>
+  </data>
+  <data name="ScoreWinnerFormat" xml:space="preserve">
+    <value>WINNER: {0}</value>
+  </data>
+  <data name="AcceptReadyButtonLabel" xml:space="preserve">
+    <value>ACCEPT</value>
+  </data>
+  <data name="AvatarSectionLabel" xml:space="preserve">
+    <value>AVATAR</value>
+  </data>
+  <data name="BiographyLabel" xml:space="preserve">
+    <value>BIOGRAPHY</value>
+  </data>
+  <data name="ChangePasswordButtonLabel" xml:space="preserve">
+    <value>CHANGE PASSWORD</value>
+  </data>
+  <data name="DatabaseErrorMessage" xml:space="preserve">
+    <value>An error occurred while connecting to the database.</value>
+  </data>
+  <data name="EmailOrUsernameLabel" xml:space="preserve">
+    <value>EMAIL OR USERNAME</value>
+  </data>
+  <data name="FriendsListWindowTitle" xml:space="preserve">
+    <value>FRIENDS LIST</value>
+  </data>
+  <data name="GameSetupWindowTitle" xml:space="preserve">
+    <value>Domino Train · Game setup</value>
+  </data>
+  <data name="GamesPlayedLabel" xml:space="preserve">
+    <value>GAMES PLAYED</value>
+  </data>
+  <data name="LeaderboardGamesHeader" xml:space="preserve">
+    <value>GAMES</value>
+  </data>
+  <data name="LeaderboardPlayerHeader" xml:space="preserve">
+    <value>PLAYER</value>
+  </data>
+  <data name="LeaderboardRankHeader" xml:space="preserve">
+    <value>RANK</value>
+  </data>
+  <data name="LeaderboardTitle" xml:space="preserve">
+    <value>LEADERBOARD</value>
+  </data>
+  <data name="LeaderboardWindowTitle" xml:space="preserve">
+    <value>Domino Train · Leaderboard</value>
+  </data>
+  <data name="LeaderboardWinsHeader" xml:space="preserve">
+    <value>WINS</value>
+  </data>
+  <data name="LoginSidebarLabel" xml:space="preserve">
+    <value>LOGIN</value>
+  </data>
+  <data name="LoginSidebarTitle" xml:space="preserve">
+    <value>WELCOME BACK</value>
+  </data>
+  <data name="MemberSinceLabel" xml:space="preserve">
+    <value>MEMBER SINCE</value>
+  </data>
+  <data name="MessageIncorrectPassword" xml:space="preserve">
+    <value>The password is incorrect.</value>
+  </data>
+  <data name="MessageLoginSuccess" xml:space="preserve">
+    <value>Login successful.</value>
+  </data>
+  <data name="MessageRequiredFields" xml:space="preserve">
+    <value>Complete the required fields.</value>
+  </data>
+  <data name="MessageSignUpSuccess" xml:space="preserve">
+    <value>Registration completed successfully.</value>
+  </data>
+  <data name="MessageUserAlreadyExists" xml:space="preserve">
+    <value>The username or email is already registered.</value>
+  </data>
+  <data name="MessageUserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="ProfileSectionTitle" xml:space="preserve">
+    <value>PLAYER PROFILE</value>
+  </data>
+  <data name="ProfileStatsSectionLabel" xml:space="preserve">
+    <value>STATISTICS</value>
+  </data>
+  <data name="ProfileWindowTitle" xml:space="preserve">
+    <value>Domino Train · Profile</value>
+  </data>
+  <data name="RecoverPasswordFormTitle" xml:space="preserve">
+    <value>RECOVER PASSWORD</value>
+  </data>
+  <data name="RecoverPasswordWindowTitle" xml:space="preserve">
+    <value>Domino Train · Recover password</value>
+  </data>
+  <data name="ReportPlayerDescription" xml:space="preserve">
+    <value>Describe the reason for the report.</value>
+  </data>
+  <data name="ReportReasonRequiredMessage" xml:space="preserve">
+    <value>You must provide a reason for the report.</value>
+  </data>
+  <data name="VerificationTitle" xml:space="preserve">
+    <value>Enter code</value>
+  </data>
+  <data name="WinsLabel" xml:space="preserve">
+    <value>WINS</value>
+  </data>
 </root>

@@ -9,7 +9,7 @@ public partial class GameRulesWindow : Window
         InitializeComponent();
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs e)
+    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
     {
         Close();
     }
