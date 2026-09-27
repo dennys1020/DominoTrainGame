@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Data.Entity.Core;
 using System.Linq;
-using DominoTrainGame.Resources.Localization;
 using log4net.Ext.Trace;
+using DominoTrainGame.Resources.Localization;
 
 namespace DominoTrainGame;
-
 public sealed class LoginValidator
 {
     private static readonly ITraceLog _logger;
@@ -19,41 +19,46 @@ public sealed class LoginValidator
         if (string.IsNullOrWhiteSpace(usernameOrEmail) || string.IsNullOrWhiteSpace(password))
         {
             message = UiStrings.MessageRequiredFields;
+
             return false;
         }
 
         try
         {
-            using (DominoTrainBDEntities dbContext = new DominoTrainBDEntities())
+            using (DominoGameDBEntities dbContext = new DominoGameDBEntities())
             {
-                Players user = dbContext.Players.FirstOrDefault(
-                    p => p.Username == usernameOrEmail || p.Email == usernameOrEmail);
+                Player user = dbContext.Players.FirstOrDefault(
+                    p => p.UserName == usernameOrEmail || p.Email == usernameOrEmail);
 
                 if (user == null)
                 {
                     message = UiStrings.MessageUserNotFound;
+
                     return false;
                 }
 
-                string enteredHash = PasswordHasher.Hash(password);
+                bool isPasswordValid = PasswordHasher.Verify(user.PasswordHash, password);
 
-                if (user.Password == enteredHash)
+                if (!isPasswordValid)
                 {
-                    message = UiStrings.MessageLoginSuccess;
-                    return true;
+                    message = UiStrings.MessageIncorrectPassword;
+
+                    return false;
                 }
 
-                message = UiStrings.MessageIncorrectPassword;
-                return false;
+                message = UiStrings.MessageLoginSuccess;
+
+                return true;
             }
         }
-        catch (Exception exception)
+        catch (EntityException exception)
         {
             _logger.Error(
                 "The login operation failed due to a database exception.",
                 exception);
 
             message = UiStrings.DatabaseErrorMessage;
+
             return false;
         }
     }
