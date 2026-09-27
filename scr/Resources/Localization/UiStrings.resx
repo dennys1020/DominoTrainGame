@@ -555,41 +555,38 @@ INVITACIÓN</value>
   <data name="GameRulesTitle" xml:space="preserve">
     <value>REGLAS DEL JUEGO</value>
   </data>
-  <data name="GameRulesDescription" xml:space="preserve">
-    <value>Una guía rápida para tu siguiente partida de Tren Mexicano.</value>
-  </data>
   <data name="RulesObjectiveTitle" xml:space="preserve">
-    <value>OBJETIVO</value>
+    <value>01/OBJETIVO</value>
   </data>
   <data name="RulesObjectiveDescription" xml:space="preserve">
     <value>Coloca tus fichas y termina con la menor cantidad de puntos. Al final de la partida, gana el menor total.</value>
   </data>
   <data name="RulesPreparationTitle" xml:space="preserve">
-    <value>PREPARACIÓN</value>
+    <value>02/PREPARACIÓN</value>
   </data>
   <data name="RulesPreparationDescription" xml:space="preserve">
     <value>El doble inicial se coloca en el centro. Cada jugador tiene un tren y las fichas restantes forman el pozo.</value>
   </data>
   <data name="RulesTurnTitle" xml:space="preserve">
-    <value>EN TU TURNO</value>
+    <value>03/EN TU TURNO</value>
   </data>
   <data name="RulesTurnDescription" xml:space="preserve">
     <value>Une una ficha por un extremo del mismo valor. Puedes jugar en tu tren, en el tren mexicano o en un tren abierto.</value>
   </data>
   <data name="RulesDrawTitle" xml:space="preserve">
-    <value>ROBAR Y PASAR</value>
+    <value>04/ROBAR Y PASAR</value>
   </data>
   <data name="RulesDrawDescription" xml:space="preserve">
     <value>Si no puedes jugar, roba una ficha. Si tampoco puedes colocarla, pasa y deja tu tren abierto a los demás.</value>
   </data>
   <data name="RulesDoublesTitle" xml:space="preserve">
-    <value>FICHAS DOBLES</value>
+    <value>05/FICHAS DOBLES</value>
   </data>
   <data name="RulesDoublesDescription" xml:space="preserve">
     <value>Después de colocar un doble, juega otra ficha. Un doble pendiente debe cubrirse antes de continuar en otros trenes.</value>
   </data>
   <data name="RulesScoringTitle" xml:space="preserve">
-    <value>FIN DE LA RONDA</value>
+    <value>06/FIN DE LA RONDA</value>
   </data>
   <data name="RulesScoringDescription" xml:space="preserve">
     <value>La ronda termina al agotarse una mano o bloquearse la mesa. Suma los puntos de tus fichas restantes a tu total.</value>
@@ -659,24 +656,6 @@ INVITACIÓN</value>
   </data>
   <data name="ViewScoresButtonLabel" xml:space="preserve">
     <value>PUNTAJES</value>
-  </data>
-  <data name="RuleStep1" xml:space="preserve">
-    <value>01</value>
-  </data>
-  <data name="RuleStep2" xml:space="preserve">
-    <value>02</value>
-  </data>
-  <data name="RuleStep3" xml:space="preserve">
-    <value>03</value>
-  </data>
-  <data name="RuleStep4" xml:space="preserve">
-    <value>04</value>
-  </data>
-  <data name="RuleStep5" xml:space="preserve">
-    <value>05</value>
-  </data>
-  <data name="RuleStep6" xml:space="preserve">
-    <value>06</value>
   </data>
   <data name="MarkReadyButtonLabel" xml:space="preserve">
     <value>MARCAR LISTO</value>

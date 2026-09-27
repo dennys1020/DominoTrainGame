@@ -555,41 +555,38 @@ CODE</value>
   <data name="GameRulesTitle" xml:space="preserve">
     <value>GAME RULES</value>
   </data>
-  <data name="GameRulesDescription" xml:space="preserve">
-    <value>A quick guide to your next game of Mexican Train.</value>
-  </data>
   <data name="RulesObjectiveTitle" xml:space="preserve">
-    <value>OBJECTIVE</value>
+    <value>01/OBJECTIVE</value>
   </data>
   <data name="RulesObjectiveDescription" xml:space="preserve">
     <value>Play your tiles and finish with as few points as possible. The lowest total wins the game.</value>
   </data>
   <data name="RulesPreparationTitle" xml:space="preserve">
-    <value>SETUP</value>
+    <value>02/SETUP</value>
   </data>
   <data name="RulesPreparationDescription" xml:space="preserve">
     <value>The starting double goes in the center. Each player has a train; the remaining tiles form the boneyard.</value>
   </data>
   <data name="RulesTurnTitle" xml:space="preserve">
-    <value>ON YOUR TURN</value>
+    <value>03/ON YOUR TURN</value>
   </data>
   <data name="RulesTurnDescription" xml:space="preserve">
     <value>Match a tile to an end with the same value. Play on your own train, the Mexican Train or an open train.</value>
   </data>
   <data name="RulesDrawTitle" xml:space="preserve">
-    <value>DRAW AND PASS</value>
+    <value>04/DRAW AND PASS</value>
   </data>
   <data name="RulesDrawDescription" xml:space="preserve">
     <value>If you cannot play, draw one tile. If it cannot be played either, pass and leave your train open to others.</value>
   </data>
   <data name="RulesDoublesTitle" xml:space="preserve">
-    <value>DOUBLES</value>
+    <value>05/DOUBLES</value>
   </data>
   <data name="RulesDoublesDescription" xml:space="preserve">
     <value>After playing a double, play another tile. An unfinished double must be covered before play continues on other trains.</value>
   </data>
   <data name="RulesScoringTitle" xml:space="preserve">
-    <value>END OF THE ROUND</value>
+    <value>06/END OF THE ROUND</value>
   </data>
   <data name="RulesScoringDescription" xml:space="preserve">
     <value>The round ends when a hand is empty or no one can play. Add the pips on your remaining tiles to your total.</value>
@@ -659,24 +656,6 @@ CODE</value>
   </data>
   <data name="ViewScoresButtonLabel" xml:space="preserve">
     <value>SCORES</value>
-  </data>
-  <data name="RuleStep1" xml:space="preserve">
-    <value>01</value>
-  </data>
-  <data name="RuleStep2" xml:space="preserve">
-    <value>02</value>
-  </data>
-  <data name="RuleStep3" xml:space="preserve">
-    <value>03</value>
-  </data>
-  <data name="RuleStep4" xml:space="preserve">
-    <value>04</value>
-  </data>
-  <data name="RuleStep5" xml:space="preserve">
-    <value>05</value>
-  </data>
-  <data name="RuleStep6" xml:space="preserve">
-    <value>06</value>
   </data>
   <data name="MarkReadyButtonLabel" xml:space="preserve">
     <value>I'M READY</value>
