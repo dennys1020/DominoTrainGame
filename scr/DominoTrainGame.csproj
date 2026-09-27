@@ -126,7 +126,7 @@
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\LocalizationViewModel.cs" />
-    <Compile Include="ViewModels\GameSetupViewModel.cs" />
+    <Compile Include="ViewModels\RoomViewModel.cs" />
     <Compile Include="ViewModels\RoomPlayerViewModel.cs" />
     <Compile Include="Views\DeleteAccountWindow.xaml.cs">
       <DependentUpon>DeleteAccountWindow.xaml</DependentUpon>

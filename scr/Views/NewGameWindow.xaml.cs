@@ -26,9 +26,9 @@ public partial class NewGameWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenGameSetup(object sender, RoutedEventArgs e)
+    private void OpenRoom(object sender, RoutedEventArgs e)
     {
-        WindowNavigation.Navigate(this, new GameSetupWindow());
+        WindowNavigation.Navigate(this, new RoomWindow(true));
     }
 
     private void OpenJoinGame(object sender, RoutedEventArgs e)

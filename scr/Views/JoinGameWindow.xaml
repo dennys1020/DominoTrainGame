@@ -87,7 +87,7 @@
                                     <Button
                                         Content="{Binding [JoinRoomButtonLabel]}"
                                         Style="{StaticResource MatchButton}"
-                                        Click="OpenWaitingRoom"
+                                        Click="OpenRoom"
                                         Grid.Row="2"
                                         Background="{StaticResource Aqua}" />
                                 </Grid>
