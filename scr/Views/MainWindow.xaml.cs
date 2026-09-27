@@ -15,7 +15,7 @@ public partial class MainWindow : Window
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenResults(object sender, RoutedEventArgs e)
+    /*private void OpenResults(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new MatchResultsWindow());
     }
@@ -29,7 +29,7 @@ public partial class MainWindow : Window
             ShowInTaskbar = false
         };
         rulesWindow.ShowDialog();
-    }
+    }*/
 
     private void OpenChangePassword(object sender, RoutedEventArgs e)
     {

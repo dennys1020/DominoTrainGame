@@ -677,7 +677,14 @@ INVITACIÓN</value>
   </data>
   <data name="RuleStep6" xml:space="preserve">
     <value>06</value>
+  </data>
   <data name="DatabaseErrorMessage" xml:space="preserve">
     <value>Ocurrió un error al conectar con la base de datos</value>
+  </data>
+  <data name="MesssageInvalidEmail" xml:space="preserve">
+    <value>El correo electrónico no es válido</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>

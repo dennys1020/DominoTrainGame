@@ -1,78 +1,81 @@
-﻿using System;
-using System.Data.Entity.Core;
-using System.Linq;
+﻿using DominoTrainGame.Utils;
 using log4net.Ext.Trace;
-using DominoTrainGame.Resources.Localization;
+using System.Data.Entity.Core;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace DominoTrainGame;
 
-/// <summary>
-/// Validates credentials and signs in existing players.
-/// </summary>
 public sealed class SignUpValidator
 {
+    private const int MinimumPasswordLength = 12;
+
     private static readonly ITraceLog _logger;
+
+    private static readonly Regex EmailPattern = new Regex(
+        @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+        RegexOptions.Compiled);
 
     static SignUpValidator()
     {
         _logger = TraceLogManager.GetLogger(typeof(SignUpValidator));
     }
 
-    /// <summary>
-    /// Attempts to sign in a player using a user name or email and a password.
-    /// </summary>
-    /// <param name="userNameOrEmail">The user name or email entered by the player.</param>
-    /// <param name="password">The password entered by the player.</param>
-    /// <param name="message">The user-facing result message.</param>
-    /// <returns><see langword="true"/> when the credentials are valid.</returns>
-    public bool TrySignIn(string userNameOrEmail, string password, out string message)
+    public SignUpValidationStatus TryRegisterUser(string username, string email, string password)
     {
-        if (string.IsNullOrWhiteSpace(userNameOrEmail) || string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
         {
-            message = UiStrings.MessageRequiredFields;
+            return SignUpValidationStatus.EmptyFields;
+        }
 
-            return false;
+        if (!EmailPattern.IsMatch(email))
+        {
+            return SignUpValidationStatus.InvalidEmail;
+        }
+
+        if (password.Length < MinimumPasswordLength)
+        {
+            return SignUpValidationStatus.PasswordTooShort;
         }
 
         try
         {
-            using (DominoGameDBEntities dbContext = new DominoGameDBEntities())
+            using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())
             {
-                Player existingUser = dbContext.Players.FirstOrDefault(
-                    p => p.UserName == userNameOrEmail || p.Email == userNameOrEmail);
+                bool isUserExisting = databaseContext.Players.Any(p => p.userName == username || p.Email == email);
 
-                if (existingUser == null)
+                if (isUserExisting)
                 {
-                    message = UiStrings.MessageUserNotFound;
-
-                    return false;
+                    _logger.Warn("Registration attempt failed because the username or email was already taken.");
+                    return SignUpValidationStatus.UserAlreadyExists;
                 }
 
-                bool isPasswordValid = PasswordHasher.Verify(
-                    existingUser.PasswordHash,
-                    password);
-
-                if (!isPasswordValid)
+                Player newPlayer = new Player
                 {
-                    message = UiStrings.MessageIncorrectPassword;
+                    userName = username,
+                    Email = email,
+                    PasswordHash = PasswordHasher.Hash(password),
+                    CreatedAt = System.DateTime.UtcNow,
+                    IsGuest = 0
+                };
 
-                    return false;
-                }
+                databaseContext.Players.Add(newPlayer);
+                databaseContext.SaveChanges();
 
-                message = UiStrings.MessageSignUpSuccess;
-
-                return true;
+                _logger.Info("A new player registered successfully.");
+                return SignUpValidationStatus.Success;
             }
+        }
+        catch (DbUpdateException exception)
+        {
+            _logger.Error("The registration operation failed while saving the new player.", exception);
+            return SignUpValidationStatus.DatabaseError;
         }
         catch (EntityException exception)
         {
-            _logger.Error(
-                "The sign in operation failed due to a database exception.",
-                exception);
-
-            message = UiStrings.DatabaseErrorMessage;
-
-            return false;
+            _logger.Error("The registration operation failed because the database could not be reached.", exception);
+            return SignUpValidationStatus.DatabaseError;
         }
     }
 }

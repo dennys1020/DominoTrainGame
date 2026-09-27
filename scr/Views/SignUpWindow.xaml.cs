@@ -1,9 +1,12 @@
-﻿using System.Windows;
+﻿using DominoTrainGame.Utils;
+using DominoTrainGame.Resources.Localization;
+using System.Windows;
 
 namespace DominoTrainGame.Views;
 
 public partial class SignUpWindow : Window
 {
+    private const int MinimumPasswordLength = 12;
     public SignUpWindow()
     {
         InitializeComponent();
@@ -15,6 +18,7 @@ public partial class SignUpWindow : Window
         {
             Owner = this
         };
+
         settingsWindow.ShowDialog();
     }
 
@@ -25,16 +29,16 @@ public partial class SignUpWindow : Window
         string password = passwordBoxPassword.Password;
 
         SignUpValidator validator = new SignUpValidator();
-        bool isRegistered = validator.TryRegisterUser(username, email, password, out string resultMessage);
+        SignUpValidationStatus status = validator.TryRegisterUser(username, email, password);
 
-        if (!isRegistered)
+        if (status != SignUpValidationStatus.Success)
         {
-            MessageBox.Show(resultMessage);
+            MessageBox.Show(DescribeStatus(status));
 
             return;
         }
 
-        MessageBox.Show(resultMessage);
+        MessageBox.Show(UiStrings.RegisterSucessMessage);
 
         LogInWindow loginWindow = new LogInWindow();
         Application.Current.MainWindow = loginWindow;
@@ -56,6 +60,24 @@ public partial class SignUpWindow : Window
 
     private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
+    }
 
+    private string DescribeStatus(SignUpValidationStatus status)
+    {
+        switch (status)
+        {
+            case SignUpValidationStatus.EmptyFields:
+                return UiStrings.EmptyFieldsMessage;
+            case SignUpValidationStatus.InvalidEmail:
+                return UiStrings.MesssageInvalidEmail;
+            case SignUpValidationStatus.PasswordTooShort:
+                return string.Format(UiStrings.InvalidPasswordMessage, MinimumPasswordLength);
+            case SignUpValidationStatus.UserAlreadyExists:
+                return UiStrings.MessageUserAlreadyExists;
+            case SignUpValidationStatus.DatabaseError:
+                return UiStrings.DatabaseErrorMessage;
+            default:
+                return UiStrings.DatabaseErrorMessage;
+        }
     }
 }

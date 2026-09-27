@@ -5,6 +5,7 @@ using log4net.Ext.Trace;
 using DominoTrainGame.Resources.Localization;
 
 namespace DominoTrainGame;
+
 public sealed class LoginValidator
 {
     private static readonly ITraceLog _logger;
@@ -28,7 +29,7 @@ public sealed class LoginValidator
             using (DominoGameDBEntities dbContext = new DominoGameDBEntities())
             {
                 Player user = dbContext.Players.FirstOrDefault(
-                    p => p.UserName == usernameOrEmail || p.Email == usernameOrEmail);
+                    p => p.userName == usernameOrEmail || p.Email == usernameOrEmail);
 
                 if (user == null)
                 {

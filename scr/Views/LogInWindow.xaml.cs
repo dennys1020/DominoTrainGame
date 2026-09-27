@@ -1,14 +1,16 @@
-﻿using DominoTrainGame.Views;
-using System.Windows;
+﻿using System.Windows;
 
 namespace DominoTrainGame.Views
 {
 
     public partial class LogInWindow : Window
     {
+        private readonly LoginValidator _loginValidator;
+
         public LogInWindow()
         {
             InitializeComponent();
+            _loginValidator = new LoginValidator();
         }
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
@@ -31,6 +33,18 @@ namespace DominoTrainGame.Views
 
         private void NavigateToMain_Click(object sender, RoutedEventArgs e)
         {
+            string usernameOrEmail = textBoxEmailUserName.Text;
+            string password = passwordBoxPassword.Password;
+
+            bool isLoginSuccessful = _loginValidator.TryLogin(usernameOrEmail, password, out string resultMessage);
+
+            MessageBox.Show(resultMessage);
+
+            if (!isLoginSuccessful)
+            {
+                return;
+            }
+
             MainWindow mainWindow = new MainWindow();
             Application.Current.MainWindow = mainWindow;
 

@@ -677,7 +677,11 @@ CODE</value>
   </data>
   <data name="RuleStep6" xml:space="preserve">
     <value>06</value>
+  </data>
   <data name="DatabaseErrorMessage" xml:space="preserve">
     <value>An error occurred while connecting to the database</value>
+  </data>
+  <data name="MesssageInvalidEmail" xml:space="preserve">
+    <value>Error: The email address is not valid</value>
   </data>
 </root>
