@@ -1,0 +1,80 @@
+﻿<Window
+    x:Class="DominoTrainGame.Views.LeaderBoardWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
+    DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
+    Title="{Binding [LeaderboardWindowTitle]}"
+    Width="900"
+    Height="700"
+    MinWidth="640"
+    MinHeight="480"
+    WindowStartupLocation="CenterOwner"
+    Background="{StaticResource Mist}"
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding [LeaderboardTitle]}"
+                   Style="{StaticResource PixelText}" FontSize="24"
+                   Margin="0,0,0,20"/>
+
+        <Border Grid.Row="1" Background="{StaticResource Glacier}" BorderBrush="{StaticResource Ink}"
+                BorderThickness="2" Padding="14,10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="110"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding [LeaderboardRankHeader]}" Style="{StaticResource SectionLabel}"/>
+                <TextBlock Grid.Column="1" Text="{Binding [LeaderboardPlayerHeader]}" Style="{StaticResource SectionLabel}"/>
+                <TextBlock Grid.Column="2" Text="{Binding [LeaderboardWinsHeader]}" Style="{StaticResource SectionLabel}"/>
+                <TextBlock Grid.Column="3" Text="{Binding [LeaderboardGamesHeader]}" Style="{StaticResource SectionLabel}"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Background="{StaticResource Aqua}" BorderBrush="{StaticResource Ink}"
+                BorderThickness="2" Padding="14">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="RankingList">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="White" BorderBrush="{StaticResource Ink}"
+                                    BorderThickness="1" Padding="10" Margin="0,0,0,6">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="110"/>
+                                        <ColumnDefinition Width="110"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding Rank}"
+                                               Style="{StaticResource PixelText}" VerticalAlignment="Center"/>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Image Source="/Icons/person.png" Width="18" Height="18" Margin="0,0,8,0"/>
+                                        <TextBlock Text="{Binding Username}" Style="{StaticResource PixelText}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Column="2" Text="{Binding Wins}"
+                                               Style="{StaticResource PixelText}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding GamesPlayed}"
+                                               Style="{StaticResource PixelText}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</Window>

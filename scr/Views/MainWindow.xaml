@@ -12,177 +12,46 @@
     MinHeight="700"
     WindowStartupLocation="CenterScreen"
     Background="{StaticResource Glacier}"
-    UseLayoutRounding="True" SnapsToDevicePixels="True">
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True">
+    <Grid>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock
+                Text="{Binding [GameTitle]}"
+                Style="{StaticResource PixelText}"
+                FontSize="24"
+                HorizontalAlignment="Center"
+                Margin="0,0,0,36" />
+            <Button
+                Content="{Binding [ChangePasswordTitle]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenChangePassword" />
+            <Button
+                Content="{Binding [DeleteAccountTitle]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenDeleteAccount" />
+            <Button
+                Content="{Binding [OpenSettingsButtonLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenSettings" />
+            <Button
+                Content="{Binding [OpenProfileButtonLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Click="OpenProfile" />
+        </StackPanel>
 
-    <Window.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <DrawingImage x:Key="MenuFriendsImage">
-            <DrawingImage.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="Transparent" Geometry="M0,0 H32 V32 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}"
-                        Geometry="M6,4 H14 V6 H16 V14 H14 V16 H6 V14 H4 V6 H6 Z M21,6 H27 V8 H29 V14 H27 V16 H21 V14 H19 V8 H21 Z M4,19 H16 V21 H19 V29 H1 V22 H4 Z M22,19 H28 V21 H31 V29 H22 Z" />
-                    <GeometryDrawing Brush="{StaticResource Aqua}"
-                        Geometry="M8,7 H12 V9 H13 V12 H11 V13 H8 V11 H7 V9 H8 Z M5,23 H15 V26 H5 Z" />
-                </DrawingGroup>
-            </DrawingImage.Drawing>
-        </DrawingImage>
-
-        <DrawingImage x:Key="MenuTrainImage">
-            <DrawingImage.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="Transparent" Geometry="M0,0 H300 V104 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mist}"
-                        Geometry="M26,10 H48 V18 H26 Z M50,1 H80 V9 H50 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}"
-                        Geometry="M24,28 H42 V46 H56 V24 H92 V66 H101 V77 H9 V65 H17 V46 H27 V35 H24 Z" />
-                    <GeometryDrawing Brush="{StaticResource Aqua}" Geometry="M21,50 H58 V65 H21 Z M60,28 H88 V65 H60 Z" />
-                    <GeometryDrawing Brush="{StaticResource Glacier}" Geometry="M65,34 H82 V49 H65 Z" />
-                    <GeometryDrawing Brush="{StaticResource Seafoam}" Geometry="M13,69 H95 V73 H13 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}" Geometry="M101,67 H115 V71 H101 Z M179,67 H193 V71 H179 Z M113,67 H181 V77 H113 Z M191,67 H259 V77 H191 Z" />
-                    <GeometryDrawing Brush="{StaticResource Frost}" Geometry="M117,70 H177 V73 H117 Z M195,70 H255 V73 H195 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}" Geometry="M120,15 H174 V67 H120 Z M198,15 H252 V67 H198 Z" />
-                    <GeometryDrawing Brush="{StaticResource Glacier}" Geometry="M124,19 H170 V63 H124 Z M202,19 H248 V63 H202 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}" Geometry="M126,39 H168 V42 H126 Z M204,39 H246 V42 H204 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}"
-                        Geometry="M129,23 H134 V28 H129 Z M160,31 H165 V36 H160 Z M129,46 H134 V51 H129 Z M145,51 H150 V56 H145 Z M160,56 H165 V61 H160 Z M209,24 H214 V29 H209 Z M236,24 H241 V29 H236 Z M209,31 H214 V36 H209 Z M236,31 H241 V36 H236 Z M222,50 H228 V56 H222 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}"
-                        Geometry="M25,74 H41 V87 H25 Z M68,74 H84 V87 H68 Z M123,74 H139 V87 H123 Z M155,74 H171 V87 H155 Z M201,74 H217 V87 H201 Z M233,74 H249 V87 H233 Z" />
-                    <GeometryDrawing Brush="{StaticResource Seafoam}"
-                        Geometry="M30,78 H36 V83 H30 Z M73,78 H79 V83 H73 Z M128,78 H134 V83 H128 Z M160,78 H166 V83 H160 Z M206,78 H212 V83 H206 Z M238,78 H244 V83 H238 Z" />
-                </DrawingGroup>
-            </DrawingImage.Drawing>
-        </DrawingImage>
-
-        <DrawingImage x:Key="MenuDominoImage">
-            <DrawingImage.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="{StaticResource Mint}" Geometry="M5,5 H65 V117 H5 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}" Geometry="M0,0 H60 V112 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Glacier}" Geometry="M4,4 H56 V108 H4 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}" Geometry="M9,54 H51 V58 H9 Z" />
-                    <GeometryDrawing Brush="{StaticResource Ink}"
-                        Geometry="M13,14 H21 V22 H13 Z M39,36 H47 V44 H39 Z M13,70 H21 V78 H13 Z M39,70 H47 V78 H39 Z M26,83 H34 V91 H26 Z M13,96 H21 V104 H13 Z M39,96 H47 V104 H39 Z" />
-                </DrawingGroup>
-            </DrawingImage.Drawing>
-        </DrawingImage>
-
-        <DrawingImage x:Key="MenuLandscapeImage">
-            <DrawingImage.Drawing>
-                <DrawingGroup>
-                    <GeometryDrawing Brush="Transparent" Geometry="M0,0 H1200 V740 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mist}"
-                        Geometry="M150,162 H178 V148 H210 V158 H240 V176 H150 Z M900,120 H925 V105 H970 V116 H997 V134 H900 Z M1050,228 H1074 V210 H1106 V220 H1136 V240 H1050 Z M196,444 H216 V430 H246 V438 H268 V455 H196 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mist}"
-                        Geometry="M0,488 H46 V464 H92 V484 H140 V504 H188 V484 H236 V516 H280 V536 H340 V556 H398 V590 H1200 V740 H0 Z M870,562 H922 V528 H976 V500 H1022 V480 H1074 V450 H1126 V430 H1174 V454 H1200 V740 H870 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}"
-                        Geometry="M0,552 H44 V528 H88 V540 H132 V564 H176 V548 H220 V576 H266 V588 H312 V612 H0 Z M918,600 H956 V570 H1000 V584 H1044 V554 H1088 V538 H1132 V560 H1172 V540 H1200 V636 H918 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}"
-                        Geometry="M110,480 H126 V590 H110 Z M1048,472 H1064 V594 H1048 Z" />
-                    <GeometryDrawing Brush="{StaticResource Seafoam}"
-                        Geometry="M90,472 H104 V452 H130 V472 H146 V502 H90 Z M1026,456 H1040 V436 H1072 V456 H1090 V490 H1026 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mist}" Geometry="M0,636 H1200 V740 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Seafoam}" Geometry="M0,636 H1200 V640 H0 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}"
-                        Geometry="M0,594 H1200 V602 H0 Z M0,616 H1200 V623 H0 Z M22,600 H34 V634 H22 Z M82,600 H94 V634 H82 Z M142,600 H154 V634 H142 Z M202,600 H214 V634 H202 Z M262,600 H274 V634 H262 Z M322,600 H334 V634 H322 Z M382,600 H394 V634 H382 Z M442,600 H454 V634 H442 Z M502,600 H514 V634 H502 Z M562,600 H574 V634 H562 Z M622,600 H634 V634 H622 Z M682,600 H694 V634 H682 Z M742,600 H754 V634 H742 Z M802,600 H814 V634 H802 Z M862,600 H874 V634 H862 Z M922,600 H934 V634 H922 Z M982,600 H994 V634 H982 Z M1042,600 H1054 V634 H1042 Z M1102,600 H1114 V634 H1102 Z M1162,600 H1174 V634 H1162 Z" />
-                    <GeometryDrawing Brush="{StaticResource Mint}"
-                        Geometry="M68,676 H100 V680 H68 Z M112,686 H124 V690 H112 Z M296,702 H322 V706 H296 Z M880,694 H914 V698 H880 Z M1094,672 H1126 V676 H1094 Z M1048,706 H1062 V710 H1048 Z" />
-                    <GeometryDrawing Brush="{StaticResource Seafoam}" Geometry="M0,732 H1200 V740 H0 Z" />
-                </DrawingGroup>
-            </DrawingImage.Drawing>
-        </DrawingImage>
-    </Window.Resources>
-
-    <Grid Background="{StaticResource Glacier}">
-        <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.06"
-                   IsHitTestVisible="False" />
-
-        <Viewbox Stretch="Uniform">
-            <Grid Width="1200" Height="740" ClipToBounds="True">
-                <Image Source="{StaticResource MenuLandscapeImage}"
-                   Width="1200" Height="740" IsHitTestVisible="False" />
-
-                <Canvas IsHitTestVisible="False">
-                    <Image Canvas.Left="140" Canvas.Top="342" Width="78" Height="140"
-                       Source="{StaticResource MenuDominoImage}" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <RotateTransform Angle="-14" />
-                        </Image.RenderTransform>
-                    </Image>
-                    <Image Canvas.Left="990" Canvas.Top="282" Width="91" Height="164"
-                       Source="{StaticResource MenuDominoImage}" RenderTransformOrigin="0.5,0.5">
-                        <Image.RenderTransform>
-                            <RotateTransform Angle="14" />
-                        </Image.RenderTransform>
-                    </Image>
-                    <Path Canvas.Left="250" Canvas.Top="298" Fill="{StaticResource Seafoam}"
-                      Data="M8,0 H12 V8 H20 V12 H12 V20 H8 V12 H0 V8 H8 Z" />
-                    <Path Canvas.Left="918" Canvas.Top="222" Fill="{StaticResource Aqua}"
-                      Data="M8,0 H12 V8 H20 V12 H12 V20 H8 V12 H0 V8 H8 Z" />
-                    <Rectangle Canvas.Left="1076" Canvas.Top="166" Width="8" Height="8" Fill="{StaticResource Mint}" />
-                    <Rectangle Canvas.Left="216" Canvas.Top="256" Width="8" Height="8" Fill="{StaticResource Mint}" />
-                </Canvas>
-
-                <StackPanel Margin="32,32,0,0"
-                        HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Button Style="{StaticResource MenuIconButton}" Margin="0,0,0,14"
-                        Click="OpenProfile"
-                        ToolTip="{Binding [OpenProfileButtonLabel]}">
-                        <Image Width="41" Height="43" Stretch="Uniform"
-                           Source="/Resources/Images/avatar_generic_preview.png"
-                           RenderOptions.BitmapScalingMode="NearestNeighbor" />
-                    </Button>
-
-                    <Button Style="{StaticResource MenuIconButton}" Margin="0,0,0,14"
-                        Click="OpenFriendsList"
-                        ToolTip="{Binding [OpenFriendsListLabel]}">
-                        <Image Width="36" Height="36" Source="{StaticResource MenuFriendsImage}" />
-                    </Button>
-
-                    <controls:SettingsButton />
-                </StackPanel>
-
-                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,32,32,0">
-                    <Button Content="{Binding [GameRulesButtonLabel]}" Click="OpenRules"
-                            Style="{StaticResource PixelButton}" FontSize="9"
-                            Width="222" Height="50" Margin="0,0,0,12" />
-                    <Button Content="{Binding [ViewScoresButtonLabel]}" Click="OpenResults"
-                            Style="{StaticResource PixelButton}" FontSize="9"
-                            Width="222" Height="50" />
-                </StackPanel>
-
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0">
-                    <Grid Height="66">
-                        <TextBlock Text="{Binding [GameTitle]}" Margin="5,5,0,0"
-                               Style="{StaticResource PixelText}" FontSize="48"
-                               Foreground="{StaticResource Mint}" IsHitTestVisible="False" />
-                        <TextBlock Text="{Binding [GameTitle]}"
-                               Style="{StaticResource PixelText}" FontSize="48" />
-                    </Grid>
-
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,38">
-                        <Rectangle Width="40" Height="6" Fill="{StaticResource Mint}" Margin="0,0,8,0" />
-                        <Rectangle Width="40" Height="6" Fill="{StaticResource Seafoam}" Margin="0,0,8,0" />
-                        <Rectangle Width="40" Height="6" Fill="{StaticResource Aqua}" />
-                    </StackPanel>
-
-                    <Button Content="{Binding [ButtonPlay]}"
-                        Click="OpenNewGame"
-                        Style="{StaticResource PixelButton}"
-                        Background="{StaticResource Aqua}" FontSize="18"
-                        Width="380" Height="76" Margin="0,0,0,16" />
-
-                    <Button Content="{Binding [ButtonExit]}"
-                        Style="{StaticResource PixelButton}"
-                        Background="{StaticResource Mist}" FontSize="13"
-                        Width="380" Height="58" />
-                </StackPanel>
-
-                <Image Source="{StaticResource MenuTrainImage}"
-                       Width="660" Height="228.8" Margin="0,404,0,0"
-                       HorizontalAlignment="Center" VerticalAlignment="Top"
-                       IsHitTestVisible="False" />
-            </Grid>
-        </Viewbox>
     </Grid>
 </Window>

@@ -75,6 +75,28 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to ACEPTAR.
+    /// </summary>
+    public static string AcceptReadyButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("AcceptReadyButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 01 / SEGURIDAD.
+    /// </summary>
+    public static string AccountSecuritySectionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("AccountSecuritySectionLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to ¿Ya tienes una cuenta?.
     /// </summary>
     public static string AlreadyHaveAccountLabel
@@ -97,6 +119,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to AVATAR.
+    /// </summary>
+    public static string AvatarSectionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("AvatarSectionLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to VOLVER.
     /// </summary>
     public static string BackButtonLabel
@@ -104,6 +137,39 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("BackButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Volver a inicio de sesión.
+    /// </summary>
+    public static string BackToLoginLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("BackToLoginLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to BIOGRAFÍA.
+    /// </summary>
+    public static string BiographyLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("BiographyLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Aceptar.
+    /// </summary>
+    public static string ButtonAccept
+    {
+        get
+        {
+            return ResourceManager.GetString("ButtonAccept", _resourceCulture);
         }
     }
 
@@ -137,6 +203,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("ButtonPlay", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Rechazar.
+    /// </summary>
+    public static string ButtonReject
+    {
+        get
+        {
+            return ResourceManager.GetString("ButtonReject", _resourceCulture);
         }
     }
 
@@ -185,6 +262,28 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Cancelar.
+    /// </summary>
+    public static string CancelEditAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("CancelEditAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to CAMBIAR CONTRASEÑA.
+    /// </summary>
+    public static string ChangePasswordButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ChangePasswordButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to CAMBIAR CONTRASEÑA.
     /// </summary>
     public static string ChangePasswordTitle
@@ -214,6 +313,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("ConfirmPasswordLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Ir al registro.
+    /// </summary>
+    public static string CreateAccountAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("CreateAccountAccessibleName", _resourceCulture);
         }
     }
 
@@ -281,6 +391,28 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("CurrentPasswordLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Introduce tu contraseña actual..
+    /// </summary>
+    public static string CurrentPasswordRequiredMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("CurrentPasswordRequiredMessage", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Ocurrió un error al conectar con la base de datos..
+    /// </summary>
+    public static string DatabaseErrorMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("DatabaseErrorMessage", _resourceCulture);
         }
     }
 
@@ -362,6 +494,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Doble doce.
+    /// </summary>
+    public static string Double12AccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("Double12AccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to 12.
     /// </summary>
     public static string Double12Label
@@ -373,6 +516,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Doble seis.
+    /// </summary>
+    public static string Double6AccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("Double6AccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to 6.
     /// </summary>
     public static string Double6Label
@@ -380,6 +534,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("Double6Label", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Doble nueve.
+    /// </summary>
+    public static string Double9AccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("Double9AccessibleName", _resourceCulture);
         }
     }
 
@@ -406,6 +571,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Campo de correo electrónico.
+    /// </summary>
+    public static string EmailAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("EmailAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to CORREO ELECTRÓNICO.
     /// </summary>
     public static string EmailAdressLabel
@@ -413,6 +589,39 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("EmailAdressLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to CORREO ELECTRÓNICO O USUARIO.
+    /// </summary>
+    public static string EmailOrUsernameLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("EmailOrUsernameLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Error: Los campos obligatorios no pueden estar vacíos.
+    /// </summary>
+    public static string EmptyFieldsMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("EmptyFieldsMessage", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Inglés / English.
+    /// </summary>
+    public static string EnglishLanguageAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("EnglishLanguageAccessibleName", _resourceCulture);
         }
     }
 
@@ -461,6 +670,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Recuperar contraseña.
+    /// </summary>
+    public static string ForgotPasswordAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("ForgotPasswordAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to ¿Olvidaste tu contraseña?.
     /// </summary>
     public static string ForgotPasswordLabel
@@ -468,6 +688,28 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("ForgotPasswordLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to LISTA DE AMIGOS.
+    /// </summary>
+    public static string FriendListWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendListWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to LISTA DE AMIGOS.
+    /// </summary>
+    public static string FriendsListWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendsListWindowTitle", _resourceCulture);
         }
     }
 
@@ -516,6 +758,50 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Prepara la mesa y reúne a tus compañeros de viaje..
+    /// </summary>
+    public static string GameSetupDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("GameSetupDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to CONFIGURACIÓN DE PARTIDA.
+    /// </summary>
+    public static string GameSetupTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("GameSetupTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Domino Train · Configuración de partida.
+    /// </summary>
+    public static string GameSetupWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("GameSetupWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to PARTIDAS JUGADAS.
+    /// </summary>
+    public static string GamesPlayedLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("GamesPlayedLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to DOMINO TRAIN.
     /// </summary>
     public static string GameTitle
@@ -538,6 +824,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Jugar como invitado.
+    /// </summary>
+    public static string GuestButtonAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("GuestButtonAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to JUGAR COMO INVITADO.
     /// </summary>
     public static string GuestButtonLabel
@@ -545,6 +842,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("GuestButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Error: La contraseña debe tener al menos {0} caracteres.
+    /// </summary>
+    public static string InvalidPasswordMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("InvalidPasswordMessage", _resourceCulture);
         }
     }
 
@@ -696,6 +1004,83 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to PARTIDAS.
+    /// </summary>
+    public static string LeaderboardGamesHeader
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardGamesHeader", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to JUGADOR.
+    /// </summary>
+    public static string LeaderboardPlayerHeader
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardPlayerHeader", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to POSICIÓN.
+    /// </summary>
+    public static string LeaderboardRankHeader
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardRankHeader", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to CLASIFICACIÓN.
+    /// </summary>
+    public static string LeaderboardTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Domino Train · Clasificación.
+    /// </summary>
+    public static string LeaderboardWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to VICTORIAS.
+    /// </summary>
+    public static string LeaderboardWinsHeader
+    {
+        get
+        {
+            return ResourceManager.GetString("LeaderboardWinsHeader", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Iniciar sesión.
+    /// </summary>
+    public static string LoginButtonAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginButtonAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to INICIAR SESIÓN.
     /// </summary>
     public static string LoginButtonLabel
@@ -703,6 +1088,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("LoginButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Campo de correo electrónico o usuario.
+    /// </summary>
+    public static string LoginIdentifierAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginIdentifierAccessibleName", _resourceCulture);
         }
     }
 
@@ -736,6 +1132,39 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("LoginSidebarDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to INICIO DE SESIÓN.
+    /// </summary>
+    public static string LoginSidebarLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginSidebarLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to BIENVENIDO DE VUELTA.
+    /// </summary>
+    public static string LoginSidebarTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginSidebarTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to BIENVENIDO DE VUELTA.
+    /// </summary>
+    public static string LoginSiderBarLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginSiderBarLabel", _resourceCulture);
         }
     }
 
@@ -835,6 +1264,83 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("MaximumDoubleReadOnlyDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to MIEMBRO DESDE.
+    /// </summary>
+    public static string MemberSinceLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("MemberSinceLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to La contraseña es incorrecta..
+    /// </summary>
+    public static string MessageIncorrectPassword
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageIncorrectPassword", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Inicio de sesión correcto..
+    /// </summary>
+    public static string MessageLoginSuccess
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageLoginSuccess", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Completa los campos obligatorios..
+    /// </summary>
+    public static string MessageRequiredFields
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageRequiredFields", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Registro completado correctamente..
+    /// </summary>
+    public static string MessageSignUpSuccess
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageSignUpSuccess", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to El nombre de usuario o correo ya está registrado..
+    /// </summary>
+    public static string MessageUserAlreadyExists
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageUserAlreadyExists", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Usuario no encontrado..
+    /// </summary>
+    public static string MessageUserNotFound
+    {
+        get
+        {
+            return ResourceManager.GetString("MessageUserNotFound", _resourceCulture);
         }
     }
 
@@ -960,6 +1466,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to +  Un lugar disponible.
+    /// </summary>
+    public static string OpenSeatLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("OpenSeatLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to CONFIGURACIÓN.
     /// </summary>
     public static string OpenSettingsButtonLabel
@@ -967,6 +1484,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("OpenSettingsButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Campo de contraseña.
+    /// </summary>
+    public static string PasswordAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("PasswordAccessibleName", _resourceCulture);
         }
     }
 
@@ -1004,6 +1532,61 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to PERFIL DEL JUGADOR.
+    /// </summary>
+    public static string ProfileSectionTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileSectionTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to ESTADÍSTICAS.
+    /// </summary>
+    public static string ProfileStatsSectionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileStatsSectionLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Domino Train · Perfil.
+    /// </summary>
+    public static string ProfileWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Tu próximo viaje comienza con una cuenta segura..
+    /// </summary>
+    public static string ProtectAccountDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("ProtectAccountDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Todo listo para compartir una nueva ronda..
+    /// </summary>
+    public static string ReadyRoomNote
+    {
+        get
+        {
+            return ResourceManager.GetString("ReadyRoomNote", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to LISTO.
     /// </summary>
     public static string ReadyStatusLabel
@@ -1011,6 +1594,28 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("ReadyStatusLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to RECUPERAR CONTRASEÑA.
+    /// </summary>
+    public static string RecoverPasswordFormTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("RecoverPasswordFormTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Domino Train · Recuperar contraseña.
+    /// </summary>
+    public static string RecoverPasswordWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("RecoverPasswordWindowTitle", _resourceCulture);
         }
     }
 
@@ -1037,6 +1642,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Registro completado correctamente.
+    /// </summary>
+    public static string RegisterSucessMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("RegisterSucessMessage", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to Registro.
     /// </summary>
     public static string RegisterTittle
@@ -1044,6 +1660,28 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("RegisterTittle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Describe el motivo del reporte..
+    /// </summary>
+    public static string ReportPlayerDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("ReportPlayerDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Debes proporcionar un motivo para el reporte..
+    /// </summary>
+    public static string ReportReasonRequiredMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ReportReasonRequiredMessage", _resourceCulture);
         }
     }
 
@@ -1340,6 +1978,116 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Amigo 1.
+    /// </summary>
+    public static string SampleFriendOne
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendOne", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 12.
+    /// </summary>
+    public static string SampleFriendOneRoundOne
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendOneRoundOne", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 9.
+    /// </summary>
+    public static string SampleFriendOneRoundTwo
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendOneRoundTwo", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 21.
+    /// </summary>
+    public static string SampleFriendOneTotal
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendOneTotal", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Amigo 3.
+    /// </summary>
+    public static string SampleFriendThree
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendThree", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 5.
+    /// </summary>
+    public static string SampleFriendThreeRoundOne
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendThreeRoundOne", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 10.
+    /// </summary>
+    public static string SampleFriendThreeRoundTwo
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendThreeRoundTwo", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 15.
+    /// </summary>
+    public static string SampleFriendThreeTotal
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendThreeTotal", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Amigo 2.
+    /// </summary>
+    public static string SampleFriendTwo
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleFriendTwo", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 3 / 4.
+    /// </summary>
+    public static string SamplePlayerCount
+    {
+        get
+        {
+            return ResourceManager.GetString("SamplePlayerCount", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to XXXXXX.
     /// </summary>
     public static string SampleRoomCode
@@ -1351,6 +2099,61 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to ¡AMIGO 2 GANÓ!.
+    /// </summary>
+    public static string SampleWinnerLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleWinnerLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 0.
+    /// </summary>
+    public static string SampleWinnerScore
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleWinnerScore", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 47.
+    /// </summary>
+    public static string SampleYouRoundOne
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleYouRoundOne", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 8.
+    /// </summary>
+    public static string SampleYouRoundTwo
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleYouRoundTwo", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to 55.
+    /// </summary>
+    public static string SampleYouTotal
+    {
+        get
+        {
+            return ResourceManager.GetString("SampleYouTotal", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to GUARDAR.
     /// </summary>
     public static string SaveButtonLabel
@@ -1358,6 +2161,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("SaveButtonLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Guardar.
+    /// </summary>
+    public static string SaveProfileAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("SaveProfileAccessibleName", _resourceCulture);
         }
     }
 
@@ -1439,6 +2253,28 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to RONDA 1.
+    /// </summary>
+    public static string ScoreRoundOneLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ScoreRoundOneLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to RONDA 2.
+    /// </summary>
+    public static string ScoreRoundTwoLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ScoreRoundTwoLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to EMPATE: {0}.
     /// </summary>
     public static string ScoreTieFormat
@@ -1494,6 +2330,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Acepta tu lugar para pasar a la sala de espera..
+    /// </summary>
+    public static string SetupRoomNote
+    {
+        get
+        {
+            return ResourceManager.GetString("SetupRoomNote", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to REGISTRARSE.
     /// </summary>
     public static string SignUpBottonLabel
@@ -1505,6 +2352,28 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Registrar nueva cuenta.
+    /// </summary>
+    public static string SignUpButtonAccesibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("SignUpButtonAccesibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Tren de domino - Inicio de sesión.
+    /// </summary>
+    public static string SignUpWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("SignUpWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to EFECTOS DE SONIDO.
     /// </summary>
     public static string SoundEffectsVolumeLabel
@@ -1512,6 +2381,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("SoundEffectsVolumeLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Español.
+    /// </summary>
+    public static string SpanishLanguageAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("SpanishLanguageAccessibleName", _resourceCulture);
         }
     }
 
@@ -1593,6 +2473,17 @@ public class UiStrings
     }
 
     /// <summary>
+    ///   Looks up a localized string similar to Campo de nombre de usuario.
+    /// </summary>
+    public static string UsernameAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("UsernameAccessibleName", _resourceCulture);
+        }
+    }
+
+    /// <summary>
     ///   Looks up a localized string similar to NOMBRE DE USUARIO.
     /// </summary>
     public static string UsernameLabel
@@ -1600,6 +2491,17 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("UsernameLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Código de verificación.
+    /// </summary>
+    public static string VerificationCodeAccessibleName
+    {
+        get
+        {
+            return ResourceManager.GetString("VerificationCodeAccessibleName", _resourceCulture);
         }
     }
 
@@ -1622,6 +2524,28 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("VerificationPrompt", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Ingrese el código.
+    /// </summary>
+    public static string VerificationTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("VerificationTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Ingrese el código.
+    /// </summary>
+    public static string VerificationTittle
+    {
+        get
+        {
+            return ResourceManager.GetString("VerificationTittle", _resourceCulture);
         }
     }
 
@@ -1655,6 +2579,61 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("VolumePercentageFormat", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to La mesa está preparada. El próximo viaje está por comenzar..
+    /// </summary>
+    public static string WaitingRoomDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("WaitingRoomDescription", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to SALA DE ESPERA.
+    /// </summary>
+    public static string WaitingRoomTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("WaitingRoomTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Domino Train · Sala de espera.
+    /// </summary>
+    public static string WaitingRoomWindowTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("WaitingRoomWindowTitle", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to VICTORIAS.
+    /// </summary>
+    public static string WinsLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("WinsLabel", _resourceCulture);
+        }
+    }
+
+    /// <summary>
+    ///   Looks up a localized string similar to Tú (anfitrión).
+    /// </summary>
+    public static string YouHostLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("YouHostLabel", _resourceCulture);
         }
     }
 

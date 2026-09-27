@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2ddcafbbc6844295a22b31da4e650cbe" Name="Diagram1" ZoomLevel="86">
+        <EntityTypeShape EntityType="DominoGameDBModel.Bans" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.FriendshipRequests" Width="1.5" PointX="3" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Lobbies" Width="1.5" PointX="1.5" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.LobbyPlayers" Width="1.5" PointX="6" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Matches" Width="1.5" PointX="3.75" PointY="2.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.MatchResults" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Players" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Reports" Width="1.5" PointX="3" PointY="18.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.StatusFriendshipRequests" Width="1.5" PointX="0.75" PointY="11.625" IsExpanded="true" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Bans_Players" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Addressee" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Requester" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Status" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_LobbyPlayers_Lobbies" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Matches_Lobbies" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_LobbyPlayers_Players" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Matches" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Players" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Reports_Players" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
