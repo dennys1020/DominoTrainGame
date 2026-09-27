@@ -414,15 +414,6 @@ CODE</value>
   <data name="YouPlayerLabel" xml:space="preserve">
     <value>You</value>
   </data>
-  <data name="SampleFriendOne" xml:space="preserve">
-    <value>Friend 1</value>
-  </data>
-  <data name="SampleFriendTwo" xml:space="preserve">
-    <value>Friend 2</value>
-  </data>
-  <data name="SampleFriendThree" xml:space="preserve">
-    <value>Friend 3</value>
-  </data>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>READY</value>
   </data>
@@ -489,47 +480,8 @@ CODE</value>
   <data name="ScorePlayerLabel" xml:space="preserve">
     <value>PLAYER</value>
   </data>
-  <data name="ScoreRoundOneLabel" xml:space="preserve">
-    <value>ROUND 1</value>
-  </data>
-  <data name="ScoreRoundTwoLabel" xml:space="preserve">
-    <value>ROUND 2</value>
-  </data>
   <data name="ScoreTotalLabel" xml:space="preserve">
     <value>TOTAL</value>
-  </data>
-  <data name="SampleYouRoundOne" xml:space="preserve">
-    <value>47</value>
-  </data>
-  <data name="SampleYouRoundTwo" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="SampleYouTotal" xml:space="preserve">
-    <value>55</value>
-  </data>
-  <data name="SampleFriendOneRoundOne" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="SampleFriendOneRoundTwo" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="SampleFriendOneTotal" xml:space="preserve">
-    <value>21</value>
-  </data>
-  <data name="SampleWinnerScore" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="SampleFriendThreeRoundOne" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="SampleFriendThreeRoundTwo" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="SampleFriendThreeTotal" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="SampleWinnerLabel" xml:space="preserve">
-    <value>FRIEND 2 WINS!</value>
   </data>
   <data name="ScoreExplanation" xml:space="preserve">
     <value>Fewer points, a better result.</value>
@@ -578,5 +530,26 @@ CODE</value>
   </data>
   <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
     <value>Selected by the host.</value>
+  </data>
+  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
+    <value>Connected players: {0}</value>
+  </data>
+  <data name="ScoreRoundCountFormat" xml:space="preserve">
+    <value>Rounds: {0}</value>
+  </data>
+  <data name="ScoreRoundFormat" xml:space="preserve">
+    <value>ROUND {0}</value>
+  </data>
+  <data name="ScoreWinnerFormat" xml:space="preserve">
+    <value>WINNER: {0}</value>
+  </data>
+  <data name="ScoreTieFormat" xml:space="preserve">
+    <value>TIE: {0}</value>
+  </data>
+  <data name="ScorePendingResultsLabel" xml:space="preserve">
+    <value>RESULTS PENDING</value>
+  </data>
+  <data name="ScoreNoPlayersLabel" xml:space="preserve">
+    <value>No players or results to display yet.</value>
   </data>
 </root>

@@ -414,15 +414,6 @@ INVITACIÓN</value>
   <data name="YouPlayerLabel" xml:space="preserve">
     <value>Tú</value>
   </data>
-  <data name="SampleFriendOne" xml:space="preserve">
-    <value>Amigo 1</value>
-  </data>
-  <data name="SampleFriendTwo" xml:space="preserve">
-    <value>Amigo 2</value>
-  </data>
-  <data name="SampleFriendThree" xml:space="preserve">
-    <value>Amigo 3</value>
-  </data>
   <data name="ReadyStatusLabel" xml:space="preserve">
     <value>LISTO</value>
   </data>
@@ -489,47 +480,8 @@ INVITACIÓN</value>
   <data name="ScorePlayerLabel" xml:space="preserve">
     <value>JUGADOR</value>
   </data>
-  <data name="ScoreRoundOneLabel" xml:space="preserve">
-    <value>RONDA 1</value>
-  </data>
-  <data name="ScoreRoundTwoLabel" xml:space="preserve">
-    <value>RONDA 2</value>
-  </data>
   <data name="ScoreTotalLabel" xml:space="preserve">
     <value>TOTAL</value>
-  </data>
-  <data name="SampleYouRoundOne" xml:space="preserve">
-    <value>47</value>
-  </data>
-  <data name="SampleYouRoundTwo" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="SampleYouTotal" xml:space="preserve">
-    <value>55</value>
-  </data>
-  <data name="SampleFriendOneRoundOne" xml:space="preserve">
-    <value>12</value>
-  </data>
-  <data name="SampleFriendOneRoundTwo" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="SampleFriendOneTotal" xml:space="preserve">
-    <value>21</value>
-  </data>
-  <data name="SampleWinnerScore" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="SampleFriendThreeRoundOne" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="SampleFriendThreeRoundTwo" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="SampleFriendThreeTotal" xml:space="preserve">
-    <value>15</value>
-  </data>
-  <data name="SampleWinnerLabel" xml:space="preserve">
-    <value>¡AMIGO 2 GANÓ!</value>
   </data>
   <data name="ScoreExplanation" xml:space="preserve">
     <value>Menos puntos, mejor resultado.</value>
@@ -578,5 +530,26 @@ INVITACIÓN</value>
   </data>
   <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
     <value>Seleccionado por el anfitrión.</value>
+  </data>
+  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
+    <value>Jugadores conectados: {0}</value>
+  </data>
+  <data name="ScoreRoundCountFormat" xml:space="preserve">
+    <value>Rondas: {0}</value>
+  </data>
+  <data name="ScoreRoundFormat" xml:space="preserve">
+    <value>RONDA {0}</value>
+  </data>
+  <data name="ScoreWinnerFormat" xml:space="preserve">
+    <value>GANADOR: {0}</value>
+  </data>
+  <data name="ScoreTieFormat" xml:space="preserve">
+    <value>EMPATE: {0}</value>
+  </data>
+  <data name="ScorePendingResultsLabel" xml:space="preserve">
+    <value>RESULTADOS PENDIENTES</value>
+  </data>
+  <data name="ScoreNoPlayersLabel" xml:space="preserve">
+    <value>Todavía no hay jugadores ni resultados para mostrar.</value>
   </data>
 </root>

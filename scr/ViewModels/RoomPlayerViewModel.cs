@@ -19,7 +19,10 @@ public sealed class RoomPlayerViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public string PlayerId { get; }
+    public string PlayerId
+    {
+        get;
+    }
 
     public string Username
     {
