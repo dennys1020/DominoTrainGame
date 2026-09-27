@@ -25,14 +25,14 @@ namespace DominoTrainGame
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Bans> Bans { get; set; }
-        public virtual DbSet<FriendshipRequests> FriendshipRequests { get; set; }
-        public virtual DbSet<Lobbies> Lobbies { get; set; }
-        public virtual DbSet<LobbyPlayers> LobbyPlayers { get; set; }
-        public virtual DbSet<Matches> Matches { get; set; }
-        public virtual DbSet<MatchResults> MatchResults { get; set; }
-        public virtual DbSet<Players> Players { get; set; }
-        public virtual DbSet<Reports> Reports { get; set; }
-        public virtual DbSet<StatusFriendshipRequests> StatusFriendshipRequests { get; set; }
+        public virtual DbSet<Ban> Bans { get; set; }
+        public virtual DbSet<FriendshipRequest> FriendshipRequests { get; set; }
+        public virtual DbSet<Lobby> Lobbies { get; set; }
+        public virtual DbSet<LobbyPlayer> LobbyPlayers { get; set; }
+        public virtual DbSet<Match> Matches { get; set; }
+        public virtual DbSet<MatchResult> MatchResults { get; set; }
+        public virtual DbSet<Player> Players { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<StatusFriendshipRequest> StatusFriendshipRequests { get; set; }
     }
 }

@@ -372,23 +372,23 @@
   <data name="ButtonReject" xml:space="preserve">
     <value>Reject</value>
   </data>
-  <data name="VerificationWindowTitle" xml:space="preserve">
-    <value>Verification</value>
+  <data name="MessageRequiredFields" xml:space="preserve">
+    <value>All fields are required</value>
   </data>
-  <data name="VerificationTittle" xml:space="preserve">
-    <value>Enter code</value>
+  <data name="MessageUserNotFound" xml:space="preserve">
+    <value>User not found</value>
   </data>
-  <data name="VerificationPrompt" xml:space="preserve">
-    <value>Enter the 5-digit code we sent to your email</value>
+  <data name="MessageIncorrectPassword" xml:space="preserve">
+    <value>Incorrect password</value>
   </data>
-  <data name="VerificationCodeAccessibleName" xml:space="preserve">
-    <value>Verification code</value>
+  <data name="MessageLoginSuccess" xml:space="preserve">
+    <value>Login successful</value>
   </data>
-  <data name="VerificationNoEmail" xml:space="preserve">
-    <value>Didn't receive the email?</value>
+  <data name="MessageUserAlreadyExists" xml:space="preserve">
+    <value>Username or email is already registered</value>
   </data>
-  <data name="ButtonResendCode" xml:space="preserve">
-    <value>Resend code</value>
+  <data name="MessageSignUpSuccess" xml:space="preserve">
+    <value>Registration completed successfully</value>
   </data>
   <data name="BackToLoginLabel" xml:space="preserve">
     <value>Back to login</value>
@@ -797,5 +797,11 @@ CODE</value>
   </data>
   <data name="WinsLabel" xml:space="preserve">
     <value>WINS</value>
+  </data>
+  <data name="DatabaseErrorMessage" xml:space="preserve">
+    <value>An error occurred while connecting to the database</value>
+  </data>
+  <data name="MesssageInvalidEmail" xml:space="preserve">
+    <value>Error: The email address is not valid</value>
   </data>
 </root>

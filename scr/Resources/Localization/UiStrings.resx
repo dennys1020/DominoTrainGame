@@ -372,23 +372,23 @@
   <data name="ButtonReject" xml:space="preserve">
     <value>Rechazar</value>
   </data>
-  <data name="VerificationWindowTitle" xml:space="preserve">
-    <value>Verificación</value>
+  <data name="MessageRequiredFields" xml:space="preserve">
+    <value>Todos los campos son obligatorios</value>
   </data>
-  <data name="VerificationTittle" xml:space="preserve">
-    <value>Ingrese el código</value>
+  <data name="MessageUserNotFound" xml:space="preserve">
+    <value>Usuario no encontrado</value>
   </data>
-  <data name="VerificationPrompt" xml:space="preserve">
-    <value>Ingresa el código de 5 dígitos que enviamos a tu correo</value>
+  <data name="MessageIncorrectPassword" xml:space="preserve">
+    <value>Contraseña incorrecta</value>
   </data>
-  <data name="VerificationCodeAccessibleName" xml:space="preserve">
-    <value>Código de verificación</value>
+  <data name="MessageLoginSuccess" xml:space="preserve">
+    <value>Inicio de sesión exitoso</value>
   </data>
-  <data name="VerificationNoEmail" xml:space="preserve">
-    <value>¿No recibiste el correo?</value>
+  <data name="MessageUserAlreadyExists" xml:space="preserve">
+    <value>El nombre de usuario o correo ya está registrado</value>
   </data>
-  <data name="ButtonResendCode" xml:space="preserve">
-    <value>Reenviar código</value>
+  <data name="MessageSignUpSuccess" xml:space="preserve">
+    <value>Registro completado con éxito</value>
   </data>
   <data name="BackToLoginLabel" xml:space="preserve">
     <value>Volver a inicio de sesión</value>
@@ -797,5 +797,11 @@ INVITACIÓN</value>
   </data>
   <data name="WinsLabel" xml:space="preserve">
     <value>VICTORIAS</value>
+  </data>
+  <data name="DatabaseErrorMessage" xml:space="preserve">
+    <value>Ocurrió un error al conectar con la base de datos</value>
+  </data>
+  <data name="MesssageInvalidEmail" xml:space="preserve">
+    <value>El correo electrónico no es válido</value>
   </data>
 </root>

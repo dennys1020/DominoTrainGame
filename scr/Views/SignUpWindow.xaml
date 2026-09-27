@@ -334,6 +334,7 @@
                                             FontSize="10"
                                             Margin="0,0,0,8" />
                                         <TextBox
+                                            x:Name="textBoxEmail"
                                             Style="{StaticResource NightTextBox}" />
                                     </StackPanel>
 
@@ -344,6 +345,7 @@
                                             FontSize="10"
                                             Margin="0,0,0,8" />
                                         <TextBox
+                                            x:Name="textBoxUserName"
                                             Style="{StaticResource NightTextBox}" />
                                     </StackPanel>
 
@@ -354,24 +356,20 @@
                                             FontSize="10"
                                             Margin="0,0,0,8" />
                                         <PasswordBox
+                                            x:Name="passwordBoxPassword"
                                             Style="{StaticResource NightPasswordBox}" />
                                     </StackPanel>
 
                                     <StackPanel Grid.Row="5" Margin="0,26,0,0" VerticalAlignment="Bottom">
                                         <Grid>
                                             <Button
-                                                Content="{Binding [BackButtonLabel]}"
-                                                Style="{StaticResource NightButton}"
-                                                HorizontalAlignment="Left"
-                                                Width="154"
-                                                Height="50" />
-                                            <Button
                                                 Content="{Binding [SignUpBottonLabel]}"
                                                 Style="{StaticResource NightPrimaryButton}"
                                                 HorizontalAlignment="Right"
                                                 Width="188"
                                                 Height="50"
-                                                IsDefault="True" />
+                                                IsDefault="True" 
+                                                Click="SignUpButton_Click"/>
                                         </Grid>
                                         <TextBlock HorizontalAlignment="Center" Margin="0,24,0,0" Style="{StaticResource NightLabel}" FontSize="13">
                                         <Run Text="{Binding [AlreadyHaveAccountLabel], Mode=OneWay}" />

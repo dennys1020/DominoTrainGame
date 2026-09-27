@@ -29,7 +29,7 @@ public partial class MainWindow : Window
             ShowInTaskbar = false
         };
         rulesWindow.ShowDialog();
-    }
+    }*/
 
     private void OpenChangePassword(object sender, RoutedEventArgs eventArgs)
     {
