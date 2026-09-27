@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace DominoTrainGame.Views
 {
-    /// <summary>
-    /// Lógica de interacción para RecoverPasswordWindow.xaml
-    /// </summary>
     public partial class RecoverPasswordWindow : Window
     {
         public RecoverPasswordWindow()

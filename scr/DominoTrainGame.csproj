@@ -145,6 +145,10 @@
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\LocalizationViewModel.cs" />
+    <Compile Include="ViewModels\MatchResultsViewModel.cs" />
+    <Compile Include="ViewModels\MatchRoundViewModel.cs" />
+    <Compile Include="ViewModels\PlayerMatchResultViewModel.cs" />
+    <Compile Include="ViewModels\RoundScoreViewModel.cs" />
     <Compile Include="ViewModels\RoomViewModel.cs" />
     <Compile Include="ViewModels\RoomPlayerViewModel.cs" />
     <Compile Include="Views\Controls\SettingsButton.xaml.cs">

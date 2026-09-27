@@ -10,17 +10,17 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private void OpenNewGame(object sender, RoutedEventArgs e)
+    private void OpenNewGame(object sender, RoutedEventArgs eventArgs)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    /*private void OpenResults(object sender, RoutedEventArgs e)
+    private void OpenResults(object sender, RoutedEventArgs eventArgs)
     {
         WindowNavigation.Navigate(this, new MatchResultsWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs e)
+    private void OpenRules(object sender, RoutedEventArgs eventArgs)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -31,7 +31,7 @@ public partial class MainWindow : Window
         rulesWindow.ShowDialog();
     }*/
 
-    private void OpenChangePassword(object sender, RoutedEventArgs e)
+    private void OpenChangePassword(object sender, RoutedEventArgs eventArgs)
     {
         ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow
         {
@@ -41,7 +41,7 @@ public partial class MainWindow : Window
         changePasswordWindow.ShowDialog();
     }
 
-    private void OpenDeleteAccount(object sender, RoutedEventArgs e)
+    private void OpenDeleteAccount(object sender, RoutedEventArgs eventArgs)
     {
         DeleteAccountWindow deleteAccountWindow = new DeleteAccountWindow
         {
@@ -51,7 +51,7 @@ public partial class MainWindow : Window
         deleteAccountWindow.ShowDialog();
     }
 
-    private void OpenProfile(object sender, RoutedEventArgs e)
+    private void OpenProfile(object sender, RoutedEventArgs eventArgs)
     {
         ProfileWindow profileWindow = new ProfileWindow
         {
@@ -60,7 +60,7 @@ public partial class MainWindow : Window
         profileWindow.ShowDialog();
     }
 
-    private void OpenFriendsList(object sender, RoutedEventArgs e)
+    private void OpenFriendsList(object sender, RoutedEventArgs eventArgs)
     {
         FriendsListWindow friendsWindow = new FriendsListWindow
         {

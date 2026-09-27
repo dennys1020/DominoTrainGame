@@ -14,10 +14,23 @@ public sealed class RoomViewModel : INotifyPropertyChanged
     private int _maximumPlayers = DefaultMaximumPlayers;
     private int _maximumDouble = DefaultMaximumDouble;
 
+    public RoomViewModel()
+    {
+        Players = new ObservableCollection<RoomPlayerViewModel>();
+        Results = new MatchResultsViewModel(Players);
+    }
+
     public event PropertyChangedEventHandler PropertyChanged;
 
-    public ObservableCollection<RoomPlayerViewModel> Players { get; } =
-        new ObservableCollection<RoomPlayerViewModel>();
+    public ObservableCollection<RoomPlayerViewModel> Players
+    {
+        get;
+    }
+
+    public MatchResultsViewModel Results
+    {
+        get;
+    }
 
     public int MaximumDouble
     {
