@@ -126,6 +126,8 @@
     <Compile Include="Report.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LeaderboardEntry.cs" />
+    <Compile Include="Repository\LeaderboardRepository.cs" />
     <Compile Include="Repository\PlayerRepository.cs" />
     <Compile Include="Resources\Localization\UiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -144,6 +146,7 @@
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\LeaderboardViewModel.cs" />
     <Compile Include="ViewModels\LocalizationViewModel.cs" />
     <Compile Include="ViewModels\MatchResultsViewModel.cs" />
     <Compile Include="ViewModels\MatchRoundViewModel.cs" />
@@ -160,6 +163,9 @@
     <Compile Include="Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GameRulesWindow.xaml.cs">
+      <DependentUpon>GameRulesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\JoinGameWindow.xaml.cs">
       <DependentUpon>JoinGameWindow.xaml</DependentUpon>
     </Compile>
@@ -171,6 +177,9 @@
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MatchResultsWindow.xaml.cs">
+      <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -221,6 +230,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GameRulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\JoinGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -234,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatchResultsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

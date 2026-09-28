@@ -149,6 +149,9 @@
                     <Button Content="{Binding [ViewScoresButtonLabel]}" Click="OpenResults"
                             Style="{StaticResource PixelButton}" FontSize="9"
                             Width="222" Height="50" />
+                    <Button Content="{Binding [LeaderboardButtonLabel]}" Click="OpenLeaderboard"
+                            Style="{StaticResource PixelButton}" FontSize="9"
+                            Width="222" Height="50" Margin="0,12,0,0" />
                 </StackPanel>
 
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0">

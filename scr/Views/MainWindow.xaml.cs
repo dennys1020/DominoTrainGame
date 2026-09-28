@@ -1,4 +1,4 @@
-using System.Windows;
+﻿using System.Windows;
 using DominoTrainGame.Navigation;
 
 namespace DominoTrainGame.Views;
@@ -15,6 +15,15 @@ public partial class MainWindow : Window
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
+    private void OpenLeaderboard(object sender, RoutedEventArgs eventArgs)
+    {
+        LeaderBoardWindow leaderboardWindow = new LeaderBoardWindow
+        {
+            Owner = this
+        };
+        leaderboardWindow.ShowDialog();
+    }
+
     private void OpenResults(object sender, RoutedEventArgs eventArgs)
     {
         WindowNavigation.Navigate(this, new MatchResultsWindow());
@@ -29,7 +38,7 @@ public partial class MainWindow : Window
             ShowInTaskbar = false
         };
         rulesWindow.ShowDialog();
-    }*/
+    }
 
     private void OpenChangePassword(object sender, RoutedEventArgs eventArgs)
     {
