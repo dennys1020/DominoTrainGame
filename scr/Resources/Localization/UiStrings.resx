@@ -753,24 +753,6 @@ INVITACIÓN</value>
   <data name="MemberSinceLabel" xml:space="preserve">
     <value>MIEMBRO DESDE</value>
   </data>
-  <data name="MessageIncorrectPassword" xml:space="preserve">
-    <value>La contraseña es incorrecta.</value>
-  </data>
-  <data name="MessageLoginSuccess" xml:space="preserve">
-    <value>Inicio de sesión correcto.</value>
-  </data>
-  <data name="MessageRequiredFields" xml:space="preserve">
-    <value>Completa los campos obligatorios.</value>
-  </data>
-  <data name="MessageSignUpSuccess" xml:space="preserve">
-    <value>Registro completado correctamente.</value>
-  </data>
-  <data name="MessageUserAlreadyExists" xml:space="preserve">
-    <value>El nombre de usuario o correo ya está registrado.</value>
-  </data>
-  <data name="MessageUserNotFound" xml:space="preserve">
-    <value>Usuario no encontrado.</value>
-  </data>
   <data name="ProfileSectionTitle" xml:space="preserve">
     <value>PERFIL DEL JUGADOR</value>
   </data>
@@ -798,131 +780,8 @@ INVITACIÓN</value>
   <data name="WinsLabel" xml:space="preserve">
     <value>VICTORIAS</value>
   </data>
-  <data name="DatabaseErrorMessage" xml:space="preserve">
-    <value>Ocurrió un error al conectar con la base de datos</value>
-  </data>
   <data name="MesssageInvalidEmail" xml:space="preserve">
     <value>El correo electrónico no es válido</value>
-  </data>
-  <data name="AcceptReadyButtonLabel" xml:space="preserve">
-    <value>ACEPTAR</value>
-  </data>
-  <data name="AvatarSectionLabel" xml:space="preserve">
-    <value>AVATAR</value>
-  </data>
-  <data name="BiographyLabel" xml:space="preserve">
-    <value>BIOGRAFÍA</value>
-  </data>
-  <data name="ChangePasswordButtonLabel" xml:space="preserve">
-    <value>CAMBIAR CONTRASEÑA</value>
-  </data>
-  <data name="EmailOrUsernameLabel" xml:space="preserve">
-    <value>CORREO O USUARIO</value>
-  </data>
-  <data name="FriendsListWindowTitle" xml:space="preserve">
-    <value>LISTA DE AMIGOS</value>
-  </data>
-  <data name="GameSetupWindowTitle" xml:space="preserve">
-    <value>Domino Train · Configuración de partida</value>
-  </data>
-  <data name="GamesPlayedLabel" xml:space="preserve">
-    <value>PARTIDAS JUGADAS</value>
-  </data>
-  <data name="LeaderboardGamesHeader" xml:space="preserve">
-    <value>PARTIDAS</value>
-  </data>
-  <data name="LeaderboardPlayerHeader" xml:space="preserve">
-    <value>JUGADOR</value>
-  </data>
-  <data name="LeaderboardRankHeader" xml:space="preserve">
-    <value>POSICIÓN</value>
-  </data>
-  <data name="LeaderboardTitle" xml:space="preserve">
-    <value>TABLA DE POSICIONES</value>
-  </data>
-  <data name="LeaderboardWindowTitle" xml:space="preserve">
-    <value>Domino Train · Tabla de posiciones</value>
-  </data>
-  <data name="LeaderboardWinsHeader" xml:space="preserve">
-    <value>VICTORIAS</value>
-  </data>
-  <data name="LoginSidebarLabel" xml:space="preserve">
-    <value>INICIO DE SESIÓN</value>
-  </data>
-  <data name="LoginSidebarTitle" xml:space="preserve">
-    <value>BIENVENIDO DE VUELTA</value>
-  </data>
-  <data name="MarkReadyButtonLabel" xml:space="preserve">
-    <value>ESTOY LISTO</value>
-  </data>
-  <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
-    <value>Seleccionado por el anfitrión.</value>
-  </data>
-  <data name="MemberSinceLabel" xml:space="preserve">
-    <value>MIEMBRO DESDE</value>
-  </data>
-  <data name="ProfileSectionTitle" xml:space="preserve">
-    <value>PERFIL DEL JUGADOR</value>
-  </data>
-  <data name="ProfileStatsSectionLabel" xml:space="preserve">
-    <value>ESTADÍSTICAS</value>
-  </data>
-  <data name="ProfileWindowTitle" xml:space="preserve">
-    <value>Domino Train · Perfil</value>
-  </data>
-  <data name="RecoverPasswordFormTitle" xml:space="preserve">
-    <value>RECUPERAR CONTRASEÑA</value>
-  </data>
-  <data name="RecoverPasswordWindowTitle" xml:space="preserve">
-    <value>Domino Train · Recuperar contraseña</value>
-  </data>
-  <data name="ReportPlayerDescription" xml:space="preserve">
-    <value>Describe el motivo del reporte.</value>
-  </data>
-  <data name="ReportReasonRequiredMessage" xml:space="preserve">
-    <value>Debes indicar un motivo para el reporte.</value>
-  </data>
-  <data name="RoomHostLabel" xml:space="preserve">
-    <value>ANFITRIÓN</value>
-  </data>
-  <data name="RoomNoPlayersLabel" xml:space="preserve">
-    <value>Todavía no hay jugadores en la sala.</value>
-  </data>
-  <data name="RoomNotReadyLabel" xml:space="preserve">
-    <value>NO LISTO</value>
-  </data>
-  <data name="RoomPlayerCountFormat" xml:space="preserve">
-    <value>{0} / {1}</value>
-  </data>
-  <data name="RoomTitle" xml:space="preserve">
-    <value>SALA DE PARTIDA</value>
-  </data>
-  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
-    <value>Jugadores conectados: {0}</value>
-  </data>
-  <data name="ScoreNoPlayersLabel" xml:space="preserve">
-    <value>Todavía no hay jugadores ni resultados que mostrar.</value>
-  </data>
-  <data name="ScorePendingResultsLabel" xml:space="preserve">
-    <value>RESULTADOS PENDIENTES</value>
-  </data>
-  <data name="ScoreRoundCountFormat" xml:space="preserve">
-    <value>Rondas: {0}</value>
-  </data>
-  <data name="ScoreRoundFormat" xml:space="preserve">
-    <value>RONDA {0}</value>
-  </data>
-  <data name="ScoreTieFormat" xml:space="preserve">
-    <value>EMPATE: {0}</value>
-  </data>
-  <data name="ScoreWinnerFormat" xml:space="preserve">
-    <value>GANADOR: {0}</value>
-  </data>
-  <data name="VerificationTitle" xml:space="preserve">
-    <value>Introduce el código</value>
-  </data>
-  <data name="WinsLabel" xml:space="preserve">
-    <value>VICTORIAS</value>
   </data>
   <data name="LogOutSessionLabel" xml:space="preserve">
     <value>CERRAR SESIÓN</value>
