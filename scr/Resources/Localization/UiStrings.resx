@@ -694,24 +694,6 @@ INVITACIÓN</value>
   <data name="MemberSinceLabel" xml:space="preserve">
     <value>MIEMBRO DESDE</value>
   </data>
-  <data name="MessageIncorrectPassword" xml:space="preserve">
-    <value>La contraseña es incorrecta.</value>
-  </data>
-  <data name="MessageLoginSuccess" xml:space="preserve">
-    <value>Inicio de sesión correcto.</value>
-  </data>
-  <data name="MessageRequiredFields" xml:space="preserve">
-    <value>Completa los campos obligatorios.</value>
-  </data>
-  <data name="MessageSignUpSuccess" xml:space="preserve">
-    <value>Registro completado correctamente.</value>
-  </data>
-  <data name="MessageUserAlreadyExists" xml:space="preserve">
-    <value>El nombre de usuario o correo ya está registrado.</value>
-  </data>
-  <data name="MessageUserNotFound" xml:space="preserve">
-    <value>Usuario no encontrado.</value>
-  </data>
   <data name="ProfileSectionTitle" xml:space="preserve">
     <value>PERFIL DEL JUGADOR</value>
     </data>
@@ -741,9 +723,6 @@ INVITACIÓN</value>
   </data>
   <data name="MesssageInvalidEmail" xml:space="preserve">
     <value>El correo electrónico no es válido</value>
-  </data>
-  <data name="VerificationTitle" xml:space="preserve">
-    <value>Ingrese el código</value>
   </data>
   <data name="LogOutSessionLabel" xml:space="preserve">
     <value>CERRAR SESIÓN</value>
