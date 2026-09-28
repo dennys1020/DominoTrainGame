@@ -61,6 +61,15 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a ACEPTAR.
+        /// </summary>
+        public static string AcceptReadyButtonLabel {
+            get {
+                return ResourceManager.GetString("AcceptReadyButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a 01 / SEGURIDAD.
         ///   Looks up a localized string similar to ACEPTAR.
         /// </summary>
@@ -98,7 +107,16 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AVATAR.
+        ///   Busca una cadena traducida similar a AVATAR.
+        /// </summary>
+        public static string AvatarSectionLabel {
+            get {
+                return ResourceManager.GetString("AvatarSectionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a VOLVER.
         /// </summary>
         public static string AvatarSectionLabel {
             get {
@@ -125,7 +143,16 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BIOGRAFÍA.
+        ///   Busca una cadena traducida similar a BIOGRAFÍA.
+        /// </summary>
+        public static string BiographyLabel {
+            get {
+                return ResourceManager.GetString("BiographyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Aceptar.
         /// </summary>
         public static string BiographyLabel {
             get {
@@ -226,6 +253,15 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Looks up a localized string similar to CAMBIAR CONTRASEÑA.
+        /// </summary>
+        public static string ChangePasswordButtonLabel {
+            get {
+                return ResourceManager.GetString("ChangePasswordButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a CAMBIAR CONTRASEÑA.
         /// </summary>
         public static string ChangePasswordButtonLabel {
             get {
@@ -488,6 +524,15 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a CORREO O USUARIO.
+        /// </summary>
+        public static string EmailOrUsernameLabel {
+            get {
+                return ResourceManager.GetString("EmailOrUsernameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Error: Los campos obligatorios no pueden estar vacíos.
         ///   Looks up a localized string similar to CORREO ELECTRÓNICO O USUARIO.
         /// </summary>
@@ -580,6 +625,15 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a LISTA DE AMIGOS.
+        /// </summary>
+        public static string FriendsListWindowTitle {
+            get {
+                return ResourceManager.GetString("FriendsListWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a REGLAS DEL JUEGO.
         ///   Looks up a localized string similar to LISTA DE AMIGOS.
         /// </summary>
@@ -631,6 +685,24 @@ namespace DominoTrainGame.Resources.Localization {
         public static string GameSetupTitle {
             get {
                 return ResourceManager.GetString("GameSetupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Domino Train · Configuración de partida.
+        /// </summary>
+        public static string GameSetupWindowTitle {
+            get {
+                return ResourceManager.GetString("GameSetupWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a PARTIDAS JUGADAS.
+        /// </summary>
+        public static string GamesPlayedLabel {
+            get {
+                return ResourceManager.GetString("GamesPlayedLabel", resourceCulture);
             }
         }
         
@@ -821,6 +893,60 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a PARTIDAS.
+        /// </summary>
+        public static string LeaderboardGamesHeader {
+            get {
+                return ResourceManager.GetString("LeaderboardGamesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a JUGADOR.
+        /// </summary>
+        public static string LeaderboardPlayerHeader {
+            get {
+                return ResourceManager.GetString("LeaderboardPlayerHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a POSICIÓN.
+        /// </summary>
+        public static string LeaderboardRankHeader {
+            get {
+                return ResourceManager.GetString("LeaderboardRankHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a TABLA DE POSICIONES.
+        /// </summary>
+        public static string LeaderboardTitle {
+            get {
+                return ResourceManager.GetString("LeaderboardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Domino Train · Tabla de posiciones.
+        /// </summary>
+        public static string LeaderboardWindowTitle {
+            get {
+                return ResourceManager.GetString("LeaderboardWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a VICTORIAS.
+        /// </summary>
+        public static string LeaderboardWinsHeader {
+            get {
+                return ResourceManager.GetString("LeaderboardWinsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Iniciar sesión.
         ///   Looks up a localized string similar to PARTIDAS.
         /// </summary>
@@ -930,6 +1056,24 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a INICIO DE SESIÓN.
+        /// </summary>
+        public static string LoginSidebarLabel {
+            get {
+                return ResourceManager.GetString("LoginSidebarLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a BIENVENIDO DE VUELTA.
+        /// </summary>
+        public static string LoginSidebarTitle {
+            get {
+                return ResourceManager.GetString("LoginSidebarTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a BIENVENIDO DE VUELTA.
         ///   Looks up a localized string similar to INICIO DE SESIÓN.
         /// </summary>
@@ -968,11 +1112,29 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Domino Train.
+        ///   Busca una cadena traducida similar a CERRAR SESIÓN.
+        /// </summary>
+        public static string LogOutSessionLabel {
+            get {
+                return ResourceManager.GetString("LogOutSessionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Domino Train.
         /// </summary>
         public static string MainWindowTitle {
             get {
                 return ResourceManager.GetString("MainWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ESTOY LISTO.
+        /// </summary>
+        public static string MarkReadyButtonLabel {
+            get {
+                return ResourceManager.GetString("MarkReadyButtonLabel", resourceCulture);
             }
         }
         
@@ -1029,6 +1191,24 @@ namespace DominoTrainGame.Resources.Localization {
         public static string MaximumDoubleLabel {
             get {
                 return ResourceManager.GetString("MaximumDoubleLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Seleccionado por el anfitrión..
+        /// </summary>
+        public static string MaximumDoubleReadOnlyDescription {
+            get {
+                return ResourceManager.GetString("MaximumDoubleReadOnlyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a MIEMBRO DESDE.
+        /// </summary>
+        public static string MemberSinceLabel {
+            get {
+                return ResourceManager.GetString("MemberSinceLabel", resourceCulture);
             }
         }
         
@@ -1211,7 +1391,16 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PERFIL.
+        ///   Busca una cadena traducida similar a NUEVA PARTIDA.
+        /// </summary>
+        public static string OpenNewGameLabel {
+            get {
+                return ResourceManager.GetString("OpenNewGameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a PERFIL.
         /// </summary>
         public static string OpenProfileButtonLabel {
             get {
@@ -1275,6 +1464,33 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a PERFIL DEL JUGADOR.
+        /// </summary>
+        public static string ProfileSectionTitle {
+            get {
+                return ResourceManager.GetString("ProfileSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ESTADÍSTICAS.
+        /// </summary>
+        public static string ProfileStatsSectionLabel {
+            get {
+                return ResourceManager.GetString("ProfileStatsSectionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Domino Train · Perfil.
+        /// </summary>
+        public static string ProfileWindowTitle {
+            get {
+                return ResourceManager.GetString("ProfileWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Tu próximo viaje comienza con una cuenta segura..
         ///   Looks up a localized string similar to PERFIL DEL JUGADOR.
         /// </summary>
@@ -1331,7 +1547,25 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RECUPERAR CONTRASEÑA.
+        ///   Busca una cadena traducida similar a RECUPERAR CONTRASEÑA.
+        /// </summary>
+        public static string RecoverPasswordFormTitle {
+            get {
+                return ResourceManager.GetString("RecoverPasswordFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Domino Train · Recuperar contraseña.
+        /// </summary>
+        public static string RecoverPasswordWindowTitle {
+            get {
+                return ResourceManager.GetString("RecoverPasswordWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Toma asiento y regístrate para comenzar tu partida.
         /// </summary>
         public static string RecoverPasswordFormTitle {
             get {
@@ -1396,6 +1630,24 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Describe el motivo del reporte..
+        /// </summary>
+        public static string ReportPlayerDescription {
+            get {
+                return ResourceManager.GetString("ReportPlayerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Debes indicar un motivo para el reporte..
+        /// </summary>
+        public static string ReportReasonRequiredMessage {
+            get {
+                return ResourceManager.GetString("ReportReasonRequiredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a Comparte este código con tus amigos..
         ///   Looks up a localized string similar to Debes proporcionar un motivo para el reporte..
         /// </summary>
@@ -1412,6 +1664,51 @@ namespace DominoTrainGame.Resources.Localization {
         public static string RoomCodeLabel {
             get {
                 return ResourceManager.GetString("RoomCodeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ANFITRIÓN.
+        /// </summary>
+        public static string RoomHostLabel {
+            get {
+                return ResourceManager.GetString("RoomHostLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Todavía no hay jugadores en la sala..
+        /// </summary>
+        public static string RoomNoPlayersLabel {
+            get {
+                return ResourceManager.GetString("RoomNoPlayersLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a NO LISTO.
+        /// </summary>
+        public static string RoomNotReadyLabel {
+            get {
+                return ResourceManager.GetString("RoomNotReadyLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a {0} / {1}.
+        /// </summary>
+        public static string RoomPlayerCountFormat {
+            get {
+                return ResourceManager.GetString("RoomPlayerCountFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a SALA DE PARTIDA.
+        /// </summary>
+        public static string RoomTitle {
+            get {
+                return ResourceManager.GetString("RoomTitle", resourceCulture);
             }
         }
         
@@ -1751,7 +2048,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Jugadores conectados: {0}.
+        ///   Busca una cadena traducida similar a Jugadores conectados: {0}.
         /// </summary>
         public static string ScoreConnectedPlayersFormat {
             get {
@@ -1769,7 +2066,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Todavía no hay jugadores ni resultados para mostrar..
+        ///   Busca una cadena traducida similar a Todavía no hay jugadores ni resultados que mostrar..
         /// </summary>
         public static string ScoreNoPlayersLabel {
             get {
@@ -1778,7 +2075,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RESULTADOS PENDIENTES.
+        ///   Busca una cadena traducida similar a RESULTADOS PENDIENTES.
         /// </summary>
         public static string ScorePendingResultsLabel {
             get {
@@ -1787,7 +2084,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to JUGADOR.
+        ///   Busca una cadena traducida similar a JUGADOR.
         /// </summary>
         public static string ScorePlayerLabel {
             get {
@@ -1796,7 +2093,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rondas: {0}.
+        ///   Busca una cadena traducida similar a Rondas: {0}.
         /// </summary>
         public static string ScoreRoundCountFormat {
             get {
@@ -1805,7 +2102,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RONDA {0}.
+        ///   Busca una cadena traducida similar a RONDA {0}.
         /// </summary>
         public static string ScoreRoundFormat {
             get {
@@ -1814,7 +2111,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RONDA 1.
+        ///   Busca una cadena traducida similar a RONDA 1.
         /// </summary>
         public static string ScoreRoundOneLabel {
             get {
@@ -1832,7 +2129,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EMPATE: {0}.
+        ///   Busca una cadena traducida similar a EMPATE: {0}.
         /// </summary>
         public static string ScoreTieFormat {
             get {
@@ -1841,7 +2138,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TOTAL.
+        ///   Busca una cadena traducida similar a TOTAL.
         /// </summary>
         public static string ScoreTotalLabel {
             get {
@@ -1850,7 +2147,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to GANADOR: {0}.
+        ///   Busca una cadena traducida similar a GANADOR: {0}.
         /// </summary>
         public static string ScoreWinnerFormat {
             get {
@@ -1859,7 +2156,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to CONFIGURACIÓN.
+        ///   Busca una cadena traducida similar a CONFIGURACIÓN.
         /// </summary>
         public static string SettingsTitle {
             get {
@@ -1976,25 +2273,6 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a .
-        ///   Looks up a localized string similar to Amigos.
-        /// </summary>
-        public static string TabFriends {
-            get {
-                return ResourceManager.GetString("TabFriends", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Solicitudes.
-        /// </summary>
-        public static string String1 {
-            get {
-                return ResourceManager.GetString("String1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a Amigos.
         /// </summary>
         public static string UpdatePasswordButtonLabel {
@@ -2078,7 +2356,16 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PUNTAJES.
+        ///   Busca una cadena traducida similar a Introduce el código.
+        /// </summary>
+        public static string VerificationTitle {
+            get {
+                return ResourceManager.GetString("VerificationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a PUNTAJES.
         /// </summary>
         public static string ViewScoresButtonLabel {
             get {
@@ -2119,6 +2406,15 @@ namespace DominoTrainGame.Resources.Localization {
         public static string WaitingRoomWindowTitle {
             get {
                 return ResourceManager.GetString("WaitingRoomWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a VICTORIAS.
+        /// </summary>
+        public static string WinsLabel {
+            get {
+                return ResourceManager.GetString("WinsLabel", resourceCulture);
             }
         }
         

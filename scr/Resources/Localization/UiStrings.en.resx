@@ -804,4 +804,131 @@ CODE</value>
   <data name="MesssageInvalidEmail" xml:space="preserve">
     <value>Error: The email address is not valid</value>
   </data>
+  <data name="AcceptReadyButtonLabel" xml:space="preserve">
+    <value>ACCEPT</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="AvatarSectionLabel" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="BiographyLabel" xml:space="preserve">
+    <value>BIOGRAPHY</value>
+  </data>
+  <data name="ChangePasswordButtonLabel" xml:space="preserve">
+    <value>CHANGE PASSWORD</value>
+  </data>
+  <data name="EmailOrUsernameLabel" xml:space="preserve">
+    <value>EMAIL OR USERNAME</value>
+  </data>
+  <data name="FriendsListWindowTitle" xml:space="preserve">
+    <value>FRIENDS LIST</value>
+  </data>
+  <data name="GameSetupWindowTitle" xml:space="preserve">
+    <value>Domino Train · Game Setup</value>
+  </data>
+  <data name="GamesPlayedLabel" xml:space="preserve">
+    <value>MATCHES PLAYED</value>
+  </data>
+  <data name="LeaderboardGamesHeader" xml:space="preserve">
+    <value>MATCHES</value>
+  </data>
+  <data name="LeaderboardPlayerHeader" xml:space="preserve">
+    <value>PLAYER</value>
+  </data>
+  <data name="LeaderboardRankHeader" xml:space="preserve">
+    <value>RANK</value>
+  </data>
+  <data name="LeaderboardTitle" xml:space="preserve">
+    <value>LEADERBOARD</value>
+  </data>
+  <data name="LeaderboardWindowTitle" xml:space="preserve">
+    <value>Domino Train · Leaderboard</value>
+  </data>
+  <data name="LeaderboardWinsHeader" xml:space="preserve">
+    <value>WINS</value>
+  </data>
+  <data name="LoginSidebarLabel" xml:space="preserve">
+    <value>LOG IN</value>
+  </data>
+  <data name="LoginSidebarTitle" xml:space="preserve">
+    <value>WELCOME BACK</value>
+  </data>
+  <data name="MarkReadyButtonLabel" xml:space="preserve">
+    <value>I'M READY</value>
+  </data>
+  <data name="MaximumDoubleReadOnlyDescription" xml:space="preserve">
+    <value>Selected by the host</value>
+  </data>
+  <data name="MemberSinceLabel" xml:space="preserve">
+    <value>MEMBER SINCE</value>
+  </data>
+  <data name="ProfileSectionTitle" xml:space="preserve">
+    <value>PLAYER PROFILE</value>
+  </data>
+  <data name="ProfileStatsSectionLabel" xml:space="preserve">
+    <value>STATISTICS</value>
+  </data>
+  <data name="ProfileWindowTitle" xml:space="preserve">
+    <value>Domino Train · Profile</value>
+  </data>
+  <data name="RecoverPasswordFormTitle" xml:space="preserve">
+    <value>RECOVER PASSWORD</value>
+  </data>
+  <data name="RecoverPasswordWindowTitle" xml:space="preserve">
+    <value>Domino Train · Recover password</value>
+  </data>
+  <data name="ReportPlayerDescription" xml:space="preserve">
+    <value>Describe the reason for the report</value>
+  </data>
+  <data name="ReportReasonRequiredMessage" xml:space="preserve">
+    <value>You must indicate a reason for the report</value>
+  </data>
+  <data name="RoomHostLabel" xml:space="preserve">
+    <value>HOST</value>
+  </data>
+  <data name="RoomNoPlayersLabel" xml:space="preserve">
+    <value>There are no players in the room yet</value>
+  </data>
+  <data name="RoomNotReadyLabel" xml:space="preserve">
+    <value>NOT READY</value>
+  </data>
+  <data name="RoomPlayerCountFormat" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="RoomTitle" xml:space="preserve">
+    <value>GAME ROOM</value>
+  </data>
+  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
+    <value>Connected players: {0}</value>
+  </data>
+  <data name="ScoreNoPlayersLabel" xml:space="preserve">
+    <value>There are no players or results yet</value>
+  </data>
+  <data name="ScorePendingResultsLabel" xml:space="preserve">
+    <value>PENDING RESULTS</value>
+  </data>
+  <data name="ScoreRoundCountFormat" xml:space="preserve">
+    <value>Rounds: {0}</value>
+  </data>
+  <data name="ScoreRoundFormat" xml:space="preserve">
+    <value>ROUND {0}</value>
+  </data>
+  <data name="ScoreTieFormat" xml:space="preserve">
+    <value>TIE: {0}</value>
+  </data>
+  <data name="ScoreWinnerFormat" xml:space="preserve">
+    <value>WINNER: {0}</value>
+  </data>
+  <data name="VerificationTitle" xml:space="preserve">
+    <value>Enter the code</value>
+  </data>
+  <data name="WinsLabel" xml:space="preserve">
+    <value>WINS</value>
+  </data>
+  <data name="LogOutSessionLabel" xml:space="preserve">
+    <value>LOG OUT</value>
+  </data>
+  <data name="OpenNewGameLabel" xml:space="preserve">
+    <value>NEW MATCH</value>
+  </data>
 </root>
