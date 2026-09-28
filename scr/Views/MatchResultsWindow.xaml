@@ -11,295 +11,295 @@
     Title="{Binding [MatchResultsWindowTitle]}"
     Style="{StaticResource MatchWindow}"
     WindowStartupLocation="CenterScreen">
-	<Window.Resources>
-		<ItemsPanelTemplate x:Key="ResultsHorizontalItems">
-			<StackPanel Orientation="Horizontal" />
-		</ItemsPanelTemplate>
-		<Style x:Key="ResultsHeader" TargetType="TextBlock" BasedOn="{StaticResource PixelText}">
-			<Setter Property="FontSize" Value="10" />
-			<Setter Property="VerticalAlignment" Value="Center" />
-			<Setter Property="TextAlignment" Value="Center" />
-			<Setter Property="Margin" Value="14,0" />
-		</Style>
-		<DataTemplate x:Key="ResultsScoreCell">
-			<TextBlock
+    <Window.Resources>
+        <ItemsPanelTemplate x:Key="ResultsHorizontalItems">
+            <StackPanel Orientation="Horizontal" />
+        </ItemsPanelTemplate>
+        <Style x:Key="ResultsHeader" TargetType="TextBlock" BasedOn="{StaticResource PixelText}">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Margin" Value="14,0" />
+        </Style>
+        <DataTemplate x:Key="ResultsScoreCell">
+            <TextBlock
                 Text="{Binding Points, TargetNullValue=—}"
                 d:Text="12"
                 Style="{StaticResource MatchTableCell}"
                 Width="140"
                 Margin="0"
                 TextAlignment="Center" />
-		</DataTemplate>
-	</Window.Resources>
-	<Grid>
-		<Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
-		<Viewbox Stretch="Uniform">
-			<Grid Width="1200" Height="800">
-				<Grid Margin="40,24">
-					<Grid.RowDefinitions>
-						<RowDefinition Height="64" />
-						<RowDefinition Height="*" />
-						<RowDefinition Height="64" />
-					</Grid.RowDefinitions>
-					<Grid Margin="0,0,8,0">
-						<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-							<Image
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
+        <Viewbox Stretch="Uniform">
+            <Grid Width="1200" Height="800">
+                <Grid Margin="40,24">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="64" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="64" />
+                    </Grid.RowDefinitions>
+                    <Grid Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Image
                                 Source="{StaticResource MatchDominoImage}"
                                 Width="24"
                                 Height="42"
                                 Margin="0,0,16,0" />
-							<TextBlock
+                            <TextBlock
                                 Text="{Binding [GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
-						</StackPanel>
-						<controls:SettingsButton HorizontalAlignment="Right" VerticalAlignment="Center" />
-					</Grid>
-					<Grid Grid.Row="1" Margin="0,8,0,16">
-						<Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
-						<Border Style="{StaticResource MatchCard}" Margin="0,0,8,8">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="108" />
-									<RowDefinition Height="*" />
-									<RowDefinition Height="102" />
-									<RowDefinition Height="60" />
-								</Grid.RowDefinitions>
-								<StackPanel>
-									<TextBlock
+                        </StackPanel>
+                        <controls:SettingsButton HorizontalAlignment="Right" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Grid.Row="1" Margin="0,8,0,16">
+                        <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                        <Border Style="{StaticResource MatchCard}" Margin="0,0,8,8">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="108" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="102" />
+                                    <RowDefinition Height="60" />
+                                </Grid.RowDefinitions>
+                                <StackPanel>
+                                    <TextBlock
                                         Text="{Binding [MatchResultsTitle]}"
                                         Style="{StaticResource MatchHeading}" />
-									<TextBlock
+                                    <TextBlock
                                         Text="{Binding [MatchResultsDescription]}"
                                         Style="{StaticResource MatchBody}"
                                         Margin="0,10,0,0"
                                         FontSize="16" />
-									<StackPanel
+                                    <StackPanel
                                         Orientation="Horizontal"
                                         Margin="0,8,0,0"
                                         DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}">
-										<TextBlock
+                                        <TextBlock
                                             Text="{Binding RoundCountText}"
                                             Style="{StaticResource MatchBody}"
                                             FontSize="16" />
-									</StackPanel>
-								</StackPanel>
-								<Border
+                                    </StackPanel>
+                                </StackPanel>
+                                <Border
                                     Grid.Row="1"
                                     BorderBrush="{StaticResource Ink}"
                                     BorderThickness="2"
                                     DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}"
                                     d:DataContext="{d:DesignInstance Type=viewModels:MatchResultsViewModel}">
-									<ScrollViewer
+                                    <ScrollViewer
                                         HorizontalScrollBarVisibility="Auto"
                                         VerticalScrollBarVisibility="Auto">
-										<StackPanel>
-											<Border
+                                        <StackPanel>
+                                            <Border
                                                 Background="{StaticResource Aqua}"
                                                 BorderBrush="{StaticResource Ink}"
                                                 BorderThickness="0,0,0,2"
                                                 Height="48">
-												<Grid>
-													<Grid.ColumnDefinitions>
-														<ColumnDefinition Width="260" />
-														<ColumnDefinition Width="Auto" />
-														<ColumnDefinition Width="*" MinWidth="160" />
-													</Grid.ColumnDefinitions>
-													<TextBlock
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="260" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" MinWidth="160" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock
                                                         Style="{StaticResource ResultsHeader}"
                                                         TextAlignment="Left"
                                                         Text="{Binding [ScorePlayerLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
-													<ItemsControl
+                                                    <ItemsControl
                                                         Grid.Column="1"
                                                         ItemsSource="{Binding RoundLabels}"
                                                         ItemsPanel="{StaticResource ResultsHorizontalItems}"
                                                         d:ItemsSource="{d:SampleData ItemCount=2}">
-														<ItemsControl.ItemTemplate>
-															<DataTemplate>
-																<TextBlock
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock
                                                                     Text="{Binding}"
                                                                     d:Text="RONDA"
                                                                     Style="{StaticResource ResultsHeader}"
                                                                     Width="140"
                                                                     Margin="0" />
-															</DataTemplate>
-														</ItemsControl.ItemTemplate>
-													</ItemsControl>
-													<TextBlock
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                    <TextBlock
                                                         Grid.Column="2"
                                                         Style="{StaticResource ResultsHeader}"
                                                         Text="{Binding [ScoreTotalLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
-												</Grid>
-											</Border>
-											<ItemsControl
+                                                </Grid>
+                                            </Border>
+                                            <ItemsControl
                                                 ItemsSource="{Binding Players}"
                                                 d:ItemsSource="{d:SampleData ItemCount=4}">
-												<ItemsControl.ItemTemplate>
-													<DataTemplate>
-														<Border
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border
                                                             BorderBrush="{StaticResource Mint}"
                                                             BorderThickness="0,0,0,2"
                                                             MinHeight="52">
-															<Border.Style>
-																<Style TargetType="Border">
-																	<Setter
+                                                            <Border.Style>
+                                                                <Style TargetType="Border">
+                                                                    <Setter
                                                                         Property="Background"
                                                                         Value="{StaticResource Glacier}" />
-																	<Style.Triggers>
-																		<DataTrigger
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger
                                                                             Binding="{Binding IsWinner}"
                                                                             Value="True">
-																			<Setter
+                                                                            <Setter
                                                                                 Property="Background"
                                                                                 Value="{StaticResource Frost}" />
-																		</DataTrigger>
-																	</Style.Triggers>
-																</Style>
-															</Border.Style>
-															<Grid>
-																<Grid.ColumnDefinitions>
-																	<ColumnDefinition Width="260" />
-																	<ColumnDefinition Width="Auto" />
-																	<ColumnDefinition Width="*" MinWidth="160" />
-																</Grid.ColumnDefinitions>
-																<TextBlock
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Border.Style>
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="260" />
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="*" MinWidth="160" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock
                                                                     TextWrapping="NoWrap"
                                                                     TextTrimming="CharacterEllipsis"
                                                                     d:Text="Jugador">
-																	<TextBlock.Style>
-																		<Style
+                                                                    <TextBlock.Style>
+                                                                        <Style
                                                                             TargetType="TextBlock"
                                                                             BasedOn="{StaticResource MatchTableCell}">
-																			<Setter
+                                                                            <Setter
                                                                                 Property="Text"
                                                                                 Value="{Binding Player.Username}" />
-																			<Style.Triggers>
-																				<DataTrigger
+                                                                            <Style.Triggers>
+                                                                                <DataTrigger
                                                                                     Binding="{Binding Player.IsCurrentPlayer}"
                                                                                     Value="True">
-																					<Setter
+                                                                                    <Setter
                                                                                         Property="Text"
                                                                                         Value="{Binding [YouPlayerLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
-																				</DataTrigger>
-																			</Style.Triggers>
-																		</Style>
-																	</TextBlock.Style>
-																</TextBlock>
-																<ItemsControl
+                                                                                </DataTrigger>
+                                                                            </Style.Triggers>
+                                                                        </Style>
+                                                                    </TextBlock.Style>
+                                                                </TextBlock>
+                                                                <ItemsControl
                                                                     Grid.Column="1"
                                                                     ItemsSource="{Binding Scores}"
                                                                     VerticalAlignment="Center"
                                                                     d:ItemsSource="{d:SampleData ItemCount=2}"
                                                                     ItemsPanel="{StaticResource ResultsHorizontalItems}"
                                                                     ItemTemplate="{StaticResource ResultsScoreCell}" />
-																<TextBlock
+                                                                <TextBlock
                                                                     Grid.Column="2"
                                                                     Text="{Binding TotalScore, TargetNullValue=—}"
                                                                     d:Text="24"
                                                                     Style="{StaticResource MatchTableCell}"
                                                                     TextAlignment="Center" />
-															</Grid>
-														</Border>
-													</DataTemplate>
-												</ItemsControl.ItemTemplate>
-											</ItemsControl>
-											<TextBlock
+                                                            </Grid>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <TextBlock
                                                 Margin="20"
                                                 FontSize="18"
                                                 d:Visibility="Collapsed"
                                                 Text="{Binding [ScoreNoPlayersLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}">
-												<TextBlock.Style>
-													<Style TargetType="TextBlock" BasedOn="{StaticResource MatchBody}">
-														<Setter Property="Visibility" Value="Collapsed" />
-														<Style.Triggers>
-															<DataTrigger Binding="{Binding HasPlayers}" Value="False">
-																<Setter Property="Visibility" Value="Visible" />
-															</DataTrigger>
-														</Style.Triggers>
-													</Style>
-												</TextBlock.Style>
-											</TextBlock>
-										</StackPanel>
-									</ScrollViewer>
-								</Border>
-								<Grid
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock" BasedOn="{StaticResource MatchBody}">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding HasPlayers}" Value="False">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Border>
+                                <Grid
                                     Grid.Row="2"
                                     VerticalAlignment="Center"
                                     DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}">
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="Auto" />
-										<ColumnDefinition Width="*" />
-									</Grid.ColumnDefinitions>
-									<Image
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
                                         Source="{StaticResource MatchTrophyImage}"
                                         Width="62"
                                         Height="62"
                                         Margin="0,0,20,0">
-										<Image.Style>
-											<Style TargetType="Image">
-												<Setter Property="Visibility" Value="Collapsed" />
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding HasWinner}" Value="True">
-														<Setter Property="Visibility" Value="Visible" />
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</Image.Style>
-									</Image>
-									<StackPanel Grid.Column="1" VerticalAlignment="Center">
-										<ScrollViewer
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasWinner}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <ScrollViewer
                                             MaxHeight="48"
                                             VerticalScrollBarVisibility="Auto"
                                             HorizontalScrollBarVisibility="Disabled">
-											<TextBlock
+                                            <TextBlock
                                                 Text="{Binding WinnerText}"
                                                 d:Text="GANADOR: JUGADOR"
                                                 Style="{StaticResource PixelText}"
                                                 FontSize="13"
                                                 TextWrapping="Wrap" />
-										</ScrollViewer>
-										<TextBlock
+                                        </ScrollViewer>
+                                        <TextBlock
                                             Style="{StaticResource MatchBody}"
                                             Margin="0,10,0,0"
                                             FontSize="16"
                                             Text="{Binding [ScoreExplanation], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
-									</StackPanel>
-								</Grid>
-								<Grid Grid.Row="3">
-									<Button
+                                    </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <Button
                                         Content="{Binding [ExitToMenuButtonLabel]}"
                                         Style="{StaticResource MatchButton}"
                                         Click="OpenMainMenu"
                                         HorizontalAlignment="Left"
                                         Width="300" />
-									<Button
+                                    <Button
                                         Content="{Binding [NextRoundButtonLabel]}"
                                         Style="{StaticResource MatchButton}"
                                         Click="OpenRoom"
                                         HorizontalAlignment="Right"
                                         Width="340"
                                         Background="{StaticResource Aqua}" />
-								</Grid>
-							</Grid>
-						</Border>
-					</Grid>
-					<Grid Grid.Row="2" Margin="0,4,8,4">
-						<Button
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,4,8,4">
+                        <Button
                             Content="{Binding [BackButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="NavigateBack"
                             HorizontalAlignment="Left"
                             MinWidth="170" />
-						<Button
+                        <Button
                             Content="{Binding [GameRulesButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="OpenRules"
                             HorizontalAlignment="Right"
                             MinWidth="210" />
-					</Grid>
-				</Grid>
-			</Grid>
-		</Viewbox>
-	</Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Viewbox>
+    </Grid>
 </Window>

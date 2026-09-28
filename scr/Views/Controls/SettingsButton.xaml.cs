@@ -10,7 +10,7 @@ public partial class SettingsButton : UserControl
         InitializeComponent();
     }
 
-    private void OpenSettings(object sender, RoutedEventArgs e)
+    private void OpenSettings(object sender, RoutedEventArgs eventArgs)
     {
         SettingsWindow settingsWindow = new SettingsWindow
         {

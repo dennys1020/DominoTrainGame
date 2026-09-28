@@ -29,15 +29,17 @@ public partial class RoomWindow : Window
         InitializeComponent();
     }
 
-    public RoomViewModel Room { 
-        get; 
+    public RoomViewModel Room
+    {
+        get;
     }
 
-    public bool IsHost { 
-        get; 
+    public bool IsHost
+    {
+        get;
     }
 
-    private void MarkReady(object sender, RoutedEventArgs e)
+    private void MarkReady(object sender, RoutedEventArgs eventArgs)
     {
         if (sender is Button button && button.DataContext is RoomPlayerViewModel player &&
             player.IsCurrentPlayer && Room.Players.Contains(player))
@@ -46,12 +48,12 @@ public partial class RoomWindow : Window
         }
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs e)
+    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs e)
+    private void OpenRules(object sender, RoutedEventArgs eventArgs)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -62,7 +64,7 @@ public partial class RoomWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenResults(object sender, RoutedEventArgs e)
+    private void OpenResults(object sender, RoutedEventArgs eventArgs)
     {
         if (IsHost)
         {
