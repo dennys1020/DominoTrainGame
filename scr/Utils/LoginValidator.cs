@@ -1,8 +1,8 @@
-﻿using System;
-using System.Data.Entity.Core;
+﻿using System.Data.Entity.Core;
 using System.Linq;
 using log4net.Ext.Trace;
-using DominoTrainGame.Resources.Localization;
+using DominoTrainGame.Utils;
+using DominoTrainGame.Validator;
 
 namespace DominoTrainGame;
 
@@ -15,41 +15,50 @@ public sealed class LoginValidator
         _logger = TraceLogManager.GetLogger(typeof(LoginValidator));
     }
 
-    public bool TryLogin(string usernameOrEmail, string password, out string message)
+    public LoginValidationStatus LogInUser(string usernameOrEmail, string password)
     {
+        LoginValidationStatus status = ValidateInput(usernameOrEmail, password);
+
+        if (status == LoginValidationStatus.Success)
+        {
+            status = AuthenticateUser(usernameOrEmail, password);
+        }
+
+        return status;
+    }
+
+    private static LoginValidationStatus ValidateInput(string usernameOrEmail, string password)
+    {
+        LoginValidationStatus status = LoginValidationStatus.Success;
+
         if (string.IsNullOrWhiteSpace(usernameOrEmail) || string.IsNullOrWhiteSpace(password))
         {
-            message = UiStrings.MessageRequiredFields;
-
-            return false;
+            status = LoginValidationStatus.EmptyFields;
         }
+
+        return status;
+    }
+
+    private LoginValidationStatus AuthenticateUser(string usernameOrEmail, string password)
+    {
+        LoginValidationStatus status = LoginValidationStatus.Success;
 
         try
         {
-            using (DominoGameDBEntities dbContext = new DominoGameDBEntities())
+            using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())
             {
-                Player user = dbContext.Players.FirstOrDefault(
-                    p => p.userName == usernameOrEmail || p.Email == usernameOrEmail);
+                Player? user = databaseContext.Players.FirstOrDefault(
+                    registeredPlayer => registeredPlayer.userName == usernameOrEmail
+                        || registeredPlayer.Email == usernameOrEmail);
 
-                if (user == null)
+                if (user is null)
                 {
-                    message = UiStrings.MessageUserNotFound;
-
-                    return false;
+                    status = LoginValidationStatus.UserNotFound;
                 }
-
-                bool isPasswordValid = PasswordHasher.Verify(user.PasswordHash, password);
-
-                if (!isPasswordValid)
+                else if (!PasswordHasher.Verify(user.PasswordHash, password))
                 {
-                    message = UiStrings.MessageIncorrectPassword;
-
-                    return false;
+                    status = LoginValidationStatus.IncorrectPassword;
                 }
-
-                message = UiStrings.MessageLoginSuccess;
-
-                return true;
             }
         }
         catch (EntityException exception)
@@ -58,9 +67,9 @@ public sealed class LoginValidator
                 "The login operation failed due to a database exception.",
                 exception);
 
-            message = UiStrings.DatabaseErrorMessage;
-
-            return false;
+            status = LoginValidationStatus.DatabaseError;
         }
+
+        return status;
     }
 }

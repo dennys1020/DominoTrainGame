@@ -77,4 +77,20 @@ public partial class MainWindow : Window
         };
         friendsWindow.ShowDialog();
     }
+
+    private void OpenSettings(object sender, RoutedEventArgs e)
+    {
+        SettingsWindow settingsWindow = new SettingsWindow
+        {
+            Owner = this
+        };
+
+        settingsWindow.ShowDialog();
+    }
+
+    private void LogOut(object sender, RoutedEventArgs e)
+    {
+        WindowNavigation.Navigate(this, new LogInWindow());
+    }
+
 }

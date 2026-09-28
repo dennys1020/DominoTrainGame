@@ -1,50 +1,59 @@
-﻿using System.Windows;
+﻿using DominoTrainGame.Resources.Localization;
+using DominoTrainGame.Utils;
+using DominoTrainGame.Validator;
+using System.Windows;
 
-namespace DominoTrainGame.Views
+namespace DominoTrainGame.Views;
+
+public partial class LogInWindow : Window
 {
+    private readonly LoginValidator _loginValidator;
 
-    public partial class LogInWindow : Window
+    public LogInWindow()
     {
-        private readonly LoginValidator _loginValidator;
+        InitializeComponent();
+        _loginValidator = new LoginValidator();
+    }
 
-        public LogInWindow()
+    private void OpenSettings(object sender, RoutedEventArgs e)
+    {
+        SettingsWindow settingsWindow = new SettingsWindow
         {
-            InitializeComponent();
-            _loginValidator = new LoginValidator();
-        }
-        private void OpenSettings(object sender, RoutedEventArgs e)
+            Owner = this
+        };
+
+        settingsWindow.ShowDialog();
+    }
+
+    private void NavigateToSignUp_Click(object sender, RoutedEventArgs e)
+    {
+        SignUpWindow signUpWindow = new SignUpWindow();
+        Application.Current.MainWindow = signUpWindow;
+
+        signUpWindow.Show();
+
+        this.Close();
+    }
+
+    private void NavigateToRecoverPassword(object sender, RoutedEventArgs e)
+    {
+        RecoverPasswordWindow recoverPasswordWindow = new RecoverPasswordWindow();
+        Application.Current.MainWindow = recoverPasswordWindow;
+
+        recoverPasswordWindow.Show();
+
+        this.Close();
+    }
+
+    private void NavigateToMain_Click(object sender, RoutedEventArgs e)
+    {
+        string usernameOrEmail = textBoxEmailUserName.Text;
+        string password = passwordBoxPassword.Password;
+
+        LoginValidationStatus status = _loginValidator.LogInUser(usernameOrEmail, password);
+
+        if (status == LoginValidationStatus.Success)
         {
-            SettingsWindow settingsWindow = new SettingsWindow
-            {
-                Owner = this
-            };
-            settingsWindow.ShowDialog();
-        }
-
-        private void NavigateToSignUp_Click(object sender, RoutedEventArgs e)
-        {
-            SignUpWindow signUpWindow = new SignUpWindow();
-            Application.Current.MainWindow = signUpWindow;
-
-            signUpWindow.Show();
-
-            this.Close();
-        }
-
-        private void NavigateToMain_Click(object sender, RoutedEventArgs e)
-        {
-            string usernameOrEmail = textBoxEmailUserName.Text;
-            string password = passwordBoxPassword.Password;
-
-            bool isLoginSuccessful = _loginValidator.TryLogin(usernameOrEmail, password, out string resultMessage);
-
-            MessageBox.Show(resultMessage);
-
-            if (!isLoginSuccessful)
-            {
-                return;
-            }
-
             MainWindow mainWindow = new MainWindow();
             Application.Current.MainWindow = mainWindow;
 
@@ -52,6 +61,26 @@ namespace DominoTrainGame.Views
 
             this.Close();
         }
+        else
+        {
+            MessageBox.Show(DescribeStatus(status));
+        }
     }
 
+    private string DescribeStatus(LoginValidationStatus status)
+    {
+        switch (status)
+        {
+            case LoginValidationStatus.EmptyFields:
+                return UiStrings.MessageRequiredFields;
+            case LoginValidationStatus.UserNotFound:
+                return UiStrings.MessageUserNotFound;
+            case LoginValidationStatus.IncorrectPassword:
+                return UiStrings.MessageIncorrectPassword;
+            case LoginValidationStatus.DatabaseError:
+                return UiStrings.DatabaseErrorMessage;
+            default:
+                return UiStrings.DatabaseErrorMessage;
+        }
+    }
 }
