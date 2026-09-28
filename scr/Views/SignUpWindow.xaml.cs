@@ -29,7 +29,7 @@ public partial class SignUpWindow : Window
         string password = passwordBoxPassword.Password;
 
         SignUpValidator validator = new SignUpValidator();
-        SignUpValidationStatus status = validator.TryRegisterUser(username, email, password);
+        SignUpValidationStatus status = validator.RegisterUser(username, email, password);
 
         if (status != SignUpValidationStatus.Success)
         {
