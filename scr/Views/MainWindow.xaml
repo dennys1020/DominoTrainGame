@@ -44,7 +44,19 @@
                 Content="{Binding [OpenProfileButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 Height="54"
+                Margin="0,0,0,16"
                 Click="OpenProfile" />
+            <Button
+                Content="{Binding [OpenNewGameLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Margin="0,0,0,16"
+                Click="OpenResults"/>
+            <Button
+                Content="{Binding [LogOutSessionLabel]}"
+                Style="{StaticResource PixelButton}"
+                Height="54"
+                Click="LogOut"/>
         </StackPanel>
 
         <Grid.RowDefinitions>

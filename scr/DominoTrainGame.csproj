@@ -45,8 +45,8 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=2.0.9.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.10\lib\net45\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=3.4.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.3.4.0\lib\net462\log4net.dll</HintPath>
     </Reference>
     <Reference Include="log4net.Ext.Trace, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll</HintPath>
@@ -141,6 +141,10 @@
     <Compile Include="Utils\PasswordHasher.cs" />
     <Compile Include="Utils\SignUpValidationStatus.cs" />
     <Compile Include="Utils\SignUpValidator.cs" />
+    <Compile Include="ViewModels\MatchResultsViewModel.cs" />
+    <Compile Include="ViewModels\MatchRoundViewModel.cs" />
+    <Compile Include="ViewModels\PlayerMatchResultViewModel.cs" />
+    <Compile Include="ViewModels\RoundScoreViewModel.cs" />
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -155,6 +159,9 @@
     </Compile>
     <Compile Include="Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameRulesWindow.xaml.cs">
+      <DependentUpon>GameRulesWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\JoinGameWindow.xaml.cs">
       <DependentUpon>JoinGameWindow.xaml</DependentUpon>
@@ -171,6 +178,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MatchResultsWindow.xaml.cs">
+      <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NewGameWindow.xaml.cs">
       <DependentUpon>NewGameWindow.xaml</DependentUpon>
@@ -217,6 +227,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GameRulesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\JoinGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -231,6 +245,9 @@
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MatchResultsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NewGameWindow.xaml">

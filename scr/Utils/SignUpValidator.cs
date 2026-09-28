@@ -56,6 +56,7 @@ public sealed class SignUpValidator
                     userName = username,
                     Email = email,
                     PasswordHash = PasswordHasher.Hash(password),
+                    PreferredLanguage = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
                     CreatedAt = System.DateTime.UtcNow,
                     IsGuest = 0
                 };

@@ -31,6 +31,16 @@ namespace DominoTrainGame.Views
             this.Close();
         }
 
+        private void NavigateToRecoverPassword(object sender, RoutedEventArgs e)
+        {
+            RecoverPasswordWindow recoverPassword = new RecoverPasswordWindow();
+            Application.Current.MainWindow = recoverPassword;
+
+            recoverPassword.Show();
+
+            this.Close();
+        }
+
         private void NavigateToMain_Click(object sender, RoutedEventArgs e)
         {
             string usernameOrEmail = textBoxEmailUserName.Text;
@@ -38,10 +48,10 @@ namespace DominoTrainGame.Views
 
             bool isLoginSuccessful = _loginValidator.TryLogin(usernameOrEmail, password, out string resultMessage);
 
-            MessageBox.Show(resultMessage);
 
             if (!isLoginSuccessful)
             {
+                MessageBox.Show(resultMessage);
                 return;
             }
 
