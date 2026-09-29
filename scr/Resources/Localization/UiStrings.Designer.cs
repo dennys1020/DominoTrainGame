@@ -803,6 +803,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a CLASIFICACIONES.
+        ///   Looks up a localized string similar to CLASIFICACIÓN.
         /// </summary>
         public static string LeaderboardButtonLabel {
             get {
@@ -812,6 +813,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a Todavía no hay puntuaciones de partidas terminadas.
+        ///   Looks up a localized string similar to Todavía no hay puntuaciones de partidas terminadas..
         /// </summary>
         public static string LeaderboardEmptyMessage {
             get {
@@ -821,6 +823,25 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a PARTIDAS.
+        ///   Looks up a localized string similar to Clasificación por victorias; los empates se ordenan por nombre. Solo se cuentan partidas terminadas. Pulsa un encabezado para ordenar. Los puntos son la suma de las penalizaciones de dominó..
+        /// </summary>
+        public static string LeaderboardExplanation {
+            get {
+                return ResourceManager.GetString("LeaderboardExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filtrar por jugador.
+        /// </summary>
+        public static string LeaderboardFilterLabel {
+            get {
+                return ResourceManager.GetString("LeaderboardFilterLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PARTIDAS.
         /// </summary>
         public static string LeaderboardGamesHeader {
             get {
@@ -830,6 +851,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a  No se pudieron cargar las puntuaciones. Revisa la conexión e inténtalo de nuevo.
+        ///   Looks up a localized string similar to No se pudieron cargar las puntuaciones. Revisa la conexión e inténtalo de nuevo..
         /// </summary>
         public static string LeaderboardLoadErrorMessage {
             get {
@@ -839,6 +861,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a Cargando puntuaciones….
+        ///   Looks up a localized string similar to Cargando puntuaciones….
         /// </summary>
         public static string LeaderboardLoadingMessage {
             get {
@@ -848,6 +871,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a No hay jugadores que coincidan con el filtro.
+        ///   Looks up a localized string similar to No hay jugadores que coincidan con el filtro..
         /// </summary>
         public static string LeaderboardNoMatchesMessage {
             get {
@@ -857,6 +881,7 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a JUGADOR.
+        ///   Looks up a localized string similar to JUGADOR.
         /// </summary>
         public static string LeaderboardPlayerHeader {
             get {
@@ -875,6 +900,25 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a TABLA DE POSICIONES.
+        ///   Looks up a localized string similar to ACTUALIZAR.
+        /// </summary>
+        public static string LeaderboardRefreshButtonLabel {
+            get {
+                return ResourceManager.GetString("LeaderboardRefreshButtonLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PUNTOS.
+        /// </summary>
+        public static string LeaderboardScoreHeader {
+            get {
+                return ResourceManager.GetString("LeaderboardScoreHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CLASIFICACIÓN.
         /// </summary>
         public static string LeaderboardTitle {
             get {
