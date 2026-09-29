@@ -117,6 +117,7 @@
     <Compile Include="MatchResult.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LeaderboardEntry.cs" />
     <Compile Include="Navigation\WindowNavigation.cs" />
     <Compile Include="Player.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
@@ -124,6 +125,7 @@
     <Compile Include="Report.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repository\LeaderboardRepository.cs" />
     <Compile Include="Repository\PlayerRepository.cs" />
     <Compile Include="Resources\Localization\UiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -139,6 +141,7 @@
     <Compile Include="Utils\PasswordHasher.cs" />
     <Compile Include="Utils\SignUpValidationStatus.cs" />
     <Compile Include="Utils\SignUpValidator.cs" />
+    <Compile Include="ViewModels\LeaderboardViewModel.cs" />
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
