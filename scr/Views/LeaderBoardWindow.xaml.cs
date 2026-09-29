@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,6 +30,7 @@ public partial class LeaderBoardWindow : Window
     private async Task LoadLeaderboardAsync()
     {
         CancellationToken cancellationToken = _loadCancellation.Token;
+
         try
         {
             await _viewModel.LoadAsync(cancellationToken);

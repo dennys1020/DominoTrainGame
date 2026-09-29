@@ -21,6 +21,7 @@
 
         <TextBlock Text="{Binding Localization[LeaderboardTitle]}"
                    Style="{StaticResource PixelText}" FontSize="22" Margin="0,0,0,16"/>
+
         <TextBlock Grid.Row="1" Text="{Binding Localization[LeaderboardExplanation]}"
                    Foreground="{StaticResource Ink}" FontSize="14"
                    TextWrapping="Wrap" Margin="0,0,0,16"/>
@@ -31,6 +32,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+
             <Label Content="{Binding Localization[LeaderboardFilterLabel]}" Target="{Binding ElementName=PlayerFilter}"
                    VerticalAlignment="Center" Foreground="{StaticResource Ink}" Margin="0,0,12,0"/>
             <TextBox x:Name="PlayerFilter" Grid.Column="1" MaxLength="45" Padding="8"
@@ -42,7 +44,7 @@
                     IsEnabled="{Binding CanRefresh}" Click="RefreshLeaderboard"/>
         </Grid>
 
-        <DataGrid x:Name="RankingList" Grid.Row="3" ItemsSource="{Binding Entries}"
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Entries}"
                   AutoGenerateColumns="False" IsReadOnly="True"
                   CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="True"
                   CanUserReorderColumns="False" HeadersVisibility="Column" RowHeaderWidth="0"

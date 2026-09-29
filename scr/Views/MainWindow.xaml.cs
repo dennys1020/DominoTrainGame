@@ -24,7 +24,7 @@ public partial class MainWindow : Window
         leaderboardWindow.ShowDialog();
     }
 
-    private void OpenResults(object sender, RoutedEventArgs eventArgs)
+    private void OpenResults(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new MatchResultsWindow());
     }
