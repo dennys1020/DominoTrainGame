@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using log4net.Ext.Trace;
 using DominoTrainGame.Utils;
+using DominoTrainGame.ViewModels;
 
 namespace DominoTrainGame;
 
@@ -35,7 +37,7 @@ public sealed class SignUpValidator
         return finalStatus;
     }
 
-    private static SignUpValidationStatus ValidateInput(string username, string email, string password)
+    public static SignUpValidationStatus ValidateInput(string username, string email, string password)
     {
         SignUpValidationStatus status = SignUpValidationStatus.Success;
 
@@ -124,4 +126,42 @@ public sealed class SignUpValidator
 
         return status;
     }
+    public SignUpValidationStatus CheckAvailability(string username, string email, string password)
+    {
+        SignUpValidationStatus status = ValidateInput(username, email, password);
+
+        if (status == SignUpValidationStatus.Success)
+        {
+            status = FindExistingPlayer(username, email);
+        }
+
+        return status;
+    }
+
+    private SignUpValidationStatus FindExistingPlayer(string username, string email)
+    {
+        SignUpValidationStatus status = SignUpValidationStatus.Success;
+
+        try
+        {
+            using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())
+            {
+                bool isAlreadyRegistered = databaseContext.Players.Any(
+                    registeredPlayer => registeredPlayer.userName == username || registeredPlayer.Email == email);
+
+                if (isAlreadyRegistered)
+                {
+                    status = SignUpValidationStatus.UserAlreadyExists;
+                }
+            }
+        }
+        catch (EntityException exception)
+        {
+            _logger.Error("The database could not be reached while checking the player.", exception);
+            status = SignUpValidationStatus.DatabaseError;
+        }
+
+        return status;
+    }
+
 }

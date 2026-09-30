@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -371,6 +371,24 @@
   </data>
   <data name="ButtonReject" xml:space="preserve">
     <value>Rechazar</value>
+  </data>
+  <data name="MessageRequiredFields" xml:space="preserve">
+    <value>Todos los campos son obligatorios</value>
+  </data>
+  <data name="MessageUserNotFound" xml:space="preserve">
+    <value>Usuario no encontrado</value>
+  </data>
+  <data name="MessageIncorrectPassword" xml:space="preserve">
+    <value>Contraseña incorrecta</value>
+  </data>
+  <data name="MessageLoginSuccess" xml:space="preserve">
+    <value>Inicio de sesión exitoso</value>
+  </data>
+  <data name="MessageUserAlreadyExists" xml:space="preserve">
+    <value>El nombre de usuario o correo ya está registrado</value>
+  </data>
+  <data name="MessageSignUpSuccess" xml:space="preserve">
+    <value>Registro completado con éxito</value>
   </data>
   <data name="BackToLoginLabel" xml:space="preserve">
     <value>Volver a inicio de sesión</value>
@@ -773,14 +791,6 @@ INVITACIÓN</value>
   </data>
   <data name="LeaderboardButtonLabel" xml:space="preserve">
     <value>CLASIFICACIONES</value>
-  <data name="LeaderboardScoreHeader" xml:space="preserve">
-    <value>PUNTOS</value>
-  </data>
-  <data name="LeaderboardFilterLabel" xml:space="preserve">
-    <value>Filtrar por jugador</value>
-  </data>
-  <data name="LeaderboardRefreshButtonLabel" xml:space="preserve">
-    <value>ACTUALIZAR</value>
   </data>
   <data name="LeaderboardLoadingMessage" xml:space="preserve">
     <value>Cargando puntuaciones…</value>
@@ -793,5 +803,38 @@ INVITACIÓN</value>
   </data>
   <data name="LeaderboardNoMatchesMessage" xml:space="preserve">
     <value>No hay jugadores que coincidan con el filtro</value>
+  </data>
+  <data name="VerificationCodeEmailSubject" xml:space="preserve">
+    <value>Tu código de verificación</value>
+  </data>
+  <data name="VerificationCodeEmailBody" xml:space="preserve">
+    <value>Tu código de verificación de Domino Train es: {0}. Vence en {1} minutos. Si no solicitaste este registro, ignora este mensaje</value>
+  </data>
+  <data name="VerificationCodeSentMessage" xml:space="preserve">
+    <value>Enviamos un código de 6 dígitos a {0}. Escríbelo para completar tu registro.</value>
+  </data>
+  <data name="VerificationCodeInvalidMessage" xml:space="preserve">
+    <value>El código es incorrecto. Inténtalo de nuevo</value>
+  </data>
+  <data name="VerificationCodeExpiredMessage" xml:space="preserve">
+    <value>El código venció</value>
+  </data>
+  <data name="VerificationCodeTooManyAttemptsMessage" xml:space="preserve">
+    <value>Demasiados intentos fallidos</value>
+  </data>
+  <data name="VerificationCodeSendErrorMessage" xml:space="preserve">
+    <value>No se pudo enviar el correo de verificación. Revisa tu dirección e inténtalo de nuevo.</value>
+  </data>
+  <data name="VerificationCodeNotReceivedLabel" xml:space="preserve">
+    <value>¿No recibiste el código?</value>
+  </data>
+  <data name="VerificationCodeResendLabel" xml:space="preserve">
+    <value>Reenviar código</value>
+  </data>
+  <data name="VerificationCodeResentMessage" xml:space="preserve">
+    <value>Te enviamos un código nuevo. El anterior ya no es válido.</value>
+  </data>
+  <data name="VerificationCodeResendWaitMessage" xml:space="preserve">
+    <value>Espera {0} segundos para pedir otro código.</value>
   </data>
 </root>

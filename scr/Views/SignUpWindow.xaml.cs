@@ -1,6 +1,8 @@
 ﻿using DominoTrainGame.Utils;
 using DominoTrainGame.Resources.Localization;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace DominoTrainGame.Views;
 
@@ -22,32 +24,79 @@ public partial class SignUpWindow : Window
         settingsWindow.ShowDialog();
     }
 
-    private void SignUpButton_Click(object sender, RoutedEventArgs e)
+    private async void SignUpButton_Click(object sender, RoutedEventArgs e)
     {
-        string email = textBoxEmail.Text;
+        Button signUpButton = (Button)sender;
+        string email = textBoxEmail.Text.Trim();
         string username = textBoxUserName.Text;
         string password = passwordBoxPassword.Password;
 
+        SignUpValidator validator = new SignUpValidator();
+        SignUpValidationStatus status = validator.CheckAvailability(username, email, password);
+
+        if (status != SignUpValidationStatus.Success)
+        {
+            MessageBox.Show(DescribeStatus(status));
+        }
+        else
+        {
+            signUpButton.IsEnabled = false;
+            bool isEmailVerified = await VerifyEmailAsync(email);
+            signUpButton.IsEnabled = true;
+
+            if (isEmailVerified)
+            {
+                CompleteRegistration(username, email, password);
+            }
+        }
+    }
+
+    private async Task<bool> VerifyEmailAsync(string email)
+    {
+        VerificationCodeService codeService = new VerificationCodeService();
+        string code = codeService.GenerateCode();
+        bool isVerified = false;
+
+        bool wasSent = await new EmailSender().SendVerificationCodeAsync(email, code);
+
+        if (!wasSent)
+        {
+            MessageBox.Show(UiStrings.VerificationCodeSendErrorMessage);
+        }
+        else
+        {
+            VerificationCodeWindow verificationWindow = new VerificationCodeWindow(email, codeService)
+            {
+                Owner = this
+            };
+
+            isVerified = verificationWindow.ShowDialog() == true;
+        }
+
+        return isVerified;
+    }
+
+    private void CompleteRegistration(string username, string email, string password)
+    {
         SignUpValidator validator = new SignUpValidator();
         SignUpValidationStatus status = validator.RegisterUser(username, email, password);
 
         if (status != SignUpValidationStatus.Success)
         {
             MessageBox.Show(DescribeStatus(status));
-
-            return;
         }
+        else
+        {
+            MessageBox.Show(UiStrings.RegisterSucessMessage);
 
-        MessageBox.Show(UiStrings.RegisterSucessMessage);
+            LogInWindow loginWindow = new LogInWindow();
+            Application.Current.MainWindow = loginWindow;
 
-        LogInWindow loginWindow = new LogInWindow();
-        Application.Current.MainWindow = loginWindow;
+            loginWindow.Show();
 
-        loginWindow.Show();
-
-        this.Close();
+            this.Close();
+        }
     }
-
     private void NavigateToLogin_Click(object sender, RoutedEventArgs e)
     {
         LogInWindow loginWindow = new LogInWindow();

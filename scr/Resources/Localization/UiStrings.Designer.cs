@@ -803,7 +803,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a CLASIFICACIONES.
-        ///   Looks up a localized string similar to CLASIFICACIÓN.
         /// </summary>
         public static string LeaderboardButtonLabel {
             get {
@@ -813,7 +812,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a Todavía no hay puntuaciones de partidas terminadas.
-        ///   Looks up a localized string similar to Todavía no hay puntuaciones de partidas terminadas..
         /// </summary>
         public static string LeaderboardEmptyMessage {
             get {
@@ -823,25 +821,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a PARTIDAS.
-        ///   Looks up a localized string similar to Clasificación por victorias; los empates se ordenan por nombre. Solo se cuentan partidas terminadas. Pulsa un encabezado para ordenar. Los puntos son la suma de las penalizaciones de dominó..
-        /// </summary>
-        public static string LeaderboardExplanation {
-            get {
-                return ResourceManager.GetString("LeaderboardExplanation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Filtrar por jugador.
-        /// </summary>
-        public static string LeaderboardFilterLabel {
-            get {
-                return ResourceManager.GetString("LeaderboardFilterLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PARTIDAS.
         /// </summary>
         public static string LeaderboardGamesHeader {
             get {
@@ -851,7 +830,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a  No se pudieron cargar las puntuaciones. Revisa la conexión e inténtalo de nuevo.
-        ///   Looks up a localized string similar to No se pudieron cargar las puntuaciones. Revisa la conexión e inténtalo de nuevo..
         /// </summary>
         public static string LeaderboardLoadErrorMessage {
             get {
@@ -861,7 +839,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a Cargando puntuaciones….
-        ///   Looks up a localized string similar to Cargando puntuaciones….
         /// </summary>
         public static string LeaderboardLoadingMessage {
             get {
@@ -871,7 +848,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a No hay jugadores que coincidan con el filtro.
-        ///   Looks up a localized string similar to No hay jugadores que coincidan con el filtro..
         /// </summary>
         public static string LeaderboardNoMatchesMessage {
             get {
@@ -881,7 +857,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a JUGADOR.
-        ///   Looks up a localized string similar to JUGADOR.
         /// </summary>
         public static string LeaderboardPlayerHeader {
             get {
@@ -900,25 +875,6 @@ namespace DominoTrainGame.Resources.Localization {
         
         /// <summary>
         ///   Busca una cadena traducida similar a TABLA DE POSICIONES.
-        ///   Looks up a localized string similar to ACTUALIZAR.
-        /// </summary>
-        public static string LeaderboardRefreshButtonLabel {
-            get {
-                return ResourceManager.GetString("LeaderboardRefreshButtonLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to PUNTOS.
-        /// </summary>
-        public static string LeaderboardScoreHeader {
-            get {
-                return ResourceManager.GetString("LeaderboardScoreHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to CLASIFICACIÓN.
         /// </summary>
         public static string LeaderboardTitle {
             get {
@@ -2075,6 +2031,105 @@ namespace DominoTrainGame.Resources.Localization {
         public static string UsernameLabel {
             get {
                 return ResourceManager.GetString("UsernameLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu código de verificación de Domino Train es: {0}. Vence en {1} minutos. Si no solicitaste este registro, ignora este mensaje.
+        /// </summary>
+        public static string VerificationCodeEmailBody {
+            get {
+                return ResourceManager.GetString("VerificationCodeEmailBody", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu código de verificación.
+        /// </summary>
+        public static string VerificationCodeEmailSubject {
+            get {
+                return ResourceManager.GetString("VerificationCodeEmailSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código venció.
+        /// </summary>
+        public static string VerificationCodeExpiredMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeExpiredMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a El código es incorrecto. Inténtalo de nuevo.
+        /// </summary>
+        public static string VerificationCodeInvalidMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeInvalidMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ¿No recibiste el código?.
+        /// </summary>
+        public static string VerificationCodeNotReceivedLabel {
+            get {
+                return ResourceManager.GetString("VerificationCodeNotReceivedLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Reenviar código.
+        /// </summary>
+        public static string VerificationCodeResendLabel {
+            get {
+                return ResourceManager.GetString("VerificationCodeResendLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Espera {0} segundos para pedir otro código..
+        /// </summary>
+        public static string VerificationCodeResendWaitMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeResendWaitMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Te enviamos un código nuevo. El anterior ya no es válido..
+        /// </summary>
+        public static string VerificationCodeResentMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeResentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a No se pudo enviar el correo de verificación. Revisa tu dirección e inténtalo de nuevo..
+        /// </summary>
+        public static string VerificationCodeSendErrorMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeSendErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Enviamos un código de 6 dígitos a {0}. Escríbelo para completar tu registro..
+        /// </summary>
+        public static string VerificationCodeSentMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeSentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Demasiados intentos fallidos.
+        /// </summary>
+        public static string VerificationCodeTooManyAttemptsMessage {
+            get {
+                return ResourceManager.GetString("VerificationCodeTooManyAttemptsMessage", resourceCulture);
             }
         }
         
