@@ -35,6 +35,7 @@ public partial class LogInWindow : Window
         this.Close();
     }
 
+    //TODO: Implement message box with the result of the password recovery process
     private void NavigateToRecoverPassword(object sender, RoutedEventArgs e)
     {
         RecoverPasswordWindow recoverPasswordWindow = new RecoverPasswordWindow
