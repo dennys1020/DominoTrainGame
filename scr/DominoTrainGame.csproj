@@ -140,6 +140,8 @@
     <Compile Include="Utils\LoginValidationStatus.cs" />
     <Compile Include="Utils\LoginValidator.cs" />
     <Compile Include="Utils\PasswordHasher.cs" />
+    <Compile Include="Utils\RecoveryPasswordValidationStatus.cs" />
+    <Compile Include="Utils\RecoveryPasswordValidator.cs" />
     <Compile Include="Utils\SignUpValidationStatus.cs" />
     <Compile Include="Utils\SignUpValidator.cs" />
     <Compile Include="Utils\VerificationCodeService.cs" />

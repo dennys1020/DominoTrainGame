@@ -178,7 +178,8 @@
                     <Button Content="{Binding [ButtonExit]}"
                         Style="{StaticResource PixelButton}"
                         Background="{StaticResource Mist}" FontSize="13"
-                        Width="380" Height="58" />
+                        Width="380" Height="58" 
+                        Click="LogOut"/>
                 </StackPanel>
 
                 <Image Source="{StaticResource MenuTrainImage}"

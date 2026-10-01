@@ -129,4 +129,9 @@ public partial class SignUpWindow : Window
                 return UiStrings.DatabaseErrorMessage;
         }
     }
+
+    private void SettingsButton_Loaded(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

@@ -400,7 +400,7 @@
     <value>FRIENDS</value>
   </data>
   <data name="ButtonExit" xml:space="preserve">
-    <value>EXIT</value>
+    <value>LOG OUT</value>
   </data>
   <data name="ButtonPlay" xml:space="preserve">
     <value>PLAY</value>
@@ -836,5 +836,14 @@ CODE</value>
   </data>
   <data name="VerificationCodeResendWaitMessage" xml:space="preserve">
     <value>Wait {0} seconds before requesting another code.</value>
+  </data>
+  <data name="PasswordsDoNotMatchMessage" xml:space="preserve">
+    <value>The passwords do not match</value>
+  </data>
+  <data name="RecoverPasswordSuccessMessage" xml:space="preserve">
+    <value>Your password was updated successfully</value>
+  </data>
+  <data name="SendCodeButtonLabel" xml:space="preserve">
+    <value>SEND</value>
   </data>
 </root>

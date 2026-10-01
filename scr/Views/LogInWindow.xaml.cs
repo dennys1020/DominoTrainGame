@@ -37,12 +37,12 @@ public partial class LogInWindow : Window
 
     private void NavigateToRecoverPassword(object sender, RoutedEventArgs e)
     {
-        RecoverPasswordWindow recoverPasswordWindow = new RecoverPasswordWindow();
-        Application.Current.MainWindow = recoverPasswordWindow;
+        RecoverPasswordWindow recoverPasswordWindow = new RecoverPasswordWindow
+        {
+            Owner = this
+        };
 
-        recoverPasswordWindow.Show();
-
-        this.Close();
+        recoverPasswordWindow.ShowDialog();
     }
 
     private void NavigateToMain_Click(object sender, RoutedEventArgs e)
