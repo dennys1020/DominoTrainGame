@@ -400,7 +400,7 @@
     <value>AMIGOS</value>
   </data>
   <data name="ButtonExit" xml:space="preserve">
-    <value>SALIR</value>
+    <value>CERRAR SESIÓN</value>
   </data>
   <data name="ButtonPlay" xml:space="preserve">
     <value>JUGAR</value>
@@ -836,5 +836,14 @@ INVITACIÓN</value>
   </data>
   <data name="VerificationCodeResendWaitMessage" xml:space="preserve">
     <value>Espera {0} segundos para pedir otro código.</value>
+  </data>
+  <data name="PasswordsDoNotMatchMessage" xml:space="preserve">
+    <value>Las contraseñas no coinciden</value>
+  </data>
+  <data name="RecoverPasswordSuccessMessage" xml:space="preserve">
+    <value>Tu contraseña se actualizó correctamente</value>
+  </data>
+  <data name="SendCodeButtonLabel" xml:space="preserve">
+    <value>ENVIAR</value>
   </data>
 </root>

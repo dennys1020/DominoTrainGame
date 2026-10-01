@@ -151,7 +151,7 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a SALIR.
+        ///   Busca una cadena traducida similar a CERRAR SESIÓN.
         /// </summary>
         public static string ButtonExit {
             get {
@@ -1297,6 +1297,15 @@ namespace DominoTrainGame.Resources.Localization {
         }
         
         /// <summary>
+        ///   Busca una cadena traducida similar a Las contraseñas no coinciden.
+        /// </summary>
+        public static string PasswordsDoNotMatchMessage {
+            get {
+                return ResourceManager.GetString("PasswordsDoNotMatchMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Busca una cadena traducida similar a JUGADORES.
         /// </summary>
         public static string PlayersLabel {
@@ -1365,6 +1374,15 @@ namespace DominoTrainGame.Resources.Localization {
         public static string RecoverPasswordFormTitle {
             get {
                 return ResourceManager.GetString("RecoverPasswordFormTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a Tu contraseña se actualizó correctamente.
+        /// </summary>
+        public static string RecoverPasswordSuccessMessage {
+            get {
+                return ResourceManager.GetString("RecoverPasswordSuccessMessage", resourceCulture);
             }
         }
         
@@ -1878,6 +1896,15 @@ namespace DominoTrainGame.Resources.Localization {
         public static string ScoreWinnerFormat {
             get {
                 return ResourceManager.GetString("ScoreWinnerFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a ENVIAR.
+        /// </summary>
+        public static string SendCodeButtonLabel {
+            get {
+                return ResourceManager.GetString("SendCodeButtonLabel", resourceCulture);
             }
         }
         
