@@ -16,11 +16,6 @@ public sealed class LeaderboardRepository
     private const int WinnerRank = 1;
     private const int FirstRank = 1;
 
-    /// <summary>
-    /// Loads participants ordered by victories, username and player identifier.
-    /// </summary>
-    /// <param name="cancellationToken">The token used to cancel the database query.</param>
-    /// <returns>The ranked statistics of players with completed matches.</returns>
     public async Task<List<LeaderboardEntry>> GetEntriesAsync(CancellationToken cancellationToken)
     {
         using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())

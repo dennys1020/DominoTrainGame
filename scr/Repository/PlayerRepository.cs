@@ -9,7 +9,7 @@ public sealed class PlayerRepository
         using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())
         {
             bool alreadyExists = databaseContext.Players.Any(
-                p => p.userName == userName || p.Email == email);
+                player => player.userName == userName || player.Email == email);
 
             return alreadyExists;
         }
@@ -17,10 +17,10 @@ public sealed class PlayerRepository
 
     public void Register(Player player)
     {
-        using (DominoGameDBEntities dbContext = new DominoGameDBEntities())
+        using (DominoGameDBEntities databaseContext = new DominoGameDBEntities())
         {
-            dbContext.Players.Add(player);
-            dbContext.SaveChanges();
+            databaseContext.Players.Add(player);
+            databaseContext.SaveChanges();
         }
     }
 }

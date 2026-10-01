@@ -44,9 +44,17 @@ public sealed class LeaderboardViewModel : INotifyPropertyChanged
         }
     }
 
-    public ICollectionView Entries { get; private set; }
+    public ICollectionView Entries 
+    { 
+        get; 
+        private set; 
+    }
 
-    public bool IsLoading { get; private set; }
+    public bool IsLoading 
+    { 
+        get; 
+        private set; 
+    }
 
     public bool CanRefresh
     {

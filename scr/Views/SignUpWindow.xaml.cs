@@ -113,25 +113,28 @@ public partial class SignUpWindow : Window
 
     private string DescribeStatus(SignUpValidationStatus status)
     {
+        string statusMessage;
         switch (status)
         {
             case SignUpValidationStatus.EmptyFields:
-                return UiStrings.EmptyFieldsMessage;
+                statusMessage = UiStrings.EmptyFieldsMessage;
+                break;
             case SignUpValidationStatus.InvalidEmail:
-                return UiStrings.MesssageInvalidEmail;
+                statusMessage = UiStrings.MesssageInvalidEmail;
+                break;
             case SignUpValidationStatus.PasswordTooShort:
-                return string.Format(UiStrings.InvalidPasswordMessage, MinimumPasswordLength);
+                statusMessage = string.Format(UiStrings.InvalidPasswordMessage, MinimumPasswordLength);
+                break;
             case SignUpValidationStatus.UserAlreadyExists:
-                return UiStrings.MessageUserAlreadyExists;
+                statusMessage = UiStrings.MessageUserAlreadyExists;
+                break;
             case SignUpValidationStatus.DatabaseError:
-                return UiStrings.DatabaseErrorMessage;
+                statusMessage = UiStrings.DatabaseErrorMessage;
+                break;
             default:
-                return UiStrings.DatabaseErrorMessage;
+                statusMessage = UiStrings.DatabaseErrorMessage;
+                break;
         }
-    }
-
-    private void SettingsButton_Loaded(object sender, RoutedEventArgs e)
-    {
-
+        return statusMessage;
     }
 }

@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace DominoTrainGame.Views
 {
-    /// <summary>
-    /// Lógica de interacción para SettingsWindow.xaml
-    /// </summary>
     public partial class SettingsWindow : Window
     {
         public SettingsWindow()

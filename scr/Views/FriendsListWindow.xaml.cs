@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace DominoTrainGame.Views
 {
-    /// <summary>
-    /// Lógica de interacción para FriendsList.xaml
-    /// </summary>
     public partial class FriendsListWindow : Window
     {
         public FriendsListWindow()
@@ -44,7 +41,7 @@ namespace DominoTrainGame.Views
 
         }
 
-        //FIX 
+        //FIXME
         private void Tab_Checked(object sender, RoutedEventArgs e)
         {
             if (FriendsPanel == null || RequestsPanel == null) return;

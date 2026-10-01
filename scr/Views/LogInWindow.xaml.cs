@@ -70,18 +70,25 @@ public partial class LogInWindow : Window
 
     private string DescribeStatus(LoginValidationStatus status)
     {
+        string message;
         switch (status)
         {
             case LoginValidationStatus.EmptyFields:
-                return UiStrings.MessageRequiredFields;
+                message = UiStrings.MessageRequiredFields;
+                break;
             case LoginValidationStatus.UserNotFound:
-                return UiStrings.MessageUserNotFound;
+                message = UiStrings.MessageUserNotFound;
+                break;
             case LoginValidationStatus.IncorrectPassword:
-                return UiStrings.MessageIncorrectPassword;
+                message = UiStrings.MessageIncorrectPassword;
+                break;
             case LoginValidationStatus.DatabaseError:
-                return UiStrings.DatabaseErrorMessage;
+                message = UiStrings.DatabaseErrorMessage;
+                break;
             default:
-                return UiStrings.DatabaseErrorMessage;
+                message = UiStrings.DatabaseErrorMessage;
+                break;
         }
+        return message;
     }
 }
