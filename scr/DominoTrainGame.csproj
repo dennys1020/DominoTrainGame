@@ -40,20 +40,11 @@
     <StartupObject>DominoTrainGame.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="log4net, Version=3.4.0.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.3.4.0\lib\net462\log4net.dll</HintPath>
     </Reference>
     <Reference Include="log4net.Ext.Trace, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -74,213 +65,158 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Ban.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DominoGameModel.Context.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DominoGameModel.Context.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DominoGameModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DominoGameModel.cs" />
-    <Compile Include="DominoGameModel.Designer.cs">
-      <DependentUpon>DominoGameModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="DominoGameModel1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DominoGameModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="FriendshipRequest.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Lobby.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LobbyPlayer.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Match.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="MatchResult.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LeaderboardEntry.cs" />
-    <Compile Include="Navigation\WindowNavigation.cs" />
-    <Compile Include="Player.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Report.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Repository\LeaderboardRepository.cs" />
-    <Compile Include="Repository\PlayerRepository.cs" />
-    <Compile Include="Resources\Localization\UiStrings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UiStrings.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SettingsDefaults.cs" />
-    <Compile Include="StatusFriendshipRequest.cs">
-      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Utils\EmailSender.cs" />
-    <Compile Include="Utils\LoginValidationStatus.cs" />
-    <Compile Include="Utils\LoginValidator.cs" />
-    <Compile Include="Utils\PasswordHasher.cs" />
-    <Compile Include="Utils\RecoveryPasswordValidationStatus.cs" />
-    <Compile Include="Utils\RecoveryPasswordValidator.cs" />
-    <Compile Include="Utils\SignUpValidationStatus.cs" />
-    <Compile Include="Utils\SignUpValidator.cs" />
-    <Compile Include="Utils\VerificationCodeService.cs" />
-    <Compile Include="Utils\VerificationCodeStatus.cs" />
-    <Compile Include="ViewModels\LeaderboardViewModel.cs" />
-    <Compile Include="Views\ChangePasswordWindow.xaml.cs">
+    <Compile Include="Client\Navigation\WindowNavigation.cs" />
+    <Compile Include="Client\Resources\SettingsDefaults.cs" />
+    <Compile Include="Client\ViewModels\LeaderboardViewModel.cs" />
+    <Compile Include="Client\Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\LocalizationViewModel.cs" />
-    <Compile Include="ViewModels\MatchResultsViewModel.cs" />
-    <Compile Include="ViewModels\MatchRoundViewModel.cs" />
-    <Compile Include="ViewModels\PlayerMatchResultViewModel.cs" />
-    <Compile Include="ViewModels\RoundScoreViewModel.cs" />
-    <Compile Include="ViewModels\RoomViewModel.cs" />
-    <Compile Include="ViewModels\RoomPlayerViewModel.cs" />
-    <Compile Include="Views\Controls\SettingsButton.xaml.cs">
+    <Compile Include="Client\ViewModels\LocalizationViewModel.cs" />
+    <Compile Include="Client\ViewModels\MatchResultsViewModel.cs" />
+    <Compile Include="Client\ViewModels\MatchRoundViewModel.cs" />
+    <Compile Include="Client\ViewModels\PlayerMatchResultViewModel.cs" />
+    <Compile Include="Client\ViewModels\RoundScoreViewModel.cs" />
+    <Compile Include="Client\ViewModels\RoomViewModel.cs" />
+    <Compile Include="Client\ViewModels\RoomPlayerViewModel.cs" />
+    <Compile Include="Client\Views\Controls\SettingsButton.xaml.cs">
       <DependentUpon>SettingsButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DeleteAccountWindow.xaml.cs">
+    <Compile Include="Client\Views\DeleteAccountWindow.xaml.cs">
       <DependentUpon>DeleteAccountWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FriendsListWindow.xaml.cs">
+    <Compile Include="Client\Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\GameRulesWindow.xaml.cs">
+    <Compile Include="Client\Views\GameRulesWindow.xaml.cs">
       <DependentUpon>GameRulesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\JoinGameWindow.xaml.cs">
+    <Compile Include="Client\Views\JoinGameWindow.xaml.cs">
       <DependentUpon>JoinGameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LeaderBoardWindow.xaml.cs">
+    <Compile Include="Client\Views\LeaderBoardWindow.xaml.cs">
       <DependentUpon>LeaderBoardWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LogInWindow.xaml.cs">
+    <Compile Include="Client\Views\LogInWindow.xaml.cs">
       <DependentUpon>LogInWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
+    <Compile Include="Client\Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Views\MatchResultsWindow.xaml.cs">
+    <Compile Include="Client\Views\MatchResultsWindow.xaml.cs">
       <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\NewGameWindow.xaml.cs">
+    <Compile Include="Client\Views\NewGameWindow.xaml.cs">
       <DependentUpon>NewGameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProfileWindow.xaml.cs">
+    <Compile Include="Client\Views\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RecoverPasswordWindow.xaml.cs">
+    <Compile Include="Client\Views\RecoverPasswordWindow.xaml.cs">
       <DependentUpon>RecoverPasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RoomWindow.xaml.cs">
+    <Compile Include="Client\Views\RoomWindow.xaml.cs">
       <DependentUpon>RoomWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsWindow.xaml.cs">
+    <Compile Include="Client\Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SignUpWindow.xaml.cs">
+    <Compile Include="Client\Views\SignUpWindow.xaml.cs">
       <DependentUpon>SignUpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\VerificationCodeWindow.xaml.cs">
+    <Compile Include="Client\Views\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="Resources\Styles\MatchStyles.xaml">
+    <Page Include="Client\Resources\Styles\MatchStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Resources\Styles\PixelTheme.xaml">
+    <Page Include="Client\Resources\Styles\PixelTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ChangePasswordWindow.xaml">
+    <Page Include="Client\Views\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Controls\SettingsButton.xaml">
+    <Page Include="Client\Views\Controls\SettingsButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DeleteAccountWindow.xaml">
+    <Page Include="Client\Views\DeleteAccountWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\FriendsListWindow.xaml">
+    <Page Include="Client\Views\FriendsListWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\GameRulesWindow.xaml">
+    <Page Include="Client\Views\GameRulesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\JoinGameWindow.xaml">
+    <Page Include="Client\Views\JoinGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LeaderBoardWindow.xaml">
+    <Page Include="Client\Views\LeaderBoardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LogInWindow.xaml">
+    <Page Include="Client\Views\LogInWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Client\Views\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MatchResultsWindow.xaml">
+    <Page Include="Client\Views\MatchResultsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\NewGameWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ProfileWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RecoverPasswordWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RoomWindow.xaml">
+    <Page Include="Client\Views\NewGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SettingsWindow.xaml">
+    <Page Include="Client\Views\ProfileWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SignUpWindow.xaml">
+    <Page Include="Client\Views\RecoverPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\VerificationCodeWindow.xaml">
+    <Page Include="Client\Views\RoomWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Client\Views\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Client\Views\SignUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Client\Views\VerificationCodeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -303,34 +239,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Localization\UiStrings.en.resx" />
-    <EmbeddedResource Include="Resources\Localization\UiStrings.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="Secrets.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Resource Include="Assets\Fonts\PressStart2P-Regular.ttf" />
-    <EntityDeploy Include="DominoGameModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DominoGameModel1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="DominoGameModel.edmx.diagram">
-      <DependentUpon>DominoGameModel.edmx</DependentUpon>
-    </None>
-    <None Include="packages.config" />
+    <Resource Include="Client\Assets\Fonts\PressStart2P-Regular.ttf" />
     <None Include="Properties\DataSources\App.datasource" />
-    <None Include="Properties\DataSources\Bans.datasource" />
-    <None Include="Properties\DataSources\DominoGameDBEntities.datasource" />
-    <None Include="Properties\DataSources\FriendshipRequests.datasource" />
-    <None Include="Properties\DataSources\Lobbies.datasource" />
-    <None Include="Properties\DataSources\LobbyPlayers.datasource" />
-    <None Include="Properties\DataSources\Matches.datasource" />
-    <None Include="Properties\DataSources\MatchResults.datasource" />
-    <None Include="Properties\DataSources\Players.datasource" />
-    <None Include="Properties\DataSources\Reports.datasource" />
-    <None Include="Properties\DataSources\StatusFriendshipRequests.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -340,36 +250,143 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Fonts\OFL.txt" />
+    <Resource Include="Client\Assets\Fonts\OFL.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\avatar_generic_preview.png" />
+    <Resource Include="Client\Resources\Images\avatar_generic_preview.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\PixelTrain.png" />
+    <Resource Include="Client\Resources\Images\PixelTrain.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Content Include="DominoGameModel.Context.Context.tt">
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Server\Data\EntityFramework\Ban.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\DominoGameModel.Context.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.Context.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\DominoGameModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\DatabaseContextFactory.cs" />
+    <Compile Include="Server\Data\DominoGameDBEntities.Configuration.cs" />
+    <Compile Include="Server\Data\EntityFramework\DominoGameModel.cs" />
+    <Compile Include="Server\Data\EntityFramework\DominoGameModel.Designer.cs">
+      <DependentUpon>DominoGameModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\FriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\Lobby.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\LobbyPlayer.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\Match.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\MatchResult.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\Player.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\EntityFramework\Report.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\Repositories\LeaderboardRepository.cs" />
+    <Compile Include="Server\Data\Repositories\PlayerRepository.cs" />
+    <Compile Include="Server\Data\EntityFramework\StatusFriendshipRequest.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Services\Notifications\EmailSender.cs" />
+    <Compile Include="Server\Services\Authentication\LoginValidator.cs" />
+    <Compile Include="Server\Security\PasswordHasher.cs" />
+    <Compile Include="Server\Services\Authentication\RecoveryPasswordValidator.cs" />
+    <Compile Include="Server\Services\Authentication\SignUpValidator.cs" />
+    <EntityDeploy Include="Server\Data\EntityFramework\DominoGameModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DominoGameModel1.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>DominoTrainGame</CustomToolNamespace>
+    </EntityDeploy>
+    <None Include="Server\Data\EntityFramework\DominoGameModel.edmx.diagram">
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+    </None>
+    <None Include="Server\Properties\DataSources\Bans.datasource" />
+    <None Include="Server\Properties\DataSources\DominoGameDBEntities.datasource" />
+    <None Include="Server\Properties\DataSources\FriendshipRequests.datasource" />
+    <None Include="Server\Properties\DataSources\Lobbies.datasource" />
+    <None Include="Server\Properties\DataSources\LobbyPlayers.datasource" />
+    <None Include="Server\Properties\DataSources\Matches.datasource" />
+    <None Include="Server\Properties\DataSources\MatchResults.datasource" />
+    <None Include="Server\Properties\DataSources\Players.datasource" />
+    <None Include="Server\Properties\DataSources\Reports.datasource" />
+    <None Include="Server\Properties\DataSources\StatusFriendshipRequests.datasource" />
+    <Content Include="Server\Data\EntityFramework\DominoGameModel.Context.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DominoGameModel.Context.Context.cs</LastGenOutput>
       <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <CustomToolNamespace>DominoTrainGame</CustomToolNamespace>
     </Content>
-    <Content Include="DominoGameModel.Context.tt">
+    <Content Include="Server\Data\EntityFramework\DominoGameModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DominoGameModel.Context.cs</LastGenOutput>
       <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <CustomToolNamespace>DominoTrainGame</CustomToolNamespace>
     </Content>
+    <Compile Include="Server\Data\EntityFramework\DominoGameModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DominoGameModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Server\Data\SqlServerConfiguration.cs" />
+    <None Include="Server\Configuration\Database.example.config" />
+    <None Include="Server\Configuration\Database.config">
+      <Link>Database.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Server\Configuration\Secrets.config" Condition="Exists('Server\Configuration\Secrets.config')">
+      <Link>Secrets.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
-  </Target>
+  <ItemGroup>
+    <Compile Include="Shared\Models\LeaderboardEntry.cs" />
+    <Compile Include="Shared\Resources\Localization\UiStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UiStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Shared\Contracts\Authentication\LoginValidationStatus.cs" />
+    <Compile Include="Shared\Contracts\Authentication\RecoveryPasswordValidationStatus.cs" />
+    <Compile Include="Shared\Contracts\Authentication\SignUpValidationStatus.cs" />
+    <Compile Include="Shared\Verification\VerificationCodeService.cs" />
+    <Compile Include="Shared\Verification\VerificationCodeStatus.cs" />
+    <EmbeddedResource Include="Shared\Resources\Localization\UiStrings.en.resx">
+      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.en.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shared\Resources\Localization\UiStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
+      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.resources</LogicalName>
+      <CustomToolNamespace>DominoTrainGame.Resources.Localization</CustomToolNamespace>
+    </EmbeddedResource>
+    <Compile Include="Shared\Errors\DatabaseOperationException.cs" />
+  </ItemGroup>
   <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
+  <Target Name="InitializeLocalDatabaseConfig" BeforeTargets="PrepareForBuild">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Server\Configuration\Database.example.config" DestinationFiles="$(MSBuildProjectDirectory)\Server\Configuration\Database.config" Condition="!Exists('$(MSBuildProjectDirectory)\Server\Configuration\Database.config')" />
+  </Target>
 </Project>
