@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /scr/Secrets.config
+/scr/Database.config
+/scr/Server/Configuration/Database.config
+/scr/Server/Configuration/Secrets.config
