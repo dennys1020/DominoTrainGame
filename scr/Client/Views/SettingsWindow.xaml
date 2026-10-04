@@ -38,8 +38,8 @@
                                     <Canvas>
                                         <Path
                                             Fill="{StaticResource Ink}"
-                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25
-                                                H18 V31 H12 Z" />
+                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25 H18
+                                                V31 H12 Z" />
                                     </Canvas>
                                 </Border>
                             </Grid>
@@ -79,9 +79,11 @@
                                     Background="{StaticResource Aqua}"
                                     BorderBrush="{StaticResource Ink}"
                                     BorderThickness="0,0,4,0">
-                                    <Image Margin="0,364,0,0" Source="/Client/Resources/Images/PixelTrain.png" Stretch="Fill"/>
+                                    <Image
+                                        Margin="0,364,0,0"
+                                        Source="/Client/Resources/Images/PixelTrain.png"
+                                        Stretch="Fill" />
                                 </Border>
-
                                 <Grid Grid.Column="1" Margin="36,28,36,24">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="74" />
@@ -127,8 +129,8 @@
                                                 Fill="{StaticResource Ink}"
                                                 Margin="8"
                                                 Stretch="Uniform"
-                                                Data="M8,0 H24 V5 H12 V21 H8 V25 H0 V17 H8 Z M20,5 H24 V17 H20 V21
-                                                    H12 V13 H20 Z" />
+                                                Data="M8,0 H24 V5 H12 V21 H8 V25 H0 V17 H8 Z M20,5 H24 V17 H20 V21 H12
+                                                    V13 H20 Z" />
                                         </Border>
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>
@@ -151,7 +153,8 @@
                                                         <Binding
                                                             Path="Value"
                                                             ElementName="_musicVolumeSlider"
-                                                            StringFormat="{x:Static strings:UiStrings.VolumePercentageFormat}" />
+                                                            StringFormat="{x:Static
+                                                                strings:UiStrings.VolumePercentageFormat}" />
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                             </Border>
@@ -181,8 +184,8 @@
                                                 Fill="{StaticResource Ink}"
                                                 Margin="8"
                                                 Stretch="Uniform"
-                                                Data="M0,8 H5 V4 H9 V0 H13 V24 H9 V20 H5 V16 H0 Z M17,6 H20 V18 H17
-                                                    Z M22,2 H25 V22 H22 Z" />
+                                                Data="M0,8 H5 V4 H9 V0 H13 V24 H9 V20 H5 V16 H0 Z M17,6 H20 V18 H17 Z
+                                                    M22,2 H25 V22 H22 Z" />
                                         </Border>
                                         <Grid Grid.Column="1">
                                             <Grid.RowDefinitions>

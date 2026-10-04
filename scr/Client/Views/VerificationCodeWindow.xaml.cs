@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +22,7 @@ public partial class VerificationCodeWindow : Window
     private const int CooldownFinishedSeconds = 0;
     private const char FirstAsciiDigit = '0';
     private const char LastAsciiDigit = '9';
+
     private readonly string _email;
     private readonly VerificationCodeService _codeService;
     private readonly TextBox[] _digitBoxes;
@@ -46,13 +47,13 @@ public partial class VerificationCodeWindow : Window
         {
             Interval = TimeSpan.FromSeconds(CountdownTickSeconds)
         };
-        _resendCooldownTimer.Tick += ResendCooldownTimer_Tick;
+        _resendCooldownTimer.Tick += OnResendCooldownTimerTick;
         Closed += (sender, e) => _resendCooldownTimer.Stop();
 
         StartResendCooldown();
     }
 
-    private void VerifyButton_Click(object sender, RoutedEventArgs e)
+    private void OnVerifyButtonClicked(object sender, RoutedEventArgs e)
     {
         string enteredCode = string.Concat(_digitBoxes.Select(digitBox => digitBox.Text));
 
@@ -67,12 +68,12 @@ public partial class VerificationCodeWindow : Window
         }
     }
 
-    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    private void OnCancelButtonClicked(object sender, RoutedEventArgs e)
     {
         DialogResult = false;
     }
 
-    private async void ResendCode_Click(object sender, RoutedEventArgs e)
+    private async void OnResendCodeClicked(object sender, RoutedEventArgs e)
     {
         if (!_isResending)
         {
@@ -109,7 +110,7 @@ public partial class VerificationCodeWindow : Window
         UpdateResendCountdown();
     }
 
-    private void ResendCooldownTimer_Tick(object sender, EventArgs e)
+    private void OnResendCooldownTimerTick(object sender, EventArgs e)
     {
         UpdateResendCountdown();
     }
@@ -155,55 +156,58 @@ public partial class VerificationCodeWindow : Window
         }
     }
 
-    private void DigitBox_PreviewTextInput(object sender, TextCompositionEventArgs eventArgs)
+    private void OnDigitBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-        eventArgs.Handled = true;
+        e.Handled = true;
 
         int index = GetFocusedIndex();
 
-        if (index >= FirstDigitBoxIndex && eventArgs.Text.Length == SingleDigitInputLength && IsAsciiDigit(eventArgs.Text[FirstDigitBoxIndex]))
+        bool hasFocusedBox = index >= FirstDigitBoxIndex;
+        bool canAcceptInput = hasFocusedBox && e.Text.Length == SingleDigitInputLength;
+
+        if (canAcceptInput && IsAsciiDigit(e.Text[FirstDigitBoxIndex]))
         {
-            _digitBoxes[index].Text = eventArgs.Text;
+            _digitBoxes[index].Text = e.Text;
             FocusDigitBox(index + DigitBoxNavigationStep);
         }
     }
 
-    private void DigitBox_PreviewKeyDown(object sender, KeyEventArgs eventArgs)
+    private void OnDigitBoxPreviewKeyDown(object sender, KeyEventArgs e)
     {
         int index = GetFocusedIndex();
 
         if (index >= FirstDigitBoxIndex)
         {
-            if (eventArgs.Key == Key.Space)
+            if (e.Key == Key.Space)
             {
-                eventArgs.Handled = true;
+                e.Handled = true;
             }
-            else if (eventArgs.Key == Key.Back)
+            else if (e.Key == Key.Back)
             {
-                eventArgs.Handled = true;
+                e.Handled = true;
                 DeleteBackward(index);
             }
-            else if (eventArgs.Key == Key.Delete)
+            else if (e.Key == Key.Delete)
             {
-                eventArgs.Handled = true;
+                e.Handled = true;
                 _digitBoxes[index].Clear();
             }
-            else if (eventArgs.Key == Key.Left)
+            else if (e.Key == Key.Left)
             {
-                eventArgs.Handled = true;
+                e.Handled = true;
                 FocusDigitBox(index - DigitBoxNavigationStep);
             }
-            else if (eventArgs.Key == Key.Right)
+            else if (e.Key == Key.Right)
             {
-                eventArgs.Handled = true;
+                e.Handled = true;
                 FocusDigitBox(index + DigitBoxNavigationStep);
             }
         }
     }
 
-    private void DigitBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs eventArgs)
+    private void OnDigitBoxGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
     {
-        TextBox focusedBox = eventArgs.NewFocus as TextBox;
+        TextBox focusedBox = e.NewFocus as TextBox;
 
         if (focusedBox != null)
         {
@@ -211,12 +215,12 @@ public partial class VerificationCodeWindow : Window
         }
     }
 
-    private void DigitBox_Pasting(object sender, DataObjectPastingEventArgs eventArgs)
+    private void OnDigitBoxPasting(object sender, DataObjectPastingEventArgs e)
     {
-        eventArgs.CancelCommand();
+        e.CancelCommand();
 
         int index = GetFocusedIndex();
-        string pastedText = eventArgs.DataObject.GetData(DataFormats.UnicodeText) as string;
+        string pastedText = e.DataObject.GetData(DataFormats.UnicodeText) as string;
 
         if (index >= FirstDigitBoxIndex && pastedText != null)
         {

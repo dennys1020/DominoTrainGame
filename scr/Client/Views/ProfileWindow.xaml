@@ -33,19 +33,16 @@
                 </GeometryDrawing>
             </DrawingBrush.Drawing>
         </DrawingBrush>
-
         <!-- Dark text on the light palette -->
         <Style x:Key="ProfileLabel" TargetType="TextBlock" BasedOn="{StaticResource PixelText}">
             <Setter Property="Foreground" Value="{StaticResource Ink}" />
         </Style>
-
         <!-- Pixel icons drawn with rectangles -->
         <Style x:Key="ProfileIconPath" TargetType="Path">
             <Setter Property="Fill" Value="{StaticResource Ink}" />
             <Setter Property="Stretch" Value="Uniform" />
             <Setter Property="RenderOptions.EdgeMode" Value="Aliased" />
         </Style>
-
         <!-- Text inputs: editable is Frost, read-only is Mist, text is always Ink -->
         <Style x:Key="ProfileTextBox" TargetType="TextBox">
             <Setter Property="FontFamily" Value="Consolas" />
@@ -80,7 +77,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
         <Style x:Key="ProfileBiographyTextBox" TargetType="TextBox" BasedOn="{StaticResource ProfileTextBox}">
             <Setter Property="FontSize" Value="15" />
             <Setter Property="Padding" Value="12,8" />
@@ -107,7 +103,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="ProfileButton" TargetType="Button">
             <Setter Property="FontSize" Value="10" />
             <Setter Property="Foreground" Value="{StaticResource Ink}" />
@@ -161,12 +156,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="ProfilePrimaryButton" TargetType="Button" BasedOn="{StaticResource ProfileButton}">
             <Setter Property="Background" Value="{StaticResource Ink}" />
             <Setter Property="Foreground" Value="{StaticResource Glacier}" />
         </Style>
-
         <Style x:Key="ProfileIconButton" TargetType="Button">
             <Setter Property="Width" Value="44" />
             <Setter Property="Height" Value="44" />
@@ -212,7 +205,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="AvatarListBoxItem" TargetType="ListBoxItem">
             <Setter Property="Margin" Value="0,0,20,16" />
             <Setter Property="Cursor" Value="Hand" />
@@ -238,7 +230,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
         <Style x:Key="AvatarListBox" TargetType="ListBox">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
@@ -264,7 +255,6 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-
     <Grid Background="{StaticResource Mist}">
         <Rectangle Fill="{StaticResource ProfileGrid}" Opacity="0.6" IsHitTestVisible="False" />
         <Viewbox Stretch="Uniform">
@@ -275,7 +265,6 @@
                         <RowDefinition Height="*" />
                         <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
-
                     <!-- Header -->
                     <Grid VerticalAlignment="Top" Margin="0,6,8,0">
                         <StackPanel Orientation="Horizontal">
@@ -289,8 +278,8 @@
                                     <Canvas>
                                         <Path
                                             Fill="{StaticResource Ink}"
-                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25
-                                                H18 V31 H12 Z" />
+                                            Data="M5,5 H11 V11 H5 Z M19,5 H25 V11 H19 Z M0,16 H30 V19 H0 Z M12,25 H18
+                                                V31 H12 Z" />
                                     </Canvas>
                                 </Border>
                             </Grid>
@@ -314,7 +303,6 @@
                                 FontSize="9" />
                         </Border>
                     </Grid>
-
                     <!-- Card -->
                     <Grid Grid.Row="1" Margin="0,4,0,8">
                         <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
@@ -329,21 +317,17 @@
                                     <RowDefinition Height="4" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-
                                 <!-- Top band: avatar and player information -->
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="268" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-
                                     <Border
                                         Background="{StaticResource Aqua}"
                                         BorderBrush="{StaticResource Ink}"
                                         BorderThickness="0,0,4,0">
-                                        <Grid
-                                            Width="170"
-                                            Height="170">
+                                        <Grid Width="170" Height="170">
                                             <Border Background="{StaticResource Ink}" Margin="4,4,0,0" />
                                             <Border
                                                 Background="{StaticResource Frost}"
@@ -361,7 +345,7 @@
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Bottom"
                                                 Margin="0,0,-14,-12"
-                                                Click="EditButton_Click">
+                                                Click="OnEditButtonClicked">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -379,14 +363,12 @@
                                             </Button>
                                         </Grid>
                                     </Border>
-
                                     <Grid Grid.Column="1" Margin="28,20,28,16">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="44" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
-
                                         <!-- Username, edit pencil, social networks and close -->
                                         <Grid>
                                             <Grid.ColumnDefinitions>
@@ -396,17 +378,15 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-
                                             <TextBox
                                                 Width="360"
                                                 Style="{StaticResource ProfileTextBox}"
                                                 IsReadOnly="True" />
-
                                             <Button
                                                 Grid.Column="1"
                                                 Margin="14,0,0,0"
                                                 Style="{StaticResource ProfileIconButton}"
-                                                Click="EditButton_Click">
+                                                Click="OnEditButtonClicked">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="20" Height="20">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -422,12 +402,11 @@
                                                     </Path.Data>
                                                 </Path>
                                             </Button>
-
                                             <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="28,0,0,0">
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
                                                     Margin="0,0,14,0"
-                                                    Click="InstagramButton_Click">
+                                                    Click="OnInstagramButtonClicked">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="22"
@@ -446,7 +425,7 @@
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
                                                     Margin="0,0,14,0"
-                                                    Click="EditButton_Click">
+                                                    Click="OnEditButtonClicked">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="20"
@@ -471,7 +450,7 @@
                                                 </Button>
                                                 <Button
                                                     Style="{StaticResource ProfileIconButton}"
-                                                    Click="FacebookButton_Click">
+                                                    Click="OnFacebookButtonClicked">
                                                     <Path
                                                         Style="{StaticResource ProfileIconPath}"
                                                         Width="22"
@@ -486,11 +465,10 @@
                                                     </Path>
                                                 </Button>
                                             </StackPanel>
-
                                             <Button
                                                 Grid.Column="4"
                                                 Style="{StaticResource ProfileIconButton}"
-                                                Click="CloseButton_Click">
+                                                Click="OnCloseButtonClicked">
                                                 <Path Style="{StaticResource ProfileIconPath}" Width="16" Height="16">
                                                     <Path.Data>
                                                         <GeometryGroup FillRule="Nonzero">
@@ -504,23 +482,19 @@
                                                 </Path>
                                             </Button>
                                         </Grid>
-
                                         <TextBlock
                                             Grid.Row="1"
                                             Text="{Binding [BiographyLabel]}"
                                             Style="{StaticResource ProfileLabel}"
                                             FontSize="9"
                                             Margin="0,14,0,6" />
-
                                         <TextBox
                                             Grid.Row="2"
                                             Style="{StaticResource ProfileBiographyTextBox}"
                                             IsReadOnly="True" />
                                     </Grid>
                                 </Grid>
-
                                 <Rectangle Grid.Row="1" Fill="{StaticResource Ink}" />
-
                                 <!-- Bottom band: avatar gallery and player data -->
                                 <Grid Grid.Row="2">
                                     <Grid.ColumnDefinitions>
@@ -528,7 +502,6 @@
                                         <ColumnDefinition Width="4" />
                                         <ColumnDefinition Width="320" />
                                     </Grid.ColumnDefinitions>
-
                                     <Grid Margin="28,20,28,12">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="32" />
@@ -564,9 +537,7 @@
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </Grid>
-
                                     <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
-
                                     <Border Grid.Column="2" Background="{StaticResource Aqua}">
                                         <Grid Margin="24,20,24,24">
                                             <Grid.RowDefinitions>
@@ -574,7 +545,6 @@
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-
                                             <DockPanel>
                                                 <TextBlock
                                                     Text="{Binding [ProfileStatsSectionLabel]}"
@@ -588,7 +558,6 @@
                                                     Height="2"
                                                     VerticalAlignment="Center" />
                                             </DockPanel>
-
                                             <StackPanel Grid.Row="1" Margin="0,14,0,0">
                                                 <TextBlock
                                                     Text="{Binding [GamesPlayedLabel]}"
@@ -615,7 +584,6 @@
                                                     FontSize="18"
                                                     Margin="0,8,0,0" />
                                             </StackPanel>
-
                                             <Grid Grid.Row="2" Height="52">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
@@ -626,18 +594,18 @@
                                                     Grid.ColumnSpan="3"
                                                     Content="{Binding [EditButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
-                                                    Click="EditButton_Click" />
+                                                    Click="OnEditButtonClicked" />
                                                 <Button
                                                     Content="{Binding [CancelButtonLabel]}"
                                                     Style="{StaticResource ProfileButton}"
                                                     Visibility="Collapsed"
-                                                    Click="CancelButton_Click" />
+                                                    Click="OnCancelButtonClicked" />
                                                 <Button
                                                     Grid.Column="2"
                                                     Content="{Binding [SaveButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
                                                     Visibility="Collapsed"
-                                                    Click="SaveButton_Click" />
+                                                    Click="OnSaveButtonClicked" />
                                             </Grid>
                                         </Grid>
                                     </Border>

@@ -1,10 +1,8 @@
-﻿using System;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
 using log4net.Ext.Trace;
-using DominoTrainGame.Utils;
 
 namespace DominoTrainGame;
 
@@ -84,7 +82,8 @@ public sealed class RecoverPasswordValidator
             using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
             {
                 Player foundPlayer = databaseContext.Players.FirstOrDefault(
-                    registeredPlayer => registeredPlayer.userName == identifier || registeredPlayer.Email == identifier);
+                    registeredPlayer => registeredPlayer.Username == identifier
+                        || registeredPlayer.Email == identifier);
 
                 if (foundPlayer is null)
                 {

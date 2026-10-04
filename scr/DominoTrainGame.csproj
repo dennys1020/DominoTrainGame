@@ -269,10 +269,10 @@
     <Compile Include="Server\Data\EntityFramework\Ban.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Server\Data\EntityFramework\DominoGameModel.Context.Context.cs">
+    <Compile Include="Server\Data\EntityFramework\DominoGameDBEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>DominoGameModel.Context.Context.tt</DependentUpon>
+      <DependentUpon>DominoGameDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Server\Data\EntityFramework\DominoGameModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -280,7 +280,7 @@
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="Server\Data\DatabaseContextFactory.cs" />
-    <Compile Include="Server\Data\DominoGameDBEntities.Configuration.cs" />
+    <Compile Include="Server\Data\DominoGameDBEntities.cs" />
     <Compile Include="Server\Data\EntityFramework\DominoGameModel.cs" />
     <Compile Include="Server\Data\EntityFramework\DominoGameModel.Designer.cs">
       <DependentUpon>DominoGameModel.cs</DependentUpon>
@@ -314,7 +314,7 @@
     <Compile Include="Server\Services\Notifications\EmailSender.cs" />
     <Compile Include="Server\Services\Authentication\LoginValidator.cs" />
     <Compile Include="Server\Security\PasswordHasher.cs" />
-    <Compile Include="Server\Services\Authentication\RecoveryPasswordValidator.cs" />
+    <Compile Include="Server\Services\Authentication\RecoverPasswordValidator.cs" />
     <Compile Include="Server\Services\Authentication\SignUpValidator.cs" />
     <EntityDeploy Include="Server\Data\EntityFramework\DominoGameModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -334,9 +334,9 @@
     <None Include="Server\Properties\DataSources\Players.datasource" />
     <None Include="Server\Properties\DataSources\Reports.datasource" />
     <None Include="Server\Properties\DataSources\StatusFriendshipRequests.datasource" />
-    <Content Include="Server\Data\EntityFramework\DominoGameModel.Context.Context.tt">
+    <Content Include="Server\Data\EntityFramework\DominoGameDBEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DominoGameModel.Context.Context.cs</LastGenOutput>
+      <LastGenOutput>DominoGameDBEntities.cs</LastGenOutput>
       <DependentUpon>DominoGameModel.edmx</DependentUpon>
       <CustomToolNamespace>DominoTrainGame</CustomToolNamespace>
     </Content>
@@ -370,7 +370,7 @@
       <DependentUpon>UiStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Shared\Contracts\Authentication\LoginValidationStatus.cs" />
-    <Compile Include="Shared\Contracts\Authentication\RecoveryPasswordValidationStatus.cs" />
+    <Compile Include="Shared\Contracts\Authentication\RecoverPasswordValidationStatus.cs" />
     <Compile Include="Shared\Contracts\Authentication\SignUpValidationStatus.cs" />
     <Compile Include="Shared\Verification\VerificationCodeService.cs" />
     <Compile Include="Shared\Verification\VerificationCodeStatus.cs" />
@@ -388,5 +388,8 @@
   <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
   <Target Name="InitializeLocalDatabaseConfig" BeforeTargets="PrepareForBuild">
     <Copy SourceFiles="$(MSBuildProjectDirectory)\Server\Configuration\Database.example.config" DestinationFiles="$(MSBuildProjectDirectory)\Server\Configuration\Database.config" Condition="!Exists('$(MSBuildProjectDirectory)\Server\Configuration\Database.config')" />
+  </Target>
+  <Target Name="NormalizeGeneratedCode" BeforeTargets="BeforeCompile">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\scripts\NormalizeGeneratedCode.ps1&quot; -ProjectDirectory &quot;$(MSBuildProjectDirectory)&quot;" />
   </Target>
 </Project>

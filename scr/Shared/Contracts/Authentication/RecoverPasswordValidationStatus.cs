@@ -1,4 +1,4 @@
-﻿namespace DominoTrainGame;
+namespace DominoTrainGame;
 
 public enum RecoverPasswordValidationStatus
 {

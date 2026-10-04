@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
@@ -14,6 +14,7 @@ public sealed class SignUpValidator
 {
     private const int MinimumPasswordLength = 12;
     private const byte NotGuest = 0;
+
     private static readonly ITraceLog _logger;
     private static readonly Regex _emailPattern;
 
@@ -57,6 +58,18 @@ public sealed class SignUpValidator
         return status;
     }
 
+    public SignUpValidationStatus CheckAvailability(string username, string email, string password)
+    {
+        SignUpValidationStatus status = ValidateInput(username, email, password);
+
+        if (status == SignUpValidationStatus.Success)
+        {
+            status = FindExistingPlayer(username, email);
+        }
+
+        return status;
+    }
+
     private static string BuildValidationFailureMessage(DbEntityValidationException exception)
     {
         string failedProperties = string.Join(", ",
@@ -80,7 +93,7 @@ public sealed class SignUpValidator
             using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
             {
                 bool isAlreadyRegistered = databaseContext.Players.Any(
-                    registeredPlayer => registeredPlayer.userName == username || registeredPlayer.Email == email);
+                    registeredPlayer => registeredPlayer.Username == username || registeredPlayer.Email == email);
 
                 if (isAlreadyRegistered)
                 {
@@ -91,7 +104,7 @@ public sealed class SignUpValidator
                 {
                     Player newPlayer = new Player
                     {
-                        userName = username,
+                        Username = username,
                         Email = email,
                         PasswordHash = PasswordHasher.Hash(password),
                         PreferredLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
@@ -124,17 +137,6 @@ public sealed class SignUpValidator
 
         return status;
     }
-    public SignUpValidationStatus CheckAvailability(string username, string email, string password)
-    {
-        SignUpValidationStatus status = ValidateInput(username, email, password);
-
-        if (status == SignUpValidationStatus.Success)
-        {
-            status = FindExistingPlayer(username, email);
-        }
-
-        return status;
-    }
 
     private SignUpValidationStatus FindExistingPlayer(string username, string email)
     {
@@ -145,7 +147,7 @@ public sealed class SignUpValidator
             using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
             {
                 bool isAlreadyRegistered = databaseContext.Players.Any(
-                    registeredPlayer => registeredPlayer.userName == username || registeredPlayer.Email == email);
+                    registeredPlayer => registeredPlayer.Username == username || registeredPlayer.Email == email);
 
                 if (isAlreadyRegistered)
                 {

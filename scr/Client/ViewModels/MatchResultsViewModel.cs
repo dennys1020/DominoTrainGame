@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -72,7 +72,11 @@ public sealed class MatchResultsViewModel : INotifyPropertyChanged
     {
         get
         {
-            string connectedPlayers = string.Format(UiStrings.Culture, UiStrings.ScoreConnectedPlayersFormat, _connectedPlayers.Count);
+            string connectedPlayers = string.Format(
+                UiStrings.Culture,
+                UiStrings.ScoreConnectedPlayersFormat,
+                _connectedPlayers.Count
+            );
             return connectedPlayers;
         }
     }
@@ -86,16 +90,16 @@ public sealed class MatchResultsViewModel : INotifyPropertyChanged
         }
     }
 
-    private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs eventArgs)
+    private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         RefreshResults();
     }
 
-    private void OnValueChanged(object sender, PropertyChangedEventArgs eventArgs)
+    private void OnValueChanged(object sender, PropertyChangedEventArgs e)
     {
-        bool hasPlayerDisplayChanged = eventArgs.PropertyName == nameof(RoomPlayerViewModel.Username)
-            || eventArgs.PropertyName == nameof(RoomPlayerViewModel.IsCurrentPlayer);
-        bool hasRelevantChange = sender is RoundScoreViewModel || string.IsNullOrEmpty(eventArgs.PropertyName)
+        bool hasPlayerDisplayChanged = e.PropertyName == nameof(RoomPlayerViewModel.Username)
+            || e.PropertyName == nameof(RoomPlayerViewModel.IsCurrentPlayer);
+        bool hasRelevantChange = sender is RoundScoreViewModel || string.IsNullOrEmpty(e.PropertyName)
             || hasPlayerDisplayChanged;
 
         if (hasRelevantChange)
@@ -104,7 +108,7 @@ public sealed class MatchResultsViewModel : INotifyPropertyChanged
         }
     }
 
-    private void OnLanguageChanged(object sender, PropertyChangedEventArgs eventArgs)
+    private void OnLanguageChanged(object sender, PropertyChangedEventArgs e)
     {
         RefreshResults();
     }

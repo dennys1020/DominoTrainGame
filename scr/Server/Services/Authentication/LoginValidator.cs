@@ -1,7 +1,6 @@
-﻿using System.Data.Entity.Core;
+using System.Data.Entity.Core;
 using System.Linq;
 using log4net.Ext.Trace;
-using DominoTrainGame.Utils;
 using DominoTrainGame.Validator;
 
 namespace DominoTrainGame;
@@ -48,7 +47,7 @@ public sealed class LoginValidator
             using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
             {
                 Player? user = databaseContext.Players.FirstOrDefault(
-                    registeredPlayer => registeredPlayer.userName == usernameOrEmail
+                    registeredPlayer => registeredPlayer.Username == usernameOrEmail
                         || registeredPlayer.Email == usernameOrEmail);
 
                 if (user is null)

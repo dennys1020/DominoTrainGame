@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 using System.Linq;
@@ -38,11 +38,11 @@ public sealed class LeaderboardRepository
             List<LeaderboardEntry> entries = await databaseContext.MatchResults
                 .AsNoTracking()
                 .Where(result => result.Match.Status == FinishedMatchStatus)
-                .GroupBy(result => new { result.PlayerId, result.Player.userName })
+                .GroupBy(result => new { result.PlayerId, result.Player.Username })
                 .Select(results => new LeaderboardEntry
                 {
                     PlayerId = results.Key.PlayerId,
-                    Username = results.Key.userName,
+                    Username = results.Key.Username,
                     Wins = results.Count(result => result.FinalRank == WinnerRank),
                     GamesPlayed = results.Count(),
                     TotalScore = results.Sum(result => (long)result.TotalScore)

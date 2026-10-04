@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 
 namespace DominoTrainGame.Views;
 
@@ -9,7 +9,7 @@ public partial class GameRulesWindow : Window
         InitializeComponent();
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
+    private void NavigateBack(object sender, RoutedEventArgs e)
     {
         Close();
     }

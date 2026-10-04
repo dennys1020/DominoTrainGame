@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using DominoTrainGame.Navigation;
 using DominoTrainGame.ViewModels;
 
@@ -26,12 +26,12 @@ public partial class MatchResultsWindow : Window
         get;
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
+    private void NavigateBack(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs eventArgs)
+    private void OpenRules(object sender, RoutedEventArgs e)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -42,12 +42,12 @@ public partial class MatchResultsWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenMainMenu(object sender, RoutedEventArgs eventArgs)
+    private void OpenMainMenu(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new MainWindow());
     }
 
-    private void OpenRoom(object sender, RoutedEventArgs eventArgs)
+    private void OpenRoom(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new RoomWindow(_room, _isHost));
     }

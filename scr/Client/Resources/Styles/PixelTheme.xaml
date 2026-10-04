@@ -2,7 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:resources="clr-namespace:DominoTrainGame.Resources">
-
     <SolidColorBrush x:Key="Glacier" Color="#D5FAF9" />
     <SolidColorBrush x:Key="Mist" Color="#C1F0E2" />
     <SolidColorBrush x:Key="Frost" Color="#7FE3D7" />
@@ -10,7 +9,6 @@
     <SolidColorBrush x:Key="Seafoam" Color="#6DD0B7" />
     <SolidColorBrush x:Key="Aqua" Color="#4FC7A7" />
     <SolidColorBrush x:Key="Ink" Color="#173D35" />
-
     <SolidColorBrush x:Key="NightBackground" Color="#0B1512" />
     <SolidColorBrush x:Key="NightGridLine" Color="#14261F" />
     <SolidColorBrush x:Key="NightCard" Color="#0E1C18" />
@@ -22,7 +20,6 @@
     <SolidColorBrush x:Key="NightMuted" Color="#8AAFA4" />
     <SolidColorBrush x:Key="NightInput" Color="#0B1613" />
     <SolidColorBrush x:Key="NightShadow" Color="#030706" />
-
     <SolidColorBrush x:Key="SceneCloud" Color="#24564A" />
     <SolidColorBrush x:Key="SceneSkyline" Color="#184038" />
     <SolidColorBrush x:Key="SceneHill" Color="#1E5A4C" />
@@ -31,8 +28,9 @@
     <SolidColorBrush x:Key="SceneInk" Color="#020806" />
     <SolidColorBrush x:Key="SceneWindow" Color="#A5F0D8" />
     <SolidColorBrush x:Key="SceneBand" Color="#2E9E83" />
-
-    <FontFamily x:Key="PixelFont">pack://application:,,,/DominoTrainGame;component/Client/Assets/Fonts/#Press Start 2P</FontFamily>
+    <FontFamily x:Key="PixelFont">
+        pack://application:,,,/DominoTrainGame;component/Client/Assets/Fonts/#Press Start 2P
+    </FontFamily>
     <DrawingBrush x:Key="GridPattern" TileMode="Tile" Viewport="0,0,32,32" ViewportUnits="Absolute">
         <DrawingBrush.Drawing>
             <DrawingGroup>
@@ -49,7 +47,6 @@
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
-
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{StaticResource Ink}" />
         <Setter Property="FontFamily" Value="Consolas" />
@@ -210,55 +207,35 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style
-    x:Key="PixelIconButton"
-    TargetType="Button"
-    BasedOn="{StaticResource PixelButton}">
-
+    <Style x:Key="PixelIconButton" TargetType="Button" BasedOn="{StaticResource PixelButton}">
         <Setter Property="Padding" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Grid SnapsToDevicePixels="True">
+                        <Border Margin="4,4,0,0" Background="{StaticResource Ink}" />
                         <Border
-                        Margin="4,4,0,0"
-                        Background="{StaticResource Ink}" />
-
-                        <Border
-                        x:Name="ButtonSurface"
-                        Margin="0,0,4,4"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{StaticResource Ink}"
-                        BorderThickness="2"
-                        Padding="{TemplateBinding Padding}">
-
+                            x:Name="ButtonSurface"
+                            Margin="0,0,4,4"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
                             <ContentPresenter
-                            Content="{TemplateBinding Content}"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
                         </Border>
                     </Grid>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter
-                            TargetName="ButtonSurface"
-                            Property="Background"
-                            Value="{StaticResource Frost}" />
+                            <Setter TargetName="ButtonSurface" Property="Background" Value="{StaticResource Frost}" />
                         </Trigger>
-
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter
-                            TargetName="ButtonSurface"
-                            Property="BorderThickness"
-                            Value="4" />
+                            <Setter TargetName="ButtonSurface" Property="BorderThickness" Value="4" />
                         </Trigger>
-
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter
-                            TargetName="ButtonSurface"
-                            Property="Margin"
-                            Value="3,3,1,1" />
+                            <Setter TargetName="ButtonSurface" Property="Margin" Value="3,3,1,1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -316,7 +293,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="PixelTextDark" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
         <Setter Property="Foreground" Value="{StaticResource NightAccent}" />
@@ -324,7 +300,6 @@
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
         <Setter Property="TextOptions.TextRenderingMode" Value="Aliased" />
     </Style>
-
     <Style x:Key="PixelTextLight" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
         <Setter Property="Foreground" Value="{StaticResource NightText}" />
@@ -332,11 +307,9 @@
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
         <Setter Property="TextOptions.TextRenderingMode" Value="Aliased" />
     </Style>
-
     <Style x:Key="NightLabel" TargetType="TextBlock" BasedOn="{StaticResource PixelTextLight}">
         <Setter Property="Foreground" Value="{StaticResource NightMuted}" />
     </Style>
-
     <Style x:Key="NightTextBox" TargetType="TextBox">
         <Setter Property="Height" Value="44" />
         <Setter Property="FontFamily" Value="Consolas" />
@@ -365,7 +338,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="NightLinkButton" TargetType="Button">
         <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
         <Setter Property="Foreground" Value="{StaticResource NightAccent}" />
@@ -377,10 +349,10 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <TextBlock 
+                    <TextBlock
                         x:Name="LinkText"
-                        Text="{TemplateBinding Content}" 
-                        Foreground="{TemplateBinding Foreground}" 
+                        Text="{TemplateBinding Content}"
+                        Foreground="{TemplateBinding Foreground}"
                         Background="{TemplateBinding Background}"
                         Padding="{TemplateBinding Padding}" />
                     <ControlTemplate.Triggers>
@@ -395,7 +367,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="NightButton" TargetType="Button" BasedOn="{StaticResource PixelButton}">
         <Setter Property="Background" Value="{StaticResource NightInput}" />
         <Setter Property="Foreground" Value="{StaticResource NightAccent}" />
@@ -443,12 +414,10 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="NightPrimaryButton" TargetType="Button" BasedOn="{StaticResource NightButton}">
         <Setter Property="Background" Value="{StaticResource NightAccent}" />
         <Setter Property="Foreground" Value="{StaticResource NightOnAccent}" />
     </Style>
-
     <Style x:Key="NightPasswordBox" TargetType="PasswordBox">
         <Setter Property="Height" Value="44" />
         <Setter Property="FontFamily" Value="Consolas" />
@@ -477,41 +446,41 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="PixelButtonDangerStyle" TargetType="Button">
-        <Setter Property="Background" Value="#B33A3A"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontFamily" Value="{StaticResource PixelFont}"/>
-        <Setter Property="FontSize" Value="9"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource Ink}"/>
-        <Setter Property="Padding" Value="8,5"/>
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="#B33A3A" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
+        <Setter Property="FontSize" Value="9" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="{StaticResource Ink}" />
+        <Setter Property="Padding" Value="8,5" />
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
-
     <Style x:Key="TabButtonStyle" TargetType="RadioButton">
-        <Setter Property="FontFamily" Value="{StaticResource PixelFont}"/>
-        <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Foreground" Value="{StaticResource Ink}"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="Foreground" Value="{StaticResource Ink}" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="border" Background="{StaticResource Mint}"
-                        BorderBrush="{StaticResource Ink}" BorderThickness="0,0,2,0">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <Border
+                        x:Name="border"
+                        Background="{StaticResource Mint}"
+                        BorderBrush="{StaticResource Ink}"
+                        BorderThickness="0,0,2,0">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="border" Property="Background" Value="{StaticResource Ink}"/>
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource Ink}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style x:Key="MenuIconButton" TargetType="Button">
         <Setter Property="Width" Value="64" />
         <Setter Property="Height" Value="64" />
@@ -523,14 +492,18 @@
                 <ControlTemplate TargetType="Button">
                     <Grid SnapsToDevicePixels="True">
                         <Border Margin="4,4,0,0" Background="{StaticResource Ink}" />
-                        <Border x:Name="Face" Margin="0,0,4,4"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{StaticResource Ink}" BorderThickness="2"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center" />
+                        <Border
+                            x:Name="Face"
+                            Margin="0,0,4,4"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center" />
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -557,10 +530,12 @@
         <DrawingImage.Drawing>
             <DrawingGroup>
                 <GeometryDrawing Brush="Transparent" Geometry="M0,0 H32 V32 H0 Z" />
-                <GeometryDrawing Brush="{StaticResource Ink}"
-                    Geometry="M12,1 H20 V6 H23 L26,3 29,6 26,9 V12 H31 V20 H26 V23 L29,26 26,29
-                              23,26 H20 V31 H12 V26 H9 L6,29 3,26 6,23 V20 H1 V12 H6 V9 L3,6 6,3 9,6 H12 Z" />
-                <GeometryDrawing Brush="{StaticResource Glacier}"
+                <GeometryDrawing
+                    Brush="{StaticResource Ink}"
+                    Geometry="M12,1 H20 V6 H23 L26,3 29,6 26,9 V12 H31 V20 H26 V23 L29,26 26,29 23,26 H20 V31 H12 V26
+                        H9 L6,29 3,26 6,23 V20 H1 V12 H6 V9 L3,6 6,3 9,6 H12 Z" />
+                <GeometryDrawing
+                    Brush="{StaticResource Glacier}"
                     Geometry="M12,10 H20 V12 H22 V20 H20 V22 H12 V20 H10 V12 H12 Z" />
                 <GeometryDrawing Brush="{StaticResource Aqua}" Geometry="M13,13 H19 V19 H13 Z" />
             </DrawingGroup>

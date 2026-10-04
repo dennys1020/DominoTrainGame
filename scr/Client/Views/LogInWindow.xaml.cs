@@ -1,9 +1,8 @@
-﻿using DominoTrainGame.Resources.Localization;
-using DominoTrainGame.Utils;
-using DominoTrainGame.Validator;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using DominoTrainGame.Resources.Localization;
+using DominoTrainGame.Validator;
 
 namespace DominoTrainGame.Views;
 
@@ -28,7 +27,7 @@ public partial class LogInWindow : Window
         settingsWindow.ShowDialog();
     }
 
-    private void NavigateToSignUp_Click(object sender, RoutedEventArgs e)
+    private void OnNavigateToSignUpClicked(object sender, RoutedEventArgs e)
     {
         SignUpWindow signUpWindow = new SignUpWindow();
         Application.Current.MainWindow = signUpWindow;
@@ -38,7 +37,7 @@ public partial class LogInWindow : Window
         this.Close();
     }
 
-    //TODO: Implement message box with the result of the password recovery process
+    // TODO: Display the password recovery result when the dialog closes.
     private void NavigateToRecoverPassword(object sender, RoutedEventArgs e)
     {
         RecoverPasswordWindow recoverPasswordWindow = new RecoverPasswordWindow
@@ -49,7 +48,7 @@ public partial class LogInWindow : Window
         recoverPasswordWindow.ShowDialog();
     }
 
-    private async void NavigateToMain_Click(object sender, RoutedEventArgs e)
+    private async void OnNavigateToMainClicked(object sender, RoutedEventArgs e)
     {
         if (_isLoggingIn)
         {

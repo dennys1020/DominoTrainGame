@@ -39,7 +39,7 @@ public partial class RoomWindow : Window
         get;
     }
 
-    private void MarkReady(object sender, RoutedEventArgs eventArgs)
+    private void MarkReady(object sender, RoutedEventArgs e)
     {
         if (sender is Button button && button.DataContext is RoomPlayerViewModel player &&
             player.IsCurrentPlayer && Room.Players.Contains(player))
@@ -48,12 +48,12 @@ public partial class RoomWindow : Window
         }
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
+    private void NavigateBack(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs eventArgs)
+    private void OpenRules(object sender, RoutedEventArgs e)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -64,7 +64,7 @@ public partial class RoomWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenResults(object sender, RoutedEventArgs eventArgs)
+    private void OpenResults(object sender, RoutedEventArgs e)
     {
         if (IsHost)
         {

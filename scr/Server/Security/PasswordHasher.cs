@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity;
 using AspNetPasswordHasher = Microsoft.AspNet.Identity.PasswordHasher;
 
 namespace DominoTrainGame;
-
 
 public static class PasswordHasher
 {

@@ -1,14 +1,15 @@
-﻿using DominoTrainGame.Utils;
-using DominoTrainGame.Resources.Localization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using DominoTrainGame.Resources.Localization;
+using DominoTrainGame.Utils;
 
 namespace DominoTrainGame.Views;
 
 public partial class SignUpWindow : Window
 {
     private const int MinimumPasswordLength = 12;
+
     public SignUpWindow()
     {
         InitializeComponent();
@@ -24,7 +25,7 @@ public partial class SignUpWindow : Window
         settingsWindow.ShowDialog();
     }
 
-    private async void SignUpButton_Click(object sender, RoutedEventArgs e)
+    private async void OnSignUpButtonClicked(object sender, RoutedEventArgs e)
     {
         Button signUpButton = (Button)sender;
         string email = textBoxEmail.Text.Trim();
@@ -97,7 +98,8 @@ public partial class SignUpWindow : Window
             this.Close();
         }
     }
-    private void NavigateToLogin_Click(object sender, RoutedEventArgs e)
+
+    private void OnNavigateToLoginClicked(object sender, RoutedEventArgs e)
     {
         LogInWindow loginWindow = new LogInWindow();
         Application.Current.MainWindow = loginWindow;
@@ -107,7 +109,7 @@ public partial class SignUpWindow : Window
         this.Close();
     }
 
-    private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    private void OnTextBoxTextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
     {
     }
 

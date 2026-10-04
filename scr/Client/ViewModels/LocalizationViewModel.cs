@@ -1,8 +1,7 @@
-using DominoTrainGame.Resources;
-using DominoTrainGame.Resources.Localization;
-using System;
 using System.ComponentModel;
 using System.Globalization;
+using DominoTrainGame.Resources;
+using DominoTrainGame.Resources.Localization;
 
 namespace DominoTrainGame.ViewModels;
 

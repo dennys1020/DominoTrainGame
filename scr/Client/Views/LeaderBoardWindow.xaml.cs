@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,12 +17,12 @@ public partial class LeaderBoardWindow : Window
         DataContext = _viewModel;
     }
 
-    private async void OnLoaded(object sender, RoutedEventArgs eventArgs)
+    private async void OnLoaded(object sender, RoutedEventArgs e)
     {
         await LoadLeaderboardAsync();
     }
 
-    private async void RefreshLeaderboard(object sender, RoutedEventArgs eventArgs)
+    private async void RefreshLeaderboard(object sender, RoutedEventArgs e)
     {
         await LoadLeaderboardAsync();
     }
@@ -41,7 +41,7 @@ public partial class LeaderBoardWindow : Window
         }
     }
 
-    private void OnClosed(object sender, EventArgs eventArgs)
+    private void OnClosed(object sender, EventArgs e)
     {
         _loadCancellation.Cancel();
         _loadCancellation.Dispose();

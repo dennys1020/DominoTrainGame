@@ -1,15 +1,15 @@
-﻿using System.Linq;
+using System.Linq;
 
 namespace DominoTrainGame;
 
 public sealed class PlayerRepository
 {
-    public bool Exists(string userName, string email)
+    public bool Exists(string username, string email)
     {
         using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
         {
             bool alreadyExists = databaseContext.Players.Any(
-                player => player.userName == userName || player.Email == email);
+                player => player.Username == username || player.Email == email);
 
             return alreadyExists;
         }
