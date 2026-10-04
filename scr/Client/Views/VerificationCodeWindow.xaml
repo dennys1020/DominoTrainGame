@@ -1,15 +1,18 @@
-﻿<Window x:Class="DominoTrainGame.Views.VerificationCodeWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
-        DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-        Title="{Binding [VerificationTitle]}"
-        Width="520" SizeToContent="Height" ResizeMode="NoResize"
-        WindowStartupLocation="CenterOwner"
-        Background="{StaticResource Mist}"
-        UseLayoutRounding="True" SnapsToDevicePixels="True"
-        FocusManager.FocusedElement="{Binding ElementName=digitBox1}">
-
+<Window
+    x:Class="DominoTrainGame.Views.VerificationCodeWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
+    DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
+    Title="{Binding [VerificationTitle]}"
+    Width="520"
+    SizeToContent="Height"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    Background="{StaticResource Mist}"
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True"
+    FocusManager.FocusedElement="{Binding ElementName=digitBox1}">
     <Window.Resources>
         <Style x:Key="DigitBox" TargetType="TextBox">
             <Setter Property="Width" Value="50" />
@@ -24,19 +27,26 @@
             <Setter Property="InputMethod.IsInputMethodEnabled" Value="False" />
         </Style>
     </Window.Resources>
-
     <StackPanel Margin="32" VerticalAlignment="Center">
-        <TextBlock Text="{Binding [VerificationTitle]}"
-                   Style="{StaticResource PixelText}" FontSize="20" Margin="0,0,0,12"/>
-
-        <TextBlock x:Name="textBlockInstruction" Foreground="{StaticResource Ink}"
-                   FontSize="14" TextWrapping="Wrap" Margin="0,0,0,20"/>
-
-        <StackPanel x:Name="panelDigits" Orientation="Horizontal" HorizontalAlignment="Center"
-                    PreviewTextInput="DigitBox_PreviewTextInput"
-                    PreviewKeyDown="DigitBox_PreviewKeyDown"
-                    GotKeyboardFocus="DigitBox_GotKeyboardFocus"
-                    DataObject.Pasting="DigitBox_Pasting">
+        <TextBlock
+            Text="{Binding [VerificationTitle]}"
+            Style="{StaticResource PixelText}"
+            FontSize="20"
+            Margin="0,0,0,12" />
+        <TextBlock
+            x:Name="textBlockInstruction"
+            Foreground="{StaticResource Ink}"
+            FontSize="14"
+            TextWrapping="Wrap"
+            Margin="0,0,0,20" />
+        <StackPanel
+            x:Name="panelDigits"
+            Orientation="Horizontal"
+            HorizontalAlignment="Center"
+            PreviewTextInput="OnDigitBoxPreviewTextInput"
+            PreviewKeyDown="OnDigitBoxPreviewKeyDown"
+            GotKeyboardFocus="OnDigitBoxGotKeyboardFocus"
+            DataObject.Pasting="OnDigitBoxPasting">
             <TextBox x:Name="digitBox1" Style="{StaticResource DigitBox}" />
             <TextBox x:Name="digitBox2" Style="{StaticResource DigitBox}" />
             <TextBox x:Name="digitBox3" Style="{StaticResource DigitBox}" />
@@ -44,42 +54,53 @@
             <TextBox x:Name="digitBox5" Style="{StaticResource DigitBox}" />
             <TextBox x:Name="digitBox6" Style="{StaticResource DigitBox}" Margin="0" />
         </StackPanel>
-
-        <TextBlock x:Name="textBlockMessage" Foreground="{StaticResource Ink}"
-                   FontSize="13" TextWrapping="Wrap" Margin="0,16,0,0"
-                   AutomationProperties.LiveSetting="Polite"/>
-
-        <Button x:Name="resendCodeButton"
+        <TextBlock
+            x:Name="textBlockMessage"
+            Foreground="{StaticResource Ink}"
+            FontSize="13"
+            TextWrapping="Wrap"
+            Margin="0,16,0,0"
+            AutomationProperties.LiveSetting="Polite" />
+        <Button
+            x:Name="resendCodeButton"
             Content="{Binding [VerificationCodeResendLabel]}"
-                Click="ResendCode_Click"
-                Background="Transparent" BorderThickness="0"
-                Foreground="{StaticResource Ink}"
-                HorizontalAlignment="Center"
-                Cursor="Hand"
-                Margin="0,12,0,0">
+            Click="OnResendCodeClicked"
+            Background="Transparent"
+            BorderThickness="0"
+            Foreground="{StaticResource Ink}"
+            HorizontalAlignment="Center"
+            Cursor="Hand"
+            Margin="0,12,0,0">
             <Button.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="TextDecorations" Value="Underline"/>
-                    </Style>
-                </Button.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="TextDecorations" Value="Underline" />
+                </Style>
+            </Button.Resources>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </ControlTemplate>
             </Button.Template>
         </Button>
-
         <Grid Margin="0,24,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Content="{Binding [CancelButtonLabel]}"
-                    Style="{StaticResource PixelButton}" Click="CancelButton_Click" Margin="0,10,0,9"/>
-            <Button Grid.Column="2" Content="{Binding [ButtonVerify]}"
-                    Style="{StaticResource PixelButton}" IsDefault="True" Click="VerifyButton_Click" Margin="22,10,22,10"/>
+            <Button
+                Grid.Column="0"
+                Content="{Binding [CancelButtonLabel]}"
+                Style="{StaticResource PixelButton}"
+                Click="OnCancelButtonClicked"
+                Margin="0,10,0,9" />
+            <Button
+                Grid.Column="2"
+                Content="{Binding [ButtonVerify]}"
+                Style="{StaticResource PixelButton}"
+                IsDefault="True"
+                Click="OnVerifyButtonClicked"
+                Margin="22,10,22,10" />
         </Grid>
     </StackPanel>
 </Window>

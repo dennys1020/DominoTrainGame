@@ -1,4 +1,4 @@
-﻿namespace DominoTrainGame.Validator;
+namespace DominoTrainGame.Validator;
 
 /// <summary>
 /// Possible outcomes when validating a login attempt.

@@ -1,4 +1,4 @@
-﻿namespace DominoTrainGame.Utils;
+namespace DominoTrainGame.Utils;
 
 public enum VerificationCodeStatus
 {

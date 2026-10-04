@@ -48,13 +48,19 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="OptionSurface" Padding="{TemplateBinding Padding}"
-                            Background="{StaticResource Glacier}" BorderBrush="{StaticResource Ink}"
-                            BorderThickness="2">
-                        <TextBlock Text="{TemplateBinding Content}"
-                                   FontFamily="{TemplateBinding FontFamily}" FontSize="{TemplateBinding FontSize}"
-                                   Foreground="{TemplateBinding Foreground}"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    <Border
+                        x:Name="OptionSurface"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{StaticResource Glacier}"
+                        BorderBrush="{StaticResource Ink}"
+                        BorderThickness="2">
+                        <TextBlock
+                            Text="{TemplateBinding Content}"
+                            FontFamily="{TemplateBinding FontFamily}"
+                            FontSize="{TemplateBinding FontSize}"
+                            Foreground="{TemplateBinding Foreground}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -85,10 +91,12 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Border x:Name="InputSurface" Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}">
+                    <Border
+                        x:Name="InputSurface"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}">
                         <ScrollViewer x:Name="PART_ContentHost" />
                     </Border>
                     <ControlTemplate.Triggers>
@@ -111,10 +119,10 @@
                 <GeometryDrawing Brush="{StaticResource Ink}" Geometry="M0,0 H48 V84 H0 Z" />
                 <GeometryDrawing Brush="{StaticResource Glacier}" Geometry="M4,4 H44 V80 H4 Z" />
                 <GeometryDrawing Brush="{StaticResource Mint}" Geometry="M8,40 H40 V44 H8 Z" />
-                <GeometryDrawing Brush="{StaticResource Ink}"
-                    Geometry="M10,10 H17 V17 H10 Z M31,27 H38 V34 H31 Z M10,50 H17 V57 H10 Z
-                              M31,50 H38 V57 H31 Z M20,60 H27 V67 H20 Z M10,70 H17 V77 H10 Z
-                              M31,70 H38 V77 H31 Z" />
+                <GeometryDrawing
+                    Brush="{StaticResource Ink}"
+                    Geometry="M10,10 H17 V17 H10 Z M31,27 H38 V34 H31 Z M10,50 H17 V57 H10 Z M31,50 H38 V57 H31 Z
+                        M20,60 H27 V67 H20 Z M10,70 H17 V77 H10 Z M31,70 H38 V77 H31 Z" />
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
@@ -122,13 +130,16 @@
         <DrawingImage.Drawing>
             <DrawingGroup>
                 <GeometryDrawing Brush="Transparent" Geometry="M0,0 H96 V96 H0 Z" />
-                <GeometryDrawing Brush="{StaticResource Ink}"
-                    Geometry="M22,8 H74 V20 H90 V45 H80 V55 H66 V65 H54 V76 H70 V88 H26 V76 H42
-                              V65 H30 V55 H16 V45 H6 V20 H22 Z" />
-                <GeometryDrawing Brush="{StaticResource Aqua}"
-                    Geometry="M28,14 H68 V43 H60 V54 H36 V43 H28 Z M12,26 H22 V43 H16 V39 H12 Z
-                              M74,26 H84 V39 H80 V43 H74 Z M32,81 H64 V84 H32 Z" />
-                <GeometryDrawing Brush="{StaticResource Glacier}"
+                <GeometryDrawing
+                    Brush="{StaticResource Ink}"
+                    Geometry="M22,8 H74 V20 H90 V45 H80 V55 H66 V65 H54 V76 H70 V88 H26 V76 H42 V65 H30 V55 H16 V45 H6
+                        V20 H22 Z" />
+                <GeometryDrawing
+                    Brush="{StaticResource Aqua}"
+                    Geometry="M28,14 H68 V43 H60 V54 H36 V43 H28 Z M12,26 H22 V43 H16 V39 H12 Z M74,26 H84 V39 H80 V43
+                        H74 Z M32,81 H64 V84 H32 Z" />
+                <GeometryDrawing
+                    Brush="{StaticResource Glacier}"
                     Geometry="M44,22 H52 V29 H59 V37 H52 V44 H44 V37 H37 V29 H44 Z" />
             </DrawingGroup>
         </DrawingImage.Drawing>

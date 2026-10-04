@@ -1,15 +1,15 @@
-﻿#nullable enable
-
 using System;
 using System.Configuration;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using DominoTrainGame.Resources.Localization;
 using log4net.Ext.Trace;
+using DominoTrainGame.Resources.Localization;
+#nullable enable
 
 namespace DominoTrainGame.Utils;
+
 public sealed class EmailSender
 {
     private const string HostKey = "SmtpHost";

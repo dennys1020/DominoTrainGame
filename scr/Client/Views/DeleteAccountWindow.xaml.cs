@@ -1,28 +1,26 @@
-﻿
 using System.Windows;
 
-namespace DominoTrainGame.Views
+namespace DominoTrainGame.Views;
+
+public partial class DeleteAccountWindow : Window
 {
-    public partial class DeleteAccountWindow : Window
+    public DeleteAccountWindow()
     {
-        public DeleteAccountWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void OpenSettings(object sender, RoutedEventArgs e)
+    private void OpenSettings(object sender, RoutedEventArgs e)
+    {
+        SettingsWindow settingsWindow = new SettingsWindow
         {
-            SettingsWindow settingsWindow = new SettingsWindow
-            {
-                Owner = this
-            };
+            Owner = this
+        };
 
-            settingsWindow.ShowDialog();
-        }
+        settingsWindow.ShowDialog();
+    }
 
-        private void GoBack(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+    private void GoBack(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

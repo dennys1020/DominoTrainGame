@@ -10,12 +10,12 @@ public partial class JoinGameWindow : Window
         InitializeComponent();
     }
 
-    private void NavigateBack(object sender, RoutedEventArgs eventArgs)
+    private void NavigateBack(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs eventArgs)
+    private void OpenRules(object sender, RoutedEventArgs e)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -26,7 +26,7 @@ public partial class JoinGameWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenRoom(object sender, RoutedEventArgs eventArgs)
+    private void OpenRoom(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new RoomWindow(false));
     }

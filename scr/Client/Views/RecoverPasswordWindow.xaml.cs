@@ -1,4 +1,3 @@
-﻿using System;
 using System.Windows;
 using DominoTrainGame.Resources.Localization;
 using DominoTrainGame.Utils;
@@ -16,7 +15,7 @@ public partial class RecoverPasswordWindow : Window
         _validator = new RecoverPasswordValidator();
     }
 
-    private async void SendCodeButton_Click(object sender, RoutedEventArgs e)
+    private async void OnSendCodeButtonClicked(object sender, RoutedEventArgs e)
     {
         RecoverPasswordValidationStatus status = _validator.FindAccount(
             EmailOrUsernameTextBox.Text, out int playerId, out string email);
@@ -57,7 +56,7 @@ public partial class RecoverPasswordWindow : Window
         }
     }
 
-    private void UpdatePasswordButton_Click(object sender, RoutedEventArgs e)
+    private void OnUpdatePasswordButtonClicked(object sender, RoutedEventArgs e)
     {
         RecoverPasswordValidationStatus status = _validator.UpdatePassword(
             _playerId, NewPasswordBox.Password, ConfirmPasswordBox.Password);
@@ -71,7 +70,7 @@ public partial class RecoverPasswordWindow : Window
         }
     }
 
-    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    private void OnCancelButtonClicked(object sender, RoutedEventArgs e)
     {
         DialogResult = false;
     }
@@ -89,7 +88,10 @@ public partial class RecoverPasswordWindow : Window
                 message = UiStrings.MessageUserNotFound;
                 break;
             case RecoverPasswordValidationStatus.PasswordTooShort:
-                message = string.Format(UiStrings.InvalidPasswordMessage, RecoverPasswordValidator.MinimumPasswordLength);
+                message = string.Format(
+                    UiStrings.InvalidPasswordMessage,
+                    RecoverPasswordValidator.MinimumPasswordLength
+                );
                 break;
             case RecoverPasswordValidationStatus.PasswordsDoNotMatch:
                 message = UiStrings.PasswordsDoNotMatchMessage;

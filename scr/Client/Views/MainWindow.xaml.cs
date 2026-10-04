@@ -10,12 +10,12 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    private void OpenNewGame(object sender, RoutedEventArgs eventArgs)
+    private void OpenNewGame(object sender, RoutedEventArgs e)
     {
         WindowNavigation.Navigate(this, new NewGameWindow());
     }
 
-    private void OpenLeaderboard(object sender, RoutedEventArgs eventArgs)
+    private void OpenLeaderboard(object sender, RoutedEventArgs e)
     {
         LeaderBoardWindow leaderboardWindow = new LeaderBoardWindow
         {
@@ -29,7 +29,7 @@ public partial class MainWindow : Window
         WindowNavigation.Navigate(this, new MatchResultsWindow());
     }
 
-    private void OpenRules(object sender, RoutedEventArgs eventArgs)
+    private void OpenRules(object sender, RoutedEventArgs e)
     {
         GameRulesWindow rulesWindow = new GameRulesWindow
         {
@@ -40,7 +40,7 @@ public partial class MainWindow : Window
         rulesWindow.ShowDialog();
     }
 
-    private void OpenChangePassword(object sender, RoutedEventArgs eventArgs)
+    private void OpenChangePassword(object sender, RoutedEventArgs e)
     {
         ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow
         {
@@ -50,7 +50,7 @@ public partial class MainWindow : Window
         changePasswordWindow.ShowDialog();
     }
 
-    private void OpenDeleteAccount(object sender, RoutedEventArgs eventArgs)
+    private void OpenDeleteAccount(object sender, RoutedEventArgs e)
     {
         DeleteAccountWindow deleteAccountWindow = new DeleteAccountWindow
         {
@@ -60,7 +60,7 @@ public partial class MainWindow : Window
         deleteAccountWindow.ShowDialog();
     }
 
-    private void OpenProfile(object sender, RoutedEventArgs eventArgs)
+    private void OpenProfile(object sender, RoutedEventArgs e)
     {
         ProfileWindow profileWindow = new ProfileWindow
         {
@@ -69,7 +69,7 @@ public partial class MainWindow : Window
         profileWindow.ShowDialog();
     }
 
-    private void OpenFriendsList(object sender, RoutedEventArgs eventArgs)
+    private void OpenFriendsList(object sender, RoutedEventArgs e)
     {
         FriendsListWindow friendsWindow = new FriendsListWindow
         {

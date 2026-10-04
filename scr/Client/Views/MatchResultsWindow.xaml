@@ -1,4 +1,4 @@
-﻿<Window
+<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:DominoTrainGame.Views.Controls"
@@ -78,7 +78,8 @@
                                     <StackPanel
                                         Orientation="Horizontal"
                                         Margin="0,8,0,0"
-                                        DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        DataContext="{Binding Results, RelativeSource={RelativeSource
+                                            AncestorType=Window}}">
                                         <TextBlock
                                             Text="{Binding RoundCountText}"
                                             Style="{StaticResource MatchBody}"
@@ -109,7 +110,8 @@
                                                     <TextBlock
                                                         Style="{StaticResource ResultsHeader}"
                                                         TextAlignment="Left"
-                                                        Text="{Binding [ScorePlayerLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
+                                                        Text="{Binding [ScorePlayerLabel], Source={StaticResource
+                                                            Localization}}" />
                                                     <ItemsControl
                                                         Grid.Column="1"
                                                         ItemsSource="{Binding RoundLabels}"
@@ -129,7 +131,8 @@
                                                     <TextBlock
                                                         Grid.Column="2"
                                                         Style="{StaticResource ResultsHeader}"
-                                                        Text="{Binding [ScoreTotalLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
+                                                        Text="{Binding [ScoreTotalLabel], Source={StaticResource
+                                                            Localization}}" />
                                                 </Grid>
                                             </Border>
                                             <ItemsControl
@@ -176,11 +179,15 @@
                                                                                 Value="{Binding Player.Username}" />
                                                                             <Style.Triggers>
                                                                                 <DataTrigger
-                                                                                    Binding="{Binding Player.IsCurrentPlayer}"
+                                                                                    Binding="{Binding
+                                                                                        Player.IsCurrentPlayer}"
                                                                                     Value="True">
                                                                                     <Setter
                                                                                         Property="Text"
-                                                                                        Value="{Binding [YouPlayerLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
+                                                                                        Value="{Binding
+                                                                                            [YouPlayerLabel],
+                                                                                            Source={StaticResource
+                                                                                            Localization}}" />
                                                                                 </DataTrigger>
                                                                             </Style.Triggers>
                                                                         </Style>
@@ -208,7 +215,8 @@
                                                 Margin="20"
                                                 FontSize="18"
                                                 d:Visibility="Collapsed"
-                                                Text="{Binding [ScoreNoPlayersLabel], Source={x:Static viewModels:LocalizationViewModel.Instance}}">
+                                                Text="{Binding [ScoreNoPlayersLabel], Source={StaticResource
+                                                    Localization}}">
                                                 <TextBlock.Style>
                                                     <Style TargetType="TextBlock" BasedOn="{StaticResource MatchBody}">
                                                         <Setter Property="Visibility" Value="Collapsed" />
@@ -226,7 +234,8 @@
                                 <Grid
                                     Grid.Row="2"
                                     VerticalAlignment="Center"
-                                    DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}">
+                                    DataContext="{Binding Results, RelativeSource={RelativeSource AncestorType=Window}}"
+                                >
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -263,7 +272,7 @@
                                             Style="{StaticResource MatchBody}"
                                             Margin="0,10,0,0"
                                             FontSize="16"
-                                            Text="{Binding [ScoreExplanation], Source={x:Static viewModels:LocalizationViewModel.Instance}}" />
+                                            Text="{Binding [ScoreExplanation], Source={StaticResource Localization}}" />
                                     </StackPanel>
                                 </Grid>
                                 <Grid Grid.Row="3">
