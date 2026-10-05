@@ -10,9 +10,6 @@ using DominoTrainGame.Models;
 
 namespace DominoTrainGame.Repository;
 
-/// <summary>
-/// Reads leaderboard statistics from completed matches in the game database.
-/// </summary>
 public sealed class LeaderboardRepository
 {
     private const string FinishedMatchStatus = "Finished";
