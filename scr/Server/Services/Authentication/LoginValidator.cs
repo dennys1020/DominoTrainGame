@@ -46,7 +46,7 @@ public sealed class LoginValidator
         {
             using (DominoGameDBEntities databaseContext = DatabaseContextFactory.Create())
             {
-                Player? user = databaseContext.Players.FirstOrDefault(
+                Player user = databaseContext.Players.FirstOrDefault(
                     registeredPlayer => registeredPlayer.Username == usernameOrEmail
                         || registeredPlayer.Email == usernameOrEmail);
 

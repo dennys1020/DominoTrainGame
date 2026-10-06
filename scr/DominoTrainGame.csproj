@@ -266,6 +266,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Server\Data\EntityFramework\Account.cs">
+      <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
+    </Compile>
     <Compile Include="Server\Data\EntityFramework\Ban.cs">
       <DependentUpon>DominoGameModel.Context.tt</DependentUpon>
     </Compile>

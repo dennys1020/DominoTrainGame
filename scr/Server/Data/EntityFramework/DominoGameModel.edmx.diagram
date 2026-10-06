@@ -11,7 +11,7 @@
         <EntityTypeShape EntityType="DominoGameDBModel.LobbyPlayer" Width="1.5" PointX="6" PointY="7.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.Match" Width="1.5" PointX="3.75" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.MatchResult" Width="1.5" PointX="6" PointY="4.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DominoGameDBModel.Player" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Player" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.Report" Width="1.5" PointX="3" PointY="18.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.StatusFriendshipRequest" Width="1.5" PointX="0.75" PointY="11.625" IsExpanded="true" />
         <AssociationConnector Association="DominoGameDBModel.FK_Bans_Players" ManuallyRouted="false" />
@@ -24,6 +24,8 @@
         <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Matches" ManuallyRouted="false" />
         <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Players" ManuallyRouted="false" />
         <AssociationConnector Association="DominoGameDBModel.FK_Reports_Players" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Account" Width="1.5" PointX="0.5" PointY="13.75" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Accounts_Players" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

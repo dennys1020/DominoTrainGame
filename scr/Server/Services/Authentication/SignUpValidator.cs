@@ -102,15 +102,25 @@ public sealed class SignUpValidator
                 }
                 else
                 {
+                    DateTime registrationTime = DateTime.UtcNow;
+
                     Player newPlayer = new Player
                     {
                         Username = username,
                         Email = email,
                         PasswordHash = PasswordHasher.Hash(password),
-                        PreferredLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
-                        CreatedAt = DateTime.UtcNow,
                         IsGuest = NotGuest
                     };
+
+                    Account newAccount = new Account
+                    {
+                        Biography = string.Empty,
+                        PreferredLanguage = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
+                        CreatedAt = registrationTime,
+                        LastSeenAt = registrationTime
+                    };
+
+                    newPlayer.Accounts.Add(newAccount);
 
                     databaseContext.Players.Add(newPlayer);
                     databaseContext.SaveChanges();

@@ -2,7 +2,6 @@
 // Generated code. The build normalizes this file after regeneration.
 // </auto-generated>
 
-using System;
 using System.Collections.Generic;
 
 namespace DominoTrainGame;
@@ -21,33 +20,27 @@ public partial class Player
         this.LobbyPlayers = new HashSet<LobbyPlayer>();
         this.MatchResults = new HashSet<MatchResult>();
         this.Reports = new HashSet<Report>();
+        this.Accounts = new HashSet<Account>();
     }
 
     public int PlayerId { get; set; }
     public string Username { get; set; }
     public string Email { get; set; }
     public string PasswordHash { get; set; }
-    public string PreferredLanguage { get; set; }
-    public string Biography { get; set; }
     public byte IsGuest { get; set; }
-    public Nullable<System.DateTime> LastSeenAt { get; set; }
-    public System.DateTime CreatedAt { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<Ban> Bans { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<FriendshipRequest> ReceivedFriendshipRequests { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<FriendshipRequest> SentFriendshipRequests { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<LobbyPlayer> LobbyPlayers { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<MatchResult> MatchResults { get; set; }
-
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<Report> Reports { get; set; }
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+    public virtual ICollection<Account> Accounts { get; set; }
 }
