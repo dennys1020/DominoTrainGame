@@ -6,7 +6,7 @@
     xmlns:strings="clr-namespace:DominoTrainGame.Resources.Localization"
     x:Class="DominoTrainGame.Views.RoomWindow"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [RoomWindowTitle]}"
+    Title="{Binding WindowTitles[RoomTitle]}"
     Style="{StaticResource MatchWindow}"
     WindowStartupLocation="CenterScreen"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -33,7 +33,7 @@
                                 Height="42"
                                 Margin="0,0,16,0" />
                             <TextBlock
-                                Text="{Binding [GameTitle]}"
+                                Text="{Binding Uppercase[GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
@@ -50,7 +50,7 @@
                                     <RowDefinition Height="68" />
                                 </Grid.RowDefinitions>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding [RoomTitle]}" Style="{StaticResource MatchHeading}" />
+                                    <TextBlock Text="{Binding Uppercase[RoomTitle]}" Style="{StaticResource MatchHeading}" />
                                 </StackPanel>
                                 <Grid Grid.Row="1" Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
@@ -64,7 +64,7 @@
                                                 AncestorType=Window}, Converter={StaticResource HostVisibility}}"
                                             d:Visibility="Visible">
                                             <TextBlock
-                                                Text="{Binding [RoomCodeLabel]}"
+                                                Text="{Binding Uppercase[RoomCodeLabel]}"
                                                 Style="{StaticResource MatchSection}" />
                                             <Border
                                                 Background="{StaticResource Frost}"
@@ -72,7 +72,7 @@
                                                 BorderThickness="2"
                                                 Padding="18,19">
                                                 <TextBlock
-                                                    Text="{Binding [SampleRoomCode]}"
+                                                    Text="XXXXXX"
                                                     Style="{StaticResource PixelText}"
                                                     FontSize="26"
                                                     HorizontalAlignment="Center" />
@@ -84,7 +84,7 @@
                                                 FontSize="16" />
                                         </StackPanel>
                                         <TextBlock
-                                            Text="{Binding [MaximumDoubleLabel]}"
+                                            Text="{Binding Uppercase[MaximumDoubleLabel]}"
                                             Style="{StaticResource MatchSection}" />
                                         <UniformGrid
                                             Rows="1"
@@ -95,7 +95,7 @@
                                             d:Visibility="Visible"
                                             d:IsEnabled="True">
                                             <RadioButton
-                                                Content="{Binding [Double6Label]}"
+                                                Content="6"
                                                 GroupName="MaximumDouble"
                                                 Style="{StaticResource MatchDoubleOption}"
                                                 Margin="0,0,10,0"
@@ -105,7 +105,7 @@
                                                     RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}"
                                                 d:IsChecked="False" />
                                             <RadioButton
-                                                Content="{Binding [Double9Label]}"
+                                                Content="9"
                                                 GroupName="MaximumDouble"
                                                 Style="{StaticResource MatchDoubleOption}"
                                                 Margin="0,0,10,0"
@@ -115,7 +115,7 @@
                                                     RelativeSource={RelativeSource AncestorType=Window}, Mode=TwoWay}"
                                                 d:IsChecked="False" />
                                             <RadioButton
-                                                Content="{Binding [Double12Label]}"
+                                                Content="12"
                                                 GroupName="MaximumDouble"
                                                 Style="{StaticResource MatchDoubleOption}"
                                                 Margin="0,0,10,0"
@@ -174,7 +174,7 @@
                                             <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
                                         <TextBlock
-                                            Text="{Binding [PlayersLabel], Source={StaticResource Localization}}"
+                                            Text="{Binding Uppercase[PlayersLabel], Source={StaticResource Localization}}"
                                             Style="{StaticResource MatchSection}" />
                                         <TextBlock
                                             Style="{StaticResource PixelText}"
@@ -265,7 +265,7 @@
                                                                         </TextBlock.Style>
                                                                     </TextBlock>
                                                                     <TextBlock
-                                                                        Text="{Binding [RoomHostLabel],
+                                                                        Text="{Binding Uppercase[RoomHostLabel],
                                                                             Source={StaticResource Localization}}">
                                                                         <TextBlock.Style>
                                                                             <Style
@@ -303,7 +303,7 @@
                                                                                 <Setter
                                                                                     Property="Text"
                                                                                     Value="{Binding
-                                                                                        [RoomNotReadyLabel],
+                                                                                        Uppercase[RoomNotReadyLabel],
                                                                                         Source={StaticResource
                                                                                         Localization}}" />
                                                                                 <Style.Triggers>
@@ -313,7 +313,7 @@
                                                                                         <Setter
                                                                                             Property="Text"
                                                                                             Value="{Binding
-                                                                                                [ReadyStatusLabel],
+                                                                                                Uppercase[ReadyStatusLabel],
                                                                                                 Source={StaticResource
                                                                                                 Localization}}" />
                                                                                     </DataTrigger>
@@ -322,7 +322,7 @@
                                                                         </TextBlock.Style>
                                                                     </TextBlock>
                                                                     <Button
-                                                                        Content="{Binding [MarkReadyButtonLabel],
+                                                                        Content="{Binding Uppercase[MarkReadyButtonLabel],
                                                                             Source={StaticResource Localization}}"
                                                                         Click="MarkReady"
                                                                         MinWidth="180"
@@ -386,7 +386,7 @@
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <Button
-                                        Content="{Binding [StartMatchButtonLabel]}"
+                                        Content="{Binding Uppercase[StartMatchButtonLabel]}"
                                         Style="{StaticResource MatchButton}"
                                         Click="OpenResults"
                                         HorizontalAlignment="Right"
@@ -404,13 +404,13 @@
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,4,8,4">
                         <Button
-                            Content="{Binding [BackButtonLabel]}"
+                            Content="{Binding Uppercase[BackButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="NavigateBack"
                             HorizontalAlignment="Left"
                             MinWidth="170" />
                         <Button
-                            Content="{Binding [GameRulesButtonLabel]}"
+                            Content="{Binding Uppercase[GameRulesTitle]}"
                             Style="{StaticResource MatchButton}"
                             Click="OpenRules"
                             HorizontalAlignment="Right"

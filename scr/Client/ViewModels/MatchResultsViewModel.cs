@@ -171,14 +171,23 @@ public sealed class MatchResultsViewModel : INotifyPropertyChanged
 
         Players = rows;
         RoundLabels = Enumerable.Range(FirstRoundNumber, Rounds.Count)
-            .Select(number => string.Format(UiStrings.Culture, UiStrings.ScoreRoundFormat, number))
+            .Select(FormatRoundLabel)
             .ToList();
+    }
+
+    private string FormatRoundLabel(int roundNumber)
+    {
+        CultureInfo culture = UiStrings.Culture ?? CultureInfo.CurrentUICulture;
+        string format = UiStrings.ScoreRoundFormat.ToUpper(culture);
+        string roundLabel = string.Format(culture, format, roundNumber);
+        return roundLabel;
     }
 
     private void UpdateWinner()
     {
+        CultureInfo culture = UiStrings.Culture ?? CultureInfo.CurrentUICulture;
         HasWinner = Players.Any() && Players.All(player => player.TotalScore.HasValue);
-        WinnerText = UiStrings.ScorePendingResultsLabel;
+        WinnerText = UiStrings.ScorePendingResultsLabel.ToUpper(culture);
 
         if (HasWinner)
         {
@@ -197,7 +206,7 @@ public sealed class MatchResultsViewModel : INotifyPropertyChanged
             string format = winners.Count == SingleWinnerCount
                 ? UiStrings.ScoreWinnerFormat
                 : UiStrings.ScoreTieFormat;
-            WinnerText = string.Format(UiStrings.Culture ?? CultureInfo.CurrentCulture, format, names);
+            WinnerText = string.Format(culture, format.ToUpper(culture), names);
         }
     }
 

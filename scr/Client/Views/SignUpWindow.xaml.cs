@@ -88,7 +88,7 @@ public partial class SignUpWindow : Window
         }
         else
         {
-            MessageBox.Show(UiStrings.RegisterSucessMessage);
+            MessageBox.Show(UiStrings.RegistrationSuccessMessage);
 
             LogInWindow loginWindow = new LogInWindow();
             Application.Current.MainWindow = loginWindow;
@@ -119,10 +119,10 @@ public partial class SignUpWindow : Window
         switch (status)
         {
             case SignUpValidationStatus.EmptyFields:
-                statusMessage = UiStrings.EmptyFieldsMessage;
+                statusMessage = UiStrings.RequiredFieldsMessage;
                 break;
             case SignUpValidationStatus.InvalidEmail:
-                statusMessage = UiStrings.MesssageInvalidEmail;
+                statusMessage = UiStrings.InvalidEmailMessage;
                 break;
             case SignUpValidationStatus.PasswordTooShort:
                 statusMessage = string.Format(UiStrings.InvalidPasswordMessage, MinimumPasswordLength);

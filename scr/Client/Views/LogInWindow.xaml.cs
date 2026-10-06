@@ -100,7 +100,7 @@ public partial class LogInWindow : Window
         switch (status)
         {
             case LoginValidationStatus.EmptyFields:
-                message = UiStrings.MessageRequiredFields;
+                message = UiStrings.RequiredFieldsMessage;
                 break;
             case LoginValidationStatus.UserNotFound:
                 message = UiStrings.MessageUserNotFound;

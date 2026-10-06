@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
-    Title="{Binding Localization[LeaderboardWindowTitle]}"
+    Title="{Binding Localization.WindowTitles[LeaderboardTitle]}"
     Width="960"
     Height="700"
     MinWidth="740"
@@ -23,7 +23,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock
-            Text="{Binding Localization[LeaderboardTitle]}"
+            Text="{Binding Localization.Uppercase[LeaderboardTitle]}"
             Style="{StaticResource PixelText}"
             FontSize="22"
             Margin="0,0,0,16" />
@@ -57,7 +57,7 @@
                 AutomationProperties.Name="{Binding Localization[LeaderboardFilterLabel]}" />
             <Button
                 Grid.Column="2"
-                Content="{Binding Localization[LeaderboardRefreshButtonLabel]}"
+                Content="{Binding Localization.Uppercase[RefreshButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 Margin="16,0,0,0"
                 IsEnabled="{Binding CanRefresh}"
@@ -85,7 +85,7 @@
             FontSize="14"
             RowHeight="42"
             ColumnHeaderHeight="48"
-            AutomationProperties.Name="{Binding Localization[LeaderboardTitle]}">
+            AutomationProperties.Name="{Binding Localization.Uppercase[LeaderboardTitle]}">
             <DataGrid.Resources>
                 <Style TargetType="DataGridColumnHeader">
                     <Setter Property="Background" Value="{StaticResource Glacier}" />
@@ -113,13 +113,13 @@
                     Binding="{Binding Rank}"
                     SortMemberPath="Rank"
                     Width="100"
-                    Header="{Binding [LeaderboardRankHeader], Source={StaticResource Localization}}" />
+                    Header="{Binding Uppercase[RankLabel], Source={StaticResource Localization}}" />
                 <DataGridTextColumn
                     Binding="{Binding Username}"
                     SortMemberPath="Username"
                     Width="*"
                     MinWidth="170"
-                    Header="{Binding [LeaderboardPlayerHeader], Source={StaticResource Localization}}">
+                    Header="{Binding Uppercase[PlayerLabel], Source={StaticResource Localization}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
@@ -131,12 +131,12 @@
                     Binding="{Binding Wins}"
                     SortMemberPath="Wins"
                     Width="110"
-                    Header="{Binding [LeaderboardWinsHeader], Source={StaticResource Localization}}" />
+                    Header="{Binding Uppercase[WinsLabel], Source={StaticResource Localization}}" />
                 <DataGridTextColumn
                     Binding="{Binding GamesPlayed}"
                     SortMemberPath="GamesPlayed"
-                    Width="110"
-                    Header="{Binding [LeaderboardGamesHeader], Source={StaticResource Localization}}" />
+                    Width="170"
+                    Header="{Binding Uppercase[GamesPlayedLabel], Source={StaticResource Localization}}" />
             </DataGrid.Columns>
         </DataGrid>
         <TextBlock

@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     x:Class="DominoTrainGame.Views.GameRulesWindow"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [GameRulesWindowTitle]}"
+    Title="{Binding WindowTitles[GameRulesTitle]}"
     Style="{StaticResource MatchWindow}"
     WindowStartupLocation="CenterScreen">
     <Grid>
@@ -26,7 +26,7 @@
                                 Height="42"
                                 Margin="0,0,16,0" />
                             <TextBlock
-                                Text="{Binding [GameTitle]}"
+                                Text="{Binding Uppercase[GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
@@ -43,7 +43,7 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel>
                                     <TextBlock
-                                        Text="{Binding [GameRulesTitle]}"
+                                        Text="{Binding Uppercase[GameRulesTitle]}"
                                         Style="{StaticResource MatchHeading}" />
                                 </StackPanel>
                                 <ScrollViewer
@@ -76,7 +76,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesObjectiveTitle]}"
+                                                        Text="{Binding Uppercase[RulesObjectiveTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -101,7 +101,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesPreparationTitle]}"
+                                                        Text="{Binding Uppercase[RulesPreparationTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -126,7 +126,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesTurnTitle]}"
+                                                        Text="{Binding Uppercase[RulesTurnTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -151,7 +151,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesDrawTitle]}"
+                                                        Text="{Binding Uppercase[RulesDrawTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -176,7 +176,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesDoublesTitle]}"
+                                                        Text="{Binding Uppercase[RulesDoublesTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -201,7 +201,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <StackPanel Grid.Column="1">
                                                     <TextBlock
-                                                        Text="{Binding [RulesScoringTitle]}"
+                                                        Text="{Binding Uppercase[RulesScoringTitle]}"
                                                         Style="{StaticResource MatchSection}"
                                                         FontSize="12" />
                                                     <TextBlock
@@ -219,7 +219,7 @@
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,4,8,4">
                         <Button
-                            Content="{Binding [BackButtonLabel]}"
+                            Content="{Binding Uppercase[BackButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="NavigateBack"
                             HorizontalAlignment="Left"

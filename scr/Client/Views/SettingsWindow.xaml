@@ -4,7 +4,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
     x:Class="DominoTrainGame.Views.SettingsWindow"
-    Title="{Binding [SettingsWindowTitle]}"
+    Title="{Binding WindowTitles[SettingsLabel]}"
     Width="1220"
     Height="880"
     MinWidth="960"
@@ -45,7 +45,7 @@
                             </Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="{Binding [GameTitle]}"
+                                    Text="{Binding Uppercase[GameTitle]}"
                                     Style="{StaticResource PixelText}"
                                     FontSize="16" />
                             </StackPanel>
@@ -57,7 +57,7 @@
                                 BorderThickness="2"
                                 Padding="12,9">
                                 <TextBlock
-                                    Text="{Binding [SettingsTitle]}"
+                                    Text="{Binding Uppercase[SettingsLabel]}"
                                     Style="{StaticResource PixelText}"
                                     FontSize="9" />
                             </Border>
@@ -96,14 +96,14 @@
                                     </Grid.RowDefinitions>
                                     <StackPanel>
                                         <TextBlock
-                                            Text="{Binding [SettingsTitle]}"
+                                            Text="{Binding Uppercase[SettingsLabel]}"
                                             Style="{StaticResource PixelText}"
                                             FontSize="24"
                                             Margin="0,2,0,0" />
                                     </StackPanel>
                                     <DockPanel Grid.Row="1" Margin="0,0,0,8">
                                         <TextBlock
-                                            Text="{Binding [AudioSectionLabel]}"
+                                            Text="{Binding Uppercase[AudioSectionLabel]}"
                                             Style="{StaticResource SectionLabel}"
                                             DockPanel.Dock="Left"
                                             Margin="0,0,18,0" />
@@ -140,7 +140,7 @@
                                                 <RowDefinition Height="18" />
                                             </Grid.RowDefinitions>
                                             <TextBlock
-                                                Text="{Binding [MusicVolumeLabel]}"
+                                                Text="{Binding Uppercase[MusicVolumeLabel]}"
                                                 Style="{StaticResource PixelText}"
                                                 VerticalAlignment="Center" />
                                             <Border
@@ -195,7 +195,7 @@
                                                 <RowDefinition Height="18" />
                                             </Grid.RowDefinitions>
                                             <TextBlock
-                                                Text="{Binding [SoundEffectsVolumeLabel]}"
+                                                Text="{Binding Uppercase[SoundEffectsVolumeLabel]}"
                                                 Style="{StaticResource PixelText}"
                                                 VerticalAlignment="Center" />
                                             <Border
@@ -225,7 +225,7 @@
                                     </Grid>
                                     <DockPanel Grid.Row="4" Margin="0,12,0,0">
                                         <TextBlock
-                                            Text="{Binding [LanguageSectionLabel]}"
+                                            Text="{Binding Uppercase[LanguageSectionLabel]}"
                                             Style="{StaticResource SectionLabel}"
                                             DockPanel.Dock="Left"
                                             Margin="0,0,18,0" />
@@ -253,7 +253,7 @@
                                                     BorderThickness="2"
                                                     Margin="0,0,14,0">
                                                     <TextBlock
-                                                        Text="{Binding [SpanishLanguageCode]}"
+                                                        Text="ES"
                                                         Style="{StaticResource PixelText}"
                                                         FontSize="10"
                                                         VerticalAlignment="Center"
@@ -285,7 +285,7 @@
                                                     BorderThickness="2"
                                                     Margin="0,0,14,0">
                                                     <TextBlock
-                                                        Text="{Binding [EnglishLanguageCode]}"
+                                                        Text="EN"
                                                         Style="{StaticResource PixelText}"
                                                         FontSize="10"
                                                         VerticalAlignment="Center"
@@ -307,7 +307,7 @@
                                     <Grid Grid.Row="6" Margin="0,26,0,0">
                                         <Grid VerticalAlignment="Bottom">
                                             <Button
-                                                Content="{Binding [BackButtonLabel]}"
+                                                Content="{Binding Uppercase[BackButtonLabel]}"
                                                 Style="{StaticResource PixelButton}"
                                                 HorizontalAlignment="Left"
                                                 Width="154"
@@ -315,7 +315,7 @@
                                                 IsCancel="True"
                                                 Click="CloseSettings" />
                                             <Button
-                                                Content="{Binding [SaveButtonLabel]}"
+                                                Content="{Binding Uppercase[SaveButtonLabel]}"
                                                 Style="{StaticResource PixelButton}"
                                                 HorizontalAlignment="Right"
                                                 Width="188"

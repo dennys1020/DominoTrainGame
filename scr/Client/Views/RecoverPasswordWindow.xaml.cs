@@ -100,7 +100,7 @@ public partial class RecoverPasswordWindow : Window
                 message = UiStrings.DatabaseErrorMessage;
                 break;
             default:
-                message = UiStrings.MessageRequiredFields;
+                message = UiStrings.RequiredFieldsMessage;
                 break;
         }
 

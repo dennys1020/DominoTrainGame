@@ -4,7 +4,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
     x:Class="DominoTrainGame.Views.ProfileWindow"
-    Title="{Binding [ProfileWindowTitle]}"
+    Title="{Binding WindowTitles[ProfileLabel]}"
     Width="1220"
     Height="880"
     MinWidth="960"
@@ -285,7 +285,7 @@
                             </Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="{Binding [GameTitle]}"
+                                    Text="{Binding Uppercase[GameTitle]}"
                                     Style="{StaticResource PixelText}"
                                     FontSize="16" />
                             </StackPanel>
@@ -298,7 +298,7 @@
                             BorderThickness="2"
                             Padding="12,9">
                             <TextBlock
-                                Text="{Binding [ProfileSectionTitle]}"
+                                Text="{Binding Uppercase[ProfileLabel]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="9" />
                         </Border>
@@ -484,7 +484,7 @@
                                         </Grid>
                                         <TextBlock
                                             Grid.Row="1"
-                                            Text="{Binding [BiographyLabel]}"
+                                            Text="{Binding Uppercase[BiographyLabel]}"
                                             Style="{StaticResource ProfileLabel}"
                                             FontSize="9"
                                             Margin="0,14,0,6" />
@@ -509,7 +509,7 @@
                                         </Grid.RowDefinitions>
                                         <DockPanel>
                                             <TextBlock
-                                                Text="{Binding [AvatarSectionLabel]}"
+                                                Text="{Binding Uppercase[AvatarSectionLabel]}"
                                                 Style="{StaticResource PixelText}"
                                                 FontSize="10"
                                                 VerticalAlignment="Center"
@@ -547,7 +547,7 @@
                                             </Grid.RowDefinitions>
                                             <DockPanel>
                                                 <TextBlock
-                                                    Text="{Binding [ProfileStatsSectionLabel]}"
+                                                    Text="{Binding Uppercase[StatisticsLabel]}"
                                                     Style="{StaticResource PixelText}"
                                                     FontSize="10"
                                                     VerticalAlignment="Center"
@@ -560,7 +560,7 @@
                                             </DockPanel>
                                             <StackPanel Grid.Row="1" Margin="0,14,0,0">
                                                 <TextBlock
-                                                    Text="{Binding [GamesPlayedLabel]}"
+                                                    Text="{Binding Uppercase[GamesPlayedLabel]}"
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
@@ -568,7 +568,7 @@
                                                     FontSize="18"
                                                     Margin="0,8,0,20" />
                                                 <TextBlock
-                                                    Text="{Binding [WinsLabel]}"
+                                                    Text="{Binding Uppercase[WinsLabel]}"
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
@@ -576,7 +576,7 @@
                                                     FontSize="18"
                                                     Margin="0,8,0,20" />
                                                 <TextBlock
-                                                    Text="{Binding [MemberSinceLabel]}"
+                                                    Text="{Binding Uppercase[MemberSinceLabel]}"
                                                     Style="{StaticResource ProfileLabel}"
                                                     FontSize="9" />
                                                 <TextBlock
@@ -592,17 +592,17 @@
                                                 </Grid.ColumnDefinitions>
                                                 <Button
                                                     Grid.ColumnSpan="3"
-                                                    Content="{Binding [EditButtonLabel]}"
+                                                    Content="{Binding Uppercase[EditButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
                                                     Click="OnEditButtonClicked" />
                                                 <Button
-                                                    Content="{Binding [CancelButtonLabel]}"
+                                                    Content="{Binding Uppercase[CancelButtonLabel]}"
                                                     Style="{StaticResource ProfileButton}"
                                                     Visibility="Collapsed"
                                                     Click="OnCancelButtonClicked" />
                                                 <Button
                                                     Grid.Column="2"
-                                                    Content="{Binding [SaveButtonLabel]}"
+                                                    Content="{Binding Uppercase[SaveButtonLabel]}"
                                                     Style="{StaticResource ProfilePrimaryButton}"
                                                     Visibility="Collapsed"
                                                     Click="OnSaveButtonClicked" />

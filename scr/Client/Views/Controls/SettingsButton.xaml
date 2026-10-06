@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}">
-    <Button Style="{StaticResource MenuIconButton}" Click="OpenSettings" ToolTip="{Binding [OpenSettingsButtonLabel]}">
+    <Button Style="{StaticResource MenuIconButton}" Click="OpenSettings" ToolTip="{Binding Uppercase[SettingsLabel]}">
         <Image Source="{StaticResource MenuSettingsImage}" Width="36" Height="36" />
     </Button>
 </UserControl>
