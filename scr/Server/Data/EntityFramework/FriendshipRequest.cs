@@ -11,6 +11,7 @@ public partial class FriendshipRequest
     public int AddresseePlayerId { get; set; }
     public int StatusId { get; set; }
     public System.DateTime RequestedAt { get; set; }
+
     public virtual Player AddresseePlayer { get; set; }
     public virtual Player RequesterPlayer { get; set; }
     public virtual StatusFriendshipRequest StatusFriendshipRequest { get; set; }

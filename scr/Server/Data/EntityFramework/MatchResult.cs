@@ -10,6 +10,7 @@ public partial class MatchResult
     public int MatchId { get; set; }
     public int FinalRank { get; set; }
     public int TotalScore { get; set; }
+
     public virtual Match Match { get; set; }
     public virtual Player Player { get; set; }
 }

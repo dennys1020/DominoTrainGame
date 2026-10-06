@@ -9,7 +9,8 @@ namespace DominoTrainGame;
 
 public partial class DominoGameDBEntities : DbContext
 {
-    public DominoGameDBEntities() : base("name=DominoGameDBEntities")
+    public DominoGameDBEntities()
+        : base("name=DominoGameDBEntities")
     {
     }
 
@@ -22,6 +23,7 @@ public partial class DominoGameDBEntities : DbContext
     public virtual DbSet<Player> Players { get; set; }
     public virtual DbSet<Report> Reports { get; set; }
     public virtual DbSet<StatusFriendshipRequest> StatusFriendshipRequests { get; set; }
+    public virtual DbSet<Account> Accounts { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)
     {

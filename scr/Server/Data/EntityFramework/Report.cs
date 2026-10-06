@@ -9,5 +9,6 @@ public partial class Report
     public int ReportId { get; set; }
     public int PlayerId { get; set; }
     public string Reason { get; set; }
+
     public virtual Player Player { get; set; }
 }

@@ -14,5 +14,6 @@ public partial class Ban
     public string BanType { get; set; }
     public System.DateTime StartedAt { get; set; }
     public Nullable<System.DateTime> ExpiresAt { get; set; }
+
     public virtual Player Player { get; set; }
 }

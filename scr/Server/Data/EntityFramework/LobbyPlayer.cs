@@ -9,6 +9,7 @@ public partial class LobbyPlayer
     public int PlayerId { get; set; }
     public int LobbyId { get; set; }
     public byte IsReady { get; set; }
+
     public virtual Lobby Lobby { get; set; }
     public virtual Player Player { get; set; }
 }
