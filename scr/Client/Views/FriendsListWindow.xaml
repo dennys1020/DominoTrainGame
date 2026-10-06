@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [FriendsListWindowTitle]}"
+    Title="{Binding WindowTitles[FriendsLabel]}"
     Width="1200"
     Height="880"
     MinWidth="960"
@@ -28,7 +28,7 @@
                 x:Name="FriendsTab"
                 Grid.Column="0"
                 GroupName="Tabs"
-                Content="{Binding [TabFriends]}"
+                Content="{Binding [FriendsLabel]}"
                 Style="{StaticResource TabButtonStyle}"
                 IsChecked="True"
                 Checked="OnTabChecked" />
@@ -36,7 +36,7 @@
                 x:Name="RequestsTab"
                 Grid.Column="1"
                 GroupName="Tabs"
-                Content="{Binding [TabRequests]}"
+                Content="{Binding [RequestsLabel]}"
                 Style="{StaticResource TabButtonStyle}"
                 Checked="OnTabChecked" />
         </Grid>
@@ -91,7 +91,7 @@
                                                 Height="14"
                                                 Margin="0,0,6,0" />
                                             <TextBlock
-                                                Text="{Binding DataContext.[ButtonRemove],
+                                                Text="{Binding DataContext.[RemoveButtonLabel],
                                                     RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </StackPanel>
                                     </Button>
@@ -147,7 +147,7 @@
                     </Grid>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                         <Button
-                            Content="{Binding [ButtonAdd]}"
+                            Content="{Binding [AddButtonLabel]}"
                             Style="{StaticResource PixelButton}"
                             Click="OnAddFriendClicked" />
                     </StackPanel>

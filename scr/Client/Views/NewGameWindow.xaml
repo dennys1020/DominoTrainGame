@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     x:Class="DominoTrainGame.Views.NewGameWindow"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [NewGameWindowTitle]}"
+    Title="{Binding WindowTitles[NewGameTitle]}"
     Style="{StaticResource MatchWindow}"
     WindowStartupLocation="CenterScreen">
     <Grid>
@@ -26,7 +26,7 @@
                                 Height="42"
                                 Margin="0,0,16,0" />
                             <TextBlock
-                                Text="{Binding [GameTitle]}"
+                                Text="{Binding Uppercase[GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
@@ -42,7 +42,7 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding [NewGameTitle]}" Style="{StaticResource MatchHeading}" />
+                                    <TextBlock Text="{Binding Uppercase[NewGameTitle]}" Style="{StaticResource MatchHeading}" />
                                     <TextBlock
                                         Text="{Binding [NewGameDescription]}"
                                         Style="{StaticResource MatchBody}"
@@ -69,7 +69,7 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top" />
                                             <TextBlock
-                                                Text="{Binding [CreateGameTitle]}"
+                                                Text="{Binding Uppercase[CreateGameTitle]}"
                                                 Style="{StaticResource MatchHeading}"
                                                 Grid.Row="1"
                                                 FontSize="19" />
@@ -79,7 +79,7 @@
                                                 Grid.Row="2"
                                                 Margin="0,8,0,20" />
                                             <Button
-                                                Content="{Binding [CreateGameButtonLabel]}"
+                                                Content="{Binding Uppercase[CreateGameTitle]}"
                                                 Style="{StaticResource MatchButton}"
                                                 Click="OpenRoom"
                                                 Grid.Row="3"
@@ -109,7 +109,7 @@
                                                     Margin="14,0,0,0" />
                                             </StackPanel>
                                             <TextBlock
-                                                Text="{Binding [JoinGameTitle]}"
+                                                Text="{Binding Uppercase[JoinGameTitle]}"
                                                 Style="{StaticResource MatchHeading}"
                                                 Grid.Row="1"
                                                 FontSize="19" />
@@ -119,7 +119,7 @@
                                                 Grid.Row="2"
                                                 Margin="0,8,0,20" />
                                             <Button
-                                                Content="{Binding [JoinGameButtonLabel]}"
+                                                Content="{Binding Uppercase[JoinGameTitle]}"
                                                 Style="{StaticResource MatchButton}"
                                                 Click="OpenJoinGame"
                                                 Grid.Row="3"
@@ -132,13 +132,13 @@
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,4,8,4">
                         <Button
-                            Content="{Binding [BackButtonLabel]}"
+                            Content="{Binding Uppercase[BackButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="NavigateBack"
                             HorizontalAlignment="Left"
                             MinWidth="170" />
                         <Button
-                            Content="{Binding [GameRulesButtonLabel]}"
+                            Content="{Binding Uppercase[GameRulesTitle]}"
                             Style="{StaticResource MatchButton}"
                             Click="OpenRules"
                             HorizontalAlignment="Right"

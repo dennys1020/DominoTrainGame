@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:DominoTrainGame.Views.Controls"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
     x:Class="DominoTrainGame.Views.SignUpWindow"
-    Title="{Binding [RegisterTittle]}"
+    Title="{Binding WindowTitles[RegistrationTitle]}"
     Width="1220"
     Height="880"
     MinWidth="960"
@@ -180,7 +180,7 @@
                             </Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="{Binding [GameTitle]}"
+                                    Text="{Binding Uppercase[GameTitle]}"
                                     Style="{StaticResource PixelTextLight}"
                                     FontSize="16" />
                             </StackPanel>
@@ -193,7 +193,7 @@
                                 BorderThickness="2"
                                 Padding="12,9">
                                 <TextBlock
-                                    Text="{Binding [RegisterSectionTitle]}"
+                                    Text="{Binding Uppercase[RegistrationTitle]}"
                                     Style="{StaticResource PixelTextDark}"
                                     FontSize="9" />
                             </Border>
@@ -282,11 +282,11 @@
                                         </Canvas>
                                         <StackPanel VerticalAlignment="Top" Margin="24,28,24,0">
                                             <TextBlock
-                                                Text="{Binding [NewPassagerSubtitule]}"
+                                                Text="{Binding Uppercase[NewPassengerSubtitle]}"
                                                 Style="{StaticResource PixelTextDark}"
                                                 FontSize="9" />
                                             <TextBlock
-                                                Text="{Binding [JoinTableTitle]}"
+                                                Text="{Binding Uppercase[JoinTableTitle]}"
                                                 Style="{StaticResource PixelTextLight}"
                                                 TextWrapping="Wrap"
                                                 FontSize="16"
@@ -312,14 +312,14 @@
                                     </Grid.RowDefinitions>
                                     <StackPanel>
                                         <TextBlock
-                                            Text="{Binding [RegisterSectionTitle]}"
+                                            Text="{Binding Uppercase[RegistrationTitle]}"
                                             Style="{StaticResource PixelTextLight}"
                                             FontSize="24"
                                             Margin="0,2,0,0" />
                                     </StackPanel>
                                     <DockPanel Grid.Row="1" Margin="0,0,0,8">
                                         <TextBlock
-                                            Text="{Binding [CredentialSectionLabel]}"
+                                            Text="{Binding Uppercase[CredentialSectionLabel]}"
                                             Style="{StaticResource PixelTextDark}"
                                             FontSize="10"
                                             VerticalAlignment="Center"
@@ -332,7 +332,7 @@
                                     </DockPanel>
                                     <StackPanel Grid.Row="2" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
                                         <TextBlock
-                                            Text="{Binding [EmailAdressLabel]}"
+                                            Text="{Binding Uppercase[EmailAddressLabel]}"
                                             Style="{StaticResource NightLabel}"
                                             FontSize="10"
                                             Margin="0,0,0,8" />
@@ -340,7 +340,7 @@
                                     </StackPanel>
                                     <StackPanel Grid.Row="3" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
                                         <TextBlock
-                                            Text="{Binding [UsernameLabel]}"
+                                            Text="{Binding Uppercase[UsernameLabel]}"
                                             Style="{StaticResource NightLabel}"
                                             FontSize="10"
                                             Margin="0,0,0,8" />
@@ -348,7 +348,7 @@
                                     </StackPanel>
                                     <StackPanel Grid.Row="4" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
                                         <TextBlock
-                                            Text="{Binding [PasswordLabel]}"
+                                            Text="{Binding Uppercase[PasswordLabel]}"
                                             Style="{StaticResource NightLabel}"
                                             FontSize="10"
                                             Margin="0,0,0,8" />
@@ -359,7 +359,7 @@
                                     <StackPanel Grid.Row="5" Margin="0,26,0,0" VerticalAlignment="Bottom">
                                         <Grid>
                                             <Button
-                                                Content="{Binding [SignUpBottonLabel]}"
+                                                Content="{Binding Uppercase[SignUpButtonLabel]}"
                                                 Style="{StaticResource NightPrimaryButton}"
                                                 HorizontalAlignment="Right"
                                                 Width="188"
@@ -378,7 +378,7 @@
                                                 Click="OnNavigateToLoginClicked"
                                                 Foreground="{StaticResource NightAccent}"
                                                 TextDecorations="None">
-                                                <Run Text="{Binding [GoToLoginLabel], Mode=OneWay}" />
+                                                <Run Text="{Binding [LoginLabel], Mode=OneWay}" />
                                             </Hyperlink>
                                         </TextBlock>
                                     </StackPanel>

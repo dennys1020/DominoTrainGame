@@ -81,8 +81,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Client\Navigation\WindowNavigation.cs" />
+    <Compile Include="Client\Converters\LocalizedTextConverter.cs" />
     <Compile Include="Client\Resources\SettingsDefaults.cs" />
     <Compile Include="Client\ViewModels\LeaderboardViewModel.cs" />
+    <Compile Include="Client\ViewModels\FormattedLocalizationViewModel.cs" />
     <Compile Include="Client\Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
@@ -357,11 +359,11 @@
     <Compile Include="Server\Data\SqlServerConfiguration.cs" />
     <None Include="Server\Configuration\Database.example.config" />
     <None Include="Server\Configuration\Database.config">
-      <Link>Database.config</Link>
+      <TargetPath>Database.config</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Server\Configuration\Secrets.config" Condition="Exists('Server\Configuration\Secrets.config')">
-      <Link>Secrets.config</Link>
+      <TargetPath>Secrets.config</TargetPath>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

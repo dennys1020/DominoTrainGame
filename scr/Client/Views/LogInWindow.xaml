@@ -5,7 +5,7 @@
     xmlns:controls="clr-namespace:DominoTrainGame.Views.Controls"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
     x:Class="DominoTrainGame.Views.LogInWindow"
-    Title="{Binding [LoginWindowTitle]}"
+    Title="{Binding WindowTitles[LoginLabel]}"
     Width="1220"
     Height="880"
     MinWidth="960"
@@ -43,7 +43,7 @@
                             </Grid>
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock
-                                    Text="{Binding [GameTitle]}"
+                                    Text="{Binding Uppercase[GameTitle]}"
                                     Style="{StaticResource PixelTextLight}"
                                     FontSize="16" />
                             </StackPanel>
@@ -56,7 +56,7 @@
                                 BorderThickness="2"
                                 Padding="12,9">
                                 <TextBlock
-                                    Text="{Binding [LoginSectionTitle]}"
+                                    Text="{Binding Uppercase[LoginLabel]}"
                                     Style="{StaticResource PixelTextDark}"
                                     FontSize="9" />
                             </Border>
@@ -145,11 +145,11 @@
                                         </Canvas>
                                         <StackPanel VerticalAlignment="Top" Margin="24,28,24,0">
                                             <TextBlock
-                                                Text="{Binding [LoginSidebarLabel]}"
+                                                Text="{Binding Uppercase[LoginLabel]}"
                                                 Style="{StaticResource PixelTextDark}"
                                                 FontSize="9" />
                                             <TextBlock
-                                                Text="{Binding [LoginSidebarTitle]}"
+                                                Text="{Binding Uppercase[WelcomeBackTitle]}"
                                                 Style="{StaticResource PixelTextLight}"
                                                 TextWrapping="Wrap"
                                                 FontSize="16"
@@ -175,13 +175,13 @@
                                     </Grid.RowDefinitions>
                                     <Grid>
                                         <TextBlock
-                                            Text="{Binding [LoginSectionTitle]}"
+                                            Text="{Binding Uppercase[LoginLabel]}"
                                             Style="{StaticResource PixelTextLight}"
                                             FontSize="24"
                                             HorizontalAlignment="Left"
                                             Margin="0,2,0,0" />
                                         <Button
-                                            Content="{Binding [GuestButtonLabel]}"
+                                            Content="{Binding Uppercase[GuestButtonLabel]}"
                                             Style="{StaticResource PixelButton}"
                                             FontSize="9"
                                             Height="36"
@@ -191,7 +191,7 @@
                                     </Grid>
                                     <DockPanel Grid.Row="1" Margin="0,0,0,8">
                                         <TextBlock
-                                            Text="{Binding [CredentialSectionLabel]}"
+                                            Text="{Binding Uppercase[CredentialSectionLabel]}"
                                             Style="{StaticResource PixelTextDark}"
                                             FontSize="10"
                                             VerticalAlignment="Center"
@@ -204,7 +204,7 @@
                                     </DockPanel>
                                     <StackPanel Grid.Row="2" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
                                         <TextBlock
-                                            Text="{Binding [LoginIdentifierLabel]}"
+                                            Text="{Binding Uppercase[EmailOrUsernameLabel]}"
                                             Style="{StaticResource NightLabel}"
                                             FontSize="10"
                                             Margin="0,0,0,8" />
@@ -212,7 +212,7 @@
                                     </StackPanel>
                                     <StackPanel Grid.Row="3" Width="560" HorizontalAlignment="Left" Margin="0,6,0,0">
                                         <TextBlock
-                                            Text="{Binding [PasswordLabel]}"
+                                            Text="{Binding Uppercase[PasswordLabel]}"
                                             Style="{StaticResource NightLabel}"
                                             FontSize="10"
                                             Margin="0,0,0,8" />
@@ -241,12 +241,12 @@
                                                     VerticalAlignment="Center"
                                                     Margin="0,0,10,0" />
                                                 <Button
-                                                    Content="{Binding [CreateAccountLinkLabel]}"
+                                                    Content="{Binding [SignUpButtonLabel]}"
                                                     Style="{StaticResource NightLinkButton}"
                                                     Click="OnNavigateToSignUpClicked" />
                                             </StackPanel>
                                             <Button
-                                                Content="{Binding [LoginButtonLabel]}"
+                                                Content="{Binding Uppercase[LoginLabel]}"
                                                 Style="{StaticResource NightPrimaryButton}"
                                                 FontSize="10"
                                                 HorizontalAlignment="Right"

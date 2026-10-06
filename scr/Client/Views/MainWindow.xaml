@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     xmlns:controls="clr-namespace:DominoTrainGame.Views.Controls"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [MainWindowTitle]}"
+    Title="{Binding [GameTitle]}"
     Width="1220"
     Height="800"
     MinWidth="960"
@@ -184,7 +184,7 @@
                         Style="{StaticResource MenuIconButton}"
                         Margin="0,0,0,14"
                         Click="OpenProfile"
-                        ToolTip="{Binding [OpenProfileButtonLabel]}">
+                        ToolTip="{Binding Uppercase[ProfileLabel]}">
                         <Image
                             Width="41"
                             Height="43"
@@ -196,14 +196,14 @@
                         Style="{StaticResource MenuIconButton}"
                         Margin="0,0,0,14"
                         Click="OpenFriendsList"
-                        ToolTip="{Binding [OpenFriendsListLabel]}">
+                        ToolTip="{Binding Uppercase[FriendsLabel]}">
                         <Image Width="36" Height="36" Source="{StaticResource MenuFriendsImage}" />
                     </Button>
                     <controls:SettingsButton />
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,32,32,0">
                     <Button
-                        Content="{Binding [GameRulesButtonLabel]}"
+                        Content="{Binding Uppercase[GameRulesTitle]}"
                         Click="OpenRules"
                         Style="{StaticResource PixelButton}"
                         FontSize="9"
@@ -211,14 +211,14 @@
                         Height="50"
                         Margin="0,0,0,12" />
                     <Button
-                        Content="{Binding [ViewScoresButtonLabel]}"
+                        Content="{Binding Uppercase[MatchResultsTitle]}"
                         Click="OpenResults"
                         Style="{StaticResource PixelButton}"
                         FontSize="9"
-                        Width="222"
+                        Width="250"
                         Height="50" />
                     <Button
-                        Content="{Binding [LeaderboardButtonLabel]}"
+                        Content="{Binding Uppercase[LeaderboardTitle]}"
                         Click="OpenLeaderboard"
                         Style="{StaticResource PixelButton}"
                         FontSize="9"
@@ -229,13 +229,13 @@
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,100,0,0">
                     <Grid Height="66">
                         <TextBlock
-                            Text="{Binding [GameTitle]}"
+                            Text="{Binding Uppercase[GameTitle]}"
                             Margin="5,5,0,0"
                             Style="{StaticResource PixelText}"
                             FontSize="48"
                             Foreground="{StaticResource Mint}"
                             IsHitTestVisible="False" />
-                        <TextBlock Text="{Binding [GameTitle]}" Style="{StaticResource PixelText}" FontSize="48" />
+                        <TextBlock Text="{Binding Uppercase[GameTitle]}" Style="{StaticResource PixelText}" FontSize="48" />
                     </Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,38">
                         <Rectangle Width="40" Height="6" Fill="{StaticResource Mint}" Margin="0,0,8,0" />
@@ -243,7 +243,7 @@
                         <Rectangle Width="40" Height="6" Fill="{StaticResource Aqua}" />
                     </StackPanel>
                     <Button
-                        Content="{Binding [ButtonPlay]}"
+                        Content="{Binding Uppercase[PlayButtonLabel]}"
                         Click="OpenNewGame"
                         Style="{StaticResource PixelButton}"
                         Background="{StaticResource Aqua}"
@@ -252,7 +252,7 @@
                         Height="76"
                         Margin="0,0,0,16" />
                     <Button
-                        Content="{Binding [ButtonExit]}"
+                        Content="{Binding Uppercase[LogOutButtonLabel]}"
                         Style="{StaticResource PixelButton}"
                         Background="{StaticResource Mist}"
                         FontSize="13"

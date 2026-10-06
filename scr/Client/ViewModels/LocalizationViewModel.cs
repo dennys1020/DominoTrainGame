@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Globalization;
+using System.Windows.Controls;
+using DominoTrainGame.Converters;
 using DominoTrainGame.Resources;
 using DominoTrainGame.Resources.Localization;
 
@@ -20,6 +22,18 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
     {
         _culture = CultureInfo.GetCultureInfo(SettingsDefaults.DefaultLanguageCode);
         UiStrings.Culture = _culture;
+        Uppercase = new FormattedLocalizationViewModel(this, new LocalizedTextConverter
+        {
+            Casing = CharacterCasing.Upper
+        });
+        Lowercase = new FormattedLocalizationViewModel(this, new LocalizedTextConverter
+        {
+            Casing = CharacterCasing.Lower
+        });
+        WindowTitles = new FormattedLocalizationViewModel(this, new LocalizedTextConverter
+        {
+            IncludeGameTitle = true
+        });
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -30,6 +44,29 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
         {
             return _instance;
         }
+    }
+
+    public CultureInfo Culture
+    {
+        get
+        {
+            return _culture;
+        }
+    }
+
+    public FormattedLocalizationViewModel Uppercase
+    {
+        get;
+    }
+
+    public FormattedLocalizationViewModel Lowercase
+    {
+        get;
+    }
+
+    public FormattedLocalizationViewModel WindowTitles
+    {
+        get;
     }
 
     public string this[string resourceKey]

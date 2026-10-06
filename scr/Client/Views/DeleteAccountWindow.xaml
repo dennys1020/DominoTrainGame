@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [DeleteAccountWindowTitle]}"
+    Title="{Binding WindowTitles[DeleteAccountTitle]}"
     Width="1220"
     Height="880"
     MinWidth="960"
@@ -120,13 +120,13 @@
                                 <Image Source="/Client/Resources/Images/MiniDominoTile.png" Stretch="Fill" />
                             </Grid>
                             <TextBlock
-                                Text="{Binding [GameTitle]}"
+                                Text="{Binding Uppercase[GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
                         </StackPanel>
                         <Button
-                            Content="{Binding [OpenSettingsButtonLabel]}"
+                            Content="{Binding Uppercase[SettingsLabel]}"
                             Style="{StaticResource PixelButton}"
                             Height="46"
                             HorizontalAlignment="Right"
@@ -163,7 +163,7 @@
                                     </Grid.RowDefinitions>
                                     <StackPanel>
                                         <TextBlock
-                                            Text="{Binding [DeleteAccountTitle]}"
+                                            Text="{Binding Uppercase[DeleteAccountTitle]}"
                                             Style="{StaticResource PixelText}"
                                             FontSize="23" />
                                         <TextBlock
@@ -180,7 +180,7 @@
                                         Margin="0,0,0,24">
                                         <StackPanel>
                                             <TextBlock
-                                                Text="{Binding [DeleteAccountWarningTitle]}"
+                                                Text="{Binding Uppercase[DeleteAccountWarningTitle]}"
                                                 Style="{StaticResource SectionLabel}"
                                                 Margin="0,0,0,14" />
                                             <TextBlock
@@ -191,7 +191,7 @@
                                     </Border>
                                     <StackPanel Grid.Row="2">
                                         <TextBlock
-                                            Text="{Binding [CurrentPasswordLabel]}"
+                                            Text="{Binding Uppercase[CurrentPasswordLabel]}"
                                             Style="{StaticResource SectionLabel}"
                                             Margin="0,0,0,10" />
                                         <PasswordBox
@@ -212,14 +212,14 @@
                                         Margin="0,8,0,24" />
                                     <Grid Grid.Row="4">
                                         <Button
-                                            Content="{Binding [CancelButtonLabel]}"
+                                            Content="{Binding Uppercase[CancelButtonLabel]}"
                                             Style="{StaticResource PixelButton}"
                                             Width="170"
                                             HorizontalAlignment="Left"
                                             IsCancel="True"
                                             Click="GoBack" />
                                         <Button
-                                            Content="{Binding [DeleteAccountTitle]}"
+                                            Content="{Binding Uppercase[DeleteAccountTitle]}"
                                             Style="{StaticResource PixelButton}"
                                             Background="{StaticResource Ink}"
                                             Foreground="{StaticResource Glacier}"

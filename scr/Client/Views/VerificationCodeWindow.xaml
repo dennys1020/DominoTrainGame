@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [VerificationTitle]}"
+    Title="{Binding WindowTitles[VerificationTitle]}"
     Width="520"
     SizeToContent="Height"
     ResizeMode="NoResize"
@@ -90,13 +90,13 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="0"
-                Content="{Binding [CancelButtonLabel]}"
+                Content="{Binding Uppercase[CancelButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 Click="OnCancelButtonClicked"
                 Margin="0,10,0,9" />
             <Button
                 Grid.Column="2"
-                Content="{Binding [ButtonVerify]}"
+                Content="{Binding [VerifyButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 IsDefault="True"
                 Click="OnVerifyButtonClicked"

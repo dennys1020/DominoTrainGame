@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:DominoTrainGame.ViewModels"
     x:Class="DominoTrainGame.Views.JoinGameWindow"
     DataContext="{x:Static viewModels:LocalizationViewModel.Instance}"
-    Title="{Binding [JoinGameWindowTitle]}"
+    Title="{Binding WindowTitles[InvitationTitle]}"
     Style="{StaticResource MatchWindow}"
     WindowStartupLocation="CenterScreen">
     <Grid>
@@ -26,7 +26,7 @@
                                 Height="42"
                                 Margin="0,0,16,0" />
                             <TextBlock
-                                Text="{Binding [GameTitle]}"
+                                Text="{Binding Uppercase[GameTitle]}"
                                 Style="{StaticResource PixelText}"
                                 FontSize="16"
                                 VerticalAlignment="Center" />
@@ -54,7 +54,7 @@
                                             HorizontalAlignment="Left"
                                             Margin="0,0,0,36" />
                                         <TextBlock
-                                            Text="{Binding [JoinSidebarTitle]}"
+                                            Text="{Binding Uppercase[JoinSidebarTitle]}"
                                             Style="{StaticResource MatchHeading}"
                                             FontSize="19" />
                                     </StackPanel>
@@ -67,7 +67,7 @@
                                     </Grid.RowDefinitions>
                                     <StackPanel>
                                         <TextBlock
-                                            Text="{Binding [InvitationTitle]}"
+                                            Text="{Binding Uppercase[InvitationTitle]}"
                                             Style="{StaticResource MatchHeading}" />
                                         <TextBlock
                                             Text="{Binding [InvitationDescription]}"
@@ -76,16 +76,16 @@
                                     </StackPanel>
                                     <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="0,26,0,26">
                                         <TextBlock
-                                            Text="{Binding [InvitationCodeLabel]}"
+                                            Text="{Binding Uppercase[RoomCodeLabel]}"
                                             Style="{StaticResource MatchSection}" />
                                         <TextBox
                                             Style="{StaticResource MatchInput}"
                                             MinHeight="82"
-                                            AutomationProperties.Name="{Binding [InvitationCodeLabel]}"
+                                            AutomationProperties.Name="{Binding Uppercase[RoomCodeLabel]}"
                                             ToolTip="{Binding [InvitationCodeHint]}" />
                                     </StackPanel>
                                     <Button
-                                        Content="{Binding [JoinRoomButtonLabel]}"
+                                        Content="{Binding Uppercase[JoinRoomButtonLabel]}"
                                         Style="{StaticResource MatchButton}"
                                         Click="OpenRoom"
                                         Grid.Row="2"
@@ -96,13 +96,13 @@
                     </Grid>
                     <Grid Grid.Row="2" Margin="0,4,8,4">
                         <Button
-                            Content="{Binding [BackButtonLabel]}"
+                            Content="{Binding Uppercase[BackButtonLabel]}"
                             Style="{StaticResource MatchButton}"
                             Click="NavigateBack"
                             HorizontalAlignment="Left"
                             MinWidth="170" />
                         <Button
-                            Content="{Binding [GameRulesButtonLabel]}"
+                            Content="{Binding Uppercase[GameRulesTitle]}"
                             Style="{StaticResource MatchButton}"
                             Click="OpenRules"
                             HorizontalAlignment="Right"
