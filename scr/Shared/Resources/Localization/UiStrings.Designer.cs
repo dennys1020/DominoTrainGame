@@ -34,7 +34,7 @@ public class UiStrings
             if (object.ReferenceEquals(_resourceManager, null))
             {
                 global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager(
-                    "DominoTrainGame.Shared.Resources.Localization.UiStrings",
+                    "DominoTrainGame.Resources.Localization.UiStrings",
                     typeof(UiStrings).Assembly
                 );
                 _resourceManager = temp;

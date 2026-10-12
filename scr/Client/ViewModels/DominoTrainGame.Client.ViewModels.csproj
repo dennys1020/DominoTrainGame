@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
+    <ProjectGuid>{53DCC3E4-4F0A-50F3-A7B9-6304928909A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DominoTrainGame</RootNamespace>
+    <AssemblyName>DominoTrainGame.Client.ViewModels</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.3.4.0\lib\net462\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net.Ext.Trace">
+      <HintPath>..\..\..\packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Converters\LocalizedTextConverter.cs" />
+    <Compile Include="Resources\SettingsDefaults.cs" />
+    <Compile Include="LeaderboardViewModel.cs" />
+    <Compile Include="FormattedLocalizationViewModel.cs" />
+    <Compile Include="LocalizationViewModel.cs" />
+    <Compile Include="MatchResultsViewModel.cs" />
+    <Compile Include="MatchRoundViewModel.cs" />
+    <Compile Include="PlayerMatchResultViewModel.cs" />
+    <Compile Include="RoundScoreViewModel.cs" />
+    <Compile Include="RoomViewModel.cs" />
+    <Compile Include="RoomPlayerViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
+      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
+      <Name>DominoTrainGame.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Commands\AsyncCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Common\ObservableViewModel.cs" />
+    <Compile Include="Common\ScreenViewModel.cs" />
+    <Compile Include="FriendsListViewModel.cs" />
+    <Compile Include="LoginViewModel.cs" />
+    <Compile Include="Navigation\IWindowService.cs" />
+    <Compile Include="NavigationViewModel.cs" />
+    <Compile Include="ProfileViewModel.cs" />
+    <Compile Include="RecoverPasswordViewModel.cs" />
+    <Compile Include="RoomScreenViewModel.cs" />
+    <Compile Include="SignUpViewModel.cs" />
+    <Compile Include="VerificationCodeViewModel.cs" />
+  </ItemGroup>
+</Project>

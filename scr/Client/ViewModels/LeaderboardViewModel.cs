@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using log4net.Ext.Trace;
 using DominoTrainGame.Models;
-using DominoTrainGame.Repository;
+using DominoTrainGame.Contracts;
 using DominoTrainGame.Resources.Localization;
 #nullable enable
 
 namespace DominoTrainGame.ViewModels;
 
-public sealed class LeaderboardViewModel : INotifyPropertyChanged
+public sealed class LeaderboardViewModel : INotifyPropertyChanged, IDisposable
 {
     private static readonly ITraceLog _logger;
 
-    private readonly LeaderboardRepository _repository = new LeaderboardRepository();
+    private readonly IGameServices _services;
+    private readonly CancellationTokenSource _loadCancellation = new CancellationTokenSource();
     private string _playerFilter = string.Empty;
     private bool _hasLoadError;
 
@@ -25,10 +26,27 @@ public sealed class LeaderboardViewModel : INotifyPropertyChanged
         _logger = TraceLogManager.GetLogger(typeof(LeaderboardViewModel));
     }
 
-    public LeaderboardViewModel()
+    public LeaderboardViewModel(IGameServices services)
     {
+        _services = services;
+        RefreshCommand = new AsyncCommand(LoadAsync);
         Entries = CreateEntriesView(new List<LeaderboardEntry>());
         PropertyChangedEventManager.AddHandler(Localization, OnLanguageChanged, string.Empty);
+    }
+
+    public AsyncCommand RefreshCommand { get; }
+
+    public async Task LoadAsync()
+    {
+        CancellationToken token = _loadCancellation.Token;
+        try { await LoadAsync(token); }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+    }
+
+    public void Dispose()
+    {
+        _loadCancellation.Cancel();
+        _loadCancellation.Dispose();
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -113,7 +131,7 @@ public sealed class LeaderboardViewModel : INotifyPropertyChanged
 
         try
         {
-            List<LeaderboardEntry> entries = await _repository.GetEntriesAsync(cancellationToken);
+            List<LeaderboardEntry> entries = await _services.GetEntriesAsync(cancellationToken);
             Entries = CreateEntriesView(entries);
         }
         catch (DatabaseOperationException exception)
