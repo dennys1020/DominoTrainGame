@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <LangVersion>10.0</LangVersion>
+    <ProjectGuid>{156578C8-A897-5ACB-9F85-44015B672575}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>DominoTrainGame</RootNamespace>
+    <AssemblyName>DominoTrainGame.Server.Bootstrapper</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <Deterministic>true</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ServerComposition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Application\DominoTrainGame.Server.Application.csproj">
+      <Project>{AA6EACA4-4F78-5A4F-9CFF-36D1FBE14B84}</Project>
+      <Name>DominoTrainGame.Server.Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\DominoTrainGame.Server.Infrastructure.csproj">
+      <Project>{106280D3-8494-5C6C-8DAC-B11A78CA5879}</Project>
+      <Name>DominoTrainGame.Server.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
+      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
+      <Name>DominoTrainGame.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="..\Configuration\Database.config">
+      <Link>Configuration\Database.config</Link>
+      <TargetPath>Database.config</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Configuration\Secrets.config" Condition="Exists('..\Configuration\Secrets.config')">
+      <Link>Configuration\Secrets.config</Link>
+      <TargetPath>Secrets.config</TargetPath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Configuration\Database.example.config" />
+  </ItemGroup>
+  <Target Name="InitializeLocalDatabaseConfig" BeforeTargets="PrepareForBuild">
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\Configuration\Database.example.config" DestinationFiles="$(MSBuildProjectDirectory)\..\Configuration\Database.config" Condition="!Exists('..\Configuration\Database.config')" />
+  </Target>
+</Project>

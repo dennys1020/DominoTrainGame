@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Projects referenced across the two solutions must inherit Debug/Release from the caller. -->
+    <ShouldUnsetParentConfigurationAndPlatform>false</ShouldUnsetParentConfigurationAndPlatform>
+  </PropertyGroup>
+</Project>

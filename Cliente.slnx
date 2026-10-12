@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="scr/Client/Presentation/DominoTrainGame.Client.csproj" Id="b52fb729-8b42-5670-bb76-27e1a2c5b0eb" />
+  <Project Path="scr/Client/ViewModels/DominoTrainGame.Client.ViewModels.csproj" Id="53dcc3e4-4f0a-50f3-a7b9-6304928909a8" />
+  <Project Path="scr/Client/Models/DominoTrainGame.Client.Models.csproj" Id="db2f91b1-d84d-5551-8086-f92d9ec281f4" />
+  <Project Path="scr/Shared/DominoTrainGame.Contracts.csproj" Id="101cf13f-d241-56d5-9f99-cf8b1977650a" />
+</Solution>
