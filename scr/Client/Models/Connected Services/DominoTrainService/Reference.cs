@@ -12,6 +12,26 @@ namespace DominoTrainGame.Client.Models.DominoTrainService {
     using System.Runtime.Serialization;
     using System;
 
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoginStatus", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
+    public enum LoginStatus {
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SystemError,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Success,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyFields,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UserNotFound,
+
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        IncorrectPassword,
+    }
+
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -360,10 +380,10 @@ namespace DominoTrainGame.Client.Models.DominoTrainService {
     public interface IAuthenticationService {
 
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/LogIn", ReplyAction="http://tempuri.org/IAuthenticationService/LogInResponse")]
-        bool LogIn(string identificator, string password);
+        DominoTrainGame.Client.Models.DominoTrainService.LoginStatus LogIn(string identificator, string password);
 
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/LogIn", ReplyAction="http://tempuri.org/IAuthenticationService/LogInResponse")]
-        System.Threading.Tasks.Task<bool> LogInAsync(string identificator, string password);
+        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LoginStatus> LogInAsync(string identificator, string password);
 
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/RegisterUser", ReplyAction="http://tempuri.org/IAuthenticationService/RegisterUserResponse")]
         bool RegisterUser(DominoTrainGame.Client.Models.DominoTrainService.User user);
@@ -399,11 +419,11 @@ namespace DominoTrainGame.Client.Models.DominoTrainService {
                 base(binding, remoteAddress) {
         }
 
-        public bool LogIn(string identificator, string password) {
+        public DominoTrainGame.Client.Models.DominoTrainService.LoginStatus LogIn(string identificator, string password) {
             return base.Channel.LogIn(identificator, password);
         }
 
-        public System.Threading.Tasks.Task<bool> LogInAsync(string identificator, string password) {
+        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LoginStatus> LogInAsync(string identificator, string password) {
             return base.Channel.LogInAsync(identificator, password);
         }
 

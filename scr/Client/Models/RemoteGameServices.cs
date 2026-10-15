@@ -13,14 +13,14 @@ namespace DominoTrainGame.Client.Models;
 
 public sealed class RemoteGameServices : IGameServices
 {
-    public async Task<bool> LogInAsync(string identifier, string password)
+    public async Task<LoginStatus> LogInAsync(string identifier, string password)
     {
-        bool canLogIn = await WithFallback(
+        LoginStatus status = await WithFallback(
             () => InvokeAsync(() => new AuthenticationServiceClient(),
                 proxy => proxy.LogInAsync(identifier, password)),
-            false).ConfigureAwait(false);
+            LoginStatus.SystemError).ConfigureAwait(false);
 
-        return canLogIn;
+        return status;
     }
 
     public async Task<bool> RegisterUserAsync(User user)

@@ -38,6 +38,7 @@
     <Compile Include="DTO\BeginVerificationRequest.cs" />
     <Compile Include="DTO\LeaderboardEntry.cs" />
     <Compile Include="DTO\LeaderboardResponse.cs" />
+    <Compile Include="DTO\LoginStatus.cs" />
     <Compile Include="DTO\User.cs" />
     <Compile Include="GameServiceRuntime.cs" />
     <Compile Include="Implementation\GameService.Authentication.cs" />

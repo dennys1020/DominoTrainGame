@@ -12,7 +12,7 @@
   <xs:element name="LogInResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="LogInResult" type="xs:boolean" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="LogInResult" type="q1:LoginStatus" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -473,6 +473,14 @@ public class UiStrings
         }
     }
 
+    public static string LoginSystemErrorMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginSystemErrorMessage", _resourceCulture);
+        }
+    }
+
     public static string LogOutButtonLabel
     {
         get

@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:simpleType name="LoginStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SystemError" />
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="EmptyFields" />
+      <xs:enumeration value="UserNotFound" />
+      <xs:enumeration value="IncorrectPassword" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LoginStatus" nillable="true" type="tns:LoginStatus" />
   <xs:complexType name="User">
     <xs:sequence>
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />

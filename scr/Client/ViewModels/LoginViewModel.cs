@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Client.Models.DominoTrainService;
 using DominoTrainGame.Resources.Localization;
 
 namespace DominoTrainGame.ViewModels;
@@ -38,20 +39,43 @@ public sealed class LoginViewModel : ScreenViewModel
         IsLoggingIn = true;
         try
         {
-            bool canLogIn = await _services.LogInAsync(identifier, password);
+            LoginStatus status = await _services.LogInAsync(identifier, password);
 
             if (Window.IsVisible)
             {
-                if (canLogIn)
+                if (status == LoginStatus.Success)
                 {
                     Window.Navigate(Screen.Main, preservePosition: false);
                 }
                 else
                 {
-                    Window.ShowMessage(UiStrings.LoginFailedMessage);
+                    Window.ShowMessage(DescribeStatus(status));
                 }
             }
         }
         finally { IsLoggingIn = false; }
+    }
+
+    private static string DescribeStatus(LoginStatus status)
+    {
+        string message;
+
+        switch (status)
+        {
+            case LoginStatus.EmptyFields:
+                message = UiStrings.RequiredFieldsMessage;
+                break;
+            case LoginStatus.UserNotFound:
+                message = UiStrings.MessageUserNotFound;
+                break;
+            case LoginStatus.IncorrectPassword:
+                message = UiStrings.MessageIncorrectPassword;
+                break;
+            default:
+                message = UiStrings.LoginSystemErrorMessage;
+                break;
+        }
+
+        return message;
     }
 }

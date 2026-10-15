@@ -544,6 +544,9 @@ en el tren</value>
   <data name="LoginFailedMessage" xml:space="preserve">
     <value>No se pudo iniciar sesión. Revisa tus datos o inténtalo más tarde.</value>
   </data>
+  <data name="LoginSystemErrorMessage" xml:space="preserve">
+    <value>Ocurrió un error del sistema al iniciar sesión. Inténtalo de nuevo más tarde.</value>
+  </data>
   <data name="RegistrationFailedMessage" xml:space="preserve">
     <value>No se pudo completar el registro. Revisa tus datos o inténtalo más tarde.</value>
   </data>
