@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:i0="urn:domino-train:services:v1" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="GameService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:i0="urn:domino-train:services:v1" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://tempuri.org/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" name="GameService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsp:Policy wsu:Id="NetTcpBinding_IAuthenticationService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
@@ -58,37 +58,142 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsdl:import namespace="urn:domino-train:services:v1" location="http://localhost:8080/?wsdl=wsdl0" />
+  <wsp:Policy wsu:Id="NetTcpBinding_IVerificationService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IAuthenticationService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <TransportBindingElementImporter.TransportUri bindingName="NetTcpBinding_IAuthenticationService" bindingNamespace="http://tempuri.org/" xmlns="http://tempuri.org/temporaryworkaround">http://schemas.microsoft.com/soap/tcp</TransportBindingElementImporter.TransportUri>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_ILeaderboardService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <TransportBindingElementImporter.TransportUri bindingName="NetTcpBinding_ILeaderboardService" bindingNamespace="http://tempuri.org/" xmlns="http://tempuri.org/temporaryworkaround">http://schemas.microsoft.com/soap/tcp</TransportBindingElementImporter.TransportUri>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IVerificationService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <TransportBindingElementImporter.TransportUri bindingName="NetTcpBinding_IVerificationService" bindingNamespace="http://tempuri.org/" xmlns="http://tempuri.org/temporaryworkaround">http://schemas.microsoft.com/soap/tcp</TransportBindingElementImporter.TransportUri>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:import namespace="urn:domino-train:services:v1" location="item.wsdl" />
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
-      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd0" namespace="http://tempuri.org/" />
-      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
+      <xsd:import schemaLocation="item2.xsd" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="item3.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="item.xsd" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
+      <xsd:import schemaLocation="item1.xsd" namespace="urn:domino-train:services:v1" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IAuthenticationService_LogIn_InputMessage">
     <wsdl:part name="parameters" element="tns:LogIn" />
   </wsdl:message>
-  <wsdl:message name="IAuthenticationService_LogIn_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LogInResponse" />
-  </wsdl:message>
   <wsdl:message name="IAuthenticationService_RegisterUser_InputMessage">
     <wsdl:part name="parameters" element="tns:RegisterUser" />
   </wsdl:message>
-  <wsdl:message name="IAuthenticationService_RegisterUser_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RegisterUserResponse" />
+  <wsdl:message name="IAuthenticationService_CheckAvailability_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAvailability" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_OnLogInCompleted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnLogInCompleted" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_OnRegistrationCompleted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnRegistrationCompleted" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_OnAvailabilityChecked_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnAvailabilityChecked" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_BeginVerification_InputMessage">
+    <wsdl:part name="parameters" element="tns:BeginVerification" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_ResendVerification_InputMessage">
+    <wsdl:part name="parameters" element="tns:ResendVerification" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_VerifyCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyCode" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_OnVerificationStarted_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnVerificationStarted" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_OnVerificationResent_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnVerificationResent" />
+  </wsdl:message>
+  <wsdl:message name="IVerificationService_OnCodeVerified_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnCodeVerified" />
   </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="LogIn">
       <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/LogIn" message="tns:IAuthenticationService_LogIn_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/LogInResponse" message="tns:IAuthenticationService_LogIn_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="RegisterUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/RegisterUser" message="tns:IAuthenticationService_RegisterUser_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/RegisterUserResponse" message="tns:IAuthenticationService_RegisterUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckAvailability">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/CheckAvailability" message="tns:IAuthenticationService_CheckAvailability_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnLogInCompleted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/OnLogInCompleted" message="tns:IAuthenticationService_OnLogInCompleted_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnRegistrationCompleted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/OnRegistrationCompleted" message="tns:IAuthenticationService_OnRegistrationCompleted_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnAvailabilityChecked">
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/OnAvailabilityChecked" message="tns:IAuthenticationService_OnAvailabilityChecked_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="NetTcpBinding_IAuthenticationService" type="tns:IAuthenticationService">
+  <wsdl:portType name="IVerificationService">
+    <wsdl:operation name="BeginVerification">
+      <wsdl:input wsaw:Action="http://tempuri.org/IVerificationService/BeginVerification" message="tns:IVerificationService_BeginVerification_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ResendVerification">
+      <wsdl:input wsaw:Action="http://tempuri.org/IVerificationService/ResendVerification" message="tns:IVerificationService_ResendVerification_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IVerificationService/VerifyCode" message="tns:IVerificationService_VerifyCode_InputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnVerificationStarted">
+      <wsdl:output wsaw:Action="http://tempuri.org/IVerificationService/OnVerificationStarted" message="tns:IVerificationService_OnVerificationStarted_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnVerificationResent">
+      <wsdl:output wsaw:Action="http://tempuri.org/IVerificationService/OnVerificationResent" message="tns:IVerificationService_OnVerificationResent_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnCodeVerified">
+      <wsdl:output wsaw:Action="http://tempuri.org/IVerificationService/OnCodeVerified" message="tns:IVerificationService_OnCodeVerified_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding wsp:PolicyURIs="#NetTcpBinding_IAuthenticationService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy" name="NetTcpBinding_IAuthenticationService" type="tns:IAuthenticationService">
     <wsp:PolicyReference URI="#NetTcpBinding_IAuthenticationService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="LogIn">
@@ -96,21 +201,39 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="RegisterUser">
       <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/RegisterUser" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="CheckAvailability">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/CheckAvailability" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="OnLogInCompleted">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/OnLogInCompleted" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnRegistrationCompleted">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/OnRegistrationCompleted" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnAvailabilityChecked">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/OnAvailabilityChecked" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:binding name="NetTcpBinding_ILeaderboardService" type="i0:ILeaderboardService">
+  <wsdl:binding wsp:PolicyURIs="#NetTcpBinding_ILeaderboardService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy" name="NetTcpBinding_ILeaderboardService" type="i0:ILeaderboardService">
     <wsp:PolicyReference URI="#NetTcpBinding_ILeaderboardService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GetLeaderboard">
@@ -118,6 +241,49 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="OnLeaderboardReceived">
+      <soap12:operation soapAction="urn:domino-train:services:v1/ILeaderboardService/OnLeaderboardReceived" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding wsp:PolicyURIs="#NetTcpBinding_IVerificationService_TransportBindingElementImporter.TransportUri_BindingAdHocPolicy" name="NetTcpBinding_IVerificationService" type="tns:IVerificationService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IVerificationService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="BeginVerification">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/BeginVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="ResendVerification">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/ResendVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyCode">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/VerifyCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
+    <wsdl:operation name="OnVerificationStarted">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/OnVerificationStarted" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnVerificationResent">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/OnVerificationResent" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnCodeVerified">
+      <soap12:operation soapAction="http://tempuri.org/IVerificationService/OnCodeVerified" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -128,18 +294,18 @@
       <soap12:address location="net.tcp://localhost:8090/GameService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/GameService</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
-        </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_ILeaderboardService" binding="tns:NetTcpBinding_ILeaderboardService">
       <soap12:address location="net.tcp://localhost:8090/GameService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/GameService</wsa10:Address>
-        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
-        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IVerificationService" binding="tns:NetTcpBinding_IVerificationService">
+      <soap12:address location="net.tcp://localhost:8090/GameService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8090/GameService</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

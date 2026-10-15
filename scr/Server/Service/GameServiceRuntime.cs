@@ -1,5 +1,6 @@
 using System;
 using System.ServiceModel;
+using DominoTrainGame.Server.Application.Notifications;
 using DominoTrainGame.Server.Service.Implementation;
 using DominoTrainGame.Server.Persistence.Repositories;
 
@@ -14,7 +15,7 @@ public sealed class GameServiceRuntime : IDisposable
         SqlAuthenticationStore store = new SqlAuthenticationStore();
         LeaderboardRepository leaderboard = new LeaderboardRepository();
 
-        GameService service = new GameService(store, leaderboard);
+        GameService service = new GameService(store, leaderboard, new EmailSender());
 
         _host = new ServiceHost(service);
     }

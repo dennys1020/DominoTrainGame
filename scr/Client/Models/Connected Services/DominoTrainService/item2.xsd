@@ -1,32 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
+  <xs:import schemaLocation="item3.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="item.xsd" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
   <xs:element name="LogIn">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="identificator" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="requestId" xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/" type="q1:guid" />
+        <xs:element minOccurs="0" name="identifier" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="LogInResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="LogInResult" type="q1:LoginStatus" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RegisterUser">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="user" nillable="true" type="q1:User" />
+        <xs:element minOccurs="0" name="requestId" xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/" type="q2:guid" />
+        <xs:element minOccurs="0" name="user" nillable="true" xmlns:q3="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q3:User" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RegisterUserResponse">
+  <xs:element name="CheckAvailability">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="RegisterUserResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="requestId" xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/" type="q4:guid" />
+        <xs:element minOccurs="0" name="user" nillable="true" xmlns:q5="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q5:User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnLogInCompleted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/" type="q6:guid" />
+        <xs:element minOccurs="0" name="status" xmlns:q7="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q7:LoginStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnRegistrationCompleted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/" type="q8:guid" />
+        <xs:element minOccurs="0" name="status" xmlns:q9="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q9:RegistrationStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnAvailabilityChecked">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" type="q10:guid" />
+        <xs:element minOccurs="0" name="status" xmlns:q11="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q11:RegistrationStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BeginVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q12="http://schemas.microsoft.com/2003/10/Serialization/" type="q12:guid" />
+        <xs:element minOccurs="0" name="request" nillable="true" xmlns:q13="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q13:BeginVerificationRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResendVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q14="http://schemas.microsoft.com/2003/10/Serialization/" type="q14:guid" />
+        <xs:element minOccurs="0" name="sessionId" xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/" type="q15:guid" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifyCode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q16="http://schemas.microsoft.com/2003/10/Serialization/" type="q16:guid" />
+        <xs:element minOccurs="0" name="sessionId" xmlns:q17="http://schemas.microsoft.com/2003/10/Serialization/" type="q17:guid" />
+        <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnVerificationStarted">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q18="http://schemas.microsoft.com/2003/10/Serialization/" type="q18:guid" />
+        <xs:element minOccurs="0" name="session" nillable="true" xmlns:q19="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q19:VerificationSessionDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnVerificationResent">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q20="http://schemas.microsoft.com/2003/10/Serialization/" type="q20:guid" />
+        <xs:element minOccurs="0" name="wasSent" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnCodeVerified">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q21="http://schemas.microsoft.com/2003/10/Serialization/" type="q21:guid" />
+        <xs:element minOccurs="0" name="status" xmlns:q22="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q22:VerificationStatus" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -40,6 +40,7 @@
             Margin="0,0,0,20" />
         <StackPanel
             x:Name="panelDigits"
+            IsEnabled="{Binding IsContentEnabled}"
             Orientation="Horizontal"
             HorizontalAlignment="Center"
             PreviewTextInput="OnDigitBoxPreviewTextInput"
@@ -98,6 +99,7 @@
                 Content="{Binding [VerifyButtonLabel]}"
                 Style="{StaticResource PixelButton}"
                 IsDefault="True"
+                IsEnabled="{Binding IsContentEnabled}"
                 Command="{Binding DataContext.VerifyCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                 Margin="22,10,22,10" />
         </Grid>

@@ -105,10 +105,9 @@
     <Compile Include="Views\SignUpWindow.xaml.cs">
       <DependentUpon>SignUpWindow.xaml</DependentUpon>
     </Compile>
-    <!-- Preserved until the server publishes its verification contract again. -->
-    <None Include="Views\VerificationCodeWindow.xaml.cs">
+    <Compile Include="Views\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
-    </None>
+    </Compile>
     <Page Include="Resources\Styles\MatchStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -180,9 +179,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <None Include="Views\VerificationCodeWindow.xaml">
+    <Page Include="Views\VerificationCodeWindow.xaml">
       <SubType>Designer</SubType>
-    </None>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

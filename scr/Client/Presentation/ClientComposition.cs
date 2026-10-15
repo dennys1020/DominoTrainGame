@@ -18,6 +18,7 @@ internal static class ClientComposition
         {
             Screen.Login => new LoginViewModel(_services, navigation),
             Screen.SignUp => new SignUpViewModel(_services, navigation),
+            Screen.Verification => new VerificationCodeViewModel(_services, navigation, (VerificationRequest)context),
             Screen.Leaderboard => new LeaderboardViewModel(_services),
             _ => new NavigationViewModel(navigation, screen)
         };
@@ -27,6 +28,7 @@ internal static class ClientComposition
     {
         Screen.Login => new LogInWindow(),
         Screen.SignUp => new SignUpWindow(),
+        Screen.Verification => new VerificationCodeWindow((VerificationRequest)context),
         Screen.Main => new MainWindow(),
         Screen.NewGame => new NewGameWindow(),
         Screen.JoinGame => new JoinGameWindow(),

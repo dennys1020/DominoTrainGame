@@ -18,6 +18,8 @@ public sealed class EmailSender : IEmailSender
     private const string PortKey = "SmtpPort";
     private const string UserKey = "SmtpUser";
     private const string PasswordKey = "SmtpPassword";
+    private const int MinimumPort = 1;
+    private const int MaximumPort = 65535;
 
     private static readonly ITraceLog _logger;
     private static readonly ResourceManager _templates = new ResourceManager(
@@ -35,7 +37,12 @@ public sealed class EmailSender : IEmailSender
         try
         {
             string host = ReadSetting(HostKey);
-            int port = int.Parse(ReadSetting(PortKey), CultureInfo.InvariantCulture);
+            bool hasPort = int.TryParse(ReadSetting(PortKey), NumberStyles.None,
+                CultureInfo.InvariantCulture, out int port);
+            if (!hasPort || port < MinimumPort || port > MaximumPort)
+            {
+                throw new InvalidOperationException("The SMTP port is not configured correctly.");
+            }
             string user = ReadSetting(UserKey);
             string password = ReadSetting(PasswordKey);
 
@@ -51,7 +58,7 @@ public sealed class EmailSender : IEmailSender
                 smtpClient.EnableSsl = true;
                 smtpClient.Credentials = new NetworkCredential(user, password);
 
-                await smtpClient.SendMailAsync(message);
+                await smtpClient.SendMailAsync(message).ConfigureAwait(false);
             }
 
             wasSent = true;
@@ -71,6 +78,10 @@ public sealed class EmailSender : IEmailSender
         {
             System.Diagnostics.Debug.WriteLine(exception.ToString());
             _logger.Error("The SMTP settings are missing from the configuration.", exception);
+        }
+        catch (ConfigurationErrorsException exception)
+        {
+            _logger.Error("The SMTP configuration could not be read.", exception);
         }
 
         return wasSent;

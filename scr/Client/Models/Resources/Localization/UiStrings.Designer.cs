@@ -1208,4 +1208,7 @@ public class UiStrings
             return ResourceManager.GetString("YouPlayerLabel", _resourceCulture);
         }
     }
+    public static string RegistrationSystemErrorMessage => ResourceManager.GetString("RegistrationSystemErrorMessage", _resourceCulture);
+    public static string VerificationSystemErrorMessage => ResourceManager.GetString("VerificationSystemErrorMessage", _resourceCulture);
+    public static string RegistrationVerificationRequiredMessage => ResourceManager.GetString("RegistrationVerificationRequiredMessage", _resourceCulture);
 }
