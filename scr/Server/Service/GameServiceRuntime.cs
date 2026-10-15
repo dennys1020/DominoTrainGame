@@ -1,17 +1,23 @@
 using System;
 using System.ServiceModel;
-using DominoTrainGame.Server.Application;
 using DominoTrainGame.Server.Service.Implementation;
+using DominoTrainGame.Server.Persistence.Repositories;
 
 namespace DominoTrainGame.Server.Service;
 
-// The console host only manages this service's lifecycle.
 public sealed class GameServiceRuntime : IDisposable
 {
     private readonly ServiceHost _host;
 
-    public GameServiceRuntime() =>
-        _host = new ServiceHost(new GameService(ApplicationComposition.CreateUseCases()));
+    public GameServiceRuntime()
+    {
+        SqlAuthenticationStore store = new SqlAuthenticationStore();
+        LeaderboardRepository leaderboard = new LeaderboardRepository();
+
+        GameService service = new GameService(store, leaderboard);
+
+        _host = new ServiceHost(service);
+    }
 
     public void Start() => _host.Open();
 

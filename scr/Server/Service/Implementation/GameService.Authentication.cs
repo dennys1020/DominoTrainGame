@@ -1,28 +1,46 @@
+using DominoTrainGame.Server.Application.Authentication;
+using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DTO;
-using LoginValidationStatus = DominoTrainGame.Server.Service.DTO.LoginValidationStatus;
-using SignUpValidationStatus = DominoTrainGame.Server.Service.DTO.SignUpValidationStatus;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 
 public sealed partial class GameService : IAuthenticationService
 {
-    public LoginResponse LogIn(LoginRequest request) => new LoginResponse
-    {
-        Status = request is null ? LoginValidationStatus.EmptyFields
-            : DtoMapper.Map(_application.LogInUser(request.Identifier, request.Password))
-    };
+    private readonly LoginValidator _loginValidator;
+    private readonly SignUpValidator _signUpValidator;
 
-    public SignUpResponse CheckAvailability(RegistrationRequest request) => new SignUpResponse
+    public bool LogIn(string identifier, string password)
     {
-        Status = request is null ? SignUpValidationStatus.EmptyFields
-            : DtoMapper.Map(_application.CheckAvailability(request.Username, request.Email, request.Password))
-    };
+        bool canLogIn =
+            _loginValidator.LogInUser(identifier, password)
+            == LoginValidationStatus.Success;
 
-    public SignUpResponse RegisterUser(RegistrationRequest request) => new SignUpResponse
+        return canLogIn;
+    }
+
+    public bool RegisterUser(User user)
     {
-        Status = request is null ? SignUpValidationStatus.EmptyFields
-            : DtoMapper.Map(_application.RegisterUser(request.Username, request.Email, request.Password,
-                NormalizeLanguage(request.Language), request.VerificationId))
-    };
+        bool isRegistered = false;
+
+        if (user != null)
+        {
+            Player player = new Player
+            {
+                Username = user.Username,
+                Email = user.Email
+            };
+
+            SignUpValidationStatus status =
+                _signUpValidator.RegisterUser(
+                    player,
+                    user.Password,
+                    NormalizeLanguage(user.Language));
+
+            isRegistered =
+                status == SignUpValidationStatus.Success;
+        }
+
+        return isRegistered;
+    }
 }

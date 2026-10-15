@@ -541,4 +541,10 @@ en el tren</value>
   <data name="NewGameDescription" xml:space="preserve">
     <value>Elige cómo quieres comenzar tu próximo viaje.</value>
   </data>
+  <data name="LoginFailedMessage" xml:space="preserve">
+    <value>No se pudo iniciar sesión. Revisa tus datos o inténtalo más tarde.</value>
+  </data>
+  <data name="RegistrationFailedMessage" xml:space="preserve">
+    <value>No se pudo completar el registro. Revisa tus datos o inténtalo más tarde.</value>
+  </data>
 </root>

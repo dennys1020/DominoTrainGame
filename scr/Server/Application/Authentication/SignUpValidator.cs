@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.Security;
@@ -9,59 +10,112 @@ namespace DominoTrainGame.Server.Application.Authentication;
 public sealed class SignUpValidator
 {
     public const int MinimumPasswordLength = 12;
-    private static readonly Regex _emailPattern = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
+
+    private static readonly Regex _emailPattern = new Regex(
+        @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
+        RegexOptions.Compiled);
+
     private readonly IAuthenticationStore _store;
 
-    public SignUpValidator(IAuthenticationStore store) => _store = store;
-
-    public static SignUpValidationStatus ValidateInput(string username, string email, string password)
+    public SignUpValidator(IAuthenticationStore store)
     {
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email)
+        _store = store
+            ?? throw new ArgumentNullException(nameof(store));
+    }
+
+    public static SignUpValidationStatus ValidateInput(
+        string username,
+        string email,
+        string password)
+    {
+        SignUpValidationStatus status;
+
+        if (string.IsNullOrWhiteSpace(username)
+            || string.IsNullOrWhiteSpace(email)
             || string.IsNullOrWhiteSpace(password))
         {
-            return SignUpValidationStatus.EmptyFields;
+            status = SignUpValidationStatus.EmptyFields;
         }
-        if (!_emailPattern.IsMatch(email))
+        else if (!_emailPattern.IsMatch(email))
         {
-            return SignUpValidationStatus.InvalidEmail;
+            status = SignUpValidationStatus.InvalidEmail;
         }
-        return password.Length < MinimumPasswordLength
-            ? SignUpValidationStatus.PasswordTooShort : SignUpValidationStatus.Success;
+        else if (password.Length < MinimumPasswordLength)
+        {
+            status = SignUpValidationStatus.PasswordTooShort;
+        }
+        else
+        {
+            status = SignUpValidationStatus.Success;
+        }
+
+        return status;
     }
 
-    public SignUpValidationStatus CheckAvailability(string username, string email, string password)
+    public SignUpValidationStatus CheckAvailability(
+        string username,
+        string email,
+        string password)
     {
-        SignUpValidationStatus status = ValidateInput(username, email, password);
-        if (status != SignUpValidationStatus.Success)
+        SignUpValidationStatus status =
+            ValidateInput(username, email, password);
+
+        if (status == SignUpValidationStatus.Success)
         {
-            return status;
+            try
+            {
+                bool playerExists =
+                    _store.PlayerExists(username, email);
+
+                status = playerExists
+                    ? SignUpValidationStatus.UserAlreadyExists
+                    : SignUpValidationStatus.Success;
+            }
+            catch (DatabaseOperationException)
+            {
+                status = SignUpValidationStatus.DatabaseError;
+            }
         }
-        try
-        {
-            return _store.PlayerExists(username, email)
-                ? SignUpValidationStatus.UserAlreadyExists : SignUpValidationStatus.Success;
-        }
-        catch (DatabaseOperationException)
-        {
-            return SignUpValidationStatus.DatabaseError;
-        }
+
+        return status;
     }
 
-    public SignUpValidationStatus RegisterUser(string username, string email, string password, string language)
+    public SignUpValidationStatus RegisterUser(
+        Player player,
+        string password,
+        string language)
     {
-        SignUpValidationStatus status = ValidateInput(username, email, password);
-        if (status != SignUpValidationStatus.Success)
+        SignUpValidationStatus status =
+            SignUpValidationStatus.EmptyFields;
+
+        if (player != null)
         {
-            return status;
+            status = ValidateInput(
+                player.Username,
+                player.Email,
+                password);
+
+            if (status == SignUpValidationStatus.Success)
+            {
+                try
+                {
+                    player.PasswordHash =
+                        PasswordHasher.Hash(password);
+
+                    bool isSaved =
+                        _store.SaveNewPlayer(player, language);
+
+                    status = isSaved
+                        ? SignUpValidationStatus.Success
+                        : SignUpValidationStatus.UserAlreadyExists;
+                }
+                catch (DatabaseOperationException)
+                {
+                    status = SignUpValidationStatus.DatabaseError;
+                }
+            }
         }
-        try
-        {
-            return _store.SaveNewPlayer(username, email, PasswordHasher.Hash(password), language)
-                ? SignUpValidationStatus.Success : SignUpValidationStatus.UserAlreadyExists;
-        }
-        catch (DatabaseOperationException)
-        {
-            return SignUpValidationStatus.DatabaseError;
-        }
+
+        return status;
     }
 }

@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
-using DominoTrainGame.Client.Models.DominoTrainService;
 
 namespace DominoTrainGame.ViewModels;
 
@@ -39,38 +38,20 @@ public sealed class LoginViewModel : ScreenViewModel
         IsLoggingIn = true;
         try
         {
-            LoginValidationStatus status = await _services.LogInAsync(identifier, password);
-            if (!Window.IsVisible) { return; }
-            if (status == LoginValidationStatus.Success)
+            bool canLogIn = await _services.LogInAsync(identifier, password);
+
+            if (Window.IsVisible)
             {
-                Window.Navigate(Screen.Main, preservePosition: false);
+                if (canLogIn)
+                {
+                    Window.Navigate(Screen.Main, preservePosition: false);
+                }
+                else
+                {
+                    Window.ShowMessage(UiStrings.LoginFailedMessage);
+                }
             }
-            else { Window.ShowMessage(DescribeStatus(status)); }
         }
         finally { IsLoggingIn = false; }
-    }
-
-    private string DescribeStatus(LoginValidationStatus status)
-    {
-        string message;
-        switch (status)
-        {
-            case LoginValidationStatus.EmptyFields:
-                message = UiStrings.RequiredFieldsMessage;
-                break;
-            case LoginValidationStatus.UserNotFound:
-                message = UiStrings.MessageUserNotFound;
-                break;
-            case LoginValidationStatus.IncorrectPassword:
-                message = UiStrings.MessageIncorrectPassword;
-                break;
-            case LoginValidationStatus.DatabaseError:
-                message = UiStrings.DatabaseErrorMessage;
-                break;
-            default:
-                message = UiStrings.DatabaseErrorMessage;
-                break;
-        }
-        return message;
     }
 }

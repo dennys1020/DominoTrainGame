@@ -32,7 +32,17 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Configuration" />
-    <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
+    <Compile Include="Authentication\LoginValidator.cs" />
+    <Compile Include="Authentication\SignUpValidator.cs" />
+    <Compile Include="Notifications\EmailSender.cs" />
+    <Compile Include="Ports\IEmailSender.cs" />
+    <Compile Include="Results\LeaderboardResultSet.cs" />
+    <Compile Include="Results\LoginValidationStatus.cs" />
+    <Compile Include="Results\SignUpValidationStatus.cs" />
+    <Compile Include="Results\VerificationCodeStatus.cs" />
+    <Compile Include="Security\PasswordHasher.cs" />
+    <Compile Include="Verification\VerificationCodeService.cs" />
+    <Compile Include="Verification\VerificationUseCases.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persistence\DominoTrainGame.Server.Persistence.csproj">

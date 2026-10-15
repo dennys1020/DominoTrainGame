@@ -8,325 +8,177 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DominoTrainGame.Client.Models.DominoTrainService
-{
+namespace DominoTrainGame.Client.Models.DominoTrainService {
     using System.Runtime.Serialization;
+    using System;
 
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginRequest", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class LoginRequest : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
+    [System.SerializableAttribute()]
+    public partial class User : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
 
+        [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
 
-        private string IdentifierField;
-
-        private string PasswordField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Identifier
-        {
-            get
-            {
-                return this.IdentifierField;
-            }
-            set
-            {
-                this.IdentifierField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Password
-        {
-            get
-            {
-                return this.PasswordField;
-            }
-            set
-            {
-                this.PasswordField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResponse", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class LoginResponse : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private DominoTrainGame.Client.Models.DominoTrainService.LoginValidationStatus StatusField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public DominoTrainGame.Client.Models.DominoTrainService.LoginValidationStatus Status
-        {
-            get
-            {
-                return this.StatusField;
-            }
-            set
-            {
-                this.StatusField = value;
-            }
-        }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginValidationStatus", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public enum LoginValidationStatus : int
-    {
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        EmptyFields = 1,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UserNotFound = 2,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        IncorrectPassword = 3,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        DatabaseError = 4,
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RegistrationRequest", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class RegistrationRequest : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LanguageField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Guid VerificationIdField;
 
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
                 return this.extensionDataField;
             }
-            set
-            {
+            set {
                 this.extensionDataField = value;
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email
-        {
-            get
-            {
+        public string Email {
+            get {
                 return this.EmailField;
             }
-            set
-            {
-                this.EmailField = value;
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Language
-        {
-            get
-            {
+        public string Language {
+            get {
                 return this.LanguageField;
             }
-            set
-            {
-                this.LanguageField = value;
+            set {
+                if ((object.ReferenceEquals(this.LanguageField, value) != true)) {
+                    this.LanguageField = value;
+                    this.RaisePropertyChanged("Language");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Password
-        {
-            get
-            {
+        public string Password {
+            get {
                 return this.PasswordField;
             }
-            set
-            {
-                this.PasswordField = value;
+            set {
+                if ((object.ReferenceEquals(this.PasswordField, value) != true)) {
+                    this.PasswordField = value;
+                    this.RaisePropertyChanged("Password");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Username
-        {
-            get
-            {
+        public string Username {
+            get {
                 return this.UsernameField;
             }
-            set
-            {
-                this.UsernameField = value;
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid VerificationId
-        {
-            get
-            {
+        public System.Guid VerificationId {
+            get {
                 return this.VerificationIdField;
             }
-            set
-            {
-                this.VerificationIdField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SignUpResponse", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class SignUpResponse : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private DominoTrainGame.Client.Models.DominoTrainService.SignUpValidationStatus StatusField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
+            set {
+                if ((this.VerificationIdField.Equals(value) != true)) {
+                    this.VerificationIdField = value;
+                    this.RaisePropertyChanged("VerificationId");
+                }
             }
         }
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public DominoTrainGame.Client.Models.DominoTrainService.SignUpValidationStatus Status
-        {
-            get
-            {
-                return this.StatusField;
-            }
-            set
-            {
-                this.StatusField = value;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SignUpValidationStatus", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public enum SignUpValidationStatus : int
-    {
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        EmptyFields = 1,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidEmail = 2,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PasswordTooShort = 3,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        UserAlreadyExists = 4,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        VerificationRequired = 5,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        DatabaseError = 6,
     }
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LeaderboardResponse", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class LeaderboardResponse : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
+    [System.SerializableAttribute()]
+    public partial class LeaderboardResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
 
+        [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
 
-        private System.Collections.Generic.List<DominoTrainGame.Client.Models.DominoTrainService.LeaderboardEntry> EntriesField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DominoTrainGame.Client.Models.DominoTrainService.LeaderboardEntry[] EntriesField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool SucceededField;
 
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
                 return this.extensionDataField;
             }
-            set
-            {
+            set {
                 this.extensionDataField = value;
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<DominoTrainGame.Client.Models.DominoTrainService.LeaderboardEntry> Entries
-        {
-            get
-            {
+        public DominoTrainGame.Client.Models.DominoTrainService.LeaderboardEntry[] Entries {
+            get {
                 return this.EntriesField;
             }
-            set
-            {
-                this.EntriesField = value;
+            set {
+                if ((object.ReferenceEquals(this.EntriesField, value) != true)) {
+                    this.EntriesField = value;
+                    this.RaisePropertyChanged("Entries");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Succeeded
-        {
-            get
-            {
+        public bool Succeeded {
+            get {
                 return this.SucceededField;
             }
-            set
-            {
-                this.SucceededField = value;
+            set {
+                if ((this.SucceededField.Equals(value) != true)) {
+                    this.SucceededField = value;
+                    this.RaisePropertyChanged("Succeeded");
+                }
+            }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -334,453 +186,131 @@ namespace DominoTrainGame.Client.Models.DominoTrainService
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="LeaderboardEntry", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class LeaderboardEntry : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
+    [System.SerializableAttribute()]
+    public partial class LeaderboardEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
 
+        [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int GamesPlayedField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int PlayerIdField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int RankField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private long TotalScoreField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string UsernameField;
 
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int WinsField;
 
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
                 return this.extensionDataField;
             }
-            set
-            {
+            set {
                 this.extensionDataField = value;
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int GamesPlayed
-        {
-            get
-            {
+        public int GamesPlayed {
+            get {
                 return this.GamesPlayedField;
             }
-            set
-            {
-                this.GamesPlayedField = value;
+            set {
+                if ((this.GamesPlayedField.Equals(value) != true)) {
+                    this.GamesPlayedField = value;
+                    this.RaisePropertyChanged("GamesPlayed");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int PlayerId
-        {
-            get
-            {
+        public int PlayerId {
+            get {
                 return this.PlayerIdField;
             }
-            set
-            {
-                this.PlayerIdField = value;
+            set {
+                if ((this.PlayerIdField.Equals(value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Rank
-        {
-            get
-            {
+        public int Rank {
+            get {
                 return this.RankField;
             }
-            set
-            {
-                this.RankField = value;
+            set {
+                if ((this.RankField.Equals(value) != true)) {
+                    this.RankField = value;
+                    this.RaisePropertyChanged("Rank");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public long TotalScore
-        {
-            get
-            {
+        public long TotalScore {
+            get {
                 return this.TotalScoreField;
             }
-            set
-            {
-                this.TotalScoreField = value;
+            set {
+                if ((this.TotalScoreField.Equals(value) != true)) {
+                    this.TotalScoreField = value;
+                    this.RaisePropertyChanged("TotalScore");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Username
-        {
-            get
-            {
+        public string Username {
+            get {
                 return this.UsernameField;
             }
-            set
-            {
-                this.UsernameField = value;
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
             }
         }
 
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Wins
-        {
-            get
-            {
+        public int Wins {
+            get {
                 return this.WinsField;
             }
-            set
-            {
-                this.WinsField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BeginVerificationRequest", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class BeginVerificationRequest : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private string EmailField;
-
-        private string LanguageField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
+                }
             }
         }
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email
-        {
-            get
-            {
-                return this.EmailField;
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
-            set
-            {
-                this.EmailField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Language
-        {
-            get
-            {
-                return this.LanguageField;
-            }
-            set
-            {
-                this.LanguageField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationSessionDto", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class VerificationSessionDto : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private System.Guid SessionIdField;
-
-        private bool WasSentField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid SessionId
-        {
-            get
-            {
-                return this.SessionIdField;
-            }
-            set
-            {
-                this.SessionIdField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool WasSent
-        {
-            get
-            {
-                return this.WasSentField;
-            }
-            set
-            {
-                this.WasSentField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResendVerificationRequest", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class ResendVerificationRequest : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private System.Guid SessionIdField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid SessionId
-        {
-            get
-            {
-                return this.SessionIdField;
-            }
-            set
-            {
-                this.SessionIdField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerifyCodeRequest", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class VerifyCodeRequest : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private string CodeField;
-
-        private System.Guid SessionIdField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Code
-        {
-            get
-            {
-                return this.CodeField;
-            }
-            set
-            {
-                this.CodeField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid SessionId
-        {
-            get
-            {
-                return this.SessionIdField;
-            }
-            set
-            {
-                this.SessionIdField = value;
-            }
-        }
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCodeResponse", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public partial class VerificationCodeResponse : object, System.Runtime.Serialization.IExtensibleDataObject
-    {
-
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-
-        private DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeStatus StatusField;
-
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData
-        {
-            get
-            {
-                return this.extensionDataField;
-            }
-            set
-            {
-                this.extensionDataField = value;
-            }
-        }
-
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeStatus Status
-        {
-            get
-            {
-                return this.StatusField;
-            }
-            set
-            {
-                this.StatusField = value;
-            }
-        }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="VerificationCodeStatus", Namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO")]
-    public enum VerificationCodeStatus : int
-    {
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Valid = 0,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Invalid = 1,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Expired = 2,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        TooManyAttempts = 3,
-
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ServiceUnavailable = 4,
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:domino-train:services:v1", ConfigurationName="DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService")]
-    public interface IAuthenticationService
-    {
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/LogIn", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/LogInResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.LoginResponse LogIn(DominoTrainGame.Client.Models.DominoTrainService.LoginRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/LogIn", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/LogInResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LoginResponse> LogInAsync(DominoTrainGame.Client.Models.DominoTrainService.LoginRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/CheckAvailability", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/CheckAvailabilityResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse CheckAvailability(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/CheckAvailability", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/CheckAvailabilityResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse> CheckAvailabilityAsync(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/RegisterUser", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/RegisterUserResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse RegisterUser(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IAuthenticationService/RegisterUser", ReplyAction="urn:domino-train:services:v1/IAuthenticationService/RegisterUserResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse> RegisterUserAsync(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request);
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAuthenticationServiceChannel : DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService, System.ServiceModel.IClientChannel
-    {
-    }
-
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AuthenticationServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService>, DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService
-    {
-
-        public AuthenticationServiceClient()
-        {
-        }
-
-        public AuthenticationServiceClient(string endpointConfigurationName) :
-                base(endpointConfigurationName)
-        {
-        }
-
-        public AuthenticationServiceClient(string endpointConfigurationName, string remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
-        }
-
-        public AuthenticationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
-        }
-
-        public AuthenticationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(binding, remoteAddress)
-        {
-        }
-
-        public DominoTrainGame.Client.Models.DominoTrainService.LoginResponse LogIn(DominoTrainGame.Client.Models.DominoTrainService.LoginRequest request)
-        {
-            return base.Channel.LogIn(request);
-        }
-
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LoginResponse> LogInAsync(DominoTrainGame.Client.Models.DominoTrainService.LoginRequest request)
-        {
-            return base.Channel.LogInAsync(request);
-        }
-
-        public DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse CheckAvailability(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request)
-        {
-            return base.Channel.CheckAvailability(request);
-        }
-
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse> CheckAvailabilityAsync(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request)
-        {
-            return base.Channel.CheckAvailabilityAsync(request);
-        }
-
-        public DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse RegisterUser(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request)
-        {
-            return base.Channel.RegisterUser(request);
-        }
-
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.SignUpResponse> RegisterUserAsync(DominoTrainGame.Client.Models.DominoTrainService.RegistrationRequest request)
-        {
-            return base.Channel.RegisterUserAsync(request);
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:domino-train:services:v1", ConfigurationName="DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService")]
-    public interface ILeaderboardService
-    {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:domino-train:services:v1", ConfigurationName="DominoTrainService.ILeaderboardService")]
+    public interface ILeaderboardService {
 
         [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/ILeaderboardService/GetLeaderboard", ReplyAction="urn:domino-train:services:v1/ILeaderboardService/GetLeaderboardResponse")]
         DominoTrainGame.Client.Models.DominoTrainService.LeaderboardResponse GetLeaderboard();
@@ -790,136 +320,99 @@ namespace DominoTrainGame.Client.Models.DominoTrainService
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ILeaderboardServiceChannel : DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService, System.ServiceModel.IClientChannel
-    {
+    public interface ILeaderboardServiceChannel : DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService, System.ServiceModel.IClientChannel {
     }
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class LeaderboardServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService>, DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService
-    {
+    public partial class LeaderboardServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService>, DominoTrainGame.Client.Models.DominoTrainService.ILeaderboardService {
 
-        public LeaderboardServiceClient()
-        {
+        public LeaderboardServiceClient() {
         }
 
         public LeaderboardServiceClient(string endpointConfigurationName) :
-                base(endpointConfigurationName)
-        {
+                base(endpointConfigurationName) {
         }
 
         public LeaderboardServiceClient(string endpointConfigurationName, string remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
+                base(endpointConfigurationName, remoteAddress) {
         }
 
         public LeaderboardServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
+                base(endpointConfigurationName, remoteAddress) {
         }
 
         public LeaderboardServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(binding, remoteAddress)
-        {
+                base(binding, remoteAddress) {
         }
 
-        public DominoTrainGame.Client.Models.DominoTrainService.LeaderboardResponse GetLeaderboard()
-        {
+        public DominoTrainGame.Client.Models.DominoTrainService.LeaderboardResponse GetLeaderboard() {
             return base.Channel.GetLeaderboard();
         }
 
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LeaderboardResponse> GetLeaderboardAsync()
-        {
+        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.LeaderboardResponse> GetLeaderboardAsync() {
             return base.Channel.GetLeaderboardAsync();
         }
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="urn:domino-train:services:v1", ConfigurationName="DominoTrainGame.Client.Models.DominoTrainService.IVerificationService")]
-    public interface IVerificationService
-    {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoTrainService.IAuthenticationService")]
+    public interface IAuthenticationService {
 
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/BeginVerification", ReplyAction="urn:domino-train:services:v1/IVerificationService/BeginVerificationResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto BeginVerification(DominoTrainGame.Client.Models.DominoTrainService.BeginVerificationRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/LogIn", ReplyAction="http://tempuri.org/IAuthenticationService/LogInResponse")]
+        bool LogIn(string identificator, string password);
 
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/BeginVerification", ReplyAction="urn:domino-train:services:v1/IVerificationService/BeginVerificationResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto> BeginVerificationAsync(DominoTrainGame.Client.Models.DominoTrainService.BeginVerificationRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/LogIn", ReplyAction="http://tempuri.org/IAuthenticationService/LogInResponse")]
+        System.Threading.Tasks.Task<bool> LogInAsync(string identificator, string password);
 
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/ResendVerification", ReplyAction="urn:domino-train:services:v1/IVerificationService/ResendVerificationResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto ResendVerification(DominoTrainGame.Client.Models.DominoTrainService.ResendVerificationRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/RegisterUser", ReplyAction="http://tempuri.org/IAuthenticationService/RegisterUserResponse")]
+        bool RegisterUser(DominoTrainGame.Client.Models.DominoTrainService.User user);
 
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/ResendVerification", ReplyAction="urn:domino-train:services:v1/IVerificationService/ResendVerificationResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto> ResendVerificationAsync(DominoTrainGame.Client.Models.DominoTrainService.ResendVerificationRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/VerifyCode", ReplyAction="urn:domino-train:services:v1/IVerificationService/VerifyCodeResponse")]
-        DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeResponse VerifyCode(DominoTrainGame.Client.Models.DominoTrainService.VerifyCodeRequest request);
-
-        [System.ServiceModel.OperationContractAttribute(Action="urn:domino-train:services:v1/IVerificationService/VerifyCode", ReplyAction="urn:domino-train:services:v1/IVerificationService/VerifyCodeResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeResponse> VerifyCodeAsync(DominoTrainGame.Client.Models.DominoTrainService.VerifyCodeRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IAuthenticationService/RegisterUser", ReplyAction="http://tempuri.org/IAuthenticationService/RegisterUserResponse")]
+        System.Threading.Tasks.Task<bool> RegisterUserAsync(DominoTrainGame.Client.Models.DominoTrainService.User user);
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IVerificationServiceChannel : DominoTrainGame.Client.Models.DominoTrainService.IVerificationService, System.ServiceModel.IClientChannel
-    {
+    public interface IAuthenticationServiceChannel : DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService, System.ServiceModel.IClientChannel {
     }
 
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class VerificationServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoTrainService.IVerificationService>, DominoTrainGame.Client.Models.DominoTrainService.IVerificationService
-    {
+    public partial class AuthenticationServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService>, DominoTrainGame.Client.Models.DominoTrainService.IAuthenticationService {
 
-        public VerificationServiceClient()
-        {
+        public AuthenticationServiceClient() {
         }
 
-        public VerificationServiceClient(string endpointConfigurationName) :
-                base(endpointConfigurationName)
-        {
+        public AuthenticationServiceClient(string endpointConfigurationName) :
+                base(endpointConfigurationName) {
         }
 
-        public VerificationServiceClient(string endpointConfigurationName, string remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
+        public AuthenticationServiceClient(string endpointConfigurationName, string remoteAddress) :
+                base(endpointConfigurationName, remoteAddress) {
         }
 
-        public VerificationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(endpointConfigurationName, remoteAddress)
-        {
+        public AuthenticationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+                base(endpointConfigurationName, remoteAddress) {
         }
 
-        public VerificationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
-                base(binding, remoteAddress)
-        {
+        public AuthenticationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
+                base(binding, remoteAddress) {
         }
 
-        public DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto BeginVerification(DominoTrainGame.Client.Models.DominoTrainService.BeginVerificationRequest request)
-        {
-            return base.Channel.BeginVerification(request);
+        public bool LogIn(string identificator, string password) {
+            return base.Channel.LogIn(identificator, password);
         }
 
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto> BeginVerificationAsync(DominoTrainGame.Client.Models.DominoTrainService.BeginVerificationRequest request)
-        {
-            return base.Channel.BeginVerificationAsync(request);
+        public System.Threading.Tasks.Task<bool> LogInAsync(string identificator, string password) {
+            return base.Channel.LogInAsync(identificator, password);
         }
 
-        public DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto ResendVerification(DominoTrainGame.Client.Models.DominoTrainService.ResendVerificationRequest request)
-        {
-            return base.Channel.ResendVerification(request);
+        public bool RegisterUser(DominoTrainGame.Client.Models.DominoTrainService.User user) {
+            return base.Channel.RegisterUser(user);
         }
 
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationSessionDto> ResendVerificationAsync(DominoTrainGame.Client.Models.DominoTrainService.ResendVerificationRequest request)
-        {
-            return base.Channel.ResendVerificationAsync(request);
-        }
-
-        public DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeResponse VerifyCode(DominoTrainGame.Client.Models.DominoTrainService.VerifyCodeRequest request)
-        {
-            return base.Channel.VerifyCode(request);
-        }
-
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoTrainService.VerificationCodeResponse> VerifyCodeAsync(DominoTrainGame.Client.Models.DominoTrainService.VerifyCodeRequest request)
-        {
-            return base.Channel.VerifyCodeAsync(request);
+        public System.Threading.Tasks.Task<bool> RegisterUserAsync(DominoTrainGame.Client.Models.DominoTrainService.User user) {
+            return base.Channel.RegisterUserAsync(user);
         }
     }
 }

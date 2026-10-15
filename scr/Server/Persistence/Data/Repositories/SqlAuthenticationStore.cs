@@ -1,8 +1,5 @@
 using System;
-using System.Data.Entity;
-using System.Data.Entity.Core;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Validation;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using DominoTrainGame.Server.Persistence.Contracts;
@@ -13,60 +10,110 @@ namespace DominoTrainGame.Server.Persistence.Repositories;
 
 public sealed class SqlAuthenticationStore : IAuthenticationStore
 {
-    public AccountRecord FindAccount(string identifier) => Execute(database => database.Players
-        .AsNoTracking()
-        .Where(player => player.Username == identifier || player.Email == identifier)
-        .Select(player => new AccountRecord
-        {
-            PlayerId = player.PlayerId,
-            Email = player.Email,
-            PasswordHash = player.PasswordHash
-        }).FirstOrDefault());
+    private const byte RegisteredPlayerFlag = 0;
+    private const string DatabaseErrorMessage =
+        "The account operation failed.";
 
-    public bool PlayerExists(string username, string email) => Execute(database => database.Players
-        .Any(player => player.Username == username || player.Email == email));
-
-    public bool SaveNewPlayer(string username, string email, string passwordHash, string preferredLanguage) =>
-        Execute(database =>
-        {
-            if (database.Players.Any(player => player.Username == username || player.Email == email))
+    public AccountRecord FindAccount(string identifier)
+    {
+        AccountRecord accountRecord;
+        accountRecord = Execute(database => database.Players
+            .AsNoTracking()
+            .Where(player =>
+                player.Username == identifier ||
+                player.Email == identifier)
+            .Select(player => new AccountRecord
             {
-                return false;
-            }
+                PlayerId = player.PlayerId,
+                Email = player.Email,
+                PasswordHash = player.PasswordHash
+            })
+            .FirstOrDefault());
+        return accountRecord;
+    }
 
+    public bool PlayerExists(string username, string email)
+    {
+        bool isExistent;
+        isExistent = Execute(database => database.Players
+            .Any(player =>
+                player.Username == username ||
+                player.Email == email));
+        return isExistent;
+    }
+
+    public bool SaveNewPlayer(Player player, string preferredLanguage)
+    {
+        bool isSaved = false;
+
+        if (player != null)
+        {
+            isSaved = Execute(database =>
+                SavePlayer(database, player, preferredLanguage));
+        }
+
+        return isSaved;
+    }
+
+    private static bool SavePlayer(
+        DominoGameDBEntities database,
+        Player player,
+        string preferredLanguage)
+    {
+        bool isSaved = false;
+
+        bool playerExists = database.Players.Any(existingPlayer =>
+            existingPlayer.Username == player.Username ||
+            existingPlayer.Email == player.Email);
+
+        if (!playerExists)
+        {
             DateTime registeredAt = DateTime.UtcNow;
-            Player player = new Player
-            {
-                Username = username,
-                Email = email,
-                PasswordHash = passwordHash,
-                IsGuest = 0
-            };
-            player.Accounts.Add(new Account
+
+            player.IsGuest = RegisteredPlayerFlag;
+
+            Account account = new Account
             {
                 Biography = string.Empty,
                 PreferredLanguage = preferredLanguage,
                 CreatedAt = registeredAt,
                 LastSeenAt = registeredAt
-            });
+            };
+
+            player.Accounts.Add(account);
+
             database.Players.Add(player);
             database.SaveChanges();
-            return true;
-        });
+
+            isSaved = true;
+        }
+
+        return isSaved;
+    }
 
     private static T Execute<T>(Func<DominoGameDBEntities, T> query)
     {
+        T result;
+
         try
         {
-            using (DominoGameDBEntities database = DatabaseContextFactory.Create())
+            using (DominoGameDBEntities database =
+                DatabaseContextFactory.Create())
             {
-                return query(database);
+                result = query(database);
             }
         }
-        catch (Exception exception) when (exception is EntityException || exception is DbUpdateException
-            || exception is DbEntityValidationException || exception is SqlException)
+        catch (DataException exception)
         {
-            throw new DatabaseOperationException("The account database operation failed.", exception);
+            throw new DatabaseOperationException(
+                DatabaseErrorMessage, exception);
         }
+        catch (SqlException exception)
+        {
+            throw new DatabaseOperationException(
+                DatabaseErrorMessage, exception);
+        }
+
+        return result;
     }
 }
