@@ -12,123 +12,161 @@ public sealed class VerificationUseCases
     private const int ResendCooldownSeconds = 30;
     private const int MaximumActiveSessions = 10000;
     private readonly ConcurrentDictionary<Guid, VerificationState> _sessions = new ConcurrentDictionary<Guid, VerificationState>();
+    private readonly object _sessionSync = new object();
     private readonly IEmailSender _email;
+    private readonly Func<DateTime> _utcNow;
 
-    public VerificationUseCases(IEmailSender email) => _email = email;
+    public VerificationUseCases(IEmailSender email) : this(email, GetUtcNow) { }
+
+    public VerificationUseCases(IEmailSender email, Func<DateTime> utcNow)
+    {
+        _email = email ?? throw new ArgumentNullException(nameof(email));
+        _utcNow = utcNow ?? throw new ArgumentNullException(nameof(utcNow));
+    }
 
     public async Task<Guid> BeginAsync(string email, string language)
     {
-        if (!IsValidEmail(email))
+        Guid sessionId = Guid.Empty;
+        string address = email?.Trim();
+
+        if (IsValidEmail(address))
         {
-            return Guid.Empty;
-        }
-        RemoveExpiredSessions();
-        if (_sessions.Count >= MaximumActiveSessions)
-        {
-            return Guid.Empty;
+            Guid candidate = CreateSession(address, language);
+            if (_sessions.TryGetValue(candidate, out VerificationState state)
+                && await SendAsync(state).ConfigureAwait(false))
+            {
+                sessionId = candidate;
+            }
         }
 
-        Guid sessionId = Guid.NewGuid();
-        VerificationState state = new VerificationState(email, language);
-        _sessions[sessionId] = state;
-        if (await SendAsync(state).ConfigureAwait(false))
-        {
-            return sessionId;
-        }
-        _sessions.TryRemove(sessionId, out _);
-        return Guid.Empty;
+        return sessionId;
     }
 
-    public Task<bool> ResendAsync(Guid sessionId)
+    public async Task<bool> ResendAsync(Guid sessionId)
     {
-        return _sessions.TryGetValue(sessionId, out VerificationState state)
-            ? SendAsync(state) : Task.FromResult(false);
+        bool wasSent = false;
+        if (_sessions.TryGetValue(sessionId, out VerificationState state))
+        {
+            wasSent = await SendAsync(state).ConfigureAwait(false);
+        }
+
+        return wasSent;
     }
 
     public VerificationCodeStatus Verify(Guid sessionId, string code)
     {
-        if (!_sessions.TryGetValue(sessionId, out VerificationState state))
+        VerificationCodeStatus status = VerificationCodeStatus.Expired;
+        if (_sessions.TryGetValue(sessionId, out VerificationState state))
         {
-            return VerificationCodeStatus.Expired;
-        }
-        lock (state)
-        {
-            if (state.IsConsumed)
+            lock (state)
             {
-                return VerificationCodeStatus.Expired;
+                if (!state.IsConsumed)
+                {
+                    status = state.IsSending || !state.WasSent
+                        ? VerificationCodeStatus.Invalid : state.Code.Verify(code);
+                    state.IsVerified = status == VerificationCodeStatus.Valid;
+                }
             }
-            if (state.IsSending || !state.WasSent)
-            {
-                return VerificationCodeStatus.Invalid;
-            }
-            VerificationCodeStatus status = state.Code.Verify(code);
-            state.IsVerified = status == VerificationCodeStatus.Valid;
-            return status;
         }
+
+        return status;
     }
 
-    // A verified session is bound to its email and can authorize one successful write.
-    public T ExecuteVerified<T>(Guid sessionId, string email, Func<T> execute, Predicate<T> succeeded, T rejected)
+    public SignUpValidationStatus ExecuteVerified(Guid sessionId, string email, Func<SignUpValidationStatus> register)
     {
-        if (!_sessions.TryGetValue(sessionId, out VerificationState state))
+        SignUpValidationStatus status = SignUpValidationStatus.VerificationRequired;
+        if (_sessions.TryGetValue(sessionId, out VerificationState state))
         {
-            return rejected;
+            lock (state)
+            {
+                if (!state.IsConsumed && state.IsVerified && !state.IsSending
+                    && _utcNow() < state.ExpiresAtUtc
+                    && string.Equals(email?.Trim(), state.Email, StringComparison.OrdinalIgnoreCase))
+                {
+                    status = register();
+                    if (status == SignUpValidationStatus.Success)
+                    {
+                        state.IsVerified = false;
+                        state.WasSent = false;
+                        state.IsConsumed = true;
+                        _sessions.TryRemove(sessionId, out _);
+                    }
+                }
+            }
         }
-        lock (state)
+
+        return status;
+    }
+
+    private Guid CreateSession(string email, string language)
+    {
+        Guid sessionId = Guid.Empty;
+        lock (_sessionSync)
         {
-            if (state.IsConsumed || !state.IsVerified || state.IsSending || DateTime.UtcNow >= state.ExpiresAtUtc
-                || !string.Equals(email, state.Email, StringComparison.OrdinalIgnoreCase))
+            RemoveExpiredSessions();
+            bool canStart = true;
+            foreach (var entry in _sessions)
             {
-                return rejected;
+                if (string.Equals(entry.Value.Email, email, StringComparison.OrdinalIgnoreCase))
+                {
+                    lock (entry.Value)
+                    {
+                        canStart = !entry.Value.IsSending
+                            && entry.Value.LastSentAtUtc != DateTime.MinValue
+                            && (_utcNow() - entry.Value.LastSentAtUtc).TotalSeconds >= ResendCooldownSeconds;
+                        if (canStart)
+                        {
+                            entry.Value.IsConsumed = true;
+                            _sessions.TryRemove(entry.Key, out _);
+                        }
+                    }
+                    break;
+                }
             }
-            T result = execute();
-            if (succeeded(result))
+
+            if (canStart && _sessions.Count < MaximumActiveSessions)
             {
-                state.IsVerified = false;
-                state.WasSent = false;
-                state.IsConsumed = true;
-                _sessions.TryRemove(sessionId, out _);
+                sessionId = Guid.NewGuid();
+                _sessions[sessionId] = new VerificationState(email, language, _utcNow);
             }
-            return result;
         }
+
+        return sessionId;
     }
 
     private async Task<bool> SendAsync(VerificationState state)
     {
-        string code;
+        bool wasSent = false;
+        string code = null;
         lock (state)
         {
-            if (state.IsConsumed || state.IsSending
-                || (DateTime.UtcNow - state.LastSentAtUtc).TotalSeconds < ResendCooldownSeconds)
+            DateTime now = _utcNow();
+            if (!state.IsConsumed && !state.IsSending && now < state.ExpiresAtUtc
+                && (now - state.LastSentAtUtc).TotalSeconds >= ResendCooldownSeconds)
             {
-                return false;
+                code = state.Code.GenerateCode();
+                state.IsSending = true;
+                state.IsVerified = false;
+                state.WasSent = false;
+                state.LastSentAtUtc = now;
+                state.ExpiresAtUtc = now.AddMinutes(VerificationCodeService.ValidityMinutes);
             }
-            state.IsSending = true;
-            state.IsVerified = false;
-            state.WasSent = false;
-            code = state.Code.GenerateCode();
-            state.ExpiresAtUtc = DateTime.UtcNow.AddMinutes(VerificationCodeService.ValidityMinutes);
         }
-        try
+
+        if (code != null)
         {
-            bool wasSent = await _email.SendVerificationCodeAsync(state.Email, code, state.Language).ConfigureAwait(false);
-            lock (state)
+            try
             {
-                state.WasSent = wasSent;
-                if (wasSent)
-                {
-                    state.LastSentAtUtc = DateTime.UtcNow;
-                }
+                wasSent = await _email.SendVerificationCodeAsync(state.Email, code, state.Language).ConfigureAwait(false);
+                lock (state) { state.WasSent = wasSent; }
             }
-            return wasSent;
-        }
-        finally
-        {
-            lock (state)
+            finally
             {
-                state.IsSending = false;
+                lock (state) { state.IsSending = false; }
             }
         }
+
+        return wasSent;
     }
 
     private void RemoveExpiredSessions()
@@ -137,7 +175,7 @@ public sealed class VerificationUseCases
         {
             lock (entry.Value)
             {
-                if (!entry.Value.IsSending && DateTime.UtcNow >= entry.Value.ExpiresAtUtc)
+                if (!entry.Value.IsSending && _utcNow() >= entry.Value.ExpiresAtUtc)
                 {
                     _sessions.TryRemove(entry.Key, out _);
                 }
@@ -147,27 +185,35 @@ public sealed class VerificationUseCases
 
     private static bool IsValidEmail(string email)
     {
-        if (string.IsNullOrWhiteSpace(email))
+        bool isValid = false;
+        if (!string.IsNullOrWhiteSpace(email))
         {
-            return false;
+            try { isValid = new MailAddress(email).Address == email; }
+            catch (FormatException) { isValid = false; }
         }
-        try
-        {
-            return new MailAddress(email).Address == email;
-        }
-        catch (FormatException)
-        {
-            return false;
-        }
+
+        return isValid;
+    }
+
+    private static DateTime GetUtcNow()
+    {
+        return DateTime.UtcNow;
     }
 
     private sealed class VerificationState
     {
-        public VerificationState(string email, string language) { Email = email; Language = language; }
+        public VerificationState(string email, string language, Func<DateTime> utcNow)
+        {
+            Email = email;
+            Language = language;
+            Code = new VerificationCodeService(utcNow);
+            ExpiresAtUtc = utcNow().AddMinutes(VerificationCodeService.ValidityMinutes);
+        }
+
         public string Email { get; }
         public string Language { get; }
-        public VerificationCodeService Code { get; } = new VerificationCodeService();
-        public DateTime ExpiresAtUtc { get; set; } = DateTime.UtcNow.AddMinutes(VerificationCodeService.ValidityMinutes);
+        public VerificationCodeService Code { get; }
+        public DateTime ExpiresAtUtc { get; set; }
         public DateTime LastSentAtUtc { get; set; } = DateTime.MinValue;
         public bool WasSent { get; set; }
         public bool IsSending { get; set; }

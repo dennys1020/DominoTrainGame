@@ -77,7 +77,6 @@
     <Compile Include="Navigation\IWindowService.cs" />
     <Compile Include="NavigationViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
-    <!-- Preserved until the server publishes its verification contract again. -->
-    <None Include="VerificationCodeViewModel.cs" />
+    <Compile Include="VerificationCodeViewModel.cs" />
   </ItemGroup>
 </Project>

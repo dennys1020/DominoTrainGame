@@ -550,4 +550,13 @@ on the train</value>
   <data name="RegistrationFailedMessage" xml:space="preserve">
     <value>Could not complete registration. Check your details or try again later.</value>
   </data>
+  <data name="RegistrationSystemErrorMessage" xml:space="preserve">
+    <value>A system error occurred while registering your account. Please try again later.</value>
+  </data>
+  <data name="VerificationSystemErrorMessage" xml:space="preserve">
+    <value>A system error occurred while verifying the code. Please try again later.</value>
+  </data>
+  <data name="RegistrationVerificationRequiredMessage" xml:space="preserve">
+    <value>Verify your email with a valid code before completing registration.</value>
+  </data>
 </root>

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using DominoTrainGame.Server.Persistence.Contracts;
@@ -13,7 +15,14 @@ public sealed partial class GameService : ILeaderboardService
 {
     private readonly ILeaderboardSource _leaderboardSource;
 
-    public async Task<LeaderboardResponse> GetLeaderboardAsync()
+    public async Task GetLeaderboardAsync(Guid requestId)
+    {
+        ILeaderboardCallback callback = OperationContext.Current.GetCallbackChannel<ILeaderboardCallback>();
+        LeaderboardResponse response = await LoadLeaderboardAsync().ConfigureAwait(false);
+        NotifyClient(() => callback.OnLeaderboardReceived(requestId, response));
+    }
+
+    private async Task<LeaderboardResponse> LoadLeaderboardAsync()
     {
         LeaderboardResponse response = new LeaderboardResponse();
 

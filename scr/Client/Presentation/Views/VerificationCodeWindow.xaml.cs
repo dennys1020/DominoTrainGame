@@ -153,7 +153,6 @@ public partial class VerificationCodeWindow : Window
 
     private void SetDigit(int index, string text)
     {
-        // Preserve the binding while the view handles typing, pasting and deleting.
         _digitBoxes[index].SetCurrentValue(TextBox.TextProperty, text);
     }
 

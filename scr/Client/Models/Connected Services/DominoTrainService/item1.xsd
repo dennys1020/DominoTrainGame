@@ -1,15 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="urn:domino-train:services:v1" elementFormDefault="qualified" targetNamespace="urn:domino-train:services:v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
+  <xs:import schemaLocation="item3.xsd" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="item.xsd" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
   <xs:element name="GetLeaderboard">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="requestId" xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/" type="q1:guid" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetLeaderboardResponse">
+  <xs:element name="OnLeaderboardReceived">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="GetLeaderboardResult" nillable="true" type="q1:LeaderboardResponse" />
+        <xs:element minOccurs="0" name="requestId" xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/" type="q2:guid" />
+        <xs:element minOccurs="0" name="response" nillable="true" xmlns:q3="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" type="q3:LeaderboardResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
