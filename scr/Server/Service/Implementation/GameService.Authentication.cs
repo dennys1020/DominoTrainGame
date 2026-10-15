@@ -10,13 +10,32 @@ public sealed partial class GameService : IAuthenticationService
     private readonly LoginValidator _loginValidator;
     private readonly SignUpValidator _signUpValidator;
 
-    public bool LogIn(string identifier, string password)
+    public LoginStatus LogIn(string identifier, string password)
     {
-        bool canLogIn =
-            _loginValidator.LogInUser(identifier, password)
-            == LoginValidationStatus.Success;
+        LoginValidationStatus validationStatus =
+            _loginValidator.LogInUser(identifier, password);
+        LoginStatus status;
 
-        return canLogIn;
+        switch (validationStatus)
+        {
+            case LoginValidationStatus.Success:
+                status = LoginStatus.Success;
+                break;
+            case LoginValidationStatus.EmptyFields:
+                status = LoginStatus.EmptyFields;
+                break;
+            case LoginValidationStatus.UserNotFound:
+                status = LoginStatus.UserNotFound;
+                break;
+            case LoginValidationStatus.IncorrectPassword:
+                status = LoginStatus.IncorrectPassword;
+                break;
+            default:
+                status = LoginStatus.SystemError;
+                break;
+        }
+
+        return status;
     }
 
     public bool RegisterUser(User user)

@@ -7,7 +7,7 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IGameServices
 {
-    Task<bool> LogInAsync(string identifier, string password);
+    Task<LoginStatus> LogInAsync(string identifier, string password);
     Task<bool> RegisterUserAsync(User user);
     Task<List<LeaderboardEntry>> GetEntriesAsync(CancellationToken cancellationToken);
 }

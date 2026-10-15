@@ -7,7 +7,7 @@ namespace DominoTrainGame.Server.Service.Contracts;
 public interface IAuthenticationService
 {
     [OperationContract]
-    bool LogIn(string identificator, string password);
+    LoginStatus LogIn(string identificator, string password);
 
     [OperationContract]
     bool RegisterUser(User user);
