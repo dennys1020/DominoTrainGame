@@ -35,12 +35,6 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Compile Include="**\*.cs" Exclude="bin\**;obj\**;Connected Services\**" />
-    <None Include="Connected Services\DominoTrainService\item.xsd" />
-    <None Include="Connected Services\DominoTrainService\item.disco" />
-    <None Include="Connected Services\DominoTrainService\GameService.wsdl" />
-    <None Include="Connected Services\DominoTrainService\item.wsdl" />
-    <None Include="Connected Services\DominoTrainService\item0.xsd" />
-    <None Include="Connected Services\DominoTrainService\item1.xsd" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -56,25 +50,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\DominoTrainService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\DominoTrainService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\DominoTrainService\" />
-    <Compile Include="Connected Services\DominoTrainService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
-    <None Include="Connected Services\DominoTrainService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-      <CustomToolNamespace>DominoTrainGame.Client.Models.DominoTrainService</CustomToolNamespace>
-    </None>
+    <Compile Include="Connected Services\DominoTrainService\Reference.cs" />
   </ItemGroup>
 </Project>

@@ -24,17 +24,6 @@ internal static class DtoMapper
         _ => DTO.SignUpValidationStatus.DatabaseError
     };
 
-    public static DTO.RecoverPasswordValidationStatus Map(RecoverPasswordValidationStatus status) => status switch
-    {
-        RecoverPasswordValidationStatus.Success => DTO.RecoverPasswordValidationStatus.Success,
-        RecoverPasswordValidationStatus.EmptyFields => DTO.RecoverPasswordValidationStatus.EmptyFields,
-        RecoverPasswordValidationStatus.UserNotFound => DTO.RecoverPasswordValidationStatus.UserNotFound,
-        RecoverPasswordValidationStatus.PasswordTooShort => DTO.RecoverPasswordValidationStatus.PasswordTooShort,
-        RecoverPasswordValidationStatus.PasswordsDoNotMatch => DTO.RecoverPasswordValidationStatus.PasswordsDoNotMatch,
-        RecoverPasswordValidationStatus.VerificationRequired => DTO.RecoverPasswordValidationStatus.VerificationRequired,
-        _ => DTO.RecoverPasswordValidationStatus.DatabaseError
-    };
-
     public static DTO.VerificationCodeStatus Map(VerificationCodeStatus status) => status switch
     {
         VerificationCodeStatus.Valid => DTO.VerificationCodeStatus.Valid,

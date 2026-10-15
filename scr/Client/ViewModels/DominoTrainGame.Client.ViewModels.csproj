@@ -56,11 +56,7 @@
     <Compile Include="FormattedLocalizationViewModel.cs" />
     <Compile Include="LocalizationViewModel.cs" />
     <Compile Include="MatchResultsViewModel.cs" />
-    <Compile Include="MatchRoundViewModel.cs" />
-    <Compile Include="PlayerMatchResultViewModel.cs" />
-    <Compile Include="RoundScoreViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
-    <Compile Include="RoomPlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -77,13 +73,9 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\ObservableViewModel.cs" />
     <Compile Include="Common\ScreenViewModel.cs" />
-    <Compile Include="FriendsListViewModel.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="Navigation\IWindowService.cs" />
     <Compile Include="NavigationViewModel.cs" />
-    <Compile Include="ProfileViewModel.cs" />
-    <Compile Include="RecoverPasswordViewModel.cs" />
-    <Compile Include="RoomScreenViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
     <Compile Include="VerificationCodeViewModel.cs" />
   </ItemGroup>

@@ -23,16 +23,6 @@ public sealed class SqlAuthenticationStore : IAuthenticationStore
             PasswordHash = player.PasswordHash
         }).FirstOrDefault());
 
-    public AccountRecord FindAccount(int playerId) => Execute(database => database.Players
-        .AsNoTracking()
-        .Where(player => player.PlayerId == playerId)
-        .Select(player => new AccountRecord
-        {
-            PlayerId = player.PlayerId,
-            Email = player.Email,
-            PasswordHash = player.PasswordHash
-        }).FirstOrDefault());
-
     public bool PlayerExists(string username, string email) => Execute(database => database.Players
         .Any(player => player.Username == username || player.Email == email));
 
@@ -63,19 +53,6 @@ public sealed class SqlAuthenticationStore : IAuthenticationStore
             database.SaveChanges();
             return true;
         });
-
-    public bool SaveNewPassword(int playerId, string passwordHash) => Execute(database =>
-    {
-        Player player = database.Players.FirstOrDefault(candidate => candidate.PlayerId == playerId);
-        if (player is null)
-        {
-            return false;
-        }
-
-        player.PasswordHash = passwordHash;
-        database.SaveChanges();
-        return true;
-    });
 
     private static T Execute<T>(Func<DominoGameDBEntities, T> query)
     {

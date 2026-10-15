@@ -14,12 +14,7 @@ public partial class Player
     )]
     public Player()
     {
-        this.Bans = new HashSet<Ban>();
-        this.ReceivedFriendshipRequests = new HashSet<FriendshipRequest>();
-        this.SentFriendshipRequests = new HashSet<FriendshipRequest>();
-        this.LobbyPlayers = new HashSet<LobbyPlayer>();
         this.MatchResults = new HashSet<MatchResult>();
-        this.Reports = new HashSet<Report>();
         this.Accounts = new HashSet<Account>();
     }
 
@@ -30,17 +25,7 @@ public partial class Player
     public byte IsGuest { get; set; }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<Ban> Bans { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<FriendshipRequest> ReceivedFriendshipRequests { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<FriendshipRequest> SentFriendshipRequests { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<LobbyPlayer> LobbyPlayers { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<MatchResult> MatchResults { get; set; }
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-    public virtual ICollection<Report> Reports { get; set; }
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
     public virtual ICollection<Account> Accounts { get; set; }
 }

@@ -55,19 +55,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\EntityFramework\Account.cs" />
-    <Compile Include="Data\EntityFramework\Ban.cs" />
     <Compile Include="Data\EntityFramework\DominoGameDBEntities.cs" />
     <Compile Include="Data\DatabaseContextFactory.cs" />
     <Compile Include="Data\DominoGameDBEntities.cs" />
-    <Compile Include="Data\EntityFramework\FriendshipRequest.cs" />
-    <Compile Include="Data\EntityFramework\Lobby.cs" />
-    <Compile Include="Data\EntityFramework\LobbyPlayer.cs" />
     <Compile Include="Data\EntityFramework\Match.cs" />
     <Compile Include="Data\EntityFramework\MatchResult.cs" />
     <Compile Include="Data\EntityFramework\Player.cs" />
-    <Compile Include="Data\EntityFramework\Report.cs" />
     <Compile Include="Data\Repositories\LeaderboardRepository.cs" />
-    <Compile Include="Data\EntityFramework\StatusFriendshipRequest.cs" />
     <EntityDeploy Include="Data\EntityFramework\DominoGameModel.edmx" />
     <Compile Include="Data\SqlServerConfiguration.cs" />
   </ItemGroup>

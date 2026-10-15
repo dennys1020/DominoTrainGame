@@ -5,13 +5,9 @@ namespace DominoTrainGame.Views;
 
 public partial class RoomWindow : Window
 {
-    public RoomWindow() : this(new RoomContext(false)) { }
-    public RoomWindow(bool isHost) : this(new RoomContext(isHost)) { }
-    public RoomWindow(RoomViewModel room, bool isHost) : this(new RoomContext(isHost, room)) { }
-
-    public RoomWindow(RoomContext context)
+    public RoomWindow()
     {
         InitializeComponent();
-        ClientComposition.Bind(this, Screen.Room, context);
+        ClientComposition.Bind(this, Screen.Room);
     }
 }

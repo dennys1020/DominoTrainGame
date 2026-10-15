@@ -14,10 +14,4 @@ public interface IAuthenticationService
 
     [OperationContract]
     SignUpResponse RegisterUser(RegistrationRequest request);
-
-    [OperationContract]
-    RecoveryAccountDto FindAccount(FindAccountRequest request);
-
-    [OperationContract]
-    PasswordResetResponse UpdatePassword(PasswordResetRequest request);
 }
