@@ -3,17 +3,17 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
-using DominoTrainGame.Utils;
+using DominoTrainGame.Client.Models.DominoTrainService;
 
 namespace DominoTrainGame.ViewModels;
 
 public sealed class VerificationRequest
 {
-    public VerificationRequest(string email, IVerificationSession session) { Email = email; Session = session; }
+    public VerificationRequest(string email, Guid sessionId) { Email = email; SessionId = sessionId; }
     public string Email { get; }
-    public IVerificationSession Session { get; }
+    public Guid SessionId { get; }
 }
 
 public sealed class VerificationDigit : ObservableViewModel
@@ -39,7 +39,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
         _request = request;
         Instruction = string.Format(CultureInfo.CurrentCulture, UiStrings.VerificationCodeSentMessage, request.Email);
         Digits = new ObservableCollection<VerificationDigit>(Enumerable.Range(0, CodeLength).Select(_ => new VerificationDigit()));
-        VerifyCommand = new RelayCommand(Verify);
+        VerifyCommand = new AsyncCommand(VerifyAsync);
         ResendCommand = new AsyncCommand(ResendAsync);
         UpdateCountdown();
     }
@@ -51,10 +51,10 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
     public string Message { get => _message; private set => SetField(ref _message, value); }
     public string ResendLabel { get => _resendLabel; private set => SetField(ref _resendLabel, value); }
     public bool CanResend { get => _canResend; private set => SetField(ref _canResend, value); }
-    public RelayCommand VerifyCommand { get; }
+    public AsyncCommand VerifyCommand { get; }
     public AsyncCommand ResendCommand { get; }
 
-    private void Verify()
+    private async Task VerifyAsync()
     {
         string enteredCode = string.Concat(Digits.Select(digit => digit.Text));
         if (enteredCode.Length < CodeLength)
@@ -64,12 +64,16 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
             return;
         }
 
-        VerificationCodeStatus status = _request.Session.Verify(enteredCode);
+        VerificationCodeStatus status = await _services.VerifyCodeAsync(_request.SessionId, enteredCode);
         if (status == VerificationCodeStatus.Valid) { Window.Close(true); }
         else if (status == VerificationCodeStatus.Invalid)
         {
             Message = UiStrings.VerificationCodeInvalidMessage;
             ClearDigits();
+        }
+        else if (status == VerificationCodeStatus.ServiceUnavailable)
+        {
+            Message = UiStrings.VerificationCodeSendErrorMessage;
         }
         else
         {
@@ -81,8 +85,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
 
     private async Task ResendAsync()
     {
-        string code = _request.Session.GenerateCode();
-        bool wasSent = await _services.SendVerificationCodeAsync(_request.Email, code);
+        bool wasSent = await _services.ResendVerificationAsync(_request.SessionId);
         if (wasSent)
         {
             Message = UiStrings.VerificationCodeResentMessage;

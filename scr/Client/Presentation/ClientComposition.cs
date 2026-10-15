@@ -1,6 +1,6 @@
 using System.Windows;
 using DominoTrainGame.Client.Models;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Navigation;
 using DominoTrainGame.ViewModels;
 using DominoTrainGame.Views;
@@ -9,7 +9,7 @@ namespace DominoTrainGame;
 
 internal static class ClientComposition
 {
-    private static readonly IGameServices _services = LocalGameServices.Create();
+    private static readonly IGameServices _services = new RemoteGameServices();
 
     public static void Bind(Window window, Screen screen, object context = null)
     {

@@ -1,7 +1,6 @@
 <Solution>
-  <Project Path="scr/Server/Bootstrapper/DominoTrainGame.Server.Bootstrapper.csproj" Id="156578c8-a897-5acb-9f85-44015b672575" />
   <Project Path="scr/Server/Application/DominoTrainGame.Server.Application.csproj" Id="aa6eaca4-4f78-5a4f-9cff-36d1fbe14b84" />
-  <Project Path="scr/Server/Domain/DominoTrainGame.Server.Domain.csproj" Id="66ae630f-920d-5711-8bb4-1f302a2adf57" />
-  <Project Path="scr/Server/Infrastructure/DominoTrainGame.Server.Infrastructure.csproj" Id="106280d3-8494-5c6c-8dac-b11a78ca5879" />
-  <Project Path="scr/Shared/DominoTrainGame.Contracts.csproj" Id="101cf13f-d241-56d5-9f99-cf8b1977650a" />
+  <Project Path="scr/Server/Host/DominoTrainGame.Server.Host.csproj" Id="156578c8-a897-5acb-9f85-44015b672575" />
+  <Project Path="scr/Server/Persistence/DominoTrainGame.Server.Persistence.csproj" Id="106280d3-8494-5c6c-8dac-b11a78ca5879" />
+  <Project Path="scr/Server/Service/DominoTrainGame.Server.Service.csproj" Id="66ae630f-920d-5711-8bb4-1f302a2adf57" />
 </Solution>

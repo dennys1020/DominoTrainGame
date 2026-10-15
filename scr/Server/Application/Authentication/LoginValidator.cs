@@ -1,39 +1,38 @@
-using DominoTrainGame.Server.Application.Ports;
-using DominoTrainGame.Validator;
+using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Server.Application.Security;
+using DominoTrainGame.Server.Persistence.Contracts;
+using DominoTrainGame.Server.Persistence.Errors;
+using DominoTrainGame.Server.Persistence.Models;
 
-namespace DominoTrainGame;
+namespace DominoTrainGame.Server.Application.Authentication;
 
 public sealed class LoginValidator
 {
     private readonly IAuthenticationStore _store;
 
-    public LoginValidator(IAuthenticationStore store)
-    {
-        _store = store;
-    }
+    public LoginValidator(IAuthenticationStore store) => _store = store;
 
-    public LoginValidationStatus LogInUser(string usernameOrEmail, string password)
+    public LoginValidationStatus LogInUser(string identifier, string password)
     {
-        LoginValidationStatus status = ValidateInput(usernameOrEmail, password);
-
-        if (status == LoginValidationStatus.Success)
+        if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
         {
-            status = _store.AuthenticateUser(usernameOrEmail, password);
+            return LoginValidationStatus.EmptyFields;
         }
 
-        return status;
-    }
-
-    private static LoginValidationStatus ValidateInput(string usernameOrEmail, string password)
-    {
-        LoginValidationStatus status = LoginValidationStatus.Success;
-
-        if (string.IsNullOrWhiteSpace(usernameOrEmail) || string.IsNullOrWhiteSpace(password))
+        try
         {
-            status = LoginValidationStatus.EmptyFields;
+            AccountRecord account = _store.FindAccount(identifier);
+            if (account is null)
+            {
+                return LoginValidationStatus.UserNotFound;
+            }
+
+            return PasswordHasher.Verify(account.PasswordHash, password)
+                ? LoginValidationStatus.Success : LoginValidationStatus.IncorrectPassword;
         }
-
-        return status;
+        catch (DatabaseOperationException)
+        {
+            return LoginValidationStatus.DatabaseError;
+        }
     }
-
 }
