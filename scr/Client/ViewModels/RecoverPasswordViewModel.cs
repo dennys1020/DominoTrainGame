@@ -1,5 +1,7 @@
+using DominoTrainGame.Client.Models.DominoTrainService;
+using System;
 using System.Threading.Tasks;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
 
 namespace DominoTrainGame.ViewModels;
@@ -9,6 +11,7 @@ public sealed class RecoverPasswordViewModel : ScreenViewModel
     private const int MinimumPasswordLength = 12;
     private readonly IGameServices _services;
     private int _playerId;
+    private Guid _verificationId;
     private string _identifier = string.Empty;
     private string _newPassword = string.Empty;
     private string _confirmation = string.Empty;
@@ -19,7 +22,7 @@ public sealed class RecoverPasswordViewModel : ScreenViewModel
     {
         _services = services;
         SendCodeCommand = new AsyncCommand(SendCodeAsync);
-        UpdatePasswordCommand = new RelayCommand(UpdatePassword);
+        UpdatePasswordCommand = new AsyncCommand(UpdatePasswordAsync);
     }
 
     public string Identifier { get => _identifier; set => SetField(ref _identifier, value); }
@@ -29,20 +32,20 @@ public sealed class RecoverPasswordViewModel : ScreenViewModel
     public bool IsPasswordStep { get => _isPasswordStep; private set { SetField(ref _isPasswordStep, value); Notify(nameof(IsIdentifyStep)); } }
     public bool IsIdentifyStep => !IsPasswordStep;
     public AsyncCommand SendCodeCommand { get; }
-    public RelayCommand UpdatePasswordCommand { get; }
+    public AsyncCommand UpdatePasswordCommand { get; }
 
     private async Task SendCodeAsync()
     {
-        RecoverPasswordValidationStatus status = _services.FindAccount(Identifier, out int playerId, out string email);
+        RecoveryAccountDto account = await _services.FindAccountAsync(Identifier);
+        RecoverPasswordValidationStatus status = account.Status;
         Message = DescribeStatus(status);
         if (status != RecoverPasswordValidationStatus.Success) { return; }
-        _playerId = playerId;
-        IVerificationSession session = _services.CreateVerificationSession();
-        string code = session.GenerateCode();
-        bool wasSent = await _services.SendVerificationCodeAsync(email, code);
-        if (wasSent)
+        _playerId = account.PlayerId;
+        VerificationSessionDto session = await _services.BeginVerificationAsync(account.Email);
+        _verificationId = session.SessionId;
+        if (session.WasSent)
         {
-            if (Window.ShowDialog(Screen.Verification, new VerificationRequest(email, session)) == true)
+            if (Window.ShowDialog(Screen.Verification, new VerificationRequest(account.Email, session.SessionId)) == true)
             {
                 IsPasswordStep = true;
                 Message = string.Empty;
@@ -51,9 +54,9 @@ public sealed class RecoverPasswordViewModel : ScreenViewModel
         else { Message = UiStrings.VerificationCodeSendErrorMessage; }
     }
 
-    private void UpdatePassword()
+    private async Task UpdatePasswordAsync()
     {
-        RecoverPasswordValidationStatus status = _services.UpdatePassword(_playerId, NewPassword, Confirmation);
+        RecoverPasswordValidationStatus status = await _services.UpdatePasswordAsync(_playerId, NewPassword, Confirmation, _verificationId);
         Message = DescribeStatus(status);
         if (status == RecoverPasswordValidationStatus.Success) { Window.Close(true); }
     }
@@ -78,6 +81,9 @@ public sealed class RecoverPasswordViewModel : ScreenViewModel
                 break;
             case RecoverPasswordValidationStatus.PasswordsDoNotMatch:
                 message = UiStrings.PasswordsDoNotMatchMessage;
+                break;
+            case RecoverPasswordValidationStatus.VerificationRequired:
+                message = UiStrings.VerificationCodeExpiredMessage;
                 break;
             case RecoverPasswordValidationStatus.DatabaseError:
                 message = UiStrings.DatabaseErrorMessage;

@@ -1,54 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
     <ProjectGuid>{DB2F91B1-D84D-5551-8086-F92D9EC281F4}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>DominoTrainGame</RootNamespace>
+    <RootNamespace>DominoTrainGame.Client.Models</RootNamespace>
     <AssemblyName>DominoTrainGame.Client.Models</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
     <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Compile Include="**\*.cs" Exclude="bin\**;obj\**;Connected Services\**" />
+    <None Include="Connected Services\DominoTrainService\item.xsd" />
+    <None Include="Connected Services\DominoTrainService\item.disco" />
+    <None Include="Connected Services\DominoTrainService\GameService.wsdl" />
+    <None Include="Connected Services\DominoTrainService\item.wsdl" />
+    <None Include="Connected Services\DominoTrainService\item0.xsd" />
+    <None Include="Connected Services\DominoTrainService\item1.xsd" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LocalGameServices.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
-      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
-      <Name>DominoTrainGame.Contracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Server\Bootstrapper\DominoTrainGame.Server.Bootstrapper.csproj">
-      <Project>{156578C8-A897-5ACB-9F85-44015B672575}</Project>
-      <Name>DominoTrainGame.Server.Bootstrapper</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <EmbeddedResource Include="Resources\Localization\UiStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UiStrings.Designer.cs</LastGenOutput>
+      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.resources</LogicalName>
+      <CustomToolNamespace>DominoTrainGame.Resources.Localization</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Localization\UiStrings.en.resx">
+      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.en.resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\DominoTrainService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\DominoTrainService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\DominoTrainService\" />
+    <Compile Include="Connected Services\DominoTrainService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <None Include="Connected Services\DominoTrainService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <CustomToolNamespace>DominoTrainGame.Client.Models.DominoTrainService</CustomToolNamespace>
+    </None>
+  </ItemGroup>
 </Project>

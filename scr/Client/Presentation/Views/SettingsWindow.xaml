@@ -12,7 +12,7 @@
     Background="{StaticResource Mist}"
     UseLayoutRounding="True"
     SnapsToDevicePixels="True"
-    xmlns:strings="clr-namespace:DominoTrainGame.Resources.Localization;assembly=DominoTrainGame.Contracts"
+    xmlns:strings="clr-namespace:DominoTrainGame.Resources.Localization;assembly=DominoTrainGame.Client.Models"
     xmlns:resources="clr-namespace:DominoTrainGame.Resources;assembly=DominoTrainGame.Client.ViewModels"
     ShowInTaskbar="False">
     <Grid>

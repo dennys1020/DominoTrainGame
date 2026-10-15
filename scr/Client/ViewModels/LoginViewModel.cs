@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
-using DominoTrainGame.Validator;
+using DominoTrainGame.Client.Models.DominoTrainService;
 
 namespace DominoTrainGame.ViewModels;
 
@@ -39,7 +39,7 @@ public sealed class LoginViewModel : ScreenViewModel
         IsLoggingIn = true;
         try
         {
-            LoginValidationStatus status = await Task.Run(() => _services.LogInUser(identifier, password));
+            LoginValidationStatus status = await _services.LogInAsync(identifier, password);
             if (!Window.IsVisible) { return; }
             if (status == LoginValidationStatus.Success)
             {

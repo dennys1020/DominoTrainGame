@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
-using DominoTrainGame.Utils;
+using DominoTrainGame.Client.Models.DominoTrainService;
 
 namespace DominoTrainGame.ViewModels;
 
@@ -31,25 +31,23 @@ public sealed class SignUpViewModel : ScreenViewModel
         string email = Email.Trim();
         string username = Username;
         string password = Password;
-        SignUpValidationStatus status = _services.CheckAvailability(username, email, password);
+        SignUpValidationStatus status = await _services.CheckAvailabilityAsync(username, email, password);
         if (status != SignUpValidationStatus.Success)
         {
             Window.ShowMessage(DescribeStatus(status));
             return;
         }
 
-        IVerificationSession session = _services.CreateVerificationSession();
-        string code = session.GenerateCode();
-        bool wasSent = await _services.SendVerificationCodeAsync(email, code);
-        if (!wasSent)
+        VerificationSessionDto session = await _services.BeginVerificationAsync(email);
+        if (!session.WasSent)
         {
             Window.ShowMessage(UiStrings.VerificationCodeSendErrorMessage);
             return;
         }
 
-        bool isVerified = Window.ShowDialog(Screen.Verification, new VerificationRequest(email, session)) == true;
+        bool isVerified = Window.ShowDialog(Screen.Verification, new VerificationRequest(email, session.SessionId)) == true;
         if (!isVerified) { return; }
-        status = _services.RegisterUser(username, email, password);
+        status = await _services.RegisterUserAsync(username, email, password, session.SessionId);
         if (status != SignUpValidationStatus.Success) { Window.ShowMessage(DescribeStatus(status)); }
         else
         {
@@ -74,6 +72,9 @@ public sealed class SignUpViewModel : ScreenViewModel
                 break;
             case SignUpValidationStatus.UserAlreadyExists:
                 statusMessage = UiStrings.MessageUserAlreadyExists;
+                break;
+            case SignUpValidationStatus.VerificationRequired:
+                statusMessage = UiStrings.VerificationCodeExpiredMessage;
                 break;
             case SignUpValidationStatus.DatabaseError:
                 statusMessage = UiStrings.DatabaseErrorMessage;

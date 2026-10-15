@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="LoginRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Identifier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginRequest" nillable="true" type="tns:LoginRequest" />
+  <xs:complexType name="LoginResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Status" type="tns:LoginValidationStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginResponse" nillable="true" type="tns:LoginResponse" />
+  <xs:simpleType name="LoginValidationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="EmptyFields" />
+      <xs:enumeration value="UserNotFound" />
+      <xs:enumeration value="IncorrectPassword" />
+      <xs:enumeration value="DatabaseError" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LoginValidationStatus" nillable="true" type="tns:LoginValidationStatus" />
+  <xs:complexType name="RegistrationRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Language" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="VerificationId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RegistrationRequest" nillable="true" type="tns:RegistrationRequest" />
+  <xs:complexType name="SignUpResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Status" type="tns:SignUpValidationStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SignUpResponse" nillable="true" type="tns:SignUpResponse" />
+  <xs:simpleType name="SignUpValidationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="EmptyFields" />
+      <xs:enumeration value="InvalidEmail" />
+      <xs:enumeration value="PasswordTooShort" />
+      <xs:enumeration value="UserAlreadyExists" />
+      <xs:enumeration value="VerificationRequired" />
+      <xs:enumeration value="DatabaseError" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="SignUpValidationStatus" nillable="true" type="tns:SignUpValidationStatus" />
+  <xs:complexType name="FindAccountRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Identifier" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FindAccountRequest" nillable="true" type="tns:FindAccountRequest" />
+  <xs:complexType name="RecoveryAccountDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:RecoverPasswordValidationStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RecoveryAccountDto" nillable="true" type="tns:RecoveryAccountDto" />
+  <xs:simpleType name="RecoverPasswordValidationStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="EmptyFields" />
+      <xs:enumeration value="UserNotFound" />
+      <xs:enumeration value="PasswordTooShort" />
+      <xs:enumeration value="PasswordsDoNotMatch" />
+      <xs:enumeration value="VerificationRequired" />
+      <xs:enumeration value="DatabaseError" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RecoverPasswordValidationStatus" nillable="true" type="tns:RecoverPasswordValidationStatus" />
+  <xs:complexType name="PasswordResetRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Confirmation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="VerificationId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PasswordResetRequest" nillable="true" type="tns:PasswordResetRequest" />
+  <xs:complexType name="PasswordResetResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Status" type="tns:RecoverPasswordValidationStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PasswordResetResponse" nillable="true" type="tns:PasswordResetResponse" />
+  <xs:complexType name="BeginVerificationRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Language" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BeginVerificationRequest" nillable="true" type="tns:BeginVerificationRequest" />
+  <xs:complexType name="ResendVerificationRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+      <xs:element minOccurs="0" name="SessionId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ResendVerificationRequest" nillable="true" type="tns:ResendVerificationRequest" />
+  <xs:complexType name="VerifyCodeRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SessionId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerifyCodeRequest" nillable="true" type="tns:VerifyCodeRequest" />
+  <xs:complexType name="VerificationCodeResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Status" type="tns:VerificationCodeStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerificationCodeResponse" nillable="true" type="tns:VerificationCodeResponse" />
+  <xs:simpleType name="VerificationCodeStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Valid" />
+      <xs:enumeration value="Invalid" />
+      <xs:enumeration value="Expired" />
+      <xs:enumeration value="TooManyAttempts" />
+      <xs:enumeration value="ServiceUnavailable" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="VerificationCodeStatus" nillable="true" type="tns:VerificationCodeStatus" />
+  <xs:complexType name="VerificationNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+      <xs:element minOccurs="0" name="Result" nillable="true" type="tns:VerificationSessionDto" />
+      <xs:element minOccurs="0" name="State" type="tns:OperationState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerificationNotification" nillable="true" type="tns:VerificationNotification" />
+  <xs:complexType name="VerificationSessionDto">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SessionId" type="ser:guid" />
+      <xs:element minOccurs="0" name="WasSent" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="VerificationSessionDto" nillable="true" type="tns:VerificationSessionDto" />
+  <xs:simpleType name="OperationState">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Started" />
+      <xs:enumeration value="Completed" />
+      <xs:enumeration value="Failed" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="OperationState" nillable="true" type="tns:OperationState" />
+  <xs:complexType name="LeaderboardRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardRequest" nillable="true" type="tns:LeaderboardRequest" />
+  <xs:complexType name="LeaderboardNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+      <xs:element minOccurs="0" name="Result" nillable="true" type="tns:LeaderboardResponse" />
+      <xs:element minOccurs="0" name="State" type="tns:OperationState" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardNotification" nillable="true" type="tns:LeaderboardNotification" />
+  <xs:complexType name="LeaderboardResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Entries" nillable="true" type="tns:ArrayOfLeaderboardEntry" />
+      <xs:element minOccurs="0" name="Succeeded" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardResponse" nillable="true" type="tns:LeaderboardResponse" />
+  <xs:complexType name="ArrayOfLeaderboardEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LeaderboardEntry" nillable="true" type="tns:LeaderboardEntry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLeaderboardEntry" nillable="true" type="tns:ArrayOfLeaderboardEntry" />
+  <xs:complexType name="LeaderboardEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Rank" type="xs:int" />
+      <xs:element minOccurs="0" name="TotalScore" type="xs:long" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Wins" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardEntry" nillable="true" type="tns:LeaderboardEntry" />
+</xs:schema>

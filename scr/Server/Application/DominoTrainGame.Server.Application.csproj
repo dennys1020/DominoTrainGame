@@ -1,60 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
     <ProjectGuid>{AA6EACA4-4F78-5A4F-9CFF-36D1FBE14B84}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>DominoTrainGame</RootNamespace>
+    <RootNamespace>DominoTrainGame.Server.Application</RootNamespace>
     <AssemblyName>DominoTrainGame.Server.Application</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
     <DefineConstants>TRACE</DefineConstants>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Configuration" />
+    <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\LoginValidator.cs" />
-    <Compile Include="Authentication\RecoverPasswordValidator.cs" />
-    <Compile Include="Authentication\SignUpValidator.cs" />
-    <Compile Include="GameServices.cs" />
-    <Compile Include="Ports\IAuthenticationStore.cs" />
-    <Compile Include="Ports\IEmailSender.cs" />
-    <Compile Include="Ports\ILeaderboardSource.cs" />
+    <ProjectReference Include="..\Persistence\DominoTrainGame.Server.Persistence.csproj">
+      <Project>{106280D3-8494-5C6C-8DAC-B11A78CA5879}</Project>
+      <Name>DominoTrainGame.Server.Persistence</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Domain\DominoTrainGame.Server.Domain.csproj">
-      <Project>{66AE630F-920D-5711-8BB4-1F302A2ADF57}</Project>
-      <Name>DominoTrainGame.Server.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
-      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
-      <Name>DominoTrainGame.Contracts</Name>
-    </ProjectReference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\packages\log4net.3.4.0\lib\net462\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net.Ext.Trace">
+      <HintPath>..\..\..\packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <None Include="packages.config" />
+    <EmbeddedResource Include="Notifications\EmailTemplates.resx" />
+    <EmbeddedResource Include="Notifications\EmailTemplates.es.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

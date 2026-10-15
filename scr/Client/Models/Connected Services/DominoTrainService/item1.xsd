@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="urn:domino-train:services:v1" elementFormDefault="qualified" targetNamespace="urn:domino-train:services:v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" />
+  <xs:element name="LogIn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q1:LoginRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LogInResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="LogInResult" nillable="true" type="q2:LoginResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckAvailability">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q3:RegistrationRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckAvailabilityResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="CheckAvailabilityResult" nillable="true" type="q4:SignUpResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterUser">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q5:RegistrationRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RegisterUserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="RegisterUserResult" nillable="true" type="q6:SignUpResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindAccount">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q7:FindAccountRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FindAccountResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="FindAccountResult" nillable="true" type="q8:RecoveryAccountDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q9:PasswordResetRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdatePasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="UpdatePasswordResult" nillable="true" type="q10:PasswordResetResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BeginVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q11:BeginVerificationRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ResendVerification">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q12:ResendVerificationRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifyCode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q13:VerifyCodeRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VerifyCodeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="VerifyCodeResult" nillable="true" type="q14:VerificationCodeResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnVerificationChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="notification" nillable="true" type="q15:VerificationNotification" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLeaderboard">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="request" nillable="true" type="q16:LeaderboardRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="OnLeaderboardChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DominoTrainGame.Server.Service.DTO" minOccurs="0" name="notification" nillable="true" type="q17:LeaderboardNotification" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

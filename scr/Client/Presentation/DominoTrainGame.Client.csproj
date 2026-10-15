@@ -8,6 +8,7 @@
     <RootNamespace>DominoTrainGame</RootNamespace>
     <AssemblyName>DominoTrainGame</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AppConfig>$(MSBuildProjectDirectory)\..\Models\App.config</AppConfig>
     <Deterministic>true</Deterministic>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -183,30 +184,12 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Resource Include="Assets\Fonts\PressStart2P-Regular.ttf" />
-    <None Include="Properties\DataSources\App.datasource" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    <None Include="..\Models\App.config">
+      <Link>App.config</Link>
     </None>
-    <None Include="App.config" />
     <Resource Include="Assets\Fonts\OFL.txt" />
-    <Resource Include="Resources\Images\avatar_generic_preview.png" />
-    <Resource Include="Resources\Images\PixelTrain.png" />
+    <Resource Include="Resources\Images\*.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ViewModels\DominoTrainGame.Client.ViewModels.csproj">
@@ -217,31 +200,8 @@
       <Project>{DB2F91B1-D84D-5551-8086-F92D9EC281F4}</Project>
       <Name>DominoTrainGame.Client.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
-      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
-      <Name>DominoTrainGame.Contracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="NormalizeGeneratedCode" BeforeTargets="BeforeCompile">
-    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\..\..\scripts\NormalizeGeneratedCode.ps1&quot; -ProjectFile &quot;$(MSBuildProjectFullPath)&quot;" />
-  </Target>
-  <ItemGroup>
-    <None Include="..\..\Server\Configuration\Database.config">
-      <Link>Configuration\Database.config</Link>
-      <TargetPath>Database.config</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Server\Configuration\Secrets.config" Condition="Exists('..\..\Server\Configuration\Secrets.config')">
-      <Link>Configuration\Secrets.config</Link>
-      <TargetPath>Secrets.config</TargetPath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\Server\Configuration\Database.example.config" />
-  </ItemGroup>
-  <Target Name="InitializeLocalDatabaseConfig" BeforeTargets="PrepareForBuild">
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\..\Server\Configuration\Database.example.config" DestinationFiles="$(MSBuildProjectDirectory)\..\..\Server\Configuration\Database.config" Condition="!Exists('..\..\Server\Configuration\Database.config')" />
-  </Target>
   <ItemGroup>
     <Compile Include="Behaviors\PasswordBinding.cs" />
     <Compile Include="ClientComposition.cs" />

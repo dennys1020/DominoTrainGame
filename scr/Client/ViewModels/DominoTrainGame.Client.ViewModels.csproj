@@ -63,13 +63,13 @@
     <Compile Include="RoomPlayerViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\DominoTrainGame.Contracts.csproj">
-      <Project>{101CF13F-D241-56D5-9F99-CF8B1977650A}</Project>
-      <Name>DominoTrainGame.Contracts</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Models\DominoTrainGame.Client.Models.csproj">
+      <Project>{DB2F91B1-D84D-5551-8086-F92D9EC281F4}</Project>
+      <Name>DominoTrainGame.Client.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

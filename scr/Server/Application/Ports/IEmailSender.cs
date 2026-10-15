@@ -4,5 +4,5 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public interface IEmailSender
 {
-    Task<bool> SendVerificationCodeAsync(string recipientEmail, string code);
+    Task<bool> SendVerificationCodeAsync(string recipientEmail, string code, string language);
 }

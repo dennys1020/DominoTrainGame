@@ -1,70 +1,64 @@
-using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Server.Application.Security;
+using DominoTrainGame.Server.Persistence.Contracts;
+using DominoTrainGame.Server.Persistence.Errors;
+using DominoTrainGame.Server.Persistence.Models;
 
-namespace DominoTrainGame;
+namespace DominoTrainGame.Server.Application.Authentication;
 
 public sealed class RecoverPasswordValidator
 {
+    public const int MinimumPasswordLength = 12;
     private readonly IAuthenticationStore _store;
 
-    public RecoverPasswordValidator(IAuthenticationStore store)
+    public RecoverPasswordValidator(IAuthenticationStore store) => _store = store;
+
+    public RecoveryAccountResult FindAccount(string identifier)
     {
-        _store = store;
+        if (string.IsNullOrWhiteSpace(identifier))
+        {
+            return new RecoveryAccountResult { Status = RecoverPasswordValidationStatus.EmptyFields };
+        }
+        try
+        {
+            AccountRecord account = _store.FindAccount(identifier);
+            return account is null
+                ? new RecoveryAccountResult { Status = RecoverPasswordValidationStatus.UserNotFound }
+                : new RecoveryAccountResult
+                {
+                    Status = RecoverPasswordValidationStatus.Success,
+                    PlayerId = account.PlayerId,
+                    Email = account.Email
+                };
+        }
+        catch (DatabaseOperationException)
+        {
+            return new RecoveryAccountResult { Status = RecoverPasswordValidationStatus.DatabaseError };
+        }
     }
 
-    public const int MinimumPasswordLength = 12;
-
-    public RecoverPasswordValidationStatus FindAccount(string identifier, out int playerId, out string email)
+    public RecoverPasswordValidationStatus UpdatePassword(int playerId, string password, string confirmation)
     {
-        playerId = 0;
-        email = string.Empty;
-
-        RecoverPasswordValidationStatus status = ValidateIdentifier(identifier);
-
-        if (status == RecoverPasswordValidationStatus.Success)
+        if (string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmation))
         {
-            status = _store.LookUpAccount(identifier, out playerId, out email);
+            return RecoverPasswordValidationStatus.EmptyFields;
         }
-
-        return status;
+        if (password.Length < MinimumPasswordLength)
+        {
+            return RecoverPasswordValidationStatus.PasswordTooShort;
+        }
+        if (password != confirmation)
+        {
+            return RecoverPasswordValidationStatus.PasswordsDoNotMatch;
+        }
+        try
+        {
+            return _store.SaveNewPassword(playerId, PasswordHasher.Hash(password))
+                ? RecoverPasswordValidationStatus.Success : RecoverPasswordValidationStatus.UserNotFound;
+        }
+        catch (DatabaseOperationException)
+        {
+            return RecoverPasswordValidationStatus.DatabaseError;
+        }
     }
-
-    public RecoverPasswordValidationStatus UpdatePassword(int playerId, string newPassword, string confirmPassword)
-    {
-        RecoverPasswordValidationStatus status = ValidatePasswords(newPassword, confirmPassword);
-
-        if (status == RecoverPasswordValidationStatus.Success)
-        {
-            status = _store.SaveNewPassword(playerId, newPassword);
-        }
-
-        return status;
-    }
-
-    private static RecoverPasswordValidationStatus ValidateIdentifier(string identifier)
-    {
-        return string.IsNullOrWhiteSpace(identifier)
-            ? RecoverPasswordValidationStatus.EmptyFields
-            : RecoverPasswordValidationStatus.Success;
-    }
-
-    private static RecoverPasswordValidationStatus ValidatePasswords(string newPassword, string confirmPassword)
-    {
-        RecoverPasswordValidationStatus status = RecoverPasswordValidationStatus.Success;
-
-        if (string.IsNullOrWhiteSpace(newPassword) || string.IsNullOrWhiteSpace(confirmPassword))
-        {
-            status = RecoverPasswordValidationStatus.EmptyFields;
-        }
-        else if (newPassword.Length < MinimumPasswordLength)
-        {
-            status = RecoverPasswordValidationStatus.PasswordTooShort;
-        }
-        else if (newPassword != confirmPassword)
-        {
-            status = RecoverPasswordValidationStatus.PasswordsDoNotMatch;
-        }
-
-        return status;
-    }
-
 }

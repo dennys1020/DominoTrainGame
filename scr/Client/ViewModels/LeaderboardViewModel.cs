@@ -1,3 +1,4 @@
+using DominoTrainGame.Client.Models.Errors;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -5,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using log4net.Ext.Trace;
-using DominoTrainGame.Models;
-using DominoTrainGame.Contracts;
+using DominoTrainGame.Client.Models.DominoTrainService;
+using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Resources.Localization;
 #nullable enable
 
@@ -134,7 +135,7 @@ public sealed class LeaderboardViewModel : INotifyPropertyChanged, IDisposable
             List<LeaderboardEntry> entries = await _services.GetEntriesAsync(cancellationToken);
             Entries = CreateEntriesView(entries);
         }
-        catch (DatabaseOperationException exception)
+        catch (GameServiceException exception)
         {
             HandleLoadError(exception);
         }
