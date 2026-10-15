@@ -1,114 +1,27 @@
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace DominoTrainGame.ViewModels;
 
-public sealed class RoomViewModel : INotifyPropertyChanged
+// Display state only; room management and gameplay are outside the current scope.
+public sealed class RoomViewModel : ObservableViewModel
 {
-    private const int DefaultMaximumPlayers = 4;
-    private const int DoubleSix = 6;
-    private const int DoubleNine = 9;
-    private const int DoubleTwelve = 12;
-    private const int DefaultMaximumDouble = DoubleTwelve;
+    private int _maximumDouble = 12;
 
-    private int _maximumPlayers = DefaultMaximumPlayers;
-    private int _maximumDouble = DefaultMaximumDouble;
-
-    public RoomViewModel()
-    {
-        Players = new ObservableCollection<RoomPlayerViewModel>();
-        Results = new MatchResultsViewModel(Players);
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    public ObservableCollection<RoomPlayerViewModel> Players
-    {
-        get;
-    }
-
-    public MatchResultsViewModel Results
-    {
-        get;
-    }
-
+    public IReadOnlyList<object> Players { get; } = new List<object>();
     public int MaximumDouble
     {
-        get
-        {
-            return _maximumDouble;
-        }
+        get => _maximumDouble;
         set
         {
-            if (_maximumDouble != value)
+            if (SetField(ref _maximumDouble, value))
             {
-                _maximumDouble = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaximumDouble)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDoubleSixSelected)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDoubleNineSelected)));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsDoubleTwelveSelected)));
+                Notify(nameof(IsDoubleSixSelected));
+                Notify(nameof(IsDoubleNineSelected));
+                Notify(nameof(IsDoubleTwelveSelected));
             }
         }
     }
-
-    public bool IsDoubleSixSelected
-    {
-        get
-        {
-            return MaximumDouble == DoubleSix;
-        }
-        set
-        {
-            if (value)
-            {
-                MaximumDouble = DoubleSix;
-            }
-        }
-    }
-
-    public bool IsDoubleNineSelected
-    {
-        get
-        {
-            return MaximumDouble == DoubleNine;
-        }
-        set
-        {
-            if (value)
-            {
-                MaximumDouble = DoubleNine;
-            }
-        }
-    }
-
-    public bool IsDoubleTwelveSelected
-    {
-        get
-        {
-            return MaximumDouble == DoubleTwelve;
-        }
-        set
-        {
-            if (value)
-            {
-                MaximumDouble = DoubleTwelve;
-            }
-        }
-    }
-
-    public int MaximumPlayers
-    {
-        get
-        {
-            return _maximumPlayers;
-        }
-        set
-        {
-            if (_maximumPlayers != value)
-            {
-                _maximumPlayers = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaximumPlayers)));
-            }
-        }
-    }
+    public bool IsDoubleSixSelected { get => MaximumDouble == 6; set { if (value) { MaximumDouble = 6; } } }
+    public bool IsDoubleNineSelected { get => MaximumDouble == 9; set { if (value) { MaximumDouble = 9; } } }
+    public bool IsDoubleTwelveSelected { get => MaximumDouble == 12; set { if (value) { MaximumDouble = 12; } } }
 }

@@ -14,15 +14,9 @@ public partial class DominoGameDBEntities : DbContext
     {
     }
 
-    public virtual DbSet<Ban> Bans { get; set; }
-    public virtual DbSet<FriendshipRequest> FriendshipRequests { get; set; }
-    public virtual DbSet<Lobby> Lobbies { get; set; }
-    public virtual DbSet<LobbyPlayer> LobbyPlayers { get; set; }
     public virtual DbSet<Match> Matches { get; set; }
     public virtual DbSet<MatchResult> MatchResults { get; set; }
     public virtual DbSet<Player> Players { get; set; }
-    public virtual DbSet<Report> Reports { get; set; }
-    public virtual DbSet<StatusFriendshipRequest> StatusFriendshipRequests { get; set; }
     public virtual DbSet<Account> Accounts { get; set; }
 
     protected override void OnModelCreating(DbModelBuilder modelBuilder)

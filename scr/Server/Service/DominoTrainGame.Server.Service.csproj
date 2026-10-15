@@ -36,6 +36,9 @@
     <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Persistence\DominoTrainGame.Server.Persistence.csproj">
+      <Name>DominoTrainGame.Server.Persistence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Application\DominoTrainGame.Server.Application.csproj">
       <Project>{AA6EACA4-4F78-5A4F-9CFF-36D1FBE14B84}</Project>
       <Name>DominoTrainGame.Server.Application</Name>

@@ -7,7 +7,5 @@ namespace DominoTrainGame.Server.Service.DTO;
 public sealed class ResendVerificationRequest
 {
     [DataMember]
-    public Guid RequestId { get; set; }
-    [DataMember]
     public Guid SessionId { get; set; }
 }
