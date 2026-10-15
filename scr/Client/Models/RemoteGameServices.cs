@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
+using System.Linq;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,37 +13,25 @@ namespace DominoTrainGame.Client.Models;
 
 public sealed class RemoteGameServices : IGameServices
 {
-    public async Task<LoginValidationStatus> LogInAsync(string identifier, string password) =>
-        (await WithFallback(() => InvokeAsync(() => new AuthenticationServiceClient(),
-            proxy => proxy.LogInAsync(new LoginRequest { Identifier = identifier, Password = password })),
-            new LoginResponse { Status = LoginValidationStatus.DatabaseError }).ConfigureAwait(false)).Status;
+    public async Task<bool> LogInAsync(string identifier, string password)
+    {
+        bool canLogIn = await WithFallback(
+            () => InvokeAsync(() => new AuthenticationServiceClient(),
+                proxy => proxy.LogInAsync(identifier, password)),
+            false).ConfigureAwait(false);
 
-    public async Task<SignUpValidationStatus> CheckAvailabilityAsync(string username, string email, string password) =>
-        (await WithFallback(() => InvokeAsync(() => new AuthenticationServiceClient(),
-            proxy => proxy.CheckAvailabilityAsync(CreateRegistration(username, email, password, Guid.Empty))),
-            new SignUpResponse { Status = SignUpValidationStatus.DatabaseError }).ConfigureAwait(false)).Status;
+        return canLogIn;
+    }
 
-    public async Task<SignUpValidationStatus> RegisterUserAsync(string username, string email, string password, Guid verificationId) =>
-        (await WithFallback(() => InvokeAsync(() => new AuthenticationServiceClient(),
-            proxy => proxy.RegisterUserAsync(CreateRegistration(username, email, password, verificationId))),
-            new SignUpResponse { Status = SignUpValidationStatus.DatabaseError }).ConfigureAwait(false)).Status;
+    public async Task<bool> RegisterUserAsync(User user)
+    {
+        bool isRegistered = await WithFallback(
+            () => InvokeAsync(() => new AuthenticationServiceClient(),
+                proxy => proxy.RegisterUserAsync(user)),
+            false).ConfigureAwait(false);
 
-    public Task<VerificationSessionDto> BeginVerificationAsync(string email) =>
-        WithFallback(() => InvokeAsync(() => new VerificationServiceClient(),
-            proxy => proxy.BeginVerificationAsync(new BeginVerificationRequest
-            {
-                Email = email, Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName
-            })), new VerificationSessionDto());
-
-    public async Task<bool> ResendVerificationAsync(Guid verificationId) =>
-        (await WithFallback(() => InvokeAsync(() => new VerificationServiceClient(),
-            proxy => proxy.ResendVerificationAsync(new ResendVerificationRequest { SessionId = verificationId })),
-            new VerificationSessionDto()).ConfigureAwait(false)).WasSent;
-
-    public async Task<VerificationCodeStatus> VerifyCodeAsync(Guid verificationId, string enteredCode) =>
-        (await WithFallback(() => InvokeAsync(() => new VerificationServiceClient(),
-            proxy => proxy.VerifyCodeAsync(new VerifyCodeRequest { SessionId = verificationId, Code = enteredCode })),
-            new VerificationCodeResponse { Status = VerificationCodeStatus.ServiceUnavailable }).ConfigureAwait(false)).Status;
+        return isRegistered;
+    }
 
     public async Task<List<LeaderboardEntry>> GetEntriesAsync(CancellationToken cancellationToken)
     {
@@ -53,15 +41,11 @@ public sealed class RemoteGameServices : IGameServices
         {
             throw new GameServiceException("The leaderboard could not be loaded.");
         }
-        return result.Entries ?? new List<LeaderboardEntry>();
-    }
+        List<LeaderboardEntry> entries = result.Entries is null
+            ? new List<LeaderboardEntry>() : result.Entries.ToList();
 
-    private static RegistrationRequest CreateRegistration(string username, string email, string password, Guid verificationId) =>
-        new RegistrationRequest
-        {
-            Username = username, Email = email, Password = password, VerificationId = verificationId,
-            Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName
-        };
+        return entries;
+    }
 
     private static Task<TResult> InvokeAsync<TProxy, TResult>(Func<TProxy> create, Func<TProxy, Task<TResult>> request,
         CancellationToken cancellationToken = default) where TProxy : class, ICommunicationObject => Task.Run(async () =>
@@ -79,7 +63,12 @@ public sealed class RemoteGameServices : IGameServices
                 return result;
             }
         }
-        catch (Exception exception) when (exception is CommunicationException || exception is TimeoutException)
+        catch (CommunicationException exception)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            throw new GameServiceException("The Domino Train server could not complete the request.", exception);
+        }
+        catch (TimeoutException exception)
         {
             cancellationToken.ThrowIfCancellationRequested();
             throw new GameServiceException("The Domino Train server could not complete the request.", exception);
@@ -92,8 +81,19 @@ public sealed class RemoteGameServices : IGameServices
 
     private static async Task<T> WithFallback<T>(Func<Task<T>> request, T fallback)
     {
-        try { return await request().ConfigureAwait(false); }
-        catch (GameServiceException exception) { Trace.TraceError(exception.ToString()); return fallback; }
+        T result;
+
+        try
+        {
+            result = await request().ConfigureAwait(false);
+        }
+        catch (GameServiceException exception)
+        {
+            Trace.TraceError(exception.ToString());
+            result = fallback;
+        }
+
+        return result;
     }
 
     private static void Close(ICommunicationObject connection)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,11 +7,7 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IGameServices
 {
-    Task<LoginValidationStatus> LogInAsync(string usernameOrEmail, string password);
-    Task<SignUpValidationStatus> CheckAvailabilityAsync(string username, string email, string password);
-    Task<SignUpValidationStatus> RegisterUserAsync(string username, string email, string password, Guid verificationId);
+    Task<bool> LogInAsync(string identifier, string password);
+    Task<bool> RegisterUserAsync(User user);
     Task<List<LeaderboardEntry>> GetEntriesAsync(CancellationToken cancellationToken);
-    Task<VerificationSessionDto> BeginVerificationAsync(string email);
-    Task<bool> ResendVerificationAsync(Guid verificationId);
-    Task<VerificationCodeStatus> VerifyCodeAsync(Guid verificationId, string enteredCode);
 }

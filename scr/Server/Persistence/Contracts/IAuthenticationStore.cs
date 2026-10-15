@@ -6,5 +6,5 @@ public interface IAuthenticationStore
 {
     AccountRecord FindAccount(string identifier);
     bool PlayerExists(string username, string email);
-    bool SaveNewPlayer(string username, string email, string passwordHash, string preferredLanguage);
+    bool SaveNewPlayer(Player player, string preferredLanguage);
 }

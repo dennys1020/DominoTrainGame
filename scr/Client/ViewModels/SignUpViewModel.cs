@@ -7,7 +7,6 @@ namespace DominoTrainGame.ViewModels;
 
 public sealed class SignUpViewModel : ScreenViewModel
 {
-    private const int MinimumPasswordLength = 12;
     private readonly IGameServices _services;
     private string _email = string.Empty;
     private string _username = string.Empty;
@@ -28,61 +27,27 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     private async Task SignUpAsync()
     {
-        string email = Email.Trim();
-        string username = Username;
-        string password = Password;
-        SignUpValidationStatus status = await _services.CheckAvailabilityAsync(username, email, password);
-        if (status != SignUpValidationStatus.Success)
+        User user = new User
         {
-            Window.ShowMessage(DescribeStatus(status));
-            return;
-        }
+            Username = Username,
+            Email = Email.Trim(),
+            Password = Password,
+            Language = Localization.Culture.TwoLetterISOLanguageName
+        };
 
-        VerificationSessionDto session = await _services.BeginVerificationAsync(email);
-        if (!session.WasSent)
-        {
-            Window.ShowMessage(UiStrings.VerificationCodeSendErrorMessage);
-            return;
-        }
+        bool isRegistered = await _services.RegisterUserAsync(user);
 
-        bool isVerified = Window.ShowDialog(Screen.Verification, new VerificationRequest(email, session.SessionId)) == true;
-        if (!isVerified) { return; }
-        status = await _services.RegisterUserAsync(username, email, password, session.SessionId);
-        if (status != SignUpValidationStatus.Success) { Window.ShowMessage(DescribeStatus(status)); }
-        else
+        if (Window.IsVisible)
         {
-            Window.ShowMessage(UiStrings.RegistrationSuccessMessage);
-            Window.Navigate(Screen.Login, preservePosition: false);
+            if (isRegistered)
+            {
+                Window.ShowMessage(UiStrings.RegistrationSuccessMessage);
+                Window.Navigate(Screen.Login, preservePosition: false);
+            }
+            else
+            {
+                Window.ShowMessage(UiStrings.RegistrationFailedMessage);
+            }
         }
-    }
-
-    private string DescribeStatus(SignUpValidationStatus status)
-    {
-        string statusMessage;
-        switch (status)
-        {
-            case SignUpValidationStatus.EmptyFields:
-                statusMessage = UiStrings.RequiredFieldsMessage;
-                break;
-            case SignUpValidationStatus.InvalidEmail:
-                statusMessage = UiStrings.InvalidEmailMessage;
-                break;
-            case SignUpValidationStatus.PasswordTooShort:
-                statusMessage = string.Format(UiStrings.InvalidPasswordMessage, MinimumPasswordLength);
-                break;
-            case SignUpValidationStatus.UserAlreadyExists:
-                statusMessage = UiStrings.MessageUserAlreadyExists;
-                break;
-            case SignUpValidationStatus.VerificationRequired:
-                statusMessage = UiStrings.VerificationCodeExpiredMessage;
-                break;
-            case SignUpValidationStatus.DatabaseError:
-                statusMessage = UiStrings.DatabaseErrorMessage;
-                break;
-            default:
-                statusMessage = UiStrings.DatabaseErrorMessage;
-                break;
-        }
-        return statusMessage;
     }
 }

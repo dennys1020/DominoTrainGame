@@ -33,7 +33,16 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
-    <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
+    <Compile Include="Contracts\IAuthenticationService.cs" />
+    <Compile Include="Contracts\ILeaderboardService.cs" />
+    <Compile Include="DTO\BeginVerificationRequest.cs" />
+    <Compile Include="DTO\LeaderboardEntry.cs" />
+    <Compile Include="DTO\LeaderboardResponse.cs" />
+    <Compile Include="DTO\User.cs" />
+    <Compile Include="GameServiceRuntime.cs" />
+    <Compile Include="Implementation\GameService.Authentication.cs" />
+    <Compile Include="Implementation\GameService.cs" />
+    <Compile Include="Implementation\GameService.Leaderboard.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Persistence\DominoTrainGame.Server.Persistence.csproj">
@@ -44,6 +53,5 @@
       <Name>DominoTrainGame.Server.Application</Name>
     </ProjectReference>
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

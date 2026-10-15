@@ -1,6 +1,9 @@
-using System.Linq;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Server.Persistence.Contracts;
+using DominoTrainGame.Server.Persistence.Errors;
+using DominoTrainGame.Server.Persistence.Models;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DTO;
 
@@ -8,17 +11,41 @@ namespace DominoTrainGame.Server.Service.Implementation;
 
 public sealed partial class GameService : ILeaderboardService
 {
+    private readonly ILeaderboardSource _leaderboardSource;
+
     public async Task<LeaderboardResponse> GetLeaderboardAsync()
     {
-        LeaderboardResultSet result = await _application.GetLeaderboardAsync().ConfigureAwait(false);
-        return new LeaderboardResponse
+        LeaderboardResponse response = new LeaderboardResponse();
+
+        try
         {
-            Succeeded = result.Succeeded,
-            Entries = result.Entries.Select(entry => new LeaderboardEntry
+            List<LeaderboardRecord> entries =
+                await _leaderboardSource
+                    .GetEntriesAsync(CancellationToken.None)
+                    .ConfigureAwait(false);
+
+            foreach (LeaderboardRecord entry in entries)
             {
-                Rank = entry.Rank, PlayerId = entry.PlayerId, Username = entry.Username,
-                Wins = entry.Wins, GamesPlayed = entry.GamesPlayed, TotalScore = entry.TotalScore
-            }).ToList()
-        };
+                LeaderboardEntry leaderboardEntry = new LeaderboardEntry
+                {
+                    Rank = entry.Rank,
+                    PlayerId = entry.PlayerId,
+                    Username = entry.Username,
+                    Wins = entry.Wins,
+                    GamesPlayed = entry.GamesPlayed,
+                    TotalScore = entry.TotalScore
+                };
+
+                response.Entries.Add(leaderboardEntry);
+            }
+
+            response.Succeeded = true;
+        }
+        catch (DatabaseOperationException)
+        {
+            response.Succeeded = false;
+        }
+
+        return response;
     }
 }

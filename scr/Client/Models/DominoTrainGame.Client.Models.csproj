@@ -34,7 +34,12 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Runtime.Serialization" />
-    <Compile Include="**\*.cs" Exclude="bin\**;obj\**;Connected Services\**" />
+    <Compile Include="**\*.cs" Exclude="bin\**;obj\**;Connected Services\**;Resources\Localization\UiStrings.Designer.cs" />
+    <Compile Include="Resources\Localization\UiStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UiStrings.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -50,6 +55,23 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Connected Services\DominoTrainService\Reference.cs" />
+    <Compile Include="Connected Services\DominoTrainService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <WCFMetadata Include="Connected Services\" />
+    <WCFMetadataStorage Include="Connected Services\DominoTrainService\" />
+    <None Include="Connected Services\DominoTrainService\*.wsdl" />
+    <None Include="Connected Services\DominoTrainService\*.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoTrainService\*.disco" />
+    <None Include="Connected Services\DominoTrainService\*.svcinfo" />
+    <None Include="Connected Services\DominoTrainService\*.datasource" />
+    <None Include="Connected Services\DominoTrainService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>

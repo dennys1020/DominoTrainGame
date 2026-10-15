@@ -449,6 +449,14 @@ public class UiStrings
         }
     }
 
+    public static string LoginFailedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("LoginFailedMessage", _resourceCulture);
+        }
+    }
+
     public static string LoginLabel
     {
         get
@@ -718,6 +726,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("RegisterDescription", _resourceCulture);
+        }
+    }
+
+    public static string RegistrationFailedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("RegistrationFailedMessage", _resourceCulture);
         }
     }
 

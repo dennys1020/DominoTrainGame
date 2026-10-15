@@ -1,3 +1,4 @@
+using System;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.Security;
 using DominoTrainGame.Server.Persistence.Contracts;
@@ -10,29 +11,43 @@ public sealed class LoginValidator
 {
     private readonly IAuthenticationStore _store;
 
-    public LoginValidator(IAuthenticationStore store) => _store = store;
+    public LoginValidator(IAuthenticationStore store)
+    {
+        _store = store
+            ?? throw new ArgumentNullException(nameof(store));
+    }
 
     public LoginValidationStatus LogInUser(string identifier, string password)
     {
+        LoginValidationStatus status;
+
         if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(password))
         {
-            return LoginValidationStatus.EmptyFields;
+            status = LoginValidationStatus.EmptyFields;
         }
-
-        try
+        else
         {
-            AccountRecord account = _store.FindAccount(identifier);
-            if (account is null)
+            try
             {
-                return LoginValidationStatus.UserNotFound;
-            }
+                AccountRecord account = _store.FindAccount(identifier);
 
-            return PasswordHasher.Verify(account.PasswordHash, password)
-                ? LoginValidationStatus.Success : LoginValidationStatus.IncorrectPassword;
+                if (account is null)
+                {
+                    status = LoginValidationStatus.UserNotFound;
+                }
+                else
+                {
+                    status = PasswordHasher.Verify(account.PasswordHash, password)
+                        ? LoginValidationStatus.Success
+                        : LoginValidationStatus.IncorrectPassword;
+                }
+            }
+            catch (DatabaseOperationException)
+            {
+                status = LoginValidationStatus.DatabaseError;
+            }
         }
-        catch (DatabaseOperationException)
-        {
-            return LoginValidationStatus.DatabaseError;
-        }
+
+        return status;
     }
 }
