@@ -62,7 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\ILoginUseCases.cs" />
+    <Compile Include="Authentication\ISignUpCases.cs" />
     <Compile Include="Authentication\LoginUseCases.cs" />
+    <Compile Include="Authentication\SignUpCases.cs" />
     <Compile Include="Connection\ConnectionUseCases.cs" />
     <Compile Include="Connection\IConnectionUseCases.cs" />
     <Compile Include="Results\DatabaseConnectionStatus.cs" />
@@ -89,4 +91,4 @@
     <Error Condition="!Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
-</Project>
+</Project>

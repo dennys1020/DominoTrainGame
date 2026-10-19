@@ -67,9 +67,8 @@
     <Compile Include="Contracts\IAuthenticationService.cs" />
     <Compile Include="Contracts\IConnectionService.cs" />
     <Compile Include="DTO\LoginRequest.cs" />
-    <Compile Include="DTO\LoginResponse.cs" />
-    <Compile Include="DTO\LoginStatus.cs" />
     <Compile Include="DTO\ServerConnectionStatus.cs" />
+    <Compile Include="DTO\SignUpRequest.cs" />
     <Compile Include="Implementation\GameService.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
     <Compile Include="GameServiceRuntime.cs" />
@@ -94,4 +93,4 @@
     <Error Condition="!Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
-</Project>
+</Project>
