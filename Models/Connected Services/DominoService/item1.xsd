@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://dominotraingame/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:element name="CheckConnection">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CheckConnectionResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://dominotraingame/services" minOccurs="0" name="CheckConnectionResult" type="q1:ServerConnectionStatus" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="ServerConnectionStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Connected" />
+      <xs:enumeration value="DatabaseUnavailable" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element xmlns:q2="http://dominotraingame/services" name="ServerConnectionStatus" nillable="true" type="q2:ServerConnectionStatus" />
+  <xs:complexType name="LoginRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Identifier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q3="http://dominotraingame/services" name="LoginRequest" nillable="true" type="q3:LoginRequest" />
+  <xs:complexType name="LoginResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="ser:guid" />
+      <xs:element xmlns:q4="http://dominotraingame/services" minOccurs="0" name="Status" type="q4:LoginStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element xmlns:q5="http://dominotraingame/services" name="LoginResponse" nillable="true" type="q5:LoginResponse" />
+  <xs:simpleType name="LoginStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="InvalidInput" />
+      <xs:enumeration value="InvalidCredentials" />
+      <xs:enumeration value="ServerError" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element xmlns:q6="http://dominotraingame/services" name="LoginStatus" nillable="true" type="q6:LoginStatus" />
+</xs:schema>

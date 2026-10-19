@@ -1,0 +1,19 @@
+<Application
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:localization="clr-namespace:DominoTrainGame.ViewModels.Localization;assembly=ViewModel"
+    x:Class="DominoTrainGame.App"
+    Startup="OnApplicationStartup">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="resources/Styles/Palette.xaml" />
+                <ResourceDictionary Source="resources/Styles/ImageBrushes.xaml" />
+                <ResourceDictionary Source="resources/Styles/PixelTheme.xaml" />
+                <ResourceDictionary Source="resources/Styles/WindowStyles.xaml" />
+                <ResourceDictionary Source="resources/Styles/MatchStyles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <x:Static x:Key="Localization" Member="localization:LocalizationViewModel.Instance" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,794 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx" Version="3.0">
+    <!-- EF Runtime content -->
+    <edmx:Runtime>
+        <!-- SSDL content -->
+        <edmx:StorageModels>
+        <Schema Namespace="DominoGameDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accounts">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Biography" Type="varchar" MaxLength="255" />
+          <Property Name="PreferredLanguage" Type="char" MaxLength="7" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="LastSeenAt" Type="datetime" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bans">
+          <Key>
+            <PropertyRef Name="BanId" />
+          </Key>
+          <Property Name="BanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="BanType" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="StartedAt" Type="datetime" Nullable="false" />
+          <Property Name="ExpiresAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="FriendshipRequests">
+          <Key>
+            <PropertyRef Name="FriendshipRequestsID" />
+          </Key>
+          <Property Name="FriendshipRequestsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequesterPlayerId" Type="int" Nullable="false" />
+          <Property Name="AddresseePlayerId" Type="int" Nullable="false" />
+          <Property Name="IdStatus" Type="int" Nullable="false" />
+          <Property Name="RequestedAt" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Lobbies">
+          <Key>
+            <PropertyRef Name="LobbyId" />
+          </Key>
+          <Property Name="LobbyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccessType" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="MaxPlayers" Type="tinyint" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Token" Type="varchar" MaxLength="6" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LobbyPlayers">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+            <PropertyRef Name="LobbyId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="LobbyId" Type="int" Nullable="false" />
+          <Property Name="IsReady" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Matches">
+          <Key>
+            <PropertyRef Name="MatchId" />
+          </Key>
+          <Property Name="MatchId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LobbyId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MatchResults">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+            <PropertyRef Name="MatchId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="MatchId" Type="int" Nullable="false" />
+          <Property Name="FinalRank" Type="int" Nullable="false" />
+          <Property Name="TotalScore" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Players">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+          </Key>
+          <Property Name="PlayerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="varchar" MaxLength="45" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="255" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="255" />
+          <Property Name="IsGuest" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Reports">
+          <Key>
+            <PropertyRef Name="idReports" />
+          </Key>
+          <Property Name="idReports" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PlayerId" Type="int" Nullable="false" />
+          <Property Name="Reason" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="StatusFriendshipRequests">
+          <Key>
+            <PropertyRef Name="idStatus" />
+          </Key>
+          <Property Name="idStatus" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_Accounts_Players">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Accounts">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Bans_Players">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="Bans" Type="Self.Bans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Bans">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Addressee">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="FriendshipRequests" Type="Self.FriendshipRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="FriendshipRequests">
+              <PropertyRef Name="AddresseePlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Requester">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="FriendshipRequests" Type="Self.FriendshipRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="FriendshipRequests">
+              <PropertyRef Name="RequesterPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Status">
+          <End Role="StatusFriendshipRequests" Type="Self.StatusFriendshipRequests" Multiplicity="1" />
+          <End Role="FriendshipRequests" Type="Self.FriendshipRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusFriendshipRequests">
+              <PropertyRef Name="idStatus" />
+            </Principal>
+            <Dependent Role="FriendshipRequests">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LobbyPlayers_Lobbies">
+          <End Role="Lobbies" Type="Self.Lobbies" Multiplicity="1" />
+          <End Role="LobbyPlayers" Type="Self.LobbyPlayers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lobbies">
+              <PropertyRef Name="LobbyId" />
+            </Principal>
+            <Dependent Role="LobbyPlayers">
+              <PropertyRef Name="LobbyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LobbyPlayers_Players">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="LobbyPlayers" Type="Self.LobbyPlayers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="LobbyPlayers">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matches_Lobbies">
+          <End Role="Lobbies" Type="Self.Lobbies" Multiplicity="1" />
+          <End Role="Matches" Type="Self.Matches" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lobbies">
+              <PropertyRef Name="LobbyId" />
+            </Principal>
+            <Dependent Role="Matches">
+              <PropertyRef Name="LobbyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MatchResults_Matches">
+          <End Role="Matches" Type="Self.Matches" Multiplicity="1" />
+          <End Role="MatchResults" Type="Self.MatchResults" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Matches">
+              <PropertyRef Name="MatchId" />
+            </Principal>
+            <Dependent Role="MatchResults">
+              <PropertyRef Name="MatchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MatchResults_Players">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="MatchResults" Type="Self.MatchResults" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="MatchResults">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_Players">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="Reports" Type="Self.Reports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Reports">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DominoGameDBModelStoreContainer">
+          <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bans" EntityType="Self.Bans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FriendshipRequests" EntityType="Self.FriendshipRequests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Lobbies" EntityType="Self.Lobbies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LobbyPlayers" EntityType="Self.LobbyPlayers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Matches" EntityType="Self.Matches" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MatchResults" EntityType="Self.MatchResults" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Players" EntityType="Self.Players" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Reports" EntityType="Self.Reports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StatusFriendshipRequests" EntityType="Self.StatusFriendshipRequests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Accounts_Players" Association="Self.FK_Accounts_Players">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Accounts" EntitySet="Accounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Bans_Players" Association="Self.FK_Bans_Players">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Bans" EntitySet="Bans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Addressee" Association="Self.FK_FriendshipRequests_Addressee">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FriendshipRequests" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Requester" Association="Self.FK_FriendshipRequests_Requester">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="FriendshipRequests" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Status" Association="Self.FK_FriendshipRequests_Status">
+            <End Role="StatusFriendshipRequests" EntitySet="StatusFriendshipRequests" />
+            <End Role="FriendshipRequests" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LobbyPlayers_Lobbies" Association="Self.FK_LobbyPlayers_Lobbies">
+            <End Role="Lobbies" EntitySet="Lobbies" />
+            <End Role="LobbyPlayers" EntitySet="LobbyPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LobbyPlayers_Players" Association="Self.FK_LobbyPlayers_Players">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="LobbyPlayers" EntitySet="LobbyPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matches_Lobbies" Association="Self.FK_Matches_Lobbies">
+            <End Role="Lobbies" EntitySet="Lobbies" />
+            <End Role="Matches" EntitySet="Matches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MatchResults_Matches" Association="Self.FK_MatchResults_Matches">
+            <End Role="Matches" EntitySet="Matches" />
+            <End Role="MatchResults" EntitySet="MatchResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MatchResults_Players" Association="Self.FK_MatchResults_Players">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="MatchResults" EntitySet="MatchResults" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_Players" Association="Self.FK_Reports_Players">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Reports" EntitySet="Reports" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+        <!-- CSDL content -->
+        <edmx:ConceptualModels>
+            <Schema xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" Namespace="DominoGameDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false">
+
+                <EntityType Name="Match">
+                    <Key>
+                        <PropertyRef Name="MatchId" />
+                    </Key>
+                    <Property Name="MatchId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+                    <Property Name="LobbyId" Type="Int32" Nullable="false" />
+                    <Property Name="Status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+                    <NavigationProperty Name="MatchResults" Relationship="Self.FK_MatchResults_Matches" FromRole="Matches" ToRole="MatchResults" />
+          <NavigationProperty Name="Lobby" Relationship="DominoGameDBModel.FK_Matches_Lobbies" FromRole="Match" ToRole="Lobby" />
+                </EntityType>
+                <EntityType Name="MatchResult">
+                    <Key>
+                        <PropertyRef Name="PlayerId" />
+                        <PropertyRef Name="MatchId" />
+                    </Key>
+                    <Property Name="PlayerId" Type="Int32" Nullable="false" />
+                    <Property Name="MatchId" Type="Int32" Nullable="false" />
+                    <Property Name="FinalRank" Type="Int32" Nullable="false" />
+                    <Property Name="TotalScore" Type="Int32" Nullable="false" />
+                    <NavigationProperty Name="Match" Relationship="Self.FK_MatchResults_Matches" FromRole="MatchResults" ToRole="Matches" />
+                    <NavigationProperty Name="Player" Relationship="Self.FK_MatchResults_Players" FromRole="MatchResults" ToRole="Players" />
+                </EntityType>
+                <EntityType Name="Player">
+                    <Key>
+                        <PropertyRef Name="PlayerId" />
+                    </Key>
+                    <Property Name="PlayerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+                    <Property Name="Username" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+                    <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+                    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+                    <Property Name="IsGuest" Type="Byte" Nullable="false" />
+
+                    <NavigationProperty Name="MatchResults" Relationship="Self.FK_MatchResults_Players" FromRole="Players" ToRole="MatchResults" />
+          <NavigationProperty Name="Accounts" Relationship="DominoGameDBModel.FK_Accounts_Players" FromRole="Player" ToRole="Account" />
+          <NavigationProperty Name="Bans" Relationship="DominoGameDBModel.FK_Bans_Players" FromRole="Player" ToRole="Ban" />
+          <NavigationProperty Name="FriendshipRequests" Relationship="DominoGameDBModel.FK_FriendshipRequests_Addressee" FromRole="Player" ToRole="FriendshipRequest" />
+          <NavigationProperty Name="FriendshipRequests1" Relationship="DominoGameDBModel.FK_FriendshipRequests_Requester" FromRole="Player" ToRole="FriendshipRequest" />
+          <NavigationProperty Name="LobbyPlayers" Relationship="DominoGameDBModel.FK_LobbyPlayers_Players" FromRole="Player" ToRole="LobbyPlayer" />
+          <NavigationProperty Name="Reports" Relationship="DominoGameDBModel.FK_Reports_Players" FromRole="Player" ToRole="Report" />
+                </EntityType>
+
+                <Association Name="FK_MatchResults_Matches">
+                    <End Role="Matches" Type="Self.Match" Multiplicity="1" />
+                    <End Role="MatchResults" Type="Self.MatchResult" Multiplicity="*" />
+                    <ReferentialConstraint>
+                        <Principal Role="Matches">
+                            <PropertyRef Name="MatchId" />
+                        </Principal>
+                        <Dependent Role="MatchResults">
+                            <PropertyRef Name="MatchId" />
+                        </Dependent>
+                    </ReferentialConstraint>
+                </Association>
+                <Association Name="FK_MatchResults_Players">
+                    <End Role="Players" Type="Self.Player" Multiplicity="1" />
+                    <End Role="MatchResults" Type="Self.MatchResult" Multiplicity="*" />
+                    <ReferentialConstraint>
+                        <Principal Role="Players">
+                            <PropertyRef Name="PlayerId" />
+                        </Principal>
+                        <Dependent Role="MatchResults">
+                            <PropertyRef Name="PlayerId" />
+                        </Dependent>
+                    </ReferentialConstraint>
+                </Association>
+                <EntityContainer Name="DominoGameDBEntities" annotation:LazyLoadingEnabled="true">
+
+                    <EntitySet Name="Matches" EntityType="Self.Match" />
+                    <EntitySet Name="MatchResults" EntityType="Self.MatchResult" />
+                    <EntitySet Name="Players" EntityType="Self.Player" />
+
+                    <AssociationSet Name="FK_MatchResults_Matches" Association="Self.FK_MatchResults_Matches">
+                        <End Role="Matches" EntitySet="Matches" />
+                        <End Role="MatchResults" EntitySet="MatchResults" />
+                    </AssociationSet>
+                    <AssociationSet Name="FK_MatchResults_Players" Association="Self.FK_MatchResults_Players">
+                        <End Role="Players" EntitySet="Players" />
+                        <End Role="MatchResults" EntitySet="MatchResults" />
+                    </AssociationSet>
+          <EntitySet Name="Accounts" EntityType="DominoGameDBModel.Account" />
+          <AssociationSet Name="FK_Accounts_Players" Association="DominoGameDBModel.FK_Accounts_Players">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Account" EntitySet="Accounts" />
+          </AssociationSet>
+          <EntitySet Name="Bans" EntityType="DominoGameDBModel.Ban" />
+          <EntitySet Name="FriendshipRequests" EntityType="DominoGameDBModel.FriendshipRequest" />
+          <EntitySet Name="Lobbies" EntityType="DominoGameDBModel.Lobby" />
+          <EntitySet Name="LobbyPlayers" EntityType="DominoGameDBModel.LobbyPlayer" />
+          <EntitySet Name="Reports" EntityType="DominoGameDBModel.Report" />
+          <EntitySet Name="StatusFriendshipRequests" EntityType="DominoGameDBModel.StatusFriendshipRequest" />
+          <EntitySet Name="sysdiagrams" EntityType="DominoGameDBModel.sysdiagram" />
+          <AssociationSet Name="FK_Bans_Players" Association="DominoGameDBModel.FK_Bans_Players">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Ban" EntitySet="Bans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Addressee" Association="DominoGameDBModel.FK_FriendshipRequests_Addressee">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="FriendshipRequest" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Requester" Association="DominoGameDBModel.FK_FriendshipRequests_Requester">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="FriendshipRequest" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FriendshipRequests_Status" Association="DominoGameDBModel.FK_FriendshipRequests_Status">
+            <End Role="StatusFriendshipRequest" EntitySet="StatusFriendshipRequests" />
+            <End Role="FriendshipRequest" EntitySet="FriendshipRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LobbyPlayers_Lobbies" Association="DominoGameDBModel.FK_LobbyPlayers_Lobbies">
+            <End Role="Lobby" EntitySet="Lobbies" />
+            <End Role="LobbyPlayer" EntitySet="LobbyPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Matches_Lobbies" Association="DominoGameDBModel.FK_Matches_Lobbies">
+            <End Role="Lobby" EntitySet="Lobbies" />
+            <End Role="Match" EntitySet="Matches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LobbyPlayers_Players" Association="DominoGameDBModel.FK_LobbyPlayers_Players">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="LobbyPlayer" EntitySet="LobbyPlayers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Reports_Players" Association="DominoGameDBModel.FK_Reports_Players">
+            <End Role="Player" EntitySet="Players" />
+            <End Role="Report" EntitySet="Reports" />
+          </AssociationSet>
+                </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Biography" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="PreferredLanguage" Type="String" Nullable="false" MaxLength="7" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="LastSeenAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Player" Relationship="DominoGameDBModel.FK_Accounts_Players" FromRole="Account" ToRole="Player" />
+        </EntityType>
+        <Association Name="FK_Accounts_Players">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.Account" Role="Account" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Account">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Ban">
+          <Key>
+            <PropertyRef Name="BanId" />
+          </Key>
+          <Property Name="BanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="BanType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="StartedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ExpiresAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Player" Relationship="DominoGameDBModel.FK_Bans_Players" FromRole="Ban" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="FriendshipRequest">
+          <Key>
+            <PropertyRef Name="FriendshipRequestsID" />
+          </Key>
+          <Property Name="FriendshipRequestsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RequesterPlayerId" Type="Int32" Nullable="false" />
+          <Property Name="AddresseePlayerId" Type="Int32" Nullable="false" />
+          <Property Name="IdStatus" Type="Int32" Nullable="false" />
+          <Property Name="RequestedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Player" Relationship="DominoGameDBModel.FK_FriendshipRequests_Addressee" FromRole="FriendshipRequest" ToRole="Player" />
+          <NavigationProperty Name="Player1" Relationship="DominoGameDBModel.FK_FriendshipRequests_Requester" FromRole="FriendshipRequest" ToRole="Player" />
+          <NavigationProperty Name="StatusFriendshipRequest" Relationship="DominoGameDBModel.FK_FriendshipRequests_Status" FromRole="FriendshipRequest" ToRole="StatusFriendshipRequest" />
+        </EntityType>
+        <EntityType Name="Lobby">
+          <Key>
+            <PropertyRef Name="LobbyId" />
+          </Key>
+          <Property Name="LobbyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccessType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="MaxPlayers" Type="Byte" Nullable="false" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Token" Type="String" Nullable="false" MaxLength="6" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="LobbyPlayers" Relationship="DominoGameDBModel.FK_LobbyPlayers_Lobbies" FromRole="Lobby" ToRole="LobbyPlayer" />
+          <NavigationProperty Name="Matches" Relationship="DominoGameDBModel.FK_Matches_Lobbies" FromRole="Lobby" ToRole="Match" />
+        </EntityType>
+        <EntityType Name="LobbyPlayer">
+          <Key>
+            <PropertyRef Name="PlayerId" />
+            <PropertyRef Name="LobbyId" />
+          </Key>
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="LobbyId" Type="Int32" Nullable="false" />
+          <Property Name="IsReady" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Lobby" Relationship="DominoGameDBModel.FK_LobbyPlayers_Lobbies" FromRole="LobbyPlayer" ToRole="Lobby" />
+          <NavigationProperty Name="Player" Relationship="DominoGameDBModel.FK_LobbyPlayers_Players" FromRole="LobbyPlayer" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="idReports" />
+          </Key>
+          <Property Name="idReports" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PlayerId" Type="Int32" Nullable="false" />
+          <Property Name="Reason" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Player" Relationship="DominoGameDBModel.FK_Reports_Players" FromRole="Report" ToRole="Player" />
+        </EntityType>
+        <EntityType Name="StatusFriendshipRequest">
+          <Key>
+            <PropertyRef Name="idStatus" />
+          </Key>
+          <Property Name="idStatus" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FriendshipRequests" Relationship="DominoGameDBModel.FK_FriendshipRequests_Status" FromRole="StatusFriendshipRequest" ToRole="FriendshipRequest" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Bans_Players">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.Ban" Role="Ban" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Ban">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Addressee">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.FriendshipRequest" Role="FriendshipRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="FriendshipRequest">
+              <PropertyRef Name="AddresseePlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Requester">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.FriendshipRequest" Role="FriendshipRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="FriendshipRequest">
+              <PropertyRef Name="RequesterPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FriendshipRequests_Status">
+          <End Type="DominoGameDBModel.StatusFriendshipRequest" Role="StatusFriendshipRequest" Multiplicity="1" />
+          <End Type="DominoGameDBModel.FriendshipRequest" Role="FriendshipRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StatusFriendshipRequest">
+              <PropertyRef Name="idStatus" />
+            </Principal>
+            <Dependent Role="FriendshipRequest">
+              <PropertyRef Name="IdStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LobbyPlayers_Lobbies">
+          <End Type="DominoGameDBModel.Lobby" Role="Lobby" Multiplicity="1" />
+          <End Type="DominoGameDBModel.LobbyPlayer" Role="LobbyPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lobby">
+              <PropertyRef Name="LobbyId" />
+            </Principal>
+            <Dependent Role="LobbyPlayer">
+              <PropertyRef Name="LobbyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Matches_Lobbies">
+          <End Type="DominoGameDBModel.Lobby" Role="Lobby" Multiplicity="1" />
+          <End Type="DominoGameDBModel.Match" Role="Match" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lobby">
+              <PropertyRef Name="LobbyId" />
+            </Principal>
+            <Dependent Role="Match">
+              <PropertyRef Name="LobbyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LobbyPlayers_Players">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.LobbyPlayer" Role="LobbyPlayer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="LobbyPlayer">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Reports_Players">
+          <End Type="DominoGameDBModel.Player" Role="Player" Multiplicity="1" />
+          <End Type="DominoGameDBModel.Report" Role="Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Player">
+              <PropertyRef Name="PlayerId" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="PlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+            </Schema>
+        </edmx:ConceptualModels>
+        <!-- C-S mapping content -->
+        <edmx:Mappings>
+            <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
+                <EntityContainerMapping StorageEntityContainer="DominoGameDBModelStoreContainer" CdmEntityContainer="DominoGameDBEntities">
+
+                    <EntitySetMapping Name="Matches">
+                        <EntityTypeMapping TypeName="DominoGameDBModel.Match">
+                            <MappingFragment StoreEntitySet="Matches">
+                                <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+                                <ScalarProperty Name="LobbyId" ColumnName="LobbyId" />
+                                <ScalarProperty Name="Status" ColumnName="Status" />
+                            </MappingFragment>
+                        </EntityTypeMapping>
+                    </EntitySetMapping>
+                    <EntitySetMapping Name="MatchResults">
+                        <EntityTypeMapping TypeName="DominoGameDBModel.MatchResult">
+                            <MappingFragment StoreEntitySet="MatchResults">
+                                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                                <ScalarProperty Name="MatchId" ColumnName="MatchId" />
+                                <ScalarProperty Name="FinalRank" ColumnName="FinalRank" />
+                                <ScalarProperty Name="TotalScore" ColumnName="TotalScore" />
+                            </MappingFragment>
+                        </EntityTypeMapping>
+                    </EntitySetMapping>
+                    <EntitySetMapping Name="Players">
+                        <EntityTypeMapping TypeName="DominoGameDBModel.Player">
+                            <MappingFragment StoreEntitySet="Players">
+                                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                                <ScalarProperty Name="Username" ColumnName="userName" />
+                                <ScalarProperty Name="Email" ColumnName="Email" />
+                                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                                <ScalarProperty Name="IsGuest" ColumnName="IsGuest" />
+                                </MappingFragment>
+                        </EntityTypeMapping>
+                    </EntitySetMapping>
+
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="DominoGameDBModel.Account">
+              <MappingFragment StoreEntitySet="Accounts">
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="LastSeenAt" ColumnName="LastSeenAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="PreferredLanguage" ColumnName="PreferredLanguage" />
+                <ScalarProperty Name="Biography" ColumnName="Biography" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bans">
+            <EntityTypeMapping TypeName="DominoGameDBModel.Ban">
+              <MappingFragment StoreEntitySet="Bans">
+                <ScalarProperty Name="ExpiresAt" ColumnName="ExpiresAt" />
+                <ScalarProperty Name="StartedAt" ColumnName="StartedAt" />
+                <ScalarProperty Name="BanType" ColumnName="BanType" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="BanId" ColumnName="BanId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FriendshipRequests">
+            <EntityTypeMapping TypeName="DominoGameDBModel.FriendshipRequest">
+              <MappingFragment StoreEntitySet="FriendshipRequests">
+                <ScalarProperty Name="RequestedAt" ColumnName="RequestedAt" />
+                <ScalarProperty Name="IdStatus" ColumnName="IdStatus" />
+                <ScalarProperty Name="AddresseePlayerId" ColumnName="AddresseePlayerId" />
+                <ScalarProperty Name="RequesterPlayerId" ColumnName="RequesterPlayerId" />
+                <ScalarProperty Name="FriendshipRequestsID" ColumnName="FriendshipRequestsID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Lobbies">
+            <EntityTypeMapping TypeName="DominoGameDBModel.Lobby">
+              <MappingFragment StoreEntitySet="Lobbies">
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MaxPlayers" ColumnName="MaxPlayers" />
+                <ScalarProperty Name="AccessType" ColumnName="AccessType" />
+                <ScalarProperty Name="LobbyId" ColumnName="LobbyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LobbyPlayers">
+            <EntityTypeMapping TypeName="DominoGameDBModel.LobbyPlayer">
+              <MappingFragment StoreEntitySet="LobbyPlayers">
+                <ScalarProperty Name="IsReady" ColumnName="IsReady" />
+                <ScalarProperty Name="LobbyId" ColumnName="LobbyId" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Reports">
+            <EntityTypeMapping TypeName="DominoGameDBModel.Report">
+              <MappingFragment StoreEntitySet="Reports">
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+                <ScalarProperty Name="idReports" ColumnName="idReports" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StatusFriendshipRequests">
+            <EntityTypeMapping TypeName="DominoGameDBModel.StatusFriendshipRequest">
+              <MappingFragment StoreEntitySet="StatusFriendshipRequests">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="idStatus" ColumnName="idStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="DominoGameDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+                </EntityContainerMapping>
+            </Mapping>
+        </edmx:Mappings>
+    </edmx:Runtime>
+    <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+    <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+        <Connection>
+            <DesignerInfoPropertySet>
+                <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+            </DesignerInfoPropertySet>
+        </Connection>
+        <Options>
+            <DesignerInfoPropertySet>
+                <DesignerProperty Name="ValidateOnBuild" Value="true" />
+                <DesignerProperty Name="EnablePluralization" Value="true" />
+                <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+                <DesignerProperty Name="UseLegacyProvider" Value="false" />
+                <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+            </DesignerInfoPropertySet>
+        </Options>
+        <!-- Diagram content (shape and connector positions) -->
+        <Diagrams>
+      <Diagram DiagramId="efc8d13a70c44f35bc50a62350273db8" Name="Diagram1">
+        <EntityTypeShape EntityType="DominoGameDBModel.Match" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.MatchResult" Width="1.5" PointX="4.125" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Player" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Account" Width="1.5" PointX="3.75" PointY="6.25" IsExpanded="true" />
+        <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Matches" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_MatchResults_Players" ManuallyRouted="false" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Accounts_Players" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Ban" Width="1.5" PointX="5.25" PointY="11" />
+        <EntityTypeShape EntityType="DominoGameDBModel.FriendshipRequest" Width="1.5" PointX="8.25" PointY="6.875" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Lobby" Width="1.5" PointX="3" PointY="0.625" />
+        <EntityTypeShape EntityType="DominoGameDBModel.LobbyPlayer" Width="1.5" PointX="8.25" PointY="3.75" />
+        <EntityTypeShape EntityType="DominoGameDBModel.Report" Width="1.5" PointX="5.25" PointY="0.75" />
+        <EntityTypeShape EntityType="DominoGameDBModel.StatusFriendshipRequest" Width="1.5" PointX="6" PointY="14.375" />
+        <EntityTypeShape EntityType="DominoGameDBModel.sysdiagram" Width="1.5" PointX="10.625" PointY="1.75" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Bans_Players" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Addressee" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Requester" />
+        <AssociationConnector Association="DominoGameDBModel.FK_FriendshipRequests_Status" />
+        <AssociationConnector Association="DominoGameDBModel.FK_LobbyPlayers_Lobbies" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Matches_Lobbies" />
+        <AssociationConnector Association="DominoGameDBModel.FK_LobbyPlayers_Players" />
+        <AssociationConnector Association="DominoGameDBModel.FK_Reports_Players" />
+      </Diagram>
+    </Diagrams>
+    </Designer>
+</edmx:Edmx>
