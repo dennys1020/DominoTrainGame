@@ -7,5 +7,10 @@ namespace DominoTrainGame.Server.Service.Contracts;
 public interface IAuthenticationService
 {
     [OperationContract(IsOneWay = true)]
-    void LogIn(LoginRequest request);
+    bool LogIn(LoginRequest request);
+
+    [OperationContract(isOneWay = true)]
+
+    bool SignUp(SignUpRequest request);
+
 }

@@ -85,6 +85,11 @@ public sealed class GameService : IConnectionService, IAuthenticationService
         return loginStatus;
     }
 
+    public void SignUp(SignUpRequest request)
+    {
+
+    }
+
     private static void NotifyLogInCompleted(IAuthenticationCallback callback, LoginResponse response)
     {
         try
