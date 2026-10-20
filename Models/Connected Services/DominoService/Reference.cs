@@ -39,9 +39,6 @@ namespace Models.DominoService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string PasswordField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid RequestIdField;
-        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -78,19 +75,6 @@ namespace Models.DominoService {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid RequestId {
-            get {
-                return this.RequestIdField;
-            }
-            set {
-                if ((this.RequestIdField.Equals(value) != true)) {
-                    this.RequestIdField = value;
-                    this.RaisePropertyChanged("RequestId");
-                }
-            }
-        }
-        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -103,18 +87,15 @@ namespace Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginResponse", Namespace="http://dominotraingame/services")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameServiceFault", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
-    public partial class LoginResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class GameServiceFault : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Guid RequestIdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Models.DominoService.LoginStatus StatusField;
+        private Models.DominoService.GameServiceFaultCode CodeField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -127,27 +108,14 @@ namespace Models.DominoService {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Guid RequestId {
+        public Models.DominoService.GameServiceFaultCode Code {
             get {
-                return this.RequestIdField;
+                return this.CodeField;
             }
             set {
-                if ((this.RequestIdField.Equals(value) != true)) {
-                    this.RequestIdField = value;
-                    this.RaisePropertyChanged("RequestId");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Models.DominoService.LoginStatus Status {
-            get {
-                return this.StatusField;
-            }
-            set {
-                if ((this.StatusField.Equals(value) != true)) {
-                    this.StatusField = value;
-                    this.RaisePropertyChanged("Status");
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
                 }
             }
         }
@@ -163,20 +131,14 @@ namespace Models.DominoService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="LoginStatus", Namespace="http://dominotraingame/services")]
-    public enum LoginStatus : int {
+    [System.Runtime.Serialization.DataContractAttribute(Name="GameServiceFaultCode", Namespace="http://dominotraingame/services")]
+    public enum GameServiceFaultCode : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        Success = 0,
+        InvalidInput = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidInput = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        InvalidCredentials = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        ServerError = 3,
+        DatabaseUnavailable = 1,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -227,21 +189,15 @@ namespace Models.DominoService {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoService.IAuthenticationService", CallbackContract=typeof(Models.DominoService.IAuthenticationServiceCallback))]
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://dominotraingame/services", ConfigurationName="DominoService.IAuthenticationService")]
     public interface IAuthenticationService {
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAuthenticationService/LogIn")]
-        void LogIn(Models.DominoService.LoginRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://dominotraingame/services/IAuthenticationService/LogIn", ReplyAction="http://dominotraingame/services/IAuthenticationService/LogInResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(Models.DominoService.GameServiceFault), Action="http://dominotraingame/services/IAuthenticationService/LogInGameServiceFaultFault", Name="GameServiceFault")]
+        bool LogIn(Models.DominoService.LoginRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAuthenticationService/LogIn")]
-        System.Threading.Tasks.Task LogInAsync(Models.DominoService.LoginRequest request);
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IAuthenticationServiceCallback {
-        
-        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IAuthenticationService/OnLogInCompleted")]
-        void OnLogInCompleted(Models.DominoService.LoginResponse response);
+        [System.ServiceModel.OperationContractAttribute(Action="http://dominotraingame/services/IAuthenticationService/LogIn", ReplyAction="http://dominotraingame/services/IAuthenticationService/LogInResponse")]
+        System.Threading.Tasks.Task<bool> LogInAsync(Models.DominoService.LoginRequest request);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -250,33 +206,32 @@ namespace Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class AuthenticationServiceClient : System.ServiceModel.DuplexClientBase<Models.DominoService.IAuthenticationService>, Models.DominoService.IAuthenticationService {
+    public partial class AuthenticationServiceClient : System.ServiceModel.ClientBase<Models.DominoService.IAuthenticationService>, Models.DominoService.IAuthenticationService {
         
-        public AuthenticationServiceClient(System.ServiceModel.InstanceContext callbackInstance) : 
-                base(callbackInstance) {
+        public AuthenticationServiceClient() {
         }
         
-        public AuthenticationServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName) : 
-                base(callbackInstance, endpointConfigurationName) {
+        public AuthenticationServiceClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
         }
         
-        public AuthenticationServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        public AuthenticationServiceClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AuthenticationServiceClient(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, endpointConfigurationName, remoteAddress) {
+        public AuthenticationServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
         }
         
-        public AuthenticationServiceClient(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(callbackInstance, binding, remoteAddress) {
+        public AuthenticationServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
         }
         
-        public void LogIn(Models.DominoService.LoginRequest request) {
-            base.Channel.LogIn(request);
+        public bool LogIn(Models.DominoService.LoginRequest request) {
+            return base.Channel.LogIn(request);
         }
         
-        public System.Threading.Tasks.Task LogInAsync(Models.DominoService.LoginRequest request) {
+        public System.Threading.Tasks.Task<bool> LogInAsync(Models.DominoService.LoginRequest request) {
             return base.Channel.LogInAsync(request);
         }
     }

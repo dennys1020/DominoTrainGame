@@ -2,14 +2,14 @@ using System;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using log4net.Ext.Trace;
-using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.Networking;
 using AuthenticationServiceClient = Models.DominoService.AuthenticationServiceClient;
 using ConnectionServiceClient = Models.DominoService.ConnectionServiceClient;
+using GameServiceFault = Models.DominoService.GameServiceFault;
+using GameServiceFaultCode = Models.DominoService.GameServiceFaultCode;
 using GeneratedConnectionStatus = Models.DominoService.ServerConnectionStatus;
 using GeneratedLoginRequest = Models.DominoService.LoginRequest;
-using GeneratedLoginStatus = Models.DominoService.LoginStatus;
 
 namespace DominoTrainGame.Client.Models;
 
@@ -17,15 +17,12 @@ public sealed class RemoteGameServices : IRemoteGameServices
 {
     private const string ConnectionEndpointName = "NetTcpBinding_IConnectionService";
     private const string AuthenticationEndpointName = "NetTcpBinding_IAuthenticationService";
-    private const int CallbackTimeoutSeconds = 30;
     private static readonly ITraceLog _logger;
-    private static readonly TimeSpan _callbackTimeout;
     private readonly GameChannelCloser _channelCloser;
 
     static RemoteGameServices()
     {
         _logger = TraceLogManager.GetLogger(typeof(RemoteGameServices));
-        _callbackTimeout = TimeSpan.FromSeconds(CallbackTimeoutSeconds);
     }
 
     public RemoteGameServices()
@@ -70,6 +67,16 @@ public sealed class RemoteGameServices : IRemoteGameServices
         {
             loginResult = await SendLogInAsync(identifier, password).ConfigureAwait(false);
         }
+        catch (FaultException<GameServiceFault> exception)
+        {
+            _logger.WarnFormat("The server rejected the login request. FaultCode: {0}.", exception.Detail.Code);
+            loginResult = MapLoginFault(exception.Detail.Code);
+        }
+        catch (FaultException exception)
+        {
+            _logger.Error("The server reported an undeclared fault while processing the login request.", exception);
+            loginResult = LoginResult.ServerError;
+        }
         catch (TimeoutException exception)
         {
             _logger.Error("The login request did not finish before the configured timeout.", exception);
@@ -95,20 +102,17 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return connectionStatus;
     }
 
-    private static LoginResult MapLoginStatus(GeneratedLoginStatus loginStatus)
+    private static LoginResult MapLoginFault(GameServiceFaultCode faultCode)
     {
         LoginResult loginResult;
 
-        switch (loginStatus)
+        switch (faultCode)
         {
-            case GeneratedLoginStatus.Success:
-                loginResult = LoginResult.Success;
-                break;
-            case GeneratedLoginStatus.InvalidInput:
+            case GameServiceFaultCode.InvalidInput:
                 loginResult = LoginResult.InvalidInput;
                 break;
-            case GeneratedLoginStatus.InvalidCredentials:
-                loginResult = LoginResult.InvalidCredentials;
+            case GameServiceFaultCode.DatabaseUnavailable:
+                loginResult = LoginResult.DatabaseUnavailable;
                 break;
             default:
                 loginResult = LoginResult.ServerError;
@@ -120,24 +124,21 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     private async Task<LoginResult> SendLogInAsync(string identifier, string password)
     {
-        AuthenticationCallback callback = new AuthenticationCallback();
-        AuthenticationServiceClient authenticationClient = new AuthenticationServiceClient(
-            new InstanceContext(callback),
-            AuthenticationEndpointName);
+        AuthenticationServiceClient authenticationClient = new AuthenticationServiceClient(AuthenticationEndpointName);
         LoginResult loginResult;
 
         try
         {
             GeneratedLoginRequest request = new GeneratedLoginRequest
             {
-                RequestId = callback.RequestId,
                 Identifier = identifier,
                 Password = password
             };
 
-            await authenticationClient.LogInAsync(request).ConfigureAwait(false);
-            GeneratedLoginStatus loginStatus = await callback.WaitForLogInAsync(_callbackTimeout).ConfigureAwait(false);
-            loginResult = MapLoginStatus(loginStatus);
+            bool isAuthenticated = await authenticationClient.LogInAsync(request).ConfigureAwait(false);
+            loginResult = isAuthenticated
+                ? LoginResult.Success
+                : LoginResult.InvalidCredentials;
         }
         finally
         {

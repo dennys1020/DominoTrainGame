@@ -305,22 +305,6 @@ public class UiStrings
         }
     }
 
-    public static string InvalidEmailMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("InvalidEmailMessage", _resourceCulture);
-        }
-    }
-
-    public static string InvalidPasswordMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("InvalidPasswordMessage", _resourceCulture);
-        }
-    }
-
     public static string InvitationCodeHint
     {
         get
@@ -393,14 +377,6 @@ public class UiStrings
         }
     }
 
-    public static string LeaderboardEmptyMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("LeaderboardEmptyMessage", _resourceCulture);
-        }
-    }
-
     public static string LeaderboardExplanation
     {
         get
@@ -414,30 +390,6 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("LeaderboardFilterLabel", _resourceCulture);
-        }
-    }
-
-    public static string LeaderboardLoadErrorMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("LeaderboardLoadErrorMessage", _resourceCulture);
-        }
-    }
-
-    public static string LeaderboardLoadingMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("LeaderboardLoadingMessage", _resourceCulture);
-        }
-    }
-
-    public static string LeaderboardNoMatchesMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("LeaderboardNoMatchesMessage", _resourceCulture);
         }
     }
 
@@ -545,30 +497,6 @@ public class UiStrings
         }
     }
 
-    public static string MessageIncorrectPassword
-    {
-        get
-        {
-            return ResourceManager.GetString("MessageIncorrectPassword", _resourceCulture);
-        }
-    }
-
-    public static string MessageUserAlreadyExists
-    {
-        get
-        {
-            return ResourceManager.GetString("MessageUserAlreadyExists", _resourceCulture);
-        }
-    }
-
-    public static string MessageUserNotFound
-    {
-        get
-        {
-            return ResourceManager.GetString("MessageUserNotFound", _resourceCulture);
-        }
-    }
-
     public static string MusicVolumeLabel
     {
         get
@@ -649,14 +577,6 @@ public class UiStrings
         }
     }
 
-    public static string PasswordsDoNotMatchMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("PasswordsDoNotMatchMessage", _resourceCulture);
-        }
-    }
-
     public static string PlayButtonLabel
     {
         get
@@ -705,14 +625,6 @@ public class UiStrings
         }
     }
 
-    public static string RecoverPasswordSuccessMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("RecoverPasswordSuccessMessage", _resourceCulture);
-        }
-    }
-
     public static string RecoverPasswordTitle
     {
         get
@@ -734,22 +646,6 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("RegisterDescription", _resourceCulture);
-        }
-    }
-
-    public static string RegistrationFailedMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("RegistrationFailedMessage", _resourceCulture);
-        }
-    }
-
-    public static string RegistrationSuccessMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("RegistrationSuccessMessage", _resourceCulture);
         }
     }
 
@@ -945,14 +841,6 @@ public class UiStrings
         }
     }
 
-    public static string ScoreConnectedPlayersFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("ScoreConnectedPlayersFormat", _resourceCulture);
-        }
-    }
-
     public static string ScoreExplanation
     {
         get
@@ -969,51 +857,11 @@ public class UiStrings
         }
     }
 
-    public static string ScorePendingResultsLabel
-    {
-        get
-        {
-            return ResourceManager.GetString("ScorePendingResultsLabel", _resourceCulture);
-        }
-    }
-
-    public static string ScoreRoundCountFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("ScoreRoundCountFormat", _resourceCulture);
-        }
-    }
-
-    public static string ScoreRoundFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("ScoreRoundFormat", _resourceCulture);
-        }
-    }
-
-    public static string ScoreTieFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("ScoreTieFormat", _resourceCulture);
-        }
-    }
-
     public static string ScoreTotalLabel
     {
         get
         {
             return ResourceManager.GetString("ScoreTotalLabel", _resourceCulture);
-        }
-    }
-
-    public static string ScoreWinnerFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("ScoreWinnerFormat", _resourceCulture);
         }
     }
 
@@ -1089,70 +937,6 @@ public class UiStrings
         }
     }
 
-    public static string VerificationCodeExpiredMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeExpiredMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeInvalidMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeInvalidMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeResendLabel
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeResendLabel", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeResendWaitMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeResendWaitMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeResentMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeResentMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeSendErrorMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeSendErrorMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeSentMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeSentMessage", _resourceCulture);
-        }
-    }
-
-    public static string VerificationCodeTooManyAttemptsMessage
-    {
-        get
-        {
-            return ResourceManager.GetString("VerificationCodeTooManyAttemptsMessage", _resourceCulture);
-        }
-    }
-
     public static string VerificationTitle
     {
         get
@@ -1182,14 +966,6 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("WelcomeBackTitle", _resourceCulture);
-        }
-    }
-
-    public static string WindowTitleFormat
-    {
-        get
-        {
-            return ResourceManager.GetString("WindowTitleFormat", _resourceCulture);
         }
     }
 

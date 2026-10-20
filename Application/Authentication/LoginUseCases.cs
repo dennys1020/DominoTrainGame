@@ -1,6 +1,6 @@
 using System;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Security;
 using DominoTrainGame.Server.Persistence.Contracts;
 using DominoTrainGame.Server.Persistence.Errors;
@@ -25,51 +25,66 @@ public sealed class LoginUseCases : ILoginUseCases
         _playerRepository = playerRepository ?? throw new ArgumentNullException(nameof(playerRepository));
     }
 
-    public LoginResult LogIn(string identifier, string password)
+    public bool LogIn(string identifier, string password)
     {
-        LoginResult loginResult = LoginResult.InvalidInput;
         string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
 
-        if (IsValidInput(normalizedIdentifier, password))
-        {
-            loginResult = VerifyCredentials(normalizedIdentifier, password);
-        }
+        ValidateIdentifier(normalizedIdentifier);
+        ValidatePassword(password);
 
-        return loginResult;
+        bool isAuthenticated = VerifyCredentials(normalizedIdentifier, password);
+        return isAuthenticated;
     }
 
-    private static bool IsValidInput(string identifier, string password)
+    private static void ValidateIdentifier(string identifier)
     {
         bool isIdentifierValid = !string.IsNullOrWhiteSpace(identifier)
             && identifier.Length <= MaximumIdentifierLength;
-        bool isPasswordValid = !string.IsNullOrEmpty(password)
-            && password.Length <= MaximumPasswordLength;
-        return isIdentifierValid && isPasswordValid;
+
+        if (!isIdentifierValid)
+        {
+            throw new ArgumentException(
+                "The identifier is empty or exceeds the maximum allowed length.",
+                nameof(identifier));
+        }
     }
 
-    private LoginResult VerifyCredentials(string identifier, string password)
+    private static void ValidatePassword(string password)
     {
-        LoginResult loginResult = LoginResult.DatabaseUnavailable;
+        bool isPasswordValid = !string.IsNullOrEmpty(password)
+            && password.Length <= MaximumPasswordLength;
+
+        if (!isPasswordValid)
+        {
+            throw new ArgumentException(
+                "The password is empty or exceeds the maximum allowed length.",
+                nameof(password));
+        }
+    }
+
+    private bool VerifyCredentials(string identifier, string password)
+    {
+        bool isAuthenticated;
 
         try
         {
             bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
-            bool isPasswordCorrect = isRegistered && PasswordHasher.Verify(credentials.PasswordHash, password);
-
-            loginResult = isPasswordCorrect ? LoginResult.Success : LoginResult.InvalidCredentials;
-            LogLoginAttempt(loginResult, credentials);
+            isAuthenticated = isRegistered && PasswordHasher.Verify(credentials.PasswordHash, password);
+            LogLoginAttempt(isAuthenticated, credentials);
         }
         catch (DatabaseOperationException exception)
         {
-            _logger.Error("The player credentials could not be read from the database.", exception);
+            throw new DatabaseUnavailableException(
+                "The player credentials could not be read from the database.",
+                exception);
         }
 
-        return loginResult;
+        return isAuthenticated;
     }
 
-    private static void LogLoginAttempt(LoginResult loginResult, PlayerCredentials credentials)
+    private static void LogLoginAttempt(bool isAuthenticated, PlayerCredentials credentials)
     {
-        if (loginResult == LoginResult.Success)
+        if (isAuthenticated)
         {
             _logger.InfoFormat("A player logged in. PlayerId: {0}.", credentials.PlayerId);
         }

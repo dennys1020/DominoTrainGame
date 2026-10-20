@@ -183,9 +183,6 @@
   <data name="SignUpButtonLabel" xml:space="preserve">
     <value>Registrarse</value>
   </data>
-  <data name="RegistrationSuccessMessage" xml:space="preserve">
-    <value>Registro completado correctamente.</value>
-  </data>
   <data name="ChangePasswordLabel" xml:space="preserve">
     <value>Cambiar contraseña</value>
   </data>
@@ -246,9 +243,6 @@
   <data name="RequiredFieldsMessage" xml:space="preserve">
     <value>Todos los campos son obligatorios.</value>
   </data>
-  <data name="InvalidPasswordMessage" xml:space="preserve">
-    <value>Error: La contraseña debe tener al menos {0} caracteres</value>
-  </data>
   <data name="AlreadyHaveAccountLabel" xml:space="preserve">
     <value>¿Ya tienes una cuenta?</value>
   </data>
@@ -269,15 +263,6 @@
   </data>
   <data name="AddButtonLabel" xml:space="preserve">
     <value>Agregar</value>
-  </data>
-  <data name="MessageUserNotFound" xml:space="preserve">
-    <value>Usuario no encontrado</value>
-  </data>
-  <data name="MessageIncorrectPassword" xml:space="preserve">
-    <value>Contraseña incorrecta</value>
-  </data>
-  <data name="MessageUserAlreadyExists" xml:space="preserve">
-    <value>El nombre de usuario o correo ya está registrado</value>
   </data>
   <data name="VerifyButtonLabel" xml:space="preserve">
     <value>Verificar</value>
@@ -421,26 +406,8 @@ en el tren</value>
   <data name="RoomPlayerCountFormat" xml:space="preserve">
     <value>{0} / {1}</value>
   </data>
-  <data name="ScoreConnectedPlayersFormat" xml:space="preserve">
-    <value>Jugadores conectados: {0}</value>
-  </data>
   <data name="ScoreNoPlayersLabel" xml:space="preserve">
     <value>Todavía no hay jugadores ni resultados que mostrar.</value>
-  </data>
-  <data name="ScorePendingResultsLabel" xml:space="preserve">
-    <value>Resultados pendientes</value>
-  </data>
-  <data name="ScoreRoundCountFormat" xml:space="preserve">
-    <value>Rondas: {0}</value>
-  </data>
-  <data name="ScoreRoundFormat" xml:space="preserve">
-    <value>Ronda {0}</value>
-  </data>
-  <data name="ScoreTieFormat" xml:space="preserve">
-    <value>Empate: {0}</value>
-  </data>
-  <data name="ScoreWinnerFormat" xml:space="preserve">
-    <value>Ganador: {0}</value>
   </data>
   <data name="AvatarSectionLabel" xml:space="preserve">
     <value>Avatar</value>
@@ -478,56 +445,8 @@ en el tren</value>
   <data name="VerificationTitle" xml:space="preserve">
     <value>Ingrese el código</value>
   </data>
-  <data name="InvalidEmailMessage" xml:space="preserve">
-    <value>El correo electrónico no es válido.</value>
-  </data>
-  <data name="LeaderboardLoadingMessage" xml:space="preserve">
-    <value>Cargando puntuaciones…</value>
-  </data>
-  <data name="LeaderboardLoadErrorMessage" xml:space="preserve">
-    <value>No se pudieron cargar las puntuaciones. Revisa la conexión e inténtalo de nuevo</value>
-  </data>
-  <data name="LeaderboardEmptyMessage" xml:space="preserve">
-    <value>Todavía no hay puntuaciones de partidas terminadas</value>
-  </data>
-  <data name="LeaderboardNoMatchesMessage" xml:space="preserve">
-    <value>No hay jugadores que coincidan con el filtro</value>
-  </data>
-  <data name="VerificationCodeSentMessage" xml:space="preserve">
-    <value>Enviamos un código de 6 dígitos a {0}. Escríbelo para completar tu registro.</value>
-  </data>
-  <data name="VerificationCodeInvalidMessage" xml:space="preserve">
-    <value>El código es incorrecto. Inténtalo de nuevo</value>
-  </data>
-  <data name="VerificationCodeExpiredMessage" xml:space="preserve">
-    <value>El código venció</value>
-  </data>
-  <data name="VerificationCodeTooManyAttemptsMessage" xml:space="preserve">
-    <value>Demasiados intentos fallidos</value>
-  </data>
-  <data name="VerificationCodeSendErrorMessage" xml:space="preserve">
-    <value>No se pudo enviar el correo de verificación. Revisa tu dirección e inténtalo de nuevo.</value>
-  </data>
-  <data name="VerificationCodeResendLabel" xml:space="preserve">
-    <value>Reenviar código</value>
-  </data>
-  <data name="VerificationCodeResentMessage" xml:space="preserve">
-    <value>Te enviamos un código nuevo. El anterior ya no es válido.</value>
-  </data>
-  <data name="VerificationCodeResendWaitMessage" xml:space="preserve">
-    <value>Espera {0} segundos para pedir otro código.</value>
-  </data>
-  <data name="PasswordsDoNotMatchMessage" xml:space="preserve">
-    <value>Las contraseñas no coinciden</value>
-  </data>
-  <data name="RecoverPasswordSuccessMessage" xml:space="preserve">
-    <value>Tu contraseña se actualizó correctamente</value>
-  </data>
   <data name="SendCodeButtonLabel" xml:space="preserve">
     <value>Enviar</value>
-  </data>
-  <data name="WindowTitleFormat" xml:space="preserve">
-    <value>{0} · {1}</value>
   </data>
   <data name="LeaderboardExplanation" xml:space="preserve">
     <value>Clasificación por victorias en partidas terminadas.</value>
@@ -546,9 +465,6 @@ en el tren</value>
   </data>
   <data name="LoginSystemErrorMessage" xml:space="preserve">
     <value>Ocurrió un error del sistema al iniciar sesión. Inténtalo de nuevo más tarde.</value>
-  </data>
-  <data name="RegistrationFailedMessage" xml:space="preserve">
-    <value>No se pudo completar el registro. Revisa tus datos o inténtalo más tarde.</value>
   </data>
   <data name="InvalidCredentialsMessage" xml:space="preserve">
     <value>El usuario o la contraseña son incorrectos.</value>

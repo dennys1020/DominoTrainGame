@@ -3,6 +3,7 @@ using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Authentication;
 using DominoTrainGame.Server.Application.Connection;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DTO;
@@ -37,52 +38,26 @@ public sealed class GameService : IConnectionService, IAuthenticationService
         return connectionStatus;
     }
 
-    public void LogIn(LoginRequest request)
+    public bool LogIn(LoginRequest request)
     {
-        IAuthenticationCallback callback = OperationContext.Current.GetCallbackChannel<IAuthenticationCallback>();
-        LoginResponse response = CreateLoginResponse(request);
+        bool isAuthenticated;
 
-        NotifyLogInCompleted(callback, response);
-    }
-
-    private LoginResponse CreateLoginResponse(LoginRequest request)
-    {
-        LoginResponse response = new LoginResponse
+        try
         {
-            RequestId = request?.RequestId ?? Guid.Empty,
-            Status = LoginStatus.InvalidInput
-        };
-
-        if (request != null)
+            isAuthenticated = _loginUseCases.LogIn(request?.Identifier, request?.Password);
+        }
+        catch (ArgumentException exception)
         {
-            LoginResult loginResult = _loginUseCases.LogIn(request.Identifier, request.Password);
-            response.Status = MapLoginStatus(loginResult);
+            _logger.Warn("A login request was rejected because its input is invalid.", exception);
+            throw CreateFault(GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("A login request failed because the database is unavailable.", exception);
+            throw CreateFault(GameServiceFaultCode.DatabaseUnavailable);
         }
 
-        return response;
-    }
-
-    private static LoginStatus MapLoginStatus(LoginResult loginResult)
-    {
-        LoginStatus loginStatus;
-
-        switch (loginResult)
-        {
-            case LoginResult.Success:
-                loginStatus = LoginStatus.Success;
-                break;
-            case LoginResult.InvalidInput:
-                loginStatus = LoginStatus.InvalidInput;
-                break;
-            case LoginResult.InvalidCredentials:
-                loginStatus = LoginStatus.InvalidCredentials;
-                break;
-            default:
-                loginStatus = LoginStatus.ServerError;
-                break;
-        }
-
-        return loginStatus;
+        return isAuthenticated;
     }
 
     public void SignUp(SignUpRequest request)
@@ -90,23 +65,13 @@ public sealed class GameService : IConnectionService, IAuthenticationService
 
     }
 
-    private static void NotifyLogInCompleted(IAuthenticationCallback callback, LoginResponse response)
+    private static FaultException<GameServiceFault> CreateFault(GameServiceFaultCode faultCode)
     {
-        try
+        GameServiceFault fault = new GameServiceFault
         {
-            callback.OnLogInCompleted(response);
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("The login result could not be delivered before the configured timeout.", exception);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("The login result could not be delivered because the client disconnected.", exception);
-        }
-        catch (ObjectDisposedException exception)
-        {
-            _logger.Warn("The login result could not be delivered because the callback channel was closed.", exception);
-        }
+            Code = faultCode
+        };
+        FaultException<GameServiceFault> faultException = new FaultException<GameServiceFault>(fault);
+        return faultException;
     }
 }

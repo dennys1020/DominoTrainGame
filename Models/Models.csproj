@@ -60,7 +60,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="resources\Localization\UiStrings.Designer.cs" />
-    <Compile Include="Callbacks\AuthenticationCallback.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
     <Compile Include="Contracts\ServerConnectionStatus.cs" />
