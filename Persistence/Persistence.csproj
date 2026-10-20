@@ -104,7 +104,6 @@
     <Compile Include="Data\EntityFramework\Account.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EntityFramework\DominoGameDBEntities.cs" />
     <Compile Include="Data\EntityFramework\Match.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
@@ -132,11 +131,13 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DominoGameModel.Context.cs</LastGenOutput>
       <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <CustomToolNamespace>DominoTrainGame.Server.Persistence.Data</CustomToolNamespace>
     </Content>
     <Content Include="Data\EntityFramework\DominoGameModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>DominoGameModel.cs</LastGenOutput>
       <DependentUpon>DominoGameModel.edmx</DependentUpon>
+      <CustomToolNamespace>DominoTrainGame.Server.Persistence.Data</CustomToolNamespace>
     </Content>
   </ItemGroup>
   <ItemGroup>
