@@ -18,6 +18,7 @@ public sealed class LoginViewModel : ScreenViewModel
     private const string LoginFailedMessageKey = "LoginFailedMessage";
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LoginSystemErrorMessageKey = "LoginSystemErrorMessage";
+    private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
     private readonly IRemoteGameServices _gameServices;
     private string _usernameOrEmail;
     private string _password;
@@ -113,6 +114,9 @@ public sealed class LoginViewModel : ScreenViewModel
                 break;
             case LoginResult.ServerUnavailable:
                 messageKey = ServerUnavailableMessageKey;
+                break;
+            case LoginResult.DatabaseUnavailable:
+                messageKey = DatabaseErrorMessageKey;
                 break;
             default:
                 messageKey = LoginSystemErrorMessageKey;

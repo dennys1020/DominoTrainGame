@@ -67,8 +67,8 @@
     <Compile Include="Authentication\SignUpCases.cs" />
     <Compile Include="Connection\ConnectionUseCases.cs" />
     <Compile Include="Connection\IConnectionUseCases.cs" />
+    <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Results\DatabaseConnectionStatus.cs" />
-    <Compile Include="Results\LoginResult.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="UseCaseFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

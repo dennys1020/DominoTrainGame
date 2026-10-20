@@ -63,9 +63,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IAuthenticationCallback.cs" />
     <Compile Include="Contracts\IAuthenticationService.cs" />
     <Compile Include="Contracts\IConnectionService.cs" />
+    <Compile Include="DTO\GameServiceFault.cs" />
+    <Compile Include="DTO\GameServiceFaultCode.cs" />
     <Compile Include="DTO\LoginRequest.cs" />
     <Compile Include="DTO\ServerConnectionStatus.cs" />
     <Compile Include="DTO\SignUpRequest.cs" />
