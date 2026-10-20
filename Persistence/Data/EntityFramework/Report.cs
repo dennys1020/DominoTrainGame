@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Persistence.Data.EntityFramework
+namespace DominoTrainGame.Server.Persistence.Data
 {
     using System;
     using System.Collections.Generic;
