@@ -35,4 +35,54 @@ public sealed class PlayerRepository : IPlayerRepository
             .ToList();
         return matches;
     }
+    public bool TryCreatePlayer(PlayerRegistration registration, out PlayerCredentials credentials)
+    {
+        PlayerCredentials createdCredentials = DatabaseExecutor.Execute(
+            context => CreatePlayer(context, registration));
+        bool isCreated = createdCredentials.PlayerId != PlayerCredentials.Empty.PlayerId;
+
+        credentials = createdCredentials;
+        return isCreated;
+    }
+
+    private static PlayerCredentials CreatePlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    {
+        PlayerCredentials credentials = PlayerCredentials.Empty;
+        bool isTaken = ExistsPlayer(context, registration);
+
+        if (!isTaken)
+        {
+            credentials = InsertPlayer(context, registration);
+        }
+
+        return credentials;
+    }
+
+    private static PlayerCredentials InsertPlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    {
+        PlayerEntity player = new PlayerEntity
+        {
+            Username = registration.Username,
+            Email = registration.Email,
+            PasswordHash = registration.PasswordHash,
+            IsGuest = RegisteredPlayerFlag
+        };
+
+        context.Players.Add(player);
+        context.SaveChanges();
+
+        PlayerCredentials credentials = new PlayerCredentials(
+            player.PlayerId,
+            player.Username,
+            player.PasswordHash);
+        return credentials;
+    }
+    private static bool ExistsPlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    {
+        bool exists = context.Players
+            .AsNoTracking()
+            .Any(player => player.Username == registration.Username
+                || player.Email == registration.Email);
+        return exists;
+    }
 }

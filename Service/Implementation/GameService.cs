@@ -1,12 +1,13 @@
-using System;
-using System.ServiceModel;
-using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Authentication;
 using DominoTrainGame.Server.Application.Connection;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Server.Servic.DTO;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DTO;
+using log4net.Ext.Trace;
+using System;
+using System.ServiceModel;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 
@@ -60,9 +61,26 @@ public sealed class GameService : IConnectionService, IAuthenticationService
         return isAuthenticated;
     }
 
-    public void SignUp(SignUpRequest request)
+    public bool SignUp(SignUpRequest request)
     {
+        bool isRegistered;
 
+        try
+        {
+            isRegistered = _signUpCases.SignUp(request?.UserName, request?.Email, request?.Password);
+        }
+        catch (ArgumentException exception)
+        {
+            _logger.Warn("A sign up request was rejected because its input is invalid.", exception);
+            throw CreateFault(GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("A sign up request failed because the database is unavailable.", exception);
+            throw CreateFault(GameServiceFaultCode.DatabaseUnavailable);
+        }
+
+        return isRegistered;
     }
 
     private static FaultException<GameServiceFault> CreateFault(GameServiceFaultCode faultCode)

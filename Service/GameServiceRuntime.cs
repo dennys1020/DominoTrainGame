@@ -25,7 +25,8 @@ public sealed class GameServiceRuntime : IDisposable
     {
         IConnectionUseCases connectionUseCases = UseCaseFactory.CreateConnectionUseCases();
         ILoginUseCases loginUseCases = UseCaseFactory.CreateLoginUseCases();
-        GameService gameService = new GameService(connectionUseCases, loginUseCases);
+        ISignUpUseCases signUpUseCases = UseCaseFactory.CreateSignupUseCases();
+        GameService gameService = new GameService(connectionUseCases, loginUseCases, signUpUseCases);
 
         _channelCloser = new GameChannelCloser();
         _host = new ServiceHost(gameService);
