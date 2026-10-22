@@ -1,15 +1,11 @@
-using System;
 using System.Runtime.Serialization;
 
-namespace DominoTrainGame.Server.Servic.DTO
+namespace DominoTrainGame.Server.Service.DTO;
 
-[DataContractName(Name = "SignUpRequest", Namespace = "http://dominotraingame/services"]
+[DataContract(Name = "SignUpRequest", Namespace = "http://dominotraingame/services")]
 
 public sealed class SignUpRequest
 {
-    [DataMember]
-
-    public Guid RequestId { get; set; }
 
     [DataMember]
 
@@ -21,8 +17,7 @@ public sealed class SignUpRequest
 
     [DataMember]
 
-    public string password { get; set; }
+    public string Password { get; set; }
 
 
-    }
 }

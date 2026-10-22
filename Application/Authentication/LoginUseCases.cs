@@ -2,7 +2,6 @@ using System;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Security;
-using DominoTrainGame.Server.Persistence.Contracts;
 using DominoTrainGame.Server.Persistence.Errors;
 using DominoTrainGame.Server.Persistence.Models;
 

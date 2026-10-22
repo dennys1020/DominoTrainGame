@@ -6,11 +6,11 @@ namespace DominoTrainGame.Server.Application.Security;
 
 public static class PasswordHasher
 {
-    private const byte SupportedFormatMarker = 0;
+    private const byte SupportedFormatMarker = 1;
     private const int FormatMarkerIndex = 0;
     private const int SaltSize = 16;
     private const int SubkeySize = 32;
-    private const int IterationCount = 1000;
+    private const int IterationCount = 600000;
     private const int SaltOffset = 1;
     private const int SubkeyOffset = SaltOffset + SaltSize;
     private const int HashSize = SubkeyOffset + SubkeySize;
@@ -21,6 +21,19 @@ public static class PasswordHasher
     static PasswordHasher()
     {
         _logger = TraceLogManager.GetLogger(typeof(PasswordHasher));
+    }
+
+    public static string Hash(string password)
+    {
+        byte[] salt = GenerateSalt();
+        byte[] subkey = DeriveSubkey(password, salt);
+        byte[] encodeHash = new byte[HashSize];
+
+        encodeHash[FormatMarkerIndex] = SupportedFormatMarker;
+        Buffer.BlockCopy(salt, DestinationOffset, encodeHash, SaltOffset, SaltSize);
+        Buffer.BlockCopy(subkey, DestinationOffset, encodeHash, SubkeyOffset, SubkeySize);
+
+        return Convert.ToBase64String(encodeHash);
     }
 
     public static bool Verify(string hashedPassword, string password)
@@ -86,5 +99,24 @@ public static class PasswordHasher
         }
 
         return difference == NoDifference;
+    }
+
+    private static byte[] GenerateSalt()
+    {
+        byte[] salt = new Byte[SaltSize];
+        using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
+        {
+            generator.GetBytes(salt);
+        }
+        return salt;
+    }
+
+    private static byte[] DeriveSubkey(string password, byte[] salt)
+    {
+        using (Rfc2898DeriveBytes keyDerivation= new Rfc2898DeriveBytes(
+            password, salt, IterationCount, HashAlgorithmName.SHA256))
+        {
+            return keyDerivation.GetBytes(SubkeySize);
+        }
     }
 }

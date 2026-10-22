@@ -46,7 +46,7 @@ internal static class WindowFactory
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
             [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
-            [Screen.SignUp] = windowService => new SignUpViewModel(windowService),
+            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
             [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
             [Screen.RecoverPassword] = windowService => new DialogViewModel(windowService),
             [Screen.Main] = windowService => new MainMenuViewModel(windowService),

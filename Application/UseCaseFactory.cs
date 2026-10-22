@@ -20,4 +20,11 @@ public static class UseCaseFactory
         ILoginUseCases loginUseCases = new LoginUseCases(playerRepository);
         return loginUseCases;
     }
+
+    public static ISignUpUseCases CreateSignUpUseCases()
+    {
+        IPlayerRepository playerRepository = new PlayerRepository();
+        ISignUpUseCases signUpUseCases = new SignUpCases(playerRepository);
+        return signUpUseCases;
+    }
 }

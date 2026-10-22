@@ -58,6 +58,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\SignUpResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="resources\Localization\UiStrings.Designer.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />

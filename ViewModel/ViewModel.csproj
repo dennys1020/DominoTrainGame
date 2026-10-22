@@ -60,6 +60,8 @@
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
+    <Compile Include="Validation\SignupInputStatus.cs" />
+    <Compile Include="Validation\SignupInputValidator.cs" />
     <Compile Include="VerificationCodeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

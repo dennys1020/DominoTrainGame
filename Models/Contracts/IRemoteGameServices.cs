@@ -7,4 +7,6 @@ public interface IRemoteGameServices
     Task<ServerConnectionStatus> CheckConnectionAsync();
 
     Task<LoginResult> LogInAsync(string identifier, string password);
+
+    Task<SignUpResult> SignUpAsync(string username, string email, string password);
 }
