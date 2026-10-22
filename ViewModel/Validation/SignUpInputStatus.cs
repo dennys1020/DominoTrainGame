@@ -1,4 +1,4 @@
-namespace DominoTrainGame.ViewModels.Validation;
+namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public enum SignUpInputStatus
 {

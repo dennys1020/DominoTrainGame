@@ -2,10 +2,12 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Threading;
 using log4net.Config;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Service;
+using DominoTrainGame.Server.Service.Implementation;
+using DominoTrainGame.Server.Service.Networking;
 
 namespace DominoTrainGame.Server.Host;
 
@@ -14,21 +16,17 @@ internal static class Program
     private const int SuccessExitCode = 0;
     private const int FailureExitCode = 1;
     private const string LogConfigurationFileName = "log4net.config";
+
     private static readonly ITraceLog _logger;
-    private static readonly ManualResetEventSlim _stopSignal;
 
     static Program()
     {
-        string logConfigurationPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
-            LogConfigurationFileName);
-        XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
         _logger = TraceLogManager.GetLogger(typeof(Program));
-        _stopSignal = new ManualResetEventSlim();
     }
 
     private static int Main()
     {
+        ConfigureLogging();
         int exitCode = FailureExitCode;
 
         try
@@ -56,22 +54,58 @@ internal static class Program
         return exitCode;
     }
 
+    private static void ConfigureLogging()
+    {
+        string logConfigurationPath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            LogConfigurationFileName);
+        XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
+    }
+
     private static void RunServer()
     {
-        using (GameServiceRuntime serviceRuntime = new GameServiceRuntime())
+        GameService gameService = GameServiceFactory.Create();
+        ServiceHost serviceHost = new ServiceHost(gameService);
+        GameChannelCloser channelCloser = new GameChannelCloser();
+
+        try
         {
-            Console.CancelKeyPress += OnCancelKeyPress;
-            serviceRuntime.Start();
-            _logger.Info("Domino Train server is running. Press Ctrl+C to stop it.");
-            _stopSignal.Wait();
+            serviceHost.Open();
+            LogEndpoints(serviceHost);
+            WaitForStopRequest();
+        }
+        finally
+        {
+            channelCloser.Close(serviceHost);
         }
 
         _logger.Info("Domino Train server stopped.");
     }
 
-    private static void OnCancelKeyPress(object sender, ConsoleCancelEventArgs e)
+    private static void LogEndpoints(ServiceHost serviceHost)
     {
-        e.Cancel = true;
-        _stopSignal.Set();
+        foreach (ServiceEndpoint endpoint in serviceHost.Description.Endpoints)
+        {
+            _logger.InfoFormat("Endpoint listening at {0}.", endpoint.Address);
+        }
+    }
+
+    private static void WaitForStopRequest()
+    {
+        using (ManualResetEventSlim stopSignal = new ManualResetEventSlim())
+        {
+            ConsoleCancelEventHandler cancelKeyPressHandler = (sender, e) => RequestStop(e, stopSignal);
+
+            Console.CancelKeyPress += cancelKeyPressHandler;
+            _logger.Info("Domino Train server is running. Press Ctrl+C to stop it.");
+            stopSignal.Wait();
+            Console.CancelKeyPress -= cancelKeyPressHandler;
+        }
+    }
+
+    private static void RequestStop(ConsoleCancelEventArgs cancelEventArgs, ManualResetEventSlim stopSignal)
+    {
+        cancelEventArgs.Cancel = true;
+        stopSignal.Set();
     }
 }

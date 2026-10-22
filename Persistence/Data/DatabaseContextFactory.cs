@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace DominoTrainGame.Server.Persistence.Data;
 
-public static class DatabaseContextFactory
+internal static class DatabaseContextFactory
 {
     private const string ActiveProfileKey = "ActiveDatabase";
     private const string LocalProfileName = "Local";
@@ -29,7 +29,7 @@ public static class DatabaseContextFactory
     private static string ResolveConnectionName()
     {
         ConnectionStringSettings selection = ConfigurationManager.ConnectionStrings[ActiveProfileKey];
-        string profileName = selection?.ConnectionString.Trim();
+        string profileName = selection?.ConnectionString?.Trim() ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(profileName))
         {
@@ -44,9 +44,11 @@ public static class DatabaseContextFactory
 
     private static bool IsEntityProfile(ConnectionStringSettings profile)
     {
-        bool hasConnectionString = profile != null && !string.IsNullOrWhiteSpace(profile.ConnectionString);
+        string connectionString = profile?.ConnectionString ?? string.Empty;
+        string providerName = profile?.ProviderName ?? string.Empty;
+        bool hasConnectionString = !string.IsNullOrWhiteSpace(connectionString);
         bool isEntityProfile = hasConnectionString && string.Equals(
-            profile.ProviderName,
+            providerName,
             EntityClientProviderName,
             StringComparison.OrdinalIgnoreCase);
         return isEntityProfile;

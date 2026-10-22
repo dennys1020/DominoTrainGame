@@ -1,8 +1,9 @@
 using System;
-using DominoTrainGame.ViewModels.Commands;
-using DominoTrainGame.ViewModels.Navigation;
+using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Navigation;
 
-namespace DominoTrainGame.ViewModels.Common;
+namespace DominoTrainGame.Client.ViewModel.Common;
 
 public abstract class ScreenViewModel : ObservableViewModel
 {

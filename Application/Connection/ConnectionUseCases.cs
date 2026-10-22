@@ -1,20 +1,12 @@
 using System;
-using log4net.Ext.Trace;
-using DominoTrainGame.Server.Application.Results;
-using DominoTrainGame.Server.Persistence.Contracts;
-using DominoTrainGame.Server.Persistence.Errors;
+using DominoTrainGame.Server.Application.Errors;
+using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.Connection;
 
 public sealed class ConnectionUseCases : IConnectionUseCases
 {
-    private static readonly ITraceLog _logger;
     private readonly IConnectionRepository _connectionRepository;
-
-    static ConnectionUseCases()
-    {
-        _logger = TraceLogManager.GetLogger(typeof(ConnectionUseCases));
-    }
 
     public ConnectionUseCases(IConnectionRepository connectionRepository)
     {
@@ -22,22 +14,13 @@ public sealed class ConnectionUseCases : IConnectionUseCases
             ?? throw new ArgumentNullException(nameof(connectionRepository));
     }
 
-    public DatabaseConnectionStatus CheckDatabaseConnection()
+    public void VerifyDatabaseConnection()
     {
-        DatabaseConnectionStatus connectionStatus = DatabaseConnectionStatus.Unavailable;
+        bool canConnect = _connectionRepository.CanConnect();
 
-        try
+        if (!canConnect)
         {
-            bool canConnect = _connectionRepository.CanConnect();
-            connectionStatus = canConnect
-                ? DatabaseConnectionStatus.Available
-                : DatabaseConnectionStatus.Unavailable;
+            throw new DatabaseUnavailableException("The database connection could not be opened.");
         }
-        catch (DatabaseOperationException exception)
-        {
-            _logger.Error("The database connection could not be verified.", exception);
-        }
-
-        return connectionStatus;
     }
 }

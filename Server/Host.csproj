@@ -7,13 +7,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E1902FB2-0417-4930-8C22-47BD89975968}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Server</RootNamespace>
+    <RootNamespace>DominoTrainGame.Server.Host</RootNamespace>
     <AssemblyName>Server</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -67,10 +68,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameServiceFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj">
+      <Project>{E779B136-7C76-4BF5-9F8F-35003D537D37}</Project>
+      <Name>Application</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Persistence\Persistence.csproj">
+      <Project>{7A7743CA-C619-4A71-A869-FADF9C0BD52C}</Project>
+      <Name>Persistence</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Service\Service.csproj">
       <Project>{3BD1B5D5-391B-45EE-879A-B4F7D871BE8D}</Project>
       <Name>Service</Name>

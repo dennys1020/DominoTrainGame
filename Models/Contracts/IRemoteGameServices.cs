@@ -4,7 +4,7 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IRemoteGameServices
 {
-    Task<ServerConnectionStatus> CheckConnectionAsync();
+    Task<ConnectionCheckResult> CheckConnectionAsync();
 
     Task<LoginResult> LogInAsync(string identifier, string password);
 

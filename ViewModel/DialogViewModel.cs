@@ -1,8 +1,8 @@
-using DominoTrainGame.ViewModels.Commands;
-using DominoTrainGame.ViewModels.Common;
-using DominoTrainGame.ViewModels.Navigation;
+using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Client.ViewModel.Common;
+using DominoTrainGame.Client.ViewModel.Contracts;
 
-namespace DominoTrainGame.ViewModels;
+namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class DialogViewModel : ScreenViewModel
 {

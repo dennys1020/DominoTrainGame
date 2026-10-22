@@ -1,0 +1,131 @@
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:strings="clr-namespace:DominoTrainGame.Client.Models.Resources.Localization;assembly=Models"
+    x:Class="DominoTrainGame.Client.View.Views.VerificationCodeWindow"
+    Title="{Binding [VerificationTitle], Source={StaticResource Localization}}"
+    Width="520"
+    WindowStartupLocation="CenterOwner"
+    FocusManager.FocusedElement="{Binding ElementName=FirstDigitTextBox}"
+    Style="{StaticResource AppWindowStyle}"
+    Height="540"
+    MinWidth="380"
+    MinHeight="420">
+    <Window.Resources>
+        <Style x:Key="DigitBoxStyle" TargetType="TextBox">
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="60" />
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MaxLength" Value="1" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="InputMethod.IsInputMethodEnabled" Value="False" />
+        </Style>
+    </Window.Resources>
+    <Grid Background="{StaticResource Mist}">
+        <Viewbox Style="{StaticResource DialogViewboxStyle}">
+            <Grid Width="520">
+                <StackPanel Margin="32" VerticalAlignment="Center">
+                    <TextBlock
+                        Text="{Binding [VerificationTitle], Source={StaticResource Localization}}"
+                        Style="{StaticResource PixelTextStyle}"
+                        FontSize="20"
+                        Margin="0,0,0,12" />
+                    <TextBlock
+                        Text="{Binding Instruction}"
+                        Foreground="{StaticResource Ink}"
+                        FontSize="14"
+                        TextWrapping="Wrap"
+                        Margin="0,0,0,20" />
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        PreviewTextInput="OnDigitTextBoxPreviewTextInput"
+                        PreviewKeyDown="OnDigitTextBoxPreviewKeyDown"
+                        GotKeyboardFocus="OnDigitTextBoxGotKeyboardFocus"
+                        DataObject.Pasting="OnDigitTextBoxPasting">
+                        <TextBox
+                            x:Name="FirstDigitTextBox"
+                            Text="{Binding Digits[0].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}" />
+                        <TextBox
+                            x:Name="SecondDigitTextBox"
+                            Text="{Binding Digits[1].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}" />
+                        <TextBox
+                            x:Name="ThirdDigitTextBox"
+                            Text="{Binding Digits[2].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}" />
+                        <TextBox
+                            x:Name="FourthDigitTextBox"
+                            Text="{Binding Digits[3].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}" />
+                        <TextBox
+                            x:Name="FifthDigitTextBox"
+                            Text="{Binding Digits[4].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}" />
+                        <TextBox
+                            x:Name="SixthDigitTextBox"
+                            Text="{Binding Digits[5].Text, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DigitBoxStyle}"
+                            Margin="0" />
+                    </StackPanel>
+                    <TextBlock
+                        Text="{Binding Message}"
+                        Foreground="{StaticResource Ink}"
+                        FontSize="13"
+                        TextWrapping="Wrap"
+                        Margin="0,16,0,0"
+                        AutomationProperties.LiveSetting="Polite" />
+                    <Button
+                        Content="{Binding ResendLabel}"
+                        IsEnabled="{Binding CanResend}"
+                        Command="{Binding DataContext.ResendCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Foreground="{StaticResource Ink}"
+                        HorizontalAlignment="Center"
+                        Cursor="Hand"
+                        Margin="0,12,0,0">
+                        <Button.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextDecorations" Value="Underline" />
+                            </Style>
+                        </Button.Resources>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Grid Margin="0,24,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Column="0"
+                            Content="{Binding [CancelButtonLabel], Source={StaticResource Localization}}"
+                            Style="{StaticResource PixelButtonStyle}"
+                            Command="{Binding DataContext.CancelCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                            Margin="0,10,0,9" />
+                        <Button
+                            Grid.Column="2"
+                            Content="{Binding [VerifyButtonLabel], Source={StaticResource Localization}}"
+                            Style="{StaticResource PixelButtonStyle}"
+                            IsDefault="True"
+                            Command="{Binding DataContext.VerifyCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                            Margin="22,10,22,10" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Viewbox>
+    </Grid>
+</Window>

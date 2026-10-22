@@ -3,9 +3,10 @@ using DominoTrainGame.Server.Service.DTO;
 
 namespace DominoTrainGame.Server.Service.Contracts;
 
-[ServiceContract(Name = "IConnectionService", Namespace = "http://dominotraingame/services")]
+[ServiceContract]
 public interface IConnectionService
 {
     [OperationContract]
-    ServerConnectionStatus CheckConnection();
+    [FaultContract(typeof(GameServiceFault))]
+    void CheckConnection();
 }

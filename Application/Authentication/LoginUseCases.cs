@@ -1,9 +1,6 @@
 using System;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Application.Errors;
-using DominoTrainGame.Server.Application.Security;
-using DominoTrainGame.Server.Persistence.Errors;
-using DominoTrainGame.Server.Persistence.Models;
+using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.Authentication;
 
@@ -11,17 +8,21 @@ public sealed class LoginUseCases : ILoginUseCases
 {
     private const int MaximumIdentifierLength = 255;
     private const int MaximumPasswordLength = 128;
+
     private static readonly ITraceLog _logger;
+
     private readonly IPlayerRepository _playerRepository;
+    private readonly IPasswordHasher _passwordHasher;
 
     static LoginUseCases()
     {
         _logger = TraceLogManager.GetLogger(typeof(LoginUseCases));
     }
 
-    public LoginUseCases(IPlayerRepository playerRepository)
+    public LoginUseCases(IPlayerRepository playerRepository, IPasswordHasher passwordHasher)
     {
         _playerRepository = playerRepository ?? throw new ArgumentNullException(nameof(playerRepository));
+        _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public bool LogIn(string identifier, string password)
@@ -61,26 +62,6 @@ public sealed class LoginUseCases : ILoginUseCases
         }
     }
 
-    private bool VerifyCredentials(string identifier, string password)
-    {
-        bool isAuthenticated;
-
-        try
-        {
-            bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
-            isAuthenticated = isRegistered && PasswordHasher.Verify(credentials.PasswordHash, password);
-            LogLoginAttempt(isAuthenticated, credentials);
-        }
-        catch (DatabaseOperationException exception)
-        {
-            throw new DatabaseUnavailableException(
-                "The player credentials could not be read from the database.",
-                exception);
-        }
-
-        return isAuthenticated;
-    }
-
     private static void LogLoginAttempt(bool isAuthenticated, PlayerCredentials credentials)
     {
         if (isAuthenticated)
@@ -91,5 +72,14 @@ public sealed class LoginUseCases : ILoginUseCases
         {
             _logger.Info("A login attempt was rejected because the credentials are invalid.");
         }
+    }
+
+    private bool VerifyCredentials(string identifier, string password)
+    {
+        bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
+        bool isAuthenticated = isRegistered && _passwordHasher.Verify(credentials.PasswordHash, password);
+
+        LogLoginAttempt(isAuthenticated, credentials);
+        return isAuthenticated;
     }
 }

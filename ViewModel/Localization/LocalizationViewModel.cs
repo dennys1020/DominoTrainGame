@@ -2,9 +2,10 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Threading;
-using DominoTrainGame.Resources.Localization;
+using DominoTrainGame.Client.Models.Resources.Localization;
+using DominoTrainGame.Client.ViewModel.Commands;
 
-namespace DominoTrainGame.ViewModels.Localization;
+namespace DominoTrainGame.Client.ViewModel.Localization;
 
 public sealed class LocalizationViewModel : INotifyPropertyChanged
 {
@@ -20,35 +21,21 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
 
     private LocalizationViewModel()
     {
+        SelectSpanishCommand = new RelayCommand(() => SelectLanguage(SpanishCultureName));
+        SelectEnglishCommand = new RelayCommand(() => SelectLanguage(EnglishCultureName));
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
     public static LocalizationViewModel Instance { get; }
 
-    public bool IsSpanishSelected
-    {
-        get
-        {
-            return !IsEnglishCulture;
-        }
-        set
-        {
-            SelectLanguage(value, SpanishCultureName);
-        }
-    }
+    public bool IsSpanishSelected => !IsEnglishCulture;
 
-    public bool IsEnglishSelected
-    {
-        get
-        {
-            return IsEnglishCulture;
-        }
-        set
-        {
-            SelectLanguage(value, EnglishCultureName);
-        }
-    }
+    public bool IsEnglishSelected => IsEnglishCulture;
+
+    public RelayCommand SelectSpanishCommand { get; }
+
+    public RelayCommand SelectEnglishCommand { get; }
 
     public string this[string key]
     {
@@ -61,11 +48,14 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
 
     private static CultureInfo CurrentCulture => UiStrings.Culture ?? CultureInfo.CurrentUICulture;
 
-    private static bool IsEnglishCulture => CurrentCulture.TwoLetterISOLanguageName == EnglishLanguageCode;
+    private static bool IsEnglishCulture => string.Equals(
+        CurrentCulture.TwoLetterISOLanguageName,
+        EnglishLanguageCode,
+        StringComparison.OrdinalIgnoreCase);
 
-    private void SelectLanguage(bool isSelected, string cultureName)
+    private void SelectLanguage(string cultureName)
     {
-        bool isNewLanguage = isSelected && !string.Equals(
+        bool isNewLanguage = !string.Equals(
             CurrentCulture.Name,
             cultureName,
             StringComparison.OrdinalIgnoreCase);

@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
-using DominoTrainGame.ViewModels.Commands;
-using DominoTrainGame.ViewModels.Common;
-using DominoTrainGame.ViewModels.Localization;
-using DominoTrainGame.ViewModels.Navigation;
-using DominoTrainGame.ViewModels.Validation;
+using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Client.ViewModel.Common;
+using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Localization;
+using DominoTrainGame.Client.ViewModel.Navigation;
+using DominoTrainGame.Client.ViewModel.Validation;
 
-namespace DominoTrainGame.ViewModels;
+namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class SignUpViewModel : ScreenViewModel
 {
@@ -22,20 +23,26 @@ public sealed class SignUpViewModel : ScreenViewModel
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string SignUpSystemErrorMessageKey = "SignUpSystemErrorMessage";
     private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
+
     private readonly IRemoteGameServices _gameServices;
+    private readonly LocalizationViewModel _localization;
     private string _email;
     private string _username;
     private string _password;
     private bool _isSigningUp;
 
-    public SignUpViewModel(IWindowService windowService, IRemoteGameServices gameServices) : base(windowService)
+    public SignUpViewModel(
+        IWindowService windowService,
+        IRemoteGameServices gameServices,
+        LocalizationViewModel localization) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _email = string.Empty;
         _username = string.Empty;
         _password = string.Empty;
 
-        LoginCommand = new RelayCommand(() => WindowService.Navigate(Screen.Login));
+        LogInCommand = new RelayCommand(() => WindowService.Navigate(Screen.Login));
         SignUpCommand = new AsyncRelayCommand(SignUpAsync);
     }
 
@@ -90,7 +97,7 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     public bool IsContentEnabled => !IsSigningUp;
 
-    public RelayCommand LoginCommand { get; }
+    public RelayCommand LogInCommand { get; }
 
     public AsyncRelayCommand SignUpCommand { get; }
 
@@ -123,11 +130,11 @@ public sealed class SignUpViewModel : ScreenViewModel
         return messageKey;
     }
 
-    private static string GetResultMessageKey(SignUpResult signupResult)
+    private static string GetResultMessageKey(SignUpResult signUpResult)
     {
         string messageKey;
 
-        switch (signupResult)
+        switch (signUpResult)
         {
             case SignUpResult.AlreadyExists:
                 messageKey = AccountAlreadyExistsMessageKey;
@@ -165,19 +172,19 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     private async Task SubmitSignUpAsync()
     {
-        SignUpResult signupResult;
+        SignUpResult signUpResult;
         IsSigningUp = true;
 
         try
         {
-            signupResult = await _gameServices.SignUpAsync(Username.Trim(), Email.Trim(), Password);
+            signUpResult = await _gameServices.SignUpAsync(Username.Trim(), Email.Trim(), Password);
         }
         finally
         {
             IsSigningUp = false;
         }
 
-        HandleSignUpResult(signupResult);
+        HandleSignUpResult(signUpResult);
     }
 
     private void HandleSignUpResult(SignUpResult signUpResult)
@@ -195,7 +202,7 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     private void ShowLocalizedMessage(string messageKey)
     {
-        string message = LocalizationViewModel.Instance[messageKey];
+        string message = _localization[messageKey];
         WindowService.ShowMessage(message);
     }
 }

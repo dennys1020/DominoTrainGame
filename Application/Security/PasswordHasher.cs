@@ -1,10 +1,11 @@
 using System;
 using System.Security.Cryptography;
 using log4net.Ext.Trace;
+using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.Security;
 
-public static class PasswordHasher
+public sealed class PasswordHasher : IPasswordHasher
 {
     private const byte SupportedFormatMarker = 1;
     private const int FormatMarkerIndex = 0;
@@ -16,6 +17,9 @@ public static class PasswordHasher
     private const int HashSize = SubkeyOffset + SubkeySize;
     private const int DestinationOffset = 0;
     private const int NoDifference = 0;
+    private const int FirstByteIndex = 0;
+    private const int EmptyLength = 0;
+
     private static readonly ITraceLog _logger;
 
     static PasswordHasher()
@@ -23,26 +27,35 @@ public static class PasswordHasher
         _logger = TraceLogManager.GetLogger(typeof(PasswordHasher));
     }
 
-    public static string Hash(string password)
+    public string Hash(string password)
     {
+        if (password == null)
+        {
+            throw new ArgumentNullException(nameof(password));
+        }
+
         byte[] salt = GenerateSalt();
         byte[] subkey = DeriveSubkey(password, salt);
-        byte[] encodeHash = new byte[HashSize];
+        byte[] encodedHash = new byte[HashSize];
 
-        encodeHash[FormatMarkerIndex] = SupportedFormatMarker;
-        Buffer.BlockCopy(salt, DestinationOffset, encodeHash, SaltOffset, SaltSize);
-        Buffer.BlockCopy(subkey, DestinationOffset, encodeHash, SubkeyOffset, SubkeySize);
+        encodedHash[FormatMarkerIndex] = SupportedFormatMarker;
+        Buffer.BlockCopy(salt, DestinationOffset, encodedHash, SaltOffset, SaltSize);
+        Buffer.BlockCopy(subkey, DestinationOffset, encodedHash, SubkeyOffset, SubkeySize);
 
-        return Convert.ToBase64String(encodeHash);
+        string hashedPassword = Convert.ToBase64String(encodedHash);
+        return hashedPassword;
     }
 
-    public static bool Verify(string hashedPassword, string password)
+    public bool Verify(string hashedPassword, string password)
     {
         bool isMatch = false;
+        string storedHash = hashedPassword ?? string.Empty;
+        string enteredPassword = password ?? string.Empty;
+        bool canVerify = storedHash.Length > EmptyLength && enteredPassword.Length > EmptyLength;
 
-        if (!string.IsNullOrEmpty(hashedPassword) && password != null)
+        if (canVerify)
         {
-            isMatch = VerifyEncodedHash(hashedPassword, password);
+            isMatch = VerifyEncodedHash(storedHash, enteredPassword);
         }
 
         return isMatch;
@@ -75,16 +88,11 @@ public static class PasswordHasher
     {
         byte[] salt = new byte[SaltSize];
         byte[] storedSubkey = new byte[SubkeySize];
-        byte[] computedSubkey;
 
         Buffer.BlockCopy(decodedHash, SaltOffset, salt, DestinationOffset, SaltSize);
         Buffer.BlockCopy(decodedHash, SubkeyOffset, storedSubkey, DestinationOffset, SubkeySize);
 
-        using (Rfc2898DeriveBytes keyDerivation = new Rfc2898DeriveBytes(password, salt, IterationCount))
-        {
-            computedSubkey = keyDerivation.GetBytes(SubkeySize);
-        }
-
+        byte[] computedSubkey = DeriveSubkey(password, salt);
         bool isMatch = AreEqualInConstantTime(storedSubkey, computedSubkey);
         return isMatch;
     }
@@ -93,30 +101,40 @@ public static class PasswordHasher
     {
         int difference = firstValue.Length ^ secondValue.Length;
 
-        for (int index = 0; index < firstValue.Length && index < secondValue.Length; index++)
+        for (int index = FirstByteIndex; index < firstValue.Length && index < secondValue.Length; index++)
         {
             difference |= firstValue[index] ^ secondValue[index];
         }
 
-        return difference == NoDifference;
+        bool areEqual = difference == NoDifference;
+        return areEqual;
     }
 
     private static byte[] GenerateSalt()
     {
-        byte[] salt = new Byte[SaltSize];
+        byte[] salt = new byte[SaltSize];
+
         using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
         {
             generator.GetBytes(salt);
         }
+
         return salt;
     }
 
     private static byte[] DeriveSubkey(string password, byte[] salt)
     {
-        using (Rfc2898DeriveBytes keyDerivation= new Rfc2898DeriveBytes(
-            password, salt, IterationCount, HashAlgorithmName.SHA256))
+        byte[] subkey;
+
+        using (Rfc2898DeriveBytes keyDerivation = new Rfc2898DeriveBytes(
+            password,
+            salt,
+            IterationCount,
+            HashAlgorithmName.SHA256))
         {
-            return keyDerivation.GetBytes(SubkeySize);
+            subkey = keyDerivation.GetBytes(SubkeySize);
         }
+
+        return subkey;
     }
 }

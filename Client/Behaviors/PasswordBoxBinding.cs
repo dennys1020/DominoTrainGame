@@ -1,7 +1,8 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DominoTrainGame.Behaviors;
+namespace DominoTrainGame.Client.View.Behaviors;
 
 public static class PasswordBoxBinding
 {
@@ -25,7 +26,7 @@ public static class PasswordBoxBinding
 
     public static string GetBoundPassword(DependencyObject target)
     {
-        string boundPassword = (string)target.GetValue(BoundPasswordProperty);
+        string boundPassword = (string)target.GetValue(BoundPasswordProperty) ?? string.Empty;
         return boundPassword;
     }
 
@@ -42,7 +43,12 @@ public static class PasswordBoxBinding
 
             passwordBox.PasswordChanged -= OnPasswordChanged;
 
-            if (passwordBox.Password != newPassword)
+            bool isDifferentPassword = !string.Equals(
+                passwordBox.Password,
+                newPassword,
+                StringComparison.Ordinal);
+
+            if (isDifferentPassword)
             {
                 passwordBox.Password = newPassword;
             }
