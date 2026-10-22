@@ -1,14 +1,21 @@
+using System;
 using System.Data;
-using DominoTrainGame.Server.Persistence.Contracts;
-using DominoTrainGame.Server.Persistence.Data;
+using DominoTrainGame.Server.Application.Ports;
 
-namespace DominoTrainGame.Server.Persistence.Repositories;
+namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class ConnectionRepository : IConnectionRepository
 {
+    private readonly DatabaseExecutor _databaseExecutor;
+
+    public ConnectionRepository(DatabaseExecutor databaseExecutor)
+    {
+        _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
+    }
+
     public bool CanConnect()
     {
-        bool canConnect = DatabaseExecutor.Execute(OpenConnection);
+        bool canConnect = _databaseExecutor.Execute(OpenConnection);
         return canConnect;
     }
 

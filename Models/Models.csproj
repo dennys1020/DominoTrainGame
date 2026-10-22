@@ -7,12 +7,13 @@
     <ProjectGuid>{E9BF46D1-B16D-4228-9860-65CFC021B295}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Models</RootNamespace>
+    <RootNamespace>DominoTrainGame.Client.Models</RootNamespace>
     <AssemblyName>Models</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,25 +61,26 @@
     </Compile>
     <Compile Include="Contracts\SignUpResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="resources\Localization\UiStrings.Designer.cs" />
+    <Compile Include="Resources\Localization\UiStrings.Designer.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
-    <Compile Include="Contracts\ServerConnectionStatus.cs" />
+    <Compile Include="Contracts\ConnectionCheckResult.cs" />
+    <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
+    <Compile Include="Networking\GameConnectionFactory.cs" />
     <Compile Include="RemoteGameServices.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resources\Localization\UiStrings.en.resx">
-      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.en.resources</LogicalName>
+    <EmbeddedResource Include="Resources\Localization\UiStrings.en.resx">
+      <LogicalName>DominoTrainGame.Client.Models.Resources.Localization.UiStrings.en.resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="resources\Localization\UiStrings.resx">
-      <LogicalName>DominoTrainGame.Resources.Localization.UiStrings.resources</LogicalName>
+    <EmbeddedResource Include="Resources\Localization\UiStrings.resx">
+      <LogicalName>DominoTrainGame.Client.Models.Resources.Localization.UiStrings.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Connected Services\DominoService\ConnectionService.wsdl" />
-    <None Include="Connected Services\DominoService\item.wsdl" />
     <None Include="Connected Services\DominoService\item.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -87,9 +89,6 @@
     </None>
     <None Include="Connected Services\DominoService\item2.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Connected Services\DominoService\Models.DominoService.ServerConnectionStatus.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

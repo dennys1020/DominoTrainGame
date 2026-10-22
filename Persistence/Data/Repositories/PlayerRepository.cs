@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
-using DominoTrainGame.Server.Persistence.Data;
-using DominoTrainGame.Server.Persistence.Models;
+using DominoTrainGame.Server.Application.Ports;
 
-namespace DominoTrainGame.Server.Persistence.Repositories;
+namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class PlayerRepository : IPlayerRepository
 {
@@ -11,9 +13,16 @@ public sealed class PlayerRepository : IPlayerRepository
     private const int MaximumMatches = 1;
     private const int FirstMatchIndex = 0;
 
+    private readonly DatabaseExecutor _databaseExecutor;
+
+    public PlayerRepository(DatabaseExecutor databaseExecutor)
+    {
+        _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
+    }
+
     public bool TryFindCredentials(string identifier, out PlayerCredentials credentials)
     {
-        List<PlayerCredentials> matches = DatabaseExecutor.Execute(
+        List<PlayerCredentials> matches = _databaseExecutor.Execute(
             context => FindCredentials(context, identifier));
         bool isFound = matches.Count == MaximumMatches;
 
@@ -21,38 +30,16 @@ public sealed class PlayerRepository : IPlayerRepository
         return isFound;
     }
 
-    public bool TryCreatePlayer(PlayerRegistration registration, out PlayerCredentials credentials)
+    public bool CreatePlayer(PlayerRegistration registration)
     {
-        PlayerCredentials createdCredentials = DatabaseExecutor.Execute(
-            context => CreatePlayer(context, registration));
-        bool isCreated = createdCredentials.PlayerId != PlayerCredentials.Empty.PlayerId;
+        if (registration == null)
+        {
+            throw new ArgumentNullException(nameof(registration));
+        }
 
-        credentials = createdCredentials;
-        return isCreated;
-    }
-
-    public bool IsUsernameTaken(string username)
-    {
-        bool isTaken = DatabaseExecutor.Execute(
-            context => context.Players
-                .AsNoTracking()
-                .Any(player => player.Username == username));
-        return isTaken;
-    }
-
-    public bool IsEmailTaken(string email)
-    {
-        bool isTaken = DatabaseExecutor.Execute(
-            context => context.Players
-                .AsNoTracking()
-                .Any(player => player.Email == email));
-        return isTaken;
-    }
-
-    public void AddPlayer(string username, string email, string passwordHash)
-    {
-        DatabaseExecutor.Execute(
-            context => InsertPlayer(context, username, email, passwordHash));
+        bool isRegistered = _databaseExecutor.Execute(
+            context => RegisterPlayer(context, registration));
+        return isRegistered;
     }
 
     private static List<PlayerCredentials> FindCredentials(DominoGameDBEntities context, string identifier)
@@ -69,53 +56,44 @@ public sealed class PlayerRepository : IPlayerRepository
         return matches;
     }
 
-    private static PlayerCredentials CreatePlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    private static bool RegisterPlayer(DominoGameDBEntities context, PlayerRegistration registration)
     {
-        PlayerCredentials credentials = PlayerCredentials.Empty;
-        bool isTaken = ExistsPlayer(context, registration);
+        bool isRegistered;
 
-        if (!isTaken)
+        using (DbContextTransaction transaction = context.Database.BeginTransaction(IsolationLevel.Serializable))
         {
-            credentials = InsertPlayer(
-                context,
-                registration.Username,
-                registration.Email,
-                registration.PasswordHash);
+            isRegistered = !IsRegistrationTaken(context, registration);
+
+            if (isRegistered)
+            {
+                InsertPlayer(context, registration);
+            }
+
+            transaction.Commit();
         }
 
-        return credentials;
+        return isRegistered;
     }
 
-    private static PlayerCredentials InsertPlayer(
-        DominoGameDBEntities context,
-        string username,
-        string email,
-        string passwordHash)
+    private static bool IsRegistrationTaken(DominoGameDBEntities context, PlayerRegistration registration)
+    {
+        bool isTaken = context.Players
+            .AsNoTracking()
+            .Any(player => player.Username == registration.Username || player.Email == registration.Email);
+        return isTaken;
+    }
+
+    private static void InsertPlayer(DominoGameDBEntities context, PlayerRegistration registration)
     {
         Player player = new Player
         {
-            Username = username,
-            Email = email,
-            PasswordHash = passwordHash,
+            Username = registration.Username,
+            Email = registration.Email,
+            PasswordHash = registration.PasswordHash,
             IsGuest = RegisteredPlayerFlag
         };
 
         context.Players.Add(player);
         context.SaveChanges();
-
-        PlayerCredentials credentials = new PlayerCredentials(
-            player.PlayerId,
-            player.Username,
-            player.PasswordHash);
-        return credentials;
-    }
-
-    private static bool ExistsPlayer(DominoGameDBEntities context, PlayerRegistration registration)
-    {
-        bool exists = context.Players
-            .AsNoTracking()
-            .Any(player => player.Username == registration.Username
-                || player.Email == registration.Email);
-        return exists;
     }
 }

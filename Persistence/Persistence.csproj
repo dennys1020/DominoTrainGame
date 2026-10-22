@@ -7,13 +7,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7A7743CA-C619-4A71-A869-FADF9C0BD52C}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Persistence</RootNamespace>
+    <RootNamespace>DominoTrainGame.Server.Persistence</RootNamespace>
     <AssemblyName>Persistence</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -64,8 +65,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IConnectionRepository.cs" />
-    <Compile Include="Contracts\IPlayerRepository.cs" />
     <Compile Include="Data\DatabaseExecutor.cs" />
     <Compile Include="Data\DatabaseContextFactory.cs" />
     <Compile Include="Data\DominoGameDBEntities.cs" />
@@ -115,10 +114,13 @@
     </Compile>
     <Compile Include="Data\Repositories\ConnectionRepository.cs" />
     <Compile Include="Data\Repositories\PlayerRepository.cs" />
-    <Compile Include="Errors\DatabaseOperationException.cs" />
-    <Compile Include="Models\PlayerCredentials.cs" />
-    <Compile Include="Models\PlayerRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj">
+      <Project>{E779B136-7C76-4BF5-9F8F-35003D537D37}</Project>
+      <Name>Application</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="Data\EntityFramework\DominoGameModel.edmx" />

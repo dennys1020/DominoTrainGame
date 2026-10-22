@@ -1,13 +1,14 @@
 using System;
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
-using DominoTrainGame.ViewModels.Commands;
-using DominoTrainGame.ViewModels.Common;
-using DominoTrainGame.ViewModels.Localization;
-using DominoTrainGame.ViewModels.Navigation;
-using DominoTrainGame.ViewModels.Validation;
+using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Client.ViewModel.Common;
+using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Localization;
+using DominoTrainGame.Client.ViewModel.Navigation;
+using DominoTrainGame.Client.ViewModel.Validation;
 
-namespace DominoTrainGame.ViewModels;
+namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class LoginViewModel : ScreenViewModel
 {
@@ -19,18 +20,24 @@ public sealed class LoginViewModel : ScreenViewModel
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LoginSystemErrorMessageKey = "LoginSystemErrorMessage";
     private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
+
     private readonly IRemoteGameServices _gameServices;
+    private readonly LocalizationViewModel _localization;
     private string _usernameOrEmail;
     private string _password;
     private bool _isLoggingIn;
 
-    public LoginViewModel(IWindowService windowService, IRemoteGameServices gameServices) : base(windowService)
+    public LoginViewModel(
+        IWindowService windowService,
+        IRemoteGameServices gameServices,
+        LocalizationViewModel localization) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _usernameOrEmail = string.Empty;
         _password = string.Empty;
 
-        LoginCommand = new AsyncRelayCommand(LogInAsync);
+        LogInCommand = new AsyncRelayCommand(LogInAsync);
         SignUpCommand = new RelayCommand(() => WindowService.Navigate(Screen.SignUp));
         RecoverPasswordCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.RecoverPassword));
     }
@@ -74,7 +81,7 @@ public sealed class LoginViewModel : ScreenViewModel
 
     public bool IsContentEnabled => !IsLoggingIn;
 
-    public AsyncRelayCommand LoginCommand { get; }
+    public AsyncRelayCommand LogInCommand { get; }
 
     public RelayCommand SignUpCommand { get; }
 
@@ -172,7 +179,7 @@ public sealed class LoginViewModel : ScreenViewModel
 
     private void ShowLocalizedMessage(string messageKey)
     {
-        string message = LocalizationViewModel.Instance[messageKey];
+        string message = _localization[messageKey];
         WindowService.ShowMessage(message);
     }
 }

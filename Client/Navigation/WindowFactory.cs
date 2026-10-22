@@ -1,28 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using DominoTrainGame.Client.Models;
 using DominoTrainGame.Client.Models.Contracts;
-using DominoTrainGame.ViewModels;
-using DominoTrainGame.ViewModels.Common;
-using DominoTrainGame.ViewModels.Navigation;
-using DominoTrainGame.Views;
+using DominoTrainGame.Client.View.Views;
+using DominoTrainGame.Client.ViewModel;
+using DominoTrainGame.Client.ViewModel.Common;
+using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Localization;
+using DominoTrainGame.Client.ViewModel.Navigation;
 
-namespace DominoTrainGame.Navigation;
+namespace DominoTrainGame.Client.View.Navigation;
 
-internal static class WindowFactory
+internal sealed class WindowFactory
 {
-    private static readonly IRemoteGameServices _gameServices;
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
-    private static readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>>
-        _viewModelsByScreen;
-    private static readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
+
+    private readonly IRemoteGameServices _gameServices;
+    private readonly LocalizationViewModel _localization;
+    private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
+    private readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
         _roomViewModelsByScreen;
 
     static WindowFactory()
     {
-        _gameServices = new RemoteGameServices();
-
         _windowsByScreen = new Dictionary<Screen, Func<Window>>
         {
             [Screen.Login] = () => new LogInWindow(),
@@ -40,13 +40,19 @@ internal static class WindowFactory
             [Screen.Friends] = () => new FriendsListWindow(),
             [Screen.ChangePassword] = () => new ChangePasswordWindow(),
             [Screen.DeleteAccount] = () => new DeleteAccountWindow(),
-            [Screen.Leaderboard] = () => new LeaderBoardWindow()
+            [Screen.Leaderboard] = () => new LeaderboardWindow()
         };
+    }
+
+    public WindowFactory(IRemoteGameServices gameServices, LocalizationViewModel localization)
+    {
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
-            [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
-            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
+            [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices, _localization),
+            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices, _localization),
             [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
             [Screen.RecoverPassword] = windowService => new DialogViewModel(windowService),
             [Screen.Main] = windowService => new MainMenuViewModel(windowService),
@@ -68,7 +74,7 @@ internal static class WindowFactory
         };
     }
 
-    public static Window Create(Screen screen)
+    public Window Create(Screen screen)
     {
         bool hasViewModel = _viewModelsByScreen.TryGetValue(
             screen,
@@ -80,12 +86,12 @@ internal static class WindowFactory
         }
 
         Window window = CreateWindow(screen);
-        IWindowService windowService = new WindowService(window);
+        IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = createViewModel(windowService);
         return window;
     }
 
-    public static Window Create(Screen screen, RoomRole roomRole)
+    public Window Create(Screen screen, RoomRole roomRole)
     {
         bool hasViewModel = _roomViewModelsByScreen.TryGetValue(
             screen,
@@ -97,7 +103,7 @@ internal static class WindowFactory
         }
 
         Window window = CreateWindow(screen);
-        IWindowService windowService = new WindowService(window);
+        IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = createViewModel(windowService, roomRole);
         return window;
     }

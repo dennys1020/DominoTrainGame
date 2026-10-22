@@ -1,53 +1,69 @@
 using System;
-using System.Configuration;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using log4net.Config;
 using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models;
 using DominoTrainGame.Client.Models.Contracts;
-using DominoTrainGame.Navigation;
-using DominoTrainGame.ViewModels.Navigation;
+using DominoTrainGame.Client.Models.Networking;
+using DominoTrainGame.Client.View.Navigation;
+using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Client.ViewModel.Localization;
+using DominoTrainGame.Client.ViewModel.Navigation;
 
-namespace DominoTrainGame;
+namespace DominoTrainGame.Client.View;
 
-public partial class App : Application
+public sealed partial class App : Application
 {
+    private const string LogConfigurationFileName = "log4net.config";
+
     private static readonly ITraceLog _logger;
-    private readonly IRemoteGameServices _gameServices;
 
     static App()
     {
-        XmlConfigurator.Configure();
         _logger = TraceLogManager.GetLogger(typeof(App));
     }
 
-    public App()
+    protected override void OnStartup(StartupEventArgs e)
     {
-        _gameServices = new RemoteGameServices();
+        ConfigureLogging();
+        base.OnStartup(e);
+
+        IGameConnectionFactory connectionFactory = new GameConnectionFactory();
+        GameChannelCloser channelCloser = new GameChannelCloser();
+        IRemoteGameServices gameServices = new RemoteGameServices(connectionFactory, channelCloser);
+        LocalizationViewModel localization = LocalizationViewModel.Instance;
+        WindowFactory windowFactory = new WindowFactory(gameServices, localization);
+
+        ShowLoginWindow(windowFactory);
+        StartConnectionCheck(gameServices);
     }
 
-    private async void OnApplicationStartup(object sender, StartupEventArgs e)
+    private static void ConfigureLogging()
     {
-        ShowLoginWindow();
-
-        try
-        {
-            ServerConnectionStatus connectionStatus = await _gameServices.CheckConnectionAsync();
-            _logger.InfoFormat("Server connection check finished. Status: {0}.", connectionStatus);
-        }
-        catch (ConfigurationErrorsException exception)
-        {
-            _logger.Fatal("The client configuration is missing or invalid.", exception);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Fatal("The service endpoint was not found in App.config.", exception);
-        }
+        string logConfigurationPath = Path.Combine(
+            AppDomain.CurrentDomain.BaseDirectory,
+            LogConfigurationFileName);
+        XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
     }
 
-    private void ShowLoginWindow()
+    private static void StartConnectionCheck(IRemoteGameServices gameServices)
     {
-        Window loginWindow = WindowFactory.Create(Screen.Login);
+        AsyncRelayCommand checkConnectionCommand = new AsyncRelayCommand(
+            () => CheckConnectionAsync(gameServices));
+        checkConnectionCommand.Execute(null);
+    }
+
+    private static async Task CheckConnectionAsync(IRemoteGameServices gameServices)
+    {
+        ConnectionCheckResult connectionResult = await gameServices.CheckConnectionAsync();
+        _logger.InfoFormat("Server connection check finished. Result: {0}.", connectionResult);
+    }
+
+    private void ShowLoginWindow(WindowFactory windowFactory)
+    {
+        Window loginWindow = windowFactory.Create(Screen.Login);
 
         loginWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         MainWindow = loginWindow;

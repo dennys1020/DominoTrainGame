@@ -7,12 +7,13 @@
     <ProjectGuid>{FCB0F09F-6581-4AAA-A21E-ACADB4100787}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ViewModel</RootNamespace>
+    <RootNamespace>DominoTrainGame.Client.ViewModel</RootNamespace>
     <AssemblyName>ViewModel</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +33,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Client\packages\log4net.3.5.0\lib\net462\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net.Ext.Trace">
+      <HintPath>..\Client\packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,7 +55,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\ObservableViewModel.cs" />
     <Compile Include="Common\ScreenViewModel.cs" />
-    <Compile Include="Navigation\IWindowService.cs" />
+    <Compile Include="Contracts\IWindowService.cs" />
     <Compile Include="Navigation\RoomRole.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />
@@ -60,8 +69,8 @@
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
-    <Compile Include="Validation\SignupInputStatus.cs" />
-    <Compile Include="Validation\SignupInputValidator.cs" />
+    <Compile Include="Validation\SignUpInputStatus.cs" />
+    <Compile Include="Validation\SignUpInputValidator.cs" />
     <Compile Include="VerificationCodeViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -70,6 +79,9 @@
       <Project>{E9BF46D1-B16D-4228-9860-65CFC021B295}</Project>
       <Name>Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

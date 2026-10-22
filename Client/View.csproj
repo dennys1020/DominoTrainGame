@@ -6,10 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{96976118-C5F7-4159-95D7-99A6A6EA5A19}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Client</RootNamespace>
+    <RootNamespace>DominoTrainGame.Client.View</RootNamespace>
     <AssemblyName>Client</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>10.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -67,55 +68,55 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="views\ChangePasswordWindow.xaml.cs">
+    <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\Controls\SettingsButton.xaml.cs">
+    <Compile Include="Views\Controls\SettingsButton.xaml.cs">
       <DependentUpon>SettingsButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\DeleteAccountWindow.xaml.cs">
+    <Compile Include="Views\DeleteAccountWindow.xaml.cs">
       <DependentUpon>DeleteAccountWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\FriendsListWindow.xaml.cs">
+    <Compile Include="Views\FriendsListWindow.xaml.cs">
       <DependentUpon>FriendsListWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\GameRulesWindow.xaml.cs">
+    <Compile Include="Views\GameRulesWindow.xaml.cs">
       <DependentUpon>GameRulesWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\JoinGameWindow.xaml.cs">
+    <Compile Include="Views\JoinGameWindow.xaml.cs">
       <DependentUpon>JoinGameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\LeaderBoardWindow.xaml.cs">
-      <DependentUpon>LeaderBoardWindow.xaml</DependentUpon>
+    <Compile Include="Views\LeaderboardWindow.xaml.cs">
+      <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\LogInWindow.xaml.cs">
+    <Compile Include="Views\LogInWindow.xaml.cs">
       <DependentUpon>LogInWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\MainWindow.xaml.cs">
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\MatchResultsWindow.xaml.cs">
+    <Compile Include="Views\MatchResultsWindow.xaml.cs">
       <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\NewGameWindow.xaml.cs">
+    <Compile Include="Views\NewGameWindow.xaml.cs">
       <DependentUpon>NewGameWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\ProfileWindow.xaml.cs">
+    <Compile Include="Views\ProfileWindow.xaml.cs">
       <DependentUpon>ProfileWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\RecoverPasswordWindow.xaml.cs">
+    <Compile Include="Views\RecoverPasswordWindow.xaml.cs">
       <DependentUpon>RecoverPasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\RoomWindow.xaml.cs">
+    <Compile Include="Views\RoomWindow.xaml.cs">
       <DependentUpon>RoomWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\SettingsWindow.xaml.cs">
+    <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\SignUpWindow.xaml.cs">
+    <Compile Include="Views\SignUpWindow.xaml.cs">
       <DependentUpon>SignUpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="views\VerificationCodeWindow.xaml.cs">
+    <Compile Include="Views\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Behaviors\PasswordBoxBinding.cs" />
@@ -125,91 +126,91 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="resources\Styles\MatchStyles.xaml">
+    <Page Include="Resources\Styles\MatchStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\Styles\Palette.xaml">
+    <Page Include="Resources\Styles\Palette.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\Styles\ImageBrushes.xaml">
+    <Page Include="Resources\Styles\ImageBrushes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\Styles\WindowStyles.xaml">
+    <Page Include="Resources\Styles\WindowStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="resources\Styles\PixelTheme.xaml">
+    <Page Include="Resources\Styles\PixelTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\ChangePasswordWindow.xaml">
+    <Page Include="Views\ChangePasswordWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\Controls\SettingsButton.xaml">
+    <Page Include="Views\Controls\SettingsButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\DeleteAccountWindow.xaml">
+    <Page Include="Views\DeleteAccountWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\FriendsListWindow.xaml">
+    <Page Include="Views\FriendsListWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\GameRulesWindow.xaml">
+    <Page Include="Views\GameRulesWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\JoinGameWindow.xaml">
+    <Page Include="Views\JoinGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\LeaderBoardWindow.xaml">
+    <Page Include="Views\LeaderboardWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\LogInWindow.xaml">
+    <Page Include="Views\LogInWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\MatchResultsWindow.xaml">
+    <Page Include="Views\MatchResultsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\NewGameWindow.xaml">
+    <Page Include="Views\NewGameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\ProfileWindow.xaml">
+    <Page Include="Views\ProfileWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\RecoverPasswordWindow.xaml">
+    <Page Include="Views\RecoverPasswordWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\RoomWindow.xaml">
+    <Page Include="Views\RoomWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\SettingsWindow.xaml">
+    <Page Include="Views\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\SignUpWindow.xaml">
+    <Page Include="Views\SignUpWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="views\VerificationCodeWindow.xaml">
+    <Page Include="Views\VerificationCodeWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -240,17 +241,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="assets\Fonts\OFL.txt" />
-    <Resource Include="resources\Images\avatar_generic_preview.png" />
-    <Resource Include="resources\Images\Lock.png" />
-    <Resource Include="resources\Images\MiniDominoTile.png" />
-    <Resource Include="resources\Images\person.png" />
-    <Resource Include="resources\Images\PixelTrain.png" />
-    <Resource Include="resources\Images\search.png" />
-    <Resource Include="resources\Images\trash.png" />
+    <Resource Include="Resources\Images\avatar_generic_preview.png" />
+    <Resource Include="Resources\Images\Lock.png" />
+    <Resource Include="Resources\Images\MiniDominoTile.png" />
+    <Resource Include="Resources\Images\person.png" />
+    <Resource Include="Resources\Images\PixelTrain.png" />
+    <Resource Include="Resources\Images\search.png" />
+    <Resource Include="Resources\Images\trash.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj">

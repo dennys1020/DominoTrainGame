@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace DominoTrainGame.ViewModels.Commands;
+namespace DominoTrainGame.Client.ViewModel.Commands;
 
 public sealed class RelayCommand : ICommand
 {
@@ -25,7 +25,7 @@ public sealed class RelayCommand : ICommand
         _execute();
     }
 
-    public void NotifyCanExecuteChanged()
+    private void OnCanExecuteChanged()
     {
         CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }

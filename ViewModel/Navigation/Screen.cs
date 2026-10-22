@@ -1,4 +1,4 @@
-namespace DominoTrainGame.ViewModels.Navigation;
+namespace DominoTrainGame.Client.ViewModel.Navigation;
 
 public enum Screen
 {

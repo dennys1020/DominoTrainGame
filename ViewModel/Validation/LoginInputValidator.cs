@@ -1,9 +1,10 @@
-namespace DominoTrainGame.ViewModels.Validation;
+namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public static class LoginInputValidator
 {
     private const int MaximumIdentifierLength = 255;
     private const int MaximumPasswordLength = 128;
+    private const int EmptyLength = 0;
 
     public static LoginInputStatus Validate(string identifier, string password)
     {
@@ -11,7 +12,7 @@ public static class LoginInputValidator
         string enteredPassword = password ?? string.Empty;
         LoginInputStatus inputStatus = LoginInputStatus.Valid;
 
-        if (normalizedIdentifier.Length == 0 || enteredPassword.Length == 0)
+        if (normalizedIdentifier.Length == EmptyLength || enteredPassword.Length == EmptyLength)
         {
             inputStatus = LoginInputStatus.EmptyFields;
         }

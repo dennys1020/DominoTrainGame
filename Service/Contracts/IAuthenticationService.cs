@@ -13,5 +13,4 @@ public interface IAuthenticationService
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
     bool SignUp(SignUpRequest request);
-
 }

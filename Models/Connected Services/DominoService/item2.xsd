@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8080/?xsd=xsd0" namespace="http://dominotraingame/services" />
-  <xs:element name="LogIn">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q1="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q1:LoginRequest" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="LogInResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="LogInResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SignUp">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q2:SignUpRequest" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SignUpResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="SignUpResult" type="xs:boolean" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+<xs:schema xmlns:tns="http://dominotraingame/services" elementFormDefault="qualified" targetNamespace="http://dominotraingame/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="GameServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:GameServiceFaultCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameServiceFault" nillable="true" type="tns:GameServiceFault" />
+  <xs:simpleType name="GameServiceFaultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InvalidInput" />
+      <xs:enumeration value="DatabaseUnavailable" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
+  <xs:complexType name="LoginRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Identifier" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginRequest" nillable="true" type="tns:LoginRequest" />
+  <xs:complexType name="SignUpRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SignUpRequest" nillable="true" type="tns:SignUpRequest" />
 </xs:schema>

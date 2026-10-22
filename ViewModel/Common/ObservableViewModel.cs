@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace DominoTrainGame.ViewModels.Common;
+namespace DominoTrainGame.Client.ViewModel.Common;
 
 public abstract class ObservableViewModel : INotifyPropertyChanged
 {
