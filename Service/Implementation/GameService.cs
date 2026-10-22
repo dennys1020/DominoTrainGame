@@ -16,16 +16,18 @@ public sealed class GameService : IConnectionService, IAuthenticationService
     private static readonly ITraceLog _logger;
     private readonly IConnectionUseCases _connectionUseCases;
     private readonly ILoginUseCases _loginUseCases;
+    private readonly ISignUpUseCases _signUpUseCases;
 
     static GameService()
     {
         _logger = TraceLogManager.GetLogger(typeof(GameService));
     }
 
-    public GameService(IConnectionUseCases connectionUseCases, ILoginUseCases loginUseCases)
+    public GameService(IConnectionUseCases connectionUseCases, ILoginUseCases loginUseCases, ISignUpUseCases signUpUseCases)
     {
         _connectionUseCases = connectionUseCases ?? throw new ArgumentNullException(nameof(connectionUseCases));
         _loginUseCases = loginUseCases ?? throw new ArgumentNullException(nameof(loginUseCases));
+        _signUpUseCases = signUpUseCases ?? throw new ArgumentNullException(nameof(signUpUseCases));
     }
 
     public ServerConnectionStatus CheckConnection()
@@ -60,8 +62,25 @@ public sealed class GameService : IConnectionService, IAuthenticationService
         return isAuthenticated;
     }
 
-    public void SignUp(SignUpRequest request)
+    public bool SignUp(SignUpRequest request)
     {
+        bool isRegistered;
+
+        try
+        {
+            isRegistered = _signUpUseCases.SignUp(request?.UserName, request?.Email, request?.Password);
+        }
+        catch (ArgumentException exception)
+        {
+            _logger.Warn("A sign up request was rejected because its input is invalid.", exception);
+            throw CreateFault(GameServiceFaultCode.InvalidInput);
+        }
+        catch(DatabaseUnavailableException exception)
+        {
+            _logger.Error("A sign up request failed because the database is unavailable.", exception);
+            throw CreateFault(GameServiceFaultCode.DatabaseUnavailable);
+        }
+        return isRegistered;
 
     }
 

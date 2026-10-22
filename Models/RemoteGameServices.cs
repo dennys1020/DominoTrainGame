@@ -10,6 +10,7 @@ using GameServiceFault = Models.DominoService.GameServiceFault;
 using GameServiceFaultCode = Models.DominoService.GameServiceFaultCode;
 using GeneratedConnectionStatus = Models.DominoService.ServerConnectionStatus;
 using GeneratedLoginRequest = Models.DominoService.LoginRequest;
+using GeneratedSignUpRequest = Models.DominoService.SignUpRequest;
 
 namespace DominoTrainGame.Client.Models;
 
@@ -93,6 +94,33 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return loginResult;
     }
 
+    private async Task<SignUpResult> SendSignUpAsync(string username, string email, string password)
+    {
+        AuthenticationServiceClient authenticationClient = new AuthenticationServiceClient(AuthenticationEndpointName);
+        SignUpResult signUpResult;
+
+        try
+        {
+            GeneratedSignUpRequest request = new GeneratedSignUpRequest
+            {
+                UserName = username,
+                Email = email,
+                Password = password
+            };
+
+            bool isRegistered = await authenticationClient.SignUpAsync(request).ConfigureAwait(false);
+            signUpResult = isRegistered
+                ? SignUpResult.Success
+                : SignUpResult.AlreadyExists;
+        }
+        finally
+        {
+            _channelCloser.Close(authenticationClient);
+        }
+
+        return signUpResult;
+    }
+
     private static ServerConnectionStatus MapConnectionStatus(GeneratedConnectionStatus serverStatus)
     {
         bool isConnected = serverStatus == GeneratedConnectionStatus.Connected;
@@ -122,6 +150,26 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return loginResult;
     }
 
+    private static SignUpResult MapSignUpFault(GameServiceFaultCode faultCode)
+    {
+        SignUpResult signUpResult;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.InvalidInput:
+                signUpResult = SignUpResult.InvalidInput;
+                break;
+            case GameServiceFaultCode.DatabaseUnavailable:
+                signUpResult = SignUpResult.DatabaseUnavailable;
+                break;
+            default:
+                signUpResult = SignUpResult.ServerError;
+                break;
+        }
+
+        return signUpResult;
+    }
+
     private async Task<LoginResult> SendLogInAsync(string identifier, string password)
     {
         AuthenticationServiceClient authenticationClient = new AuthenticationServiceClient(AuthenticationEndpointName);
@@ -146,5 +194,39 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
 
         return loginResult;
+    }
+
+    public async Task<SignUpResult> SignUpAsync(string username, string email, string password)
+    {
+        SignUpResult signUpResult = SignUpResult.ServerUnavailable;
+
+        try
+        {
+            signUpResult = await SendSignUpAsync(username, email, password).ConfigureAwait(false);
+        }
+        catch (FaultException<GameServiceFault> exception)
+        {
+            _logger.WarnFormat("The server rejected the sign up request. FaultCode: {0}.", exception.Detail.Code);
+            signUpResult = MapSignUpFault(exception.Detail.Code);
+        }
+        catch (FaultException exception)
+        {
+            _logger.Error("The server reported an undeclared fault while processing the sign up request.", exception);
+            signUpResult = SignUpResult.ServerError;
+        }
+        catch (TimeoutException exception)
+        {
+            _logger.Error("The sign up request did not finish before the configured timeout.", exception);
+        }
+        catch (CommunicationException exception)
+        {
+            _logger.Error("The sign up request could not reach the server.", exception);
+        }
+        catch (InvalidOperationException exception)
+        {
+            _logger.Error("The authentication endpoint is missing or invalid in App.config.", exception);
+        }
+
+        return signUpResult;
     }
 }

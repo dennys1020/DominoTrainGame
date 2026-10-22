@@ -69,15 +69,31 @@
   <wsdl:message name="IAuthenticationService_LogIn_InputMessage">
     <wsdl:part name="parameters" element="tns:LogIn" />
   </wsdl:message>
-  <wsdl:message name="IAuthenticationService_OnLogInCompleted_OutputCallbackMessage">
-    <wsdl:part name="parameters" element="tns:OnLogInCompleted" />
+  <wsdl:message name="IAuthenticationService_LogIn_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogInResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_LogIn_GameServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="i0:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_SignUp_InputMessage">
+    <wsdl:part name="parameters" element="tns:SignUp" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_SignUp_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SignUpResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_SignUp_GameServiceFaultFault_FaultMessage">
+    <wsdl:part name="detail" element="i0:GameServiceFault" />
   </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="LogIn">
       <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/LogIn" message="tns:IAuthenticationService_LogIn_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/LogInResponse" message="tns:IAuthenticationService_LogIn_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IAuthenticationService/LogInGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IAuthenticationService_LogIn_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
-    <wsdl:operation name="OnLogInCompleted">
-      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/OnLogInCompleted" message="tns:IAuthenticationService_OnLogInCompleted_OutputCallbackMessage" />
+    <wsdl:operation name="SignUp">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/SignUp" message="tns:IAuthenticationService_SignUp_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/SignUpResponse" message="tns:IAuthenticationService_SignUp_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IAuthenticationService/SignUpGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IAuthenticationService_SignUp_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IConnectionService" type="i0:IConnectionService">
@@ -101,12 +117,24 @@
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
-    </wsdl:operation>
-    <wsdl:operation name="OnLogInCompleted">
-      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/OnLogInCompleted" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SignUp">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/SignUp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GameService">
@@ -115,7 +143,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/ConnectionService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -124,7 +152,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/AuthenticationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -117,6 +117,7 @@
     <Compile Include="Data\Repositories\PlayerRepository.cs" />
     <Compile Include="Errors\DatabaseOperationException.cs" />
     <Compile Include="Models\PlayerCredentials.cs" />
+    <Compile Include="Models\PlayerRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

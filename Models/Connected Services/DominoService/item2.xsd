@@ -8,10 +8,24 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="OnLogInCompleted">
+  <xs:element name="LogInResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="response" nillable="true" type="q2:LoginResponse" />
+        <xs:element minOccurs="0" name="LogInResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SignUp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q2:SignUpRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SignUpResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="SignUpResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

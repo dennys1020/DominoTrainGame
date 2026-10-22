@@ -10,8 +10,8 @@ public interface IAuthenticationService
     [FaultContract(typeof(GameServiceFault))]
     bool LogIn(LoginRequest request);
 
-    [OperationContract(isOneWay = true)]
-
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
     bool SignUp(SignUpRequest request);
 
 }
