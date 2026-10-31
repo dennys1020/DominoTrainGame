@@ -52,6 +52,12 @@
                                     <TextBlock
                                         Text="{Binding [RoomTitle], Source={StaticResource Localization}}"
                                         Style="{StaticResource MatchHeadingStyle}" />
+                                    <TextBlock
+                                        Text="{Binding [ReconnectingMessage], Source={StaticResource Localization}}"
+                                        Style="{StaticResource PixelTextStyle}"
+                                        FontSize="14"
+                                        Margin="0,8,0,0"
+                                        Visibility="{Binding IsReconnecting, Converter={StaticResource HostVisibility}}" />
                                 </StackPanel>
                                 <Grid Grid.Row="1" Margin="0,0,0,20">
                                     <Grid.ColumnDefinitions>
@@ -74,8 +80,7 @@
                                                 BorderThickness="2"
                                                 Padding="18,19">
                                                 <TextBlock
-                                                    Text="{Binding [RoomCodePlaceholder],
-                                                        Source={StaticResource Localization}}"
+                                                    Text="{Binding LobbyCode}"
                                                     Style="{StaticResource PixelTextStyle}"
                                                     FontSize="26"
                                                     HorizontalAlignment="Center" />
@@ -177,9 +182,7 @@
                                             FontSize="16" />
                                     </StackPanel>
                                     <Grid
-                                        Grid.Column="2"
-                                        DataContext="{Binding DataContext.Room,
-                                            RelativeSource={RelativeSource AncestorType=Window}}">
+                                        Grid.Column="2">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="35" />
                                             <RowDefinition Height="*" />
@@ -338,10 +341,7 @@
                                                                     <Button
                                                                         Content="{Binding [MarkReadyButtonLabel],
                                                                             Source={StaticResource Localization}}"
-                                                                        Command="{Binding DataContext.ReadyCommand,
-                                                                            RelativeSource={RelativeSource
-                                                                                AncestorType=Window}}"
-                                                                        CommandParameter="{Binding}"
+                                                                        Visibility="Collapsed"
                                                                         MinWidth="180"
                                                                         FontSize="9">
                                                                         <Button.Style>

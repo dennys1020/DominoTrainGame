@@ -57,12 +57,29 @@
   <ItemGroup>
     <Compile Include="Contracts\IAuthenticationService.cs" />
     <Compile Include="Contracts\IConnectionService.cs" />
+    <Compile Include="Contracts\IGameClientCallback.cs" />
+    <Compile Include="Contracts\ILobbyService.cs" />
+    <Compile Include="DTO\ConnectRequest.cs" />
+    <Compile Include="DTO\GameFaultFactory.cs" />
     <Compile Include="DTO\GameServiceFault.cs" />
     <Compile Include="DTO\GameServiceFaultCode.cs" />
+    <Compile Include="DTO\JoinLobbyRequest.cs" />
+    <Compile Include="DTO\LobbyPlayer.cs" />
+    <Compile Include="DTO\LobbyResponse.cs" />
     <Compile Include="DTO\LoginRequest.cs" />
+    <Compile Include="DTO\LoginResponse.cs" />
+    <Compile Include="DTO\PlayerJoinedMessage.cs" />
+    <Compile Include="DTO\PlayerLeftMessage.cs" />
     <Compile Include="DTO\SignUpRequest.cs" />
+    <Compile Include="Implementation\AuthenticationController.cs" />
+    <Compile Include="Implementation\CallbackGameNotifier.cs" />
     <Compile Include="Implementation\GameService.cs" />
+    <Compile Include="Implementation\LobbyController.cs" />
+    <Compile Include="Networking\ConnectedPlayer.cs" />
+    <Compile Include="Networking\ConnectedPlayerRegistry.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
+    <Compile Include="Networking\SessionManager.cs" />
+    <Compile Include="Networking\SessionTokenRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

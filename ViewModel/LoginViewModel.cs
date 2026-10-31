@@ -20,6 +20,7 @@ public sealed class LoginViewModel : ScreenViewModel
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LoginSystemErrorMessageKey = "LoginSystemErrorMessage";
     private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
+    private const string AlreadyConnectedMessageKey = "AlreadyConnectedMessage";
 
     private readonly IRemoteGameServices _gameServices;
     private readonly LocalizationViewModel _localization;
@@ -118,6 +119,9 @@ public sealed class LoginViewModel : ScreenViewModel
                 break;
             case LoginResult.InvalidInput:
                 messageKey = LoginFailedMessageKey;
+                break;
+            case LoginResult.AlreadyConnected:
+                messageKey = AlreadyConnectedMessageKey;
                 break;
             case LoginResult.ServerUnavailable:
                 messageKey = ServerUnavailableMessageKey;

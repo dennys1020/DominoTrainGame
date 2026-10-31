@@ -68,6 +68,7 @@
     <Compile Include="MatchResultsViewModel.cs" />
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
+    <Compile Include="RoomPlayerViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
     <Compile Include="Validation\SignUpInputStatus.cs" />
     <Compile Include="Validation\SignUpInputValidator.cs" />

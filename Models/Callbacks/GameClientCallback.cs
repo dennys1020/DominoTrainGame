@@ -1,0 +1,69 @@
+using System;
+using System.ServiceModel;
+using log4net.Ext.Trace;
+using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Client.Models.DominoService;
+
+namespace DominoTrainGame.Client.Models.Callbacks;
+
+[CallbackBehavior(UseSynchronizationContext = true)]
+public sealed class GameClientCallback : ILobbyServiceCallback
+{
+    private static readonly ITraceLog _logger;
+
+    static GameClientCallback()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(GameClientCallback));
+    }
+
+    public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
+
+    public event EventHandler<PlayerLeftEventArgs> PlayerLeft;
+
+    public void ReceivePlayerJoined(PlayerJoinedMessage message)
+    {
+        if (message?.Player == null)
+        {
+            _logger.Warn("A player join notice without player data was ignored.");
+        }
+        else
+        {
+            LobbyPlayerResult player = new LobbyPlayerResult(
+                message.Player.PlayerId,
+                message.Player.Username,
+                message.Player.IsHost);
+            PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs(
+                player,
+                message.Version);
+
+            OnPlayerJoined(eventArgs);
+        }
+    }
+
+    public void ReceivePlayerLeft(PlayerLeftMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A player leave notice without content was ignored.");
+        }
+        else
+        {
+            PlayerLeftEventArgs eventArgs = new PlayerLeftEventArgs(
+                message.PlayerId,
+                message.Version,
+                message.HostPlayerId);
+
+            OnPlayerLeft(eventArgs);
+        }
+    }
+
+    private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
+    {
+        PlayerJoined?.Invoke(this, eventArgs);
+    }
+
+    private void OnPlayerLeft(PlayerLeftEventArgs eventArgs)
+    {
+        PlayerLeft?.Invoke(this, eventArgs);
+    }
+}

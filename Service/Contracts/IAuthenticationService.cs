@@ -8,7 +8,7 @@ public interface IAuthenticationService
 {
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
-    bool LogIn(LoginRequest request);
+    LoginResponse LogIn(LoginRequest request);
 
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]

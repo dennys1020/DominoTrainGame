@@ -1,6 +1,6 @@
 using System;
-using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Ports;
+using log4net.Ext.Trace;
 
 namespace DominoTrainGame.Server.Application.Authentication;
 
@@ -25,14 +25,14 @@ public sealed class LoginUseCases : ILoginUseCases
         _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
-    public bool LogIn(string identifier, string password)
+    public bool LogIn(string identifier, string password, out AuthenticatedPlayer player)
     {
         string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
 
         ValidateIdentifier(normalizedIdentifier);
         ValidatePassword(password);
 
-        bool isAuthenticated = VerifyCredentials(normalizedIdentifier, password);
+        bool isAuthenticated = VerifyCredentials(normalizedIdentifier, password, out player);
         return isAuthenticated;
     }
 
@@ -62,6 +62,19 @@ public sealed class LoginUseCases : ILoginUseCases
         }
     }
 
+    private bool VerifyCredentials(string identifier, string password, out AuthenticatedPlayer player)
+    {
+        bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
+        bool isAuthenticated = isRegistered && _passwordHasher.Verify(credentials.PasswordHash, password);
+
+        LogLoginAttempt(isAuthenticated, credentials);
+
+        player = isAuthenticated
+            ? new AuthenticatedPlayer(credentials.PlayerId, credentials.Username)
+            : AuthenticatedPlayer.Empty;
+        return isAuthenticated;
+    }
+
     private static void LogLoginAttempt(bool isAuthenticated, PlayerCredentials credentials)
     {
         if (isAuthenticated)
@@ -72,14 +85,5 @@ public sealed class LoginUseCases : ILoginUseCases
         {
             _logger.Info("A login attempt was rejected because the credentials are invalid.");
         }
-    }
-
-    private bool VerifyCredentials(string identifier, string password)
-    {
-        bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
-        bool isAuthenticated = isRegistered && _passwordHasher.Verify(credentials.PasswordHash, password);
-
-        LogLoginAttempt(isAuthenticated, credentials);
-        return isAuthenticated;
     }
 }

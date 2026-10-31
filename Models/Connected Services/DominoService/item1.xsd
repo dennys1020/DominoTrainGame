@@ -21,14 +21,14 @@
   <xs:element name="LogInResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="LogInResult" type="xs:boolean" />
+        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="LogInResult" nillable="true" type="q2:LoginResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SignUp">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q2:SignUpRequest" />
+        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q3:SignUpRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -36,6 +36,68 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="SignUpResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Connect">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q4:ConnectRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConnectResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLobby">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLobbyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://dominotraingame/services" minOccurs="0" name="CreateLobbyResult" nillable="true" type="q5:LobbyResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinLobby">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q6:JoinLobbyRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinLobbyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://dominotraingame/services" minOccurs="0" name="JoinLobbyResult" nillable="true" type="q7:LobbyResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveLobby">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveLobbyResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceivePlayerJoined">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q8:PlayerJoinedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceivePlayerLeft">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q9:PlayerLeftMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

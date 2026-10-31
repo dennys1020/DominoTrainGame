@@ -10,6 +10,13 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="InvalidInput" />
       <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="SessionNotFound" />
+      <xs:enumeration value="LobbyNotFound" />
+      <xs:enumeration value="LobbyFull" />
+      <xs:enumeration value="LobbyConflict" />
+      <xs:enumeration value="AlreadyConnected" />
+      <xs:enumeration value="InvalidLobbyRequest" />
+      <xs:enumeration value="InvalidSessionToken" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -20,6 +27,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginRequest" nillable="true" type="tns:LoginRequest" />
+  <xs:complexType name="LoginResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsAuthenticated" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LoginResponse" nillable="true" type="tns:LoginResponse" />
   <xs:complexType name="SignUpRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
@@ -28,4 +44,55 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SignUpRequest" nillable="true" type="tns:SignUpRequest" />
+  <xs:complexType name="ConnectRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConnectRequest" nillable="true" type="tns:ConnectRequest" />
+  <xs:complexType name="LobbyResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HostPlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="MaximumPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfLobbyPlayer" />
+      <xs:element minOccurs="0" name="Version" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyResponse" nillable="true" type="tns:LobbyResponse" />
+  <xs:complexType name="ArrayOfLobbyPlayer">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LobbyPlayer" nillable="true" type="tns:LobbyPlayer" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLobbyPlayer" nillable="true" type="tns:ArrayOfLobbyPlayer" />
+  <xs:complexType name="LobbyPlayer">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsHost" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyPlayer" nillable="true" type="tns:LobbyPlayer" />
+  <xs:complexType name="JoinLobbyRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="JoinLobbyRequest" nillable="true" type="tns:JoinLobbyRequest" />
+  <xs:complexType name="PlayerJoinedMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Player" nillable="true" type="tns:LobbyPlayer" />
+      <xs:element minOccurs="0" name="Version" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerJoinedMessage" nillable="true" type="tns:PlayerJoinedMessage" />
+  <xs:complexType name="PlayerLeftMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HostPlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Version" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerLeftMessage" nillable="true" type="tns:PlayerLeftMessage" />
 </xs:schema>
