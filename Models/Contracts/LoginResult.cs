@@ -6,6 +6,7 @@ public enum LoginResult
     InvalidInput,
     InvalidCredentials,
     DatabaseUnavailable,
+    AlreadyConnected,
     ServerError,
     ServerUnavailable
 }

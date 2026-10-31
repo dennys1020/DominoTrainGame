@@ -9,5 +9,26 @@ public enum GameServiceFaultCode
     InvalidInput,
 
     [EnumMember]
-    DatabaseUnavailable
+    DatabaseUnavailable,
+
+    [EnumMember]
+    SessionNotFound,
+
+    [EnumMember]
+    LobbyNotFound,
+
+    [EnumMember]
+    LobbyFull,
+
+    [EnumMember]
+    LobbyConflict,
+
+    [EnumMember]
+    AlreadyConnected,
+
+    [EnumMember]
+    InvalidLobbyRequest,
+
+    [EnumMember]
+    InvalidSessionToken
 }

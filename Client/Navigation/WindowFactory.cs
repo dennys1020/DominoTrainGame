@@ -56,8 +56,14 @@ internal sealed class WindowFactory
             [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
             [Screen.RecoverPassword] = windowService => new DialogViewModel(windowService),
             [Screen.Main] = windowService => new MainMenuViewModel(windowService),
-            [Screen.NewGame] = windowService => new NewGameViewModel(windowService),
-            [Screen.JoinGame] = windowService => new JoinGameViewModel(windowService),
+            [Screen.NewGame] = windowService => new NewGameViewModel(
+                windowService,
+                _gameServices,
+                _localization),
+            [Screen.JoinGame] = windowService => new JoinGameViewModel(
+                windowService,
+                _gameServices,
+                _localization),
             [Screen.Settings] = windowService => new DialogViewModel(windowService),
             [Screen.Rules] = windowService => new DialogViewModel(windowService),
             [Screen.Profile] = windowService => new DialogViewModel(windowService),
@@ -69,7 +75,11 @@ internal sealed class WindowFactory
 
         _roomViewModelsByScreen = new Dictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
         {
-            [Screen.Room] = (windowService, roomRole) => new RoomViewModel(windowService, roomRole),
+            [Screen.Room] = (windowService, roomRole) => new RoomViewModel(
+                windowService,
+                roomRole,
+                _gameServices,
+                _localization),
             [Screen.MatchResults] = (windowService, roomRole) => new MatchResultsViewModel(windowService, roomRole)
         };
     }

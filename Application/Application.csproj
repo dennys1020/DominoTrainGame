@@ -51,18 +51,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticatedPlayer.cs" />
     <Compile Include="Authentication\ILoginUseCases.cs" />
     <Compile Include="Authentication\ISignUpUseCases.cs" />
     <Compile Include="Authentication\LoginUseCases.cs" />
     <Compile Include="Authentication\SignUpUseCases.cs" />
     <Compile Include="Connection\ConnectionUseCases.cs" />
     <Compile Include="Connection\IConnectionUseCases.cs" />
+    <Compile Include="Connection\LobbyRegistry.cs" />
+    <Compile Include="Connection\LobbyUseCases.cs" />
+    <Compile Include="Ports\IGameNotifier.cs" />
+    <Compile Include="Connection\ILobbyUseCases.cs" />
+    <Compile Include="Connection\LobbyMember.cs" />
+    <Compile Include="Connection\LobbyPlayerState.cs" />
+    <Compile Include="Connection\LobbyRoster.cs" />
+    <Compile Include="Connection\LobbyState.cs" />
+    <Compile Include="Ports\PlayerJoinedNotice.cs" />
+    <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />
     <Compile Include="Ports\IPlayerRepository.cs" />
     <Compile Include="Ports\PlayerCredentials.cs" />
     <Compile Include="Ports\PlayerRegistration.cs" />
+    <Compile Include="Ports\ILobbyCodeGenerator.cs" />
+    <Compile Include="Results\JoinLobbyStatus.cs" />
+    <Compile Include="Security\LobbyCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

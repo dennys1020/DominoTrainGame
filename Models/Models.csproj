@@ -59,15 +59,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\ConnectionState.cs" />
+    <Compile Include="Contracts\ConnectionStateChangedEventArgs.cs" />
     <Compile Include="Contracts\SignUpResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Localization\UiStrings.Designer.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
+    <Compile Include="Contracts\LobbyResultStatus.cs" />
+    <Compile Include="Contracts\LobbyPlayerResult.cs" />
+    <Compile Include="Contracts\LobbyResult.cs" />
+    <Compile Include="Contracts\PlayerJoinedEventArgs.cs" />
+    <Compile Include="Contracts\PlayerLeftEventArgs.cs" />
     <Compile Include="Contracts\ConnectionCheckResult.cs" />
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
     <Compile Include="Networking\GameConnectionFactory.cs" />
+    <Compile Include="Callbacks\GameClientCallback.cs" />
     <Compile Include="RemoteGameServices.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,6 +89,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Connected Services\DominoService\ConnectionService.wsdl" />
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LobbyResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\DominoService\item.xsd">
       <SubType>Designer</SubType>
     </None>

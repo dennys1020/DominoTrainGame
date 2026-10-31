@@ -310,6 +310,33 @@ on the train</value>
   <data name="RoomCodeDescription" xml:space="preserve">
     <value>Share this code with your friends.</value>
   </data>
+  <data name="InvalidLobbyCodeMessage" xml:space="preserve">
+    <value>The code must contain six valid characters.</value>
+  </data>
+  <data name="LobbyNotFoundMessage" xml:space="preserve">
+    <value>No room exists with that code.</value>
+  </data>
+  <data name="LobbyFullMessage" xml:space="preserve">
+    <value>The room is already full.</value>
+  </data>
+  <data name="LobbyConflictMessage" xml:space="preserve">
+    <value>You are already in a room.</value>
+  </data>
+  <data name="LobbySessionExpiredMessage" xml:space="preserve">
+    <value>Your session is no longer active. Please sign in again.</value>
+  </data>
+  <data name="LobbyServerErrorMessage" xml:space="preserve">
+    <value>The room operation could not be completed.</value>
+  </data>
+  <data name="AlreadyConnectedMessage" xml:space="preserve">
+    <value>This account already has an active session.</value>
+  </data>
+  <data name="ReconnectingMessage" xml:space="preserve">
+    <value>Connection lost. Reconnecting...</value>
+  </data>
+  <data name="RoomLostAfterReconnectMessage" xml:space="preserve">
+    <value>The connection was restored, but the room is no longer available.</value>
+  </data>
   <data name="MaximumDoubleLabel" xml:space="preserve">
     <value>Highest double</value>
   </data>

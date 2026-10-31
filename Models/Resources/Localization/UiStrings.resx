@@ -310,6 +310,33 @@ en el tren</value>
   <data name="RoomCodeDescription" xml:space="preserve">
     <value>Comparte este código con tus amigos.</value>
   </data>
+  <data name="InvalidLobbyCodeMessage" xml:space="preserve">
+    <value>El código debe tener seis caracteres válidos.</value>
+  </data>
+  <data name="LobbyNotFoundMessage" xml:space="preserve">
+    <value>No existe una sala con ese código.</value>
+  </data>
+  <data name="LobbyFullMessage" xml:space="preserve">
+    <value>La sala ya está llena.</value>
+  </data>
+  <data name="LobbyConflictMessage" xml:space="preserve">
+    <value>Ya estás dentro de una sala.</value>
+  </data>
+  <data name="LobbySessionExpiredMessage" xml:space="preserve">
+    <value>Tu sesión ya no está activa. Inicia sesión de nuevo.</value>
+  </data>
+  <data name="LobbyServerErrorMessage" xml:space="preserve">
+    <value>No se pudo completar la operación de sala.</value>
+  </data>
+  <data name="AlreadyConnectedMessage" xml:space="preserve">
+    <value>Esta cuenta ya tiene una sesión conectada.</value>
+  </data>
+  <data name="ReconnectingMessage" xml:space="preserve">
+    <value>Se perdió la conexión. Reconectando...</value>
+  </data>
+  <data name="RoomLostAfterReconnectMessage" xml:space="preserve">
+    <value>Se recuperó la conexión, pero la sala ya no está disponible.</value>
+  </data>
   <data name="MaximumDoubleLabel" xml:space="preserve">
     <value>Doble máximo</value>
   </data>

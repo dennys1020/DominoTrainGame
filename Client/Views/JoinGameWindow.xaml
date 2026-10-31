@@ -83,6 +83,7 @@
                                         <TextBox
                                             Style="{StaticResource MatchInputStyle}"
                                             MinHeight="82"
+                                            Text="{Binding LobbyCode, UpdateSourceTrigger=PropertyChanged}"
                                             AutomationProperties.Name="{Binding [RoomCodeLabel],
                                                 Source={StaticResource Localization}}"
                                             ToolTip="{Binding [InvitationCodeHint],
