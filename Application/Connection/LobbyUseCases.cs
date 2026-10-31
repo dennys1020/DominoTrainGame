@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using log4net.Ext.Trace;
+using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Server.Application.Results;
+
+namespace DominoTrainGame.Server.Application.Connection;
+
+public sealed class LobbyUseCases : ILobbyUseCases
+{
+    private static readonly ITraceLog _logger;
+
+    private readonly LobbyRegistry _lobbyRegistry;
+    private readonly IGameNotifier _gameNotifier;
+    private readonly ILobbyCodeGenerator _lobbyCodeGenerator;
+
+    static LobbyUseCases()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(LobbyUseCases));
+    }
+
+    public LobbyUseCases(
+        LobbyRegistry lobbyRegistry,
+        IGameNotifier gameNotifier,
+        ILobbyCodeGenerator lobbyCodeGenerator)
+    {
+        _lobbyRegistry = lobbyRegistry ?? throw new ArgumentNullException(nameof(lobbyRegistry));
+        _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
+        _lobbyCodeGenerator = lobbyCodeGenerator ?? throw new ArgumentNullException(nameof(lobbyCodeGenerator));
+    }
+
+    public bool TryCreateLobby(LobbyMember host, out LobbyState lobby)
+    {
+        bool wasCreated = _lobbyRegistry.TryCreate(host, out lobby);
+
+        if (wasCreated)
+        {
+            _logger.InfoFormat("A lobby was created. HostPlayerId: {0}.", host.PlayerId);
+        }
+
+        return wasCreated;
+    }
+
+    public JoinLobbyStatus JoinLobby(LobbyMember member, string code, out LobbyState lobby)
+    {
+        string normalizedCode = code?.Trim().ToUpperInvariant() ?? string.Empty;
+        ValidateCode(normalizedCode);
+
+        JoinLobbyStatus status = _lobbyRegistry.TryJoin(member, normalizedCode, out lobby);
+
+        if (status == JoinLobbyStatus.Success)
+        {
+            NotifyPlayerJoined(member, lobby);
+        }
+        else
+        {
+            _logger.InfoFormat("A join request was rejected. PlayerId: {0}. Status: {1}.", member.PlayerId, status);
+        }
+
+        return status;
+    }
+
+    public void LeaveLobby(int playerId)
+    {
+        bool wasInLobby = _lobbyRegistry.Remove(playerId, out LobbyState remainingLobby);
+
+        if (wasInLobby)
+        {
+            NotifyPlayerLeft(playerId, remainingLobby);
+        }
+    }
+
+    private void NotifyPlayerJoined(LobbyMember member, LobbyState lobby)
+    {
+        List<int> recipientPlayerIds = lobby.Roster.GetPlayerIdsExcept(member.PlayerId);
+        PlayerJoinedNotice notice = new PlayerJoinedNotice(recipientPlayerIds, member, lobby.Roster.Version);
+
+        _logger.InfoFormat("A player joined a lobby. PlayerId: {0}.", member.PlayerId);
+        _gameNotifier.NotifyPlayerJoined(notice);
+    }
+
+    private void NotifyPlayerLeft(int playerId, LobbyState remainingLobby)
+    {
+        LobbyRoster roster = remainingLobby.Roster;
+        List<int> recipientPlayerIds = roster.GetPlayerIdsExcept(playerId);
+        PlayerLeftNotice notice = new PlayerLeftNotice(recipientPlayerIds, playerId, roster);
+
+        _logger.InfoFormat("A player left a lobby. PlayerId: {0}.", playerId);
+        _gameNotifier.NotifyPlayerLeft(notice);
+    }
+
+    private void ValidateCode(string code)
+    {
+        bool isCodeValid = _lobbyCodeGenerator.IsValid(code);
+
+        if (!isCodeValid)
+        {
+            throw new ArgumentException("The lobby code format is invalid.", nameof(code));
+        }
+    }
+}
