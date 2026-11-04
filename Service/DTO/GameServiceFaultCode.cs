@@ -33,6 +33,12 @@ public enum GameServiceFaultCode
     InvalidSessionToken,
 
     [EnumMember]
+    NotLobbyHost,
+
+    [EnumMember]
+    PlayersNotReady,
+    
+    [EnumMember]
     PlayerNotFound,
 
     [EnumMember]

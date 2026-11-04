@@ -31,4 +31,8 @@ public interface ILobbyService
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]
     void SendLobbyMessage(SendLobbyMessageRequest request);
+
+    [OperationContract(IsInitiating = false)]
+    [FaultContract(typeof(GameServiceFault))]
+    void StartMatch();
 }
