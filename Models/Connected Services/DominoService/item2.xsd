@@ -17,6 +17,8 @@
       <xs:enumeration value="AlreadyConnected" />
       <xs:enumeration value="InvalidLobbyRequest" />
       <xs:enumeration value="InvalidSessionToken" />
+      <xs:enumeration value="NotLobbyHost" />
+      <xs:enumeration value="PlayersNotReady" />
       <xs:enumeration value="PlayerNotFound" />
       <xs:enumeration value="CannotTargetSelf" />
       <xs:enumeration value="AlreadyFriends" />
@@ -131,6 +133,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LobbyChatMessage" nillable="true" type="tns:LobbyChatMessage" />
+  <xs:complexType name="MatchStartingMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MatchStartingMessage" nillable="true" type="tns:MatchStartingMessage" />
   <xs:complexType name="ArrayOfFriendResponse">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendResponse" nillable="true" type="tns:FriendResponse" />

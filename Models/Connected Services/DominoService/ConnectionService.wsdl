@@ -204,6 +204,15 @@
   <wsdl:message name="ILobbyService_SendLobbyMessage_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q9="http://dominotraingame/services" name="detail" element="q9:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_StartMatch_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartMatch" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_StartMatch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartMatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_StartMatch_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://dominotraingame/services" name="detail" element="q10:GameServiceFault" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerJoined" />
   </wsdl:message>
@@ -216,6 +225,9 @@
   <wsdl:message name="ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveLobbyMessage" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveMatchStarting_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMatchStarting" />
+  </wsdl:message>
   <wsdl:message name="IFriendService_ConnectFriends_InputMessage">
     <wsdl:part name="parameters" element="tns:ConnectFriends" />
   </wsdl:message>
@@ -223,7 +235,7 @@
     <wsdl:part name="parameters" element="tns:ConnectFriendsResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_ConnectFriends_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q10="http://dominotraingame/services" name="detail" element="q10:GameServiceFault" />
+    <wsdl:part xmlns:q11="http://dominotraingame/services" name="detail" element="q11:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">
     <wsdl:part name="parameters" element="tns:GetFriends" />
@@ -232,7 +244,7 @@
     <wsdl:part name="parameters" element="tns:GetFriendsResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetFriends_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q11="http://dominotraingame/services" name="detail" element="q11:GameServiceFault" />
+    <wsdl:part xmlns:q12="http://dominotraingame/services" name="detail" element="q12:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetPendingRequests_InputMessage">
     <wsdl:part name="parameters" element="tns:GetPendingRequests" />
@@ -241,7 +253,7 @@
     <wsdl:part name="parameters" element="tns:GetPendingRequestsResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetPendingRequests_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q12="http://dominotraingame/services" name="detail" element="q12:GameServiceFault" />
+    <wsdl:part xmlns:q13="http://dominotraingame/services" name="detail" element="q13:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_SearchPlayers_InputMessage">
     <wsdl:part name="parameters" element="tns:SearchPlayers" />
@@ -250,7 +262,7 @@
     <wsdl:part name="parameters" element="tns:SearchPlayersResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_SearchPlayers_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q13="http://dominotraingame/services" name="detail" element="q13:GameServiceFault" />
+    <wsdl:part xmlns:q14="http://dominotraingame/services" name="detail" element="q14:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_SendFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:SendFriendRequest" />
@@ -259,7 +271,7 @@
     <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_SendFriendRequest_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q14="http://dominotraingame/services" name="detail" element="q14:GameServiceFault" />
+    <wsdl:part xmlns:q15="http://dominotraingame/services" name="detail" element="q15:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_AcceptFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:AcceptFriendRequest" />
@@ -268,7 +280,7 @@
     <wsdl:part name="parameters" element="tns:AcceptFriendRequestResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_AcceptFriendRequest_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q15="http://dominotraingame/services" name="detail" element="q15:GameServiceFault" />
+    <wsdl:part xmlns:q16="http://dominotraingame/services" name="detail" element="q16:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_RejectFriendRequest_InputMessage">
     <wsdl:part name="parameters" element="tns:RejectFriendRequest" />
@@ -277,7 +289,7 @@
     <wsdl:part name="parameters" element="tns:RejectFriendRequestResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_RejectFriendRequest_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q16="http://dominotraingame/services" name="detail" element="q16:GameServiceFault" />
+    <wsdl:part xmlns:q17="http://dominotraingame/services" name="detail" element="q17:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_RemoveFriend_InputMessage">
     <wsdl:part name="parameters" element="tns:RemoveFriend" />
@@ -286,7 +298,7 @@
     <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
   </wsdl:message>
   <wsdl:message name="IFriendService_RemoveFriend_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q17="http://dominotraingame/services" name="detail" element="q17:GameServiceFault" />
+    <wsdl:part xmlns:q18="http://dominotraingame/services" name="detail" element="q18:GameServiceFault" />
   </wsdl:message>
   <wsdl:portType name="IConnectionService">
     <wsdl:operation name="CheckConnection">
@@ -338,6 +350,11 @@
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessageResponse" message="tns:ILobbyService_SendLobbyMessage_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessageGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SendLobbyMessage_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="StartMatch">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/StartMatch" message="tns:ILobbyService_StartMatch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/StartMatchResponse" message="tns:ILobbyService_StartMatch_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/StartMatchGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_StartMatch_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerJoined">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" message="tns:ILobbyService_ReceivePlayerJoined_OutputCallbackMessage" />
     </wsdl:operation>
@@ -349,6 +366,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLobbyMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" message="tns:ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveMatchStarting">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveMatchStarting" message="tns:ILobbyService_ReceiveMatchStarting_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType msc:usingSession="true" name="IFriendService">
@@ -512,6 +532,18 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="StartMatch">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/StartMatch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="ReceivePlayerJoined">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" style="document" />
       <wsdl:output>
@@ -532,6 +564,12 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveLobbyMessage">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMatchStarting">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveMatchStarting" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>
@@ -643,7 +681,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/ConnectionService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -652,7 +690,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/AuthenticationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -661,7 +699,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/LobbyService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -670,7 +708,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/FriendService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
