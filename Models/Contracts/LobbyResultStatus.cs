@@ -11,5 +11,7 @@ public enum LobbyResultStatus
     AlreadyConnected,
     SessionNotFound,
     ServerUnavailable,
-    ServerError
+    ServerError,
+    NotLobbyHost,
+    PlayersNotReady
 }

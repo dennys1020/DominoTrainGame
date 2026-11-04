@@ -73,6 +73,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 
+    public event EventHandler<MatchStartingEventArgs> MatchStarting;
+
     public LobbyResult CurrentLobby
     {
         get
@@ -190,6 +192,14 @@ public sealed class RemoteGameServices : IRemoteGameServices
         };
         LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
             lobbyClient => CompleteLobbyCommandAsync(lobbyClient.SendLobbyMessageAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return resultStatus;
+    }
+
+    public async Task<LobbyResultStatus> StartMatchAsync()
+    {
+        LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
+            lobbyClient => CompleteLobbyCommandAsync(lobbyClient.StartMatchAsync()),
             KeepStatus).ConfigureAwait(false);
         return resultStatus;
     }
@@ -453,6 +463,26 @@ public sealed class RemoteGameServices : IRemoteGameServices
             case GameServiceFaultCode.LobbyConflict:
                 resultStatus = LobbyResultStatus.AlreadyInLobby;
                 break;
+            case GameServiceFaultCode.NotLobbyHost:
+                resultStatus = LobbyResultStatus.NotLobbyHost;
+                break;
+            case GameServiceFaultCode.PlayersNotReady:
+                resultStatus = LobbyResultStatus.PlayersNotReady;
+                break;
+            default:
+                resultStatus = MapSessionFault(faultCode);
+                break;
+        }
+
+        return resultStatus;
+    }
+
+    private static LobbyResultStatus MapSessionFault(GameServiceFaultCode faultCode)
+    {
+        LobbyResultStatus resultStatus;
+
+        switch (faultCode)
+        {
             case GameServiceFaultCode.SessionNotFound:
             case GameServiceFaultCode.InvalidSessionToken:
                 resultStatus = LobbyResultStatus.SessionNotFound;
@@ -567,6 +597,11 @@ public sealed class RemoteGameServices : IRemoteGameServices
         OnLobbyMessageReceived(e);
     }
 
+    private void HandleMatchStarting(object sender, MatchStartingEventArgs e)
+    {
+        OnMatchStarting(e);
+    }
+
     private bool TryApplyLobbyUpdate(long version, Func<LobbyResult, LobbyResult> update)
     {
         bool wasApplied;
@@ -620,6 +655,11 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private void OnLobbyMessageReceived(LobbyMessageReceivedEventArgs eventArgs)
     {
         LobbyMessageReceived?.Invoke(this, eventArgs);
+    }
+
+    private void OnMatchStarting(MatchStartingEventArgs eventArgs)
+    {
+        MatchStarting?.Invoke(this, eventArgs);
     }
 
     private static LobbyResult CreateLobbyWithPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
@@ -680,6 +720,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
         callback.PlayerLeft += HandlePlayerLeft;
         callback.PlayerReadyChanged += HandlePlayerReadyChanged;
         callback.LobbyMessageReceived += HandleLobbyMessageReceived;
+        callback.MatchStarting += HandleMatchStarting;
         return callback;
     }
 
