@@ -44,7 +44,7 @@
                 BorderThickness="2"
                 Padding="16"
                 Margin="0,0,0,16">
-                <ItemsControl>
+                <ItemsControl ItemsSource="{Binding Friends}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -56,7 +56,6 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -71,18 +70,10 @@
                                             Style="{StaticResource PixelTextStyle}"
                                             VerticalAlignment="Center" />
                                     </StackPanel>
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Text="{Binding Status}"
-                                        Style="{StaticResource SectionLabelStyle}"
-                                        Margin="0,0,10,0"
-                                        VerticalAlignment="Center" />
                                     <Button
-                                        Grid.Column="2"
+                                        Grid.Column="1"
                                         Style="{StaticResource DangerPixelButtonStyle}"
-                                        Command="{Binding DataContext.RemoveFriendCommand,
-                                            RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Tag="{Binding}">
+                                        Command="{Binding RemoveCommand}">
                                         <StackPanel Orientation="Horizontal">
                                             <Rectangle
                                                 Width="14"
@@ -108,7 +99,12 @@
                 Padding="16">
                 <StackPanel>
                     <Grid>
-                        <TextBox Height="40" FontFamily="Consolas" FontSize="14" Padding="34,8,8,8" />
+                        <TextBox
+                            Height="40"
+                            FontFamily="Consolas"
+                            FontSize="14"
+                            Padding="34,8,8,8"
+                            Text="{Binding FriendUsername, UpdateSourceTrigger=PropertyChanged}" />
                         <Rectangle
                             Width="18"
                             Height="18"
@@ -118,37 +114,63 @@
                             Fill="{StaticResource SearchBrush}"
                             Style="{StaticResource PixelArtStyle}" />
                     </Grid>
-                    <Grid Margin="0,14,0,0" Visibility="Collapsed">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Border
-                            Grid.Column="0"
-                            Width="40"
-                            Height="40"
-                            CornerRadius="20"
-                            BorderBrush="{StaticResource Ink}"
-                            BorderThickness="2"
-                            Margin="0,0,10,0"
-                            Background="{StaticResource DefaultAvatarBrush}" />
-                        <Border
-                            Grid.Column="1"
-                            Background="Gold"
-                            BorderBrush="{StaticResource Ink}"
-                            BorderThickness="1"
-                            Padding="10,6"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center">
-                            <TextBlock Style="{StaticResource PixelTextStyle}" />
-                        </Border>
-                    </Grid>
+                    <Border
+                        Margin="0,8,0,0"
+                        Background="{StaticResource Glacier}"
+                        BorderBrush="{StaticResource Ink}"
+                        BorderThickness="2"
+                        Padding="8"
+                        Visibility="{Binding HasSearchResults, Converter={StaticResource TabVisibility}}">
+                        <ListBox
+                            MaxHeight="240"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{Binding SearchResults}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border
+                                            Grid.Column="0"
+                                            Width="40"
+                                            Height="40"
+                                            CornerRadius="20"
+                                            BorderBrush="{StaticResource Ink}"
+                                            BorderThickness="2"
+                                            Margin="0,0,10,0"
+                                            Background="{StaticResource DefaultAvatarBrush}" />
+                                        <Border
+                                            Grid.Column="1"
+                                            Background="Gold"
+                                            BorderBrush="{StaticResource Ink}"
+                                            BorderThickness="1"
+                                            Padding="10,6"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center">
+                                            <TextBlock
+                                                Text="{Binding Username}"
+                                                Style="{StaticResource PixelTextStyle}" />
+                                        </Border>
+                                        <Button
+                                            Grid.Column="2"
+                                            Content="{Binding [AddButtonLabel],
+                                                Source={StaticResource Localization}}"
+                                            Style="{StaticResource PixelButtonStyle}"
+                                            Command="{Binding SendRequestCommand}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Border>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                         <Button
                             Content="{Binding [AddButtonLabel], Source={StaticResource Localization}}"
                             Style="{StaticResource PixelButtonStyle}"
-                            Command="{Binding DataContext.AddFriendCommand,
-                                RelativeSource={RelativeSource AncestorType=Window}}" />
+                            Command="{Binding AddFriendCommand}" />
                     </StackPanel>
                 </StackPanel>
             </Border>
@@ -162,7 +184,7 @@
                 BorderBrush="{StaticResource Ink}"
                 BorderThickness="2"
                 Padding="16">
-                <ItemsControl>
+                <ItemsControl ItemsSource="{Binding PendingRequests}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
@@ -192,14 +214,12 @@
                                     </StackPanel>
                                     <Button
                                         Grid.Column="1"
-                                        Style="{StaticResource PixelButtonStyle}"
+                                        Style="{StaticResource PixelIconButtonStyle}"
                                         Background="#32CD32"
                                         Width="40"
                                         Height="40"
                                         Margin="0,0,10,0"
-                                        Command="{Binding DataContext.AcceptRequestCommand,
-                                            RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Tag="{Binding}">
+                                        Command="{Binding AcceptCommand}">
                                         <Rectangle
                                             Width="24"
                                             Height="24"
@@ -211,9 +231,7 @@
                                         Style="{StaticResource DangerPixelButtonStyle}"
                                         Width="40"
                                         Height="40"
-                                        Command="{Binding DataContext.RejectRequestCommand,
-                                            RelativeSource={RelativeSource AncestorType=Window}}"
-                                        Tag="{Binding}">
+                                        Command="{Binding RejectCommand}">
                                         <Rectangle
                                             Width="20"
                                             Height="20"

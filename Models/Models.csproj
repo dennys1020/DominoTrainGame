@@ -80,6 +80,7 @@
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
     <Compile Include="Networking\GameConnectionFactory.cs" />
+    <Compile Include="Networking\ServiceFailureMapping.cs" />
     <Compile Include="Callbacks\GameClientCallback.cs" />
     <Compile Include="RemoteGameServices.cs" />
   </ItemGroup>
@@ -94,10 +95,19 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Connected Services\DominoService\ConnectionService.wsdl" />
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.FriendResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LobbyResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PlayerSearchResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\DominoService\item.xsd">
@@ -131,6 +141,19 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Contracts\FoundPlayerResult.cs" />
+    <Compile Include="Contracts\FriendListResult.cs" />
+    <Compile Include="Contracts\FriendRequestListResult.cs" />
+    <Compile Include="Contracts\FriendRequestResult.cs" />
+    <Compile Include="Contracts\FriendResult.cs" />
+    <Compile Include="Contracts\FriendResultStatus.cs" />
+    <Compile Include="Contracts\IRemoteSocialServices.cs" />
+    <Compile Include="Contracts\ISocialConnectionFactory.cs" />
+    <Compile Include="Contracts\PlayerSearchResult.cs" />
+    <Compile Include="Networking\SocialConnectionFactory.cs" />
+    <Compile Include="RemoteSocialServices.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

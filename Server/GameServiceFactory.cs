@@ -2,6 +2,7 @@ using DominoTrainGame.Server.Application.Authentication;
 using DominoTrainGame.Server.Application.Connection;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Security;
+using DominoTrainGame.Server.Application.Social;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Service.Implementation;
@@ -35,7 +36,14 @@ internal static class GameServiceFactory
             sessionManager);
         LobbyController lobbyController = new LobbyController(lobbyUseCases, sessionManager);
 
-        GameService gameService = new GameService(connectionUseCases, authenticationController, lobbyController);
+        IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
+        IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository);
+        SocialSessionRegistry socialSessions = new SocialSessionRegistry();
+        SocialSessionManager socialSessionManager = new SocialSessionManager(sessionTokens, socialSessions);
+        FriendController friendController = new FriendController(friendUseCases, socialSessionManager);
+        SessionController sessionController = new SessionController(lobbyController, friendController);
+
+        GameService gameService = new GameService(connectionUseCases, authenticationController, sessionController);
         return gameService;
     }
 }

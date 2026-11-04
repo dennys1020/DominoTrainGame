@@ -7,6 +7,7 @@ public interface IFriendshipRepository
     bool TryFindFriendship(string username, out int playerId);
     IReadOnlyList<FriendSummary> GetFriends(int playerId);
     IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId);
+    IReadOnlyList<FriendSummary> SearchRegisteredPlayers(int playerId, string usernameFragment);
     FriendshipState GetFriendshipState(int playerId, int friendPlayerId);
     bool CreateRequest(int requestPlayerId, int targetPlayerId);
     bool AcceptRequest(int requestId, int targetPlayerId);

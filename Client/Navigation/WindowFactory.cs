@@ -16,6 +16,7 @@ internal sealed class WindowFactory
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
 
     private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
@@ -44,9 +45,13 @@ internal sealed class WindowFactory
         };
     }
 
-    public WindowFactory(IRemoteGameServices gameServices, LocalizationViewModel localization)
+    public WindowFactory(
+        IRemoteGameServices gameServices,
+        IRemoteSocialServices socialServices,
+        LocalizationViewModel localization)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
@@ -68,7 +73,7 @@ internal sealed class WindowFactory
             [Screen.Settings] = windowService => new DialogViewModel(windowService),
             [Screen.Rules] = windowService => new DialogViewModel(windowService),
             [Screen.Profile] = windowService => new DialogViewModel(windowService),
-            [Screen.Friends] = windowService => new DialogViewModel(windowService),
+            [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
             [Screen.ChangePassword] = windowService => new DialogViewModel(windowService),
             [Screen.DeleteAccount] = windowService => new DialogViewModel(windowService),
             [Screen.Leaderboard] = windowService => new DialogViewModel(windowService)

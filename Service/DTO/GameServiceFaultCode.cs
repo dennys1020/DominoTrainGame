@@ -36,5 +36,26 @@ public enum GameServiceFaultCode
     NotLobbyHost,
 
     [EnumMember]
-    PlayersNotReady
+    PlayersNotReady,
+    
+    [EnumMember]
+    PlayerNotFound,
+
+    [EnumMember]
+    CannotTargetSelf,
+
+    [EnumMember]
+    AlreadyFriends,
+
+    [EnumMember]
+    FriendRequestAlreadyExists,
+
+    [EnumMember]
+    PlayerBlocked,
+
+    [EnumMember]
+    FriendRequestNotFound,
+
+    [EnumMember]
+    NotFriends
 }

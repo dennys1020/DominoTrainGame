@@ -37,6 +37,16 @@ public sealed class FriendUseCases : IFriendUseCases
         return pendingRequests;
     }
 
+    public IReadOnlyList<FriendSummary> SearchPlayers(int playerId, string usernameFragment)
+    {
+        string normalizedFragment = NormalizeUsername(usernameFragment);
+        IReadOnlyList<FriendSummary> players = _friendshipRepository.SearchRegisteredPlayers(
+            playerId,
+            normalizedFragment);
+
+        return players;
+    }
+
     public SendFriendRequestStatus SendFriendRequest(int requesterPlayerId, string addresseeUsername)
     {
         string normalizedUsername = NormalizeUsername(addresseeUsername);
