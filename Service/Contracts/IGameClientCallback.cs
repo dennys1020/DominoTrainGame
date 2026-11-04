@@ -17,4 +17,9 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceivePlayerLeft",
         IsOneWay = true)]
     void ReceivePlayerLeft(PlayerLeftMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged",
+        IsOneWay = true)]
+    void ReceivePlayerReadyChanged(PlayerReadyChangedMessage message);
 }

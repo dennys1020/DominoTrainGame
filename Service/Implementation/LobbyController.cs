@@ -80,6 +80,24 @@ public sealed class LobbyController
         _lobbyUseCases.LeaveLobby(caller.PlayerId);
     }
 
+    public void SetReady(SetReadyRequest request)
+    {
+        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+
+        if (request == null)
+        {
+            _logger.Warn("A ready state request was rejected because it has no content.");
+            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidLobbyRequest);
+        }
+
+        bool wasUpdated = _lobbyUseCases.TrySetReady(caller.PlayerId, request.IsReady);
+
+        if (!wasUpdated)
+        {
+            throw GameFaultFactory.Create(GameServiceFaultCode.LobbyNotFound);
+        }
+    }
+
     private static LobbyResponse ToLobbyResponse(LobbyState lobby)
     {
         List<LobbyPlayer> players = new List<LobbyPlayer>();
@@ -90,7 +108,8 @@ public sealed class LobbyController
             {
                 PlayerId = player.PlayerId,
                 Username = player.Username,
-                IsHost = player.IsHost
+                IsHost = player.IsHost,
+                IsReady = player.IsReady
             };
 
             players.Add(lobbyPlayer);

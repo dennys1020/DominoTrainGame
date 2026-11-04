@@ -69,6 +69,7 @@
   <xs:complexType name="LobbyPlayer">
     <xs:sequence>
       <xs:element minOccurs="0" name="IsHost" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsReady" type="xs:boolean" />
       <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
       <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
@@ -80,6 +81,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="JoinLobbyRequest" nillable="true" type="tns:JoinLobbyRequest" />
+  <xs:complexType name="SetReadyRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsReady" type="xs:boolean" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SetReadyRequest" nillable="true" type="tns:SetReadyRequest" />
   <xs:complexType name="PlayerJoinedMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Player" nillable="true" type="tns:LobbyPlayer" />
@@ -95,4 +102,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerLeftMessage" nillable="true" type="tns:PlayerLeftMessage" />
+  <xs:complexType name="PlayerReadyChangedMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsReady" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Version" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerReadyChangedMessage" nillable="true" type="tns:PlayerReadyChangedMessage" />
 </xs:schema>

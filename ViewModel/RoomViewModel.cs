@@ -20,6 +20,7 @@ public sealed class RoomViewModel : ScreenViewModel
     private readonly IRemoteGameServices _gameServices;
     private readonly LocalizationViewModel _localization;
     private readonly Screen _previousScreen;
+    private bool _isBusy;
     private bool _isHost;
     private bool _isReconnecting;
     private string _lobbyCode = string.Empty;
@@ -38,6 +39,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _previousScreen = _isHost ? Screen.NewGame : Screen.JoinGame;
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
+        MarkReadyCommand = new AsyncRelayCommand(MarkReadyAsync);
         ResultsCommand = new RelayCommand(
             () => WindowService.Navigate(Screen.MatchResults, roomRole));
 
@@ -52,6 +54,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _gameServices.PlayerJoined += OnPlayerJoined;
         _gameServices.PlayerLeft += OnPlayerLeft;
         _gameServices.ConnectionStateChanged += OnConnectionStateChanged;
+        _gameServices.PlayerReadyChanged += HandlePlayerReadyChanged;
     }
 
     public bool IsReconnecting
@@ -63,6 +66,18 @@ public sealed class RoomViewModel : ScreenViewModel
         private set
         {
             SetProperty(ref _isReconnecting, value);
+        }
+    }
+
+    public bool IsBusy
+    {
+        get
+        {
+            return _isBusy;
+        }
+        private set
+        {
+            SetProperty(ref _isBusy, value);
         }
     }
 
@@ -106,6 +121,8 @@ public sealed class RoomViewModel : ScreenViewModel
         new ObservableCollection<RoomPlayerViewModel>();
 
     public AsyncRelayCommand BackCommand { get; }
+
+    public AsyncRelayCommand MarkReadyCommand { get; }
 
     public RelayCommand ResultsCommand { get; }
 
@@ -201,6 +218,29 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
+    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs e)
+    {
+        bool isNewerVersion = e.Version > _version;
+        bool isNextVersion = e.Version == _version + NextVersionOffset;
+
+        if (isNewerVersion && isNextVersion)
+        {
+            foreach (RoomPlayerViewModel player in Players)
+            {
+                if (player.PlayerId == e.PlayerId)
+                {
+                    player.IsReady = e.IsReady;
+                }
+            }
+
+            _version = e.Version;
+        }
+        else if (isNewerVersion)
+        {
+            ReloadSnapshot();
+        }
+    }
+
     private void OnConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
     {
         switch (e.State)
@@ -249,6 +289,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _gameServices.PlayerJoined -= OnPlayerJoined;
         _gameServices.PlayerLeft -= OnPlayerLeft;
         _gameServices.ConnectionStateChanged -= OnConnectionStateChanged;
+        _gameServices.PlayerReadyChanged -= HandlePlayerReadyChanged;
     }
 
     private async Task LeaveRoomAsync()
@@ -259,6 +300,25 @@ public sealed class RoomViewModel : ScreenViewModel
         {
             UnsubscribeFromGameServices();
             WindowService.Navigate(_previousScreen);
+        }
+    }
+
+    private async Task MarkReadyAsync()
+    {
+        IsBusy = true;
+
+        try
+        {
+            LobbyResultStatus result = await _gameServices.SetReadyAsync(true);
+
+            if (result != LobbyResultStatus.Success)
+            {
+                WindowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result)]);
+            }
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 }

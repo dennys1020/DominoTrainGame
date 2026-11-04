@@ -9,4 +9,6 @@ public interface ILobbyUseCases
     JoinLobbyStatus JoinLobby(LobbyMember member, string code, out LobbyState lobby);
 
     void LeaveLobby(int playerId);
+
+    bool TrySetReady(int playerId, bool isReady);
 }

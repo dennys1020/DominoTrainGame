@@ -1,4 +1,3 @@
-// Application/Connection/LobbyRoster.cs
 using System;
 using System.Collections.Generic;
 
@@ -11,6 +10,7 @@ public sealed class LobbyRoster
     private const int NoPlayers = 0;
     private const int HostIndex = 0;
     private const int NoHostPlayerId = 0;
+    private const bool InitialReadyState = false;
 
     static LobbyRoster()
     {
@@ -76,7 +76,7 @@ public sealed class LobbyRoster
         List<LobbyPlayerState> players = new List<LobbyPlayerState>(Players);
         bool isHost = players.Count == NoPlayers;
 
-        players.Add(new LobbyPlayerState(member.PlayerId, member.Username, isHost));
+        players.Add(new LobbyPlayerState(member, isHost, InitialReadyState));
 
         LobbyRoster roster = new LobbyRoster(Version + VersionStep, players);
         return roster;
@@ -91,12 +91,58 @@ public sealed class LobbyRoster
             if (player.PlayerId != playerId)
             {
                 bool isHost = players.Count == NoPlayers;
-                players.Add(new LobbyPlayerState(player.PlayerId, player.Username, isHost));
+                players.Add(player.WithHostState(isHost));
             }
         }
 
         LobbyRoster roster = new LobbyRoster(Version + VersionStep, players);
         return roster;
+    }
+
+    public LobbyRoster WithReadyState(int playerId, bool isReady)
+    {
+        List<LobbyPlayerState> players = new List<LobbyPlayerState>();
+
+        foreach (LobbyPlayerState player in Players)
+        {
+            LobbyPlayerState updatedPlayer = player.PlayerId == playerId
+                ? player.WithReadyState(isReady)
+                : player;
+
+            players.Add(updatedPlayer);
+        }
+
+        LobbyRoster roster = new LobbyRoster(Version + VersionStep, players);
+        return roster;
+    }
+
+    public bool TryFindPlayer(int playerId, out LobbyPlayerState player)
+    {
+        player = LobbyPlayerState.Empty;
+        bool wasFound = false;
+
+        foreach (LobbyPlayerState candidate in Players)
+        {
+            if (!wasFound && candidate.PlayerId == playerId)
+            {
+                player = candidate;
+                wasFound = true;
+            }
+        }
+
+        return wasFound;
+    }
+
+    public List<int> GetPlayerIds()
+    {
+        List<int> playerIds = new List<int>();
+
+        foreach (LobbyPlayerState player in Players)
+        {
+            playerIds.Add(player.PlayerId);
+        }
+
+        return playerIds;
     }
 
     public List<int> GetPlayerIdsExcept(int excludedPlayerId)

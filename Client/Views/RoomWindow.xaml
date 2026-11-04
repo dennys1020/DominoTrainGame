@@ -206,6 +206,15 @@
                                             Grid.Row="1"
                                             VerticalScrollBarVisibility="Auto"
                                             HorizontalScrollBarVisibility="Disabled">
+                                            <ScrollViewer.Style>
+                                                <Style TargetType="ScrollViewer">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                                            <Setter Property="IsEnabled" Value="False" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ScrollViewer.Style>
                                             <ItemsControl ItemsSource="{Binding Players}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
@@ -341,7 +350,9 @@
                                                                     <Button
                                                                         Content="{Binding [MarkReadyButtonLabel],
                                                                             Source={StaticResource Localization}}"
-                                                                        Visibility="Collapsed"
+                                                                        Command="{Binding DataContext.MarkReadyCommand,
+                                                                            RelativeSource={RelativeSource
+                                                                                AncestorType=Window}}"
                                                                         MinWidth="180"
                                                                         FontSize="9">
                                                                         <Button.Style>

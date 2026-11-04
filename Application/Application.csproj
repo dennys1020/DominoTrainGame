@@ -68,6 +68,7 @@
     <Compile Include="Connection\LobbyState.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
+    <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />

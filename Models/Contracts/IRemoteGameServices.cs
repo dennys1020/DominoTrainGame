@@ -15,11 +15,15 @@ public interface IRemoteGameServices
 
     Task<LobbyResultStatus> LeaveLobbyAsync();
 
+    Task<LobbyResultStatus> SetReadyAsync(bool isReady);
+
     event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
     event EventHandler<PlayerLeftEventArgs> PlayerLeft;
 
     event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged;
+
+    event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
 
     LobbyResult CurrentLobby { get; }
 

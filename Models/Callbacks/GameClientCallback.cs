@@ -20,6 +20,8 @@ public sealed class GameClientCallback : ILobbyServiceCallback
 
     public event EventHandler<PlayerLeftEventArgs> PlayerLeft;
 
+    public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
+
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
         if (message?.Player == null)
@@ -28,10 +30,11 @@ public sealed class GameClientCallback : ILobbyServiceCallback
         }
         else
         {
+            LobbyMember member = new LobbyMember(message.Player.PlayerId, message.Player.Username);
             LobbyPlayerResult player = new LobbyPlayerResult(
-                message.Player.PlayerId,
-                message.Player.Username,
-                message.Player.IsHost);
+                member,
+                message.Player.IsHost,
+                message.Player.IsReady);
             PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs(
                 player,
                 message.Version);
@@ -57,6 +60,23 @@ public sealed class GameClientCallback : ILobbyServiceCallback
         }
     }
 
+    public void ReceivePlayerReadyChanged(PlayerReadyChangedMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A ready state notice without content was ignored.");
+        }
+        else
+        {
+            PlayerReadyChangedEventArgs eventArgs = new PlayerReadyChangedEventArgs(
+                message.PlayerId,
+                message.IsReady,
+                message.Version);
+
+            OnPlayerReadyChanged(eventArgs);
+        }
+    }
+
     private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
     {
         PlayerJoined?.Invoke(this, eventArgs);
@@ -65,5 +85,10 @@ public sealed class GameClientCallback : ILobbyServiceCallback
     private void OnPlayerLeft(PlayerLeftEventArgs eventArgs)
     {
         PlayerLeft?.Invoke(this, eventArgs);
+    }
+
+    private void OnPlayerReadyChanged(PlayerReadyChangedEventArgs eventArgs)
+    {
+        PlayerReadyChanged?.Invoke(this, eventArgs);
     }
 }

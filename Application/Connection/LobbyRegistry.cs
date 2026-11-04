@@ -148,6 +148,40 @@ public sealed class LobbyRegistry
         return wasRemoved;
     }
 
+    public bool TrySetReady(int playerId, bool isReady, out LobbyState lobbyState)
+    {
+        lobbyState = LobbyState.Empty;
+        bool wasUpdated = false;
+        bool operationCompleted = false;
+
+        while (!operationCompleted)
+        {
+            RegistrySnapshot current = Volatile.Read(ref _snapshot);
+            bool wasFound = TryFindLobby(current, playerId, out LobbyState currentLobby);
+
+            if (!wasFound)
+            {
+                operationCompleted = true;
+            }
+            else
+            {
+                LobbyState updatedLobby = currentLobby.WithReadyState(playerId, isReady);
+                Dictionary<string, LobbyState> updatedLobbies = CopyLobbies(current);
+
+                updatedLobbies[currentLobby.Code] = updatedLobby;
+
+                if (TryReplaceSnapshot(current, updatedLobbies))
+                {
+                    lobbyState = updatedLobby;
+                    wasUpdated = true;
+                    operationCompleted = true;
+                }
+            }
+        }
+
+        return wasUpdated;
+    }
+
     private bool TryReplaceSnapshot(RegistrySnapshot current, Dictionary<string, LobbyState> updatedLobbies)
     {
         RegistrySnapshot updated = new RegistrySnapshot(updatedLobbies);

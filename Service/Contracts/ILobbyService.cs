@@ -23,4 +23,8 @@ public interface ILobbyService
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]
     void LeaveLobby();
+
+    [OperationContract(IsInitiating = false)]
+    [FaultContract(typeof(GameServiceFault))]
+    void SetReady(SetReadyRequest request);
 }

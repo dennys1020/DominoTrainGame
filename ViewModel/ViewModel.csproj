@@ -60,6 +60,7 @@
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />
     <Compile Include="Validation\LoginInputValidator.cs" />
+    <Compile Include="Localization\LobbyResultMessageKeys.cs" />
     <Compile Include="Localization\LocalizationViewModel.cs" />
     <Compile Include="DialogViewModel.cs" />
     <Compile Include="JoinGameViewModel.cs" />

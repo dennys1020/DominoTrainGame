@@ -40,6 +40,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged;
 
+    public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
+
     static RemoteGameServices()
     {
         _logger = TraceLogManager.GetLogger(typeof(RemoteGameServices));
@@ -229,6 +231,20 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return resultStatus;
     }
 
+    public async Task<LobbyResultStatus> SetReadyAsync(bool isReady)
+    {
+        LobbyResultStatus resultStatus = LobbyResultStatus.SessionNotFound;
+        LobbyServiceClient lobbyClient = GetLobbyClient();
+        bool hasSession = lobbyClient != null;
+
+        if (hasSession)
+        {
+            resultStatus = await SendSetReadyAsync(lobbyClient, isReady).ConfigureAwait(false);
+        }
+
+        return resultStatus;
+    }
+
     public async Task<SignUpResult> SignUpAsync(string username, string email, string password)
     {
         SignUpResult signUpResult = SignUpResult.ServerUnavailable;
@@ -387,6 +403,53 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return resultStatus;
     }
 
+    private async Task<LobbyResultStatus> SendSetReadyAsync(LobbyServiceClient lobbyClient, bool isReady)
+    {
+        LobbyResultStatus resultStatus = LobbyResultStatus.Success;
+
+        try
+        {
+            SetReadyRequest request = new SetReadyRequest
+            {
+                IsReady = isReady
+            };
+
+            await lobbyClient.SetReadyAsync(request).ConfigureAwait(false);
+        }
+        catch (FaultException<GameServiceFault> exception)
+        {
+            _logger.WarnFormat("The server rejected the ready state request. FaultCode: {0}.", exception.Detail.Code);
+            resultStatus = MapLobbyFault(exception.Detail.Code);
+        }
+        catch (FaultException exception)
+        {
+            _logger.Error("The server reported an undeclared fault while changing the ready state.", exception);
+            resultStatus = LobbyResultStatus.ServerError;
+        }
+        catch (TimeoutException exception)
+        {
+            _logger.Warn("The ready state request did not finish before the configured timeout.", exception);
+            resultStatus = LobbyResultStatus.ServerUnavailable;
+        }
+        catch (CommunicationException exception)
+        {
+            _logger.Warn("The ready state request failed because of a communication error.", exception);
+            resultStatus = LobbyResultStatus.ServerUnavailable;
+        }
+        catch (ObjectDisposedException exception)
+        {
+            _logger.Warn("The ready state request used a lobby channel that was already closed.", exception);
+            resultStatus = LobbyResultStatus.ServerUnavailable;
+        }
+        catch (InvalidOperationException exception)
+        {
+            _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
+            resultStatus = LobbyResultStatus.ServerError;
+        }
+
+        return resultStatus;
+    }
+
     private void ClearCurrentLobby()
     {
         lock (_sessionSyncRoot)
@@ -498,10 +561,9 @@ public sealed class RemoteGameServices : IRemoteGameServices
             {
                 if (player != null)
                 {
-                    players.Add(new LobbyPlayerResult(
-                        player.PlayerId,
-                        player.Username,
-                        player.IsHost));
+                    LobbyMember member = new LobbyMember(player.PlayerId, player.Username);
+
+                    players.Add(new LobbyPlayerResult(member, player.IsHost, player.IsReady));
 
                     if (player.IsHost)
                     {
@@ -602,6 +664,35 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
     }
 
+    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs e)
+    {
+        bool wasApplied;
+
+        lock (_sessionSyncRoot)
+        {
+            wasApplied = _currentLobby != null && e.Version > _currentLobby.Version;
+
+            if (_currentLobby == null)
+            {
+                _pendingLobbyUpdates.Add(lobby => ApplyReadyState(lobby, e));
+            }
+            else if (wasApplied)
+            {
+                _currentLobby = ApplyReadyState(_currentLobby, e);
+            }
+        }
+
+        if (wasApplied)
+        {
+            OnPlayerReadyChanged(e);
+        }
+    }
+
+    private void OnPlayerReadyChanged(PlayerReadyChangedEventArgs eventArgs)
+    {
+        PlayerReadyChanged?.Invoke(this, eventArgs);
+    }
+
     private static LobbyResult AddPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
     {
         LobbyResult updatedLobby = lobby;
@@ -657,7 +748,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
             if (player.PlayerId != eventArgs.PlayerId)
             {
                 bool isHost = player.PlayerId == eventArgs.HostPlayerId;
-                players.Add(new LobbyPlayerResult(player.PlayerId, player.Username, isHost));
+                players.Add(player.WithHostState(isHost));
             }
         }
 
@@ -671,11 +762,48 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return updatedLobby;
     }
 
+    private static LobbyResult ApplyReadyState(LobbyResult lobby, PlayerReadyChangedEventArgs eventArgs)
+    {
+        LobbyResult updatedLobby = lobby;
+        bool isNewerVersion = eventArgs.Version > lobby.Version;
+
+        if (isNewerVersion)
+        {
+            updatedLobby = CreateLobbyWithReadyState(lobby, eventArgs);
+        }
+
+        return updatedLobby;
+    }
+
+    private static LobbyResult CreateLobbyWithReadyState(LobbyResult lobby, PlayerReadyChangedEventArgs eventArgs)
+    {
+        List<LobbyPlayerResult> players = new List<LobbyPlayerResult>();
+
+        foreach (LobbyPlayerResult player in lobby.Players)
+        {
+            LobbyPlayerResult updatedPlayer = player.PlayerId == eventArgs.PlayerId
+                ? player.WithReadyState(eventArgs.IsReady)
+                : player;
+
+            players.Add(updatedPlayer);
+        }
+
+        LobbyResult updatedLobby = new LobbyResult(
+            LobbyResultStatus.Success,
+            lobby.Code,
+            lobby.MaximumPlayers,
+            eventArgs.Version,
+            lobby.HostPlayerId,
+            players);
+        return updatedLobby;
+    }
+
     private GameClientCallback CreateCallback()
     {
         GameClientCallback callback = new GameClientCallback();
         callback.PlayerJoined += OnPlayerJoined;
         callback.PlayerLeft += OnPlayerLeft;
+        callback.PlayerReadyChanged += HandlePlayerReadyChanged;
         return callback;
     }
 
