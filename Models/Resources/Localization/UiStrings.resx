@@ -562,4 +562,40 @@ en el tren</value>
   <data name="ChatMessagePlaceholder" xml:space="preserve">
     <value>Escribe aquí...</value>
   </data>
+  <data name="FriendRequestSentMessage" xml:space="preserve">
+    <value>Solicitud de amistad enviada.</value>
+  </data>
+  <data name="FriendUsernameRequiredMessage" xml:space="preserve">
+    <value>Escribe el nombre de usuario de tu amigo.</value>
+  </data>
+  <data name="FriendUsernameTooLongMessage" xml:space="preserve">
+    <value>El nombre de usuario no puede tener más de 45 caracteres.</value>
+  </data>
+  <data name="FriendInvalidInputMessage" xml:space="preserve">
+    <value>El nombre de usuario no es válido.</value>
+  </data>
+  <data name="FriendPlayerNotFoundMessage" xml:space="preserve">
+    <value>No existe un jugador registrado con ese nombre de usuario.</value>
+  </data>
+  <data name="FriendCannotTargetSelfMessage" xml:space="preserve">
+    <value>No puedes enviarte una solicitud de amistad a ti mismo.</value>
+  </data>
+  <data name="AlreadyFriendsMessage" xml:space="preserve">
+    <value>Ese jugador ya es tu amigo.</value>
+  </data>
+  <data name="FriendRequestAlreadyExistsMessage" xml:space="preserve">
+    <value>Ya hay una solicitud de amistad pendiente con ese jugador.</value>
+  </data>
+  <data name="FriendPlayerBlockedMessage" xml:space="preserve">
+    <value>No puedes enviar una solicitud de amistad a ese jugador.</value>
+  </data>
+  <data name="FriendRequestNotFoundMessage" xml:space="preserve">
+    <value>Esa solicitud de amistad ya no está disponible.</value>
+  </data>
+  <data name="NotFriendsMessage" xml:space="preserve">
+    <value>Ese jugador ya no está en tu lista de amigos.</value>
+  </data>
+  <data name="FriendServerErrorMessage" xml:space="preserve">
+    <value>No se pudo completar la acción. Inténtalo de nuevo.</value>
+  </data>
 </root>

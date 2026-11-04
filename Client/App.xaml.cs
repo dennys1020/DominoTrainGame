@@ -33,8 +33,13 @@ public sealed partial class App : Application
         IGameConnectionFactory connectionFactory = new GameConnectionFactory();
         GameChannelCloser channelCloser = new GameChannelCloser();
         IRemoteGameServices gameServices = new RemoteGameServices(connectionFactory, channelCloser);
+        ISocialConnectionFactory socialConnectionFactory = new SocialConnectionFactory();
+        IRemoteSocialServices socialServices = new RemoteSocialServices(
+            socialConnectionFactory,
+            channelCloser,
+            gameServices);
         LocalizationViewModel localization = LocalizationViewModel.Instance;
-        WindowFactory windowFactory = new WindowFactory(gameServices, localization);
+        WindowFactory windowFactory = new WindowFactory(gameServices, socialServices, localization);
 
         ShowLoginWindow(windowFactory);
         StartConnectionCheck(gameServices);

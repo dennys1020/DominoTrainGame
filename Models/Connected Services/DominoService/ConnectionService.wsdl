@@ -87,6 +87,35 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
+  <wsp:Policy wsu:Id="NetTcpBinding_IFriendService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
   <wsdl:types>
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import schemaLocation="http://localhost:8080/?xsd=xsd0" namespace="http://tempuri.org/" />
@@ -187,6 +216,78 @@
   <wsdl:message name="ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveLobbyMessage" />
   </wsdl:message>
+  <wsdl:message name="IFriendService_ConnectFriends_InputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectFriends" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_ConnectFriends_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectFriendsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_ConnectFriends_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://dominotraingame/services" name="detail" element="q10:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriends" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFriendsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetFriends_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://dominotraingame/services" name="detail" element="q11:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetPendingRequests_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPendingRequests" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetPendingRequests_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPendingRequestsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_GetPendingRequests_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://dominotraingame/services" name="detail" element="q12:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SearchPlayers_InputMessage">
+    <wsdl:part name="parameters" element="tns:SearchPlayers" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SearchPlayers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SearchPlayersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SearchPlayers_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://dominotraingame/services" name="detail" element="q13:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SendFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SendFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_SendFriendRequest_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q14="http://dominotraingame/services" name="detail" element="q14:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_AcceptFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:AcceptFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_AcceptFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AcceptFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_AcceptFriendRequest_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://dominotraingame/services" name="detail" element="q15:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RejectFriendRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:RejectFriendRequest" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RejectFriendRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RejectFriendRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RejectFriendRequest_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q16="http://dominotraingame/services" name="detail" element="q16:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_InputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriend" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RemoveFriendResponse" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_RemoveFriend_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q17="http://dominotraingame/services" name="detail" element="q17:GameServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IConnectionService">
     <wsdl:operation name="CheckConnection">
       <wsdl:input wsaw:Action="http://tempuri.org/IConnectionService/CheckConnection" message="tns:IConnectionService_CheckConnection_InputMessage" />
@@ -248,6 +349,48 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLobbyMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" message="tns:ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType msc:usingSession="true" name="IFriendService">
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConnectFriends">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/ConnectFriends" message="tns:IFriendService_ConnectFriends_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/ConnectFriendsResponse" message="tns:IFriendService_ConnectFriends_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/ConnectFriendsGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_ConnectFriends_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="GetFriends">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetFriendsResponse" message="tns:IFriendService_GetFriends_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetFriendsGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_GetFriends_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="GetPendingRequests">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetPendingRequests" message="tns:IFriendService_GetPendingRequests_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/GetPendingRequestsResponse" message="tns:IFriendService_GetPendingRequests_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/GetPendingRequestsGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_GetPendingRequests_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SearchPlayers">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SearchPlayers" message="tns:IFriendService_SearchPlayers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/SearchPlayersResponse" message="tns:IFriendService_SearchPlayers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/SearchPlayersGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_SearchPlayers_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SendFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequest" message="tns:IFriendService_SendFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequestResponse" message="tns:IFriendService_SendFriendRequest_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/SendFriendRequestGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_SendFriendRequest_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="AcceptFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/AcceptFriendRequest" message="tns:IFriendService_AcceptFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/AcceptFriendRequestResponse" message="tns:IFriendService_AcceptFriendRequest_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/AcceptFriendRequestGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_AcceptFriendRequest_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="RejectFriendRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/RejectFriendRequest" message="tns:IFriendService_RejectFriendRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/RejectFriendRequestResponse" message="tns:IFriendService_RejectFriendRequest_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/RejectFriendRequestGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_RejectFriendRequest_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="RemoveFriend">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/RemoveFriend" message="tns:IFriendService_RemoveFriend_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/RemoveFriendResponse" message="tns:IFriendService_RemoveFriend_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/RemoveFriendGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_RemoveFriend_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IConnectionService" type="tns:IConnectionService">
@@ -394,13 +537,113 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
+  <wsdl:binding name="NetTcpBinding_IFriendService" type="tns:IFriendService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IFriendService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="ConnectFriends">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/ConnectFriends" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetFriends">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/GetFriends" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetPendingRequests">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/GetPendingRequests" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SearchPlayers">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/SearchPlayers" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SendFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/SendFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="AcceptFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/AcceptFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RejectFriendRequest">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/RejectFriendRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="RemoveFriend">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/RemoveFriend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
   <wsdl:service name="GameService">
     <wsdl:port name="NetTcpBinding_IConnectionService" binding="tns:NetTcpBinding_IConnectionService">
       <soap12:address location="net.tcp://localhost:8090/ConnectionService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/ConnectionService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -409,7 +652,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/AuthenticationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -418,7 +661,16 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/LobbyService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetTcpBinding_IFriendService" binding="tns:NetTcpBinding_IFriendService">
+      <soap12:address location="net.tcp://localhost:8090/FriendService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8090/FriendService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

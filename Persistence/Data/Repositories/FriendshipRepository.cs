@@ -15,6 +15,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
     private const int AcceptedStatusId = 2;
     private const int RejectedStatusId = 3;
     private const int BlockedStatusId = 4;
+    private const int MaximumSearchResults = 10;
 
     private readonly DatabaseExecutor _databaseExecutor;
 
@@ -46,6 +47,14 @@ public sealed class FriendshipRepository : IFriendshipRepository
         List<FriendRequestSummary> friendRequests = _databaseExecutor.Execute(
             context => FindPendingRequests(context, playerId));
         return friendRequests;
+    }
+
+    public IReadOnlyList<FriendSummary> SearchRegisteredPlayers(int playerId, string usernameFragment)
+    {
+        string normalizedFragment = usernameFragment ?? string.Empty;
+        List<FriendSummary> players = _databaseExecutor.Execute(
+            context => FindPlayersByUsername(context, playerId, normalizedFragment));
+        return players;
     }
 
     public FriendshipState GetFriendshipState(int playerId, int friendPlayerId)
@@ -98,6 +107,24 @@ public sealed class FriendshipRepository : IFriendshipRepository
             .Select(player => player.PlayerId)
             .ToList();
         return playerIds;
+    }
+
+    private static List<FriendSummary> FindPlayersByUsername(
+        DominoGameDBEntities context,
+        int playerId,
+        string usernameFragment)
+    {
+        List<FriendSummary> players = context.Players
+            .AsNoTracking()
+            .Where(player => player.IsGuest == RegisteredPlayerFlag && player.PlayerId != playerId)
+            .Where(player => player.Username.Contains(usernameFragment))
+            .OrderBy(player => player.Username)
+            .Take(MaximumSearchResults)
+            .Select(player => new { player.PlayerId, player.Username })
+            .AsEnumerable()
+            .Select(row => new FriendSummary(row.PlayerId, row.Username))
+            .ToList();
+        return players;
     }
 
     private static List<FriendSummary> FindFriends(DominoGameDBEntities context, int playerId)

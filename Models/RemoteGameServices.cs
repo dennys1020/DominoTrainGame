@@ -103,6 +103,21 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
     }
 
+    public string SessionToken
+    {
+        get
+        {
+            string sessionToken;
+
+            lock (_sessionSyncRoot)
+            {
+                sessionToken = _sessionToken;
+            }
+
+            return sessionToken;
+        }
+    }
+
     public async Task<ConnectionCheckResult> CheckConnectionAsync()
     {
         ConnectionCheckResult connectionResult = await SendServiceRequestAsync(

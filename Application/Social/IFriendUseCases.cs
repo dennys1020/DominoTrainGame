@@ -10,6 +10,8 @@ public interface IFriendUseCases
 
     IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId);
 
+    IReadOnlyList<FriendSummary> SearchPlayers(int playerId, string usernameFragment);
+
     SendFriendRequestStatus SendFriendRequest(int requesterPlayerId, string addresseeUsername);
 
     bool AcceptFriendRequest(int playerId, int requestId);

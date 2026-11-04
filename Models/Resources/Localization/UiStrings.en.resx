@@ -562,4 +562,40 @@ on the train</value>
   <data name="ChatMessagePlaceholder" xml:space="preserve">
     <value>Type here...</value>
   </data>
+  <data name="FriendRequestSentMessage" xml:space="preserve">
+    <value>Friend request sent.</value>
+  </data>
+  <data name="FriendUsernameRequiredMessage" xml:space="preserve">
+    <value>Enter your friend's username.</value>
+  </data>
+  <data name="FriendUsernameTooLongMessage" xml:space="preserve">
+    <value>The username cannot be longer than 45 characters.</value>
+  </data>
+  <data name="FriendInvalidInputMessage" xml:space="preserve">
+    <value>The username is not valid.</value>
+  </data>
+  <data name="FriendPlayerNotFoundMessage" xml:space="preserve">
+    <value>There is no registered player with that username.</value>
+  </data>
+  <data name="FriendCannotTargetSelfMessage" xml:space="preserve">
+    <value>You cannot send a friend request to yourself.</value>
+  </data>
+  <data name="AlreadyFriendsMessage" xml:space="preserve">
+    <value>That player is already your friend.</value>
+  </data>
+  <data name="FriendRequestAlreadyExistsMessage" xml:space="preserve">
+    <value>There is already a pending friend request with that player.</value>
+  </data>
+  <data name="FriendPlayerBlockedMessage" xml:space="preserve">
+    <value>You cannot send a friend request to that player.</value>
+  </data>
+  <data name="FriendRequestNotFoundMessage" xml:space="preserve">
+    <value>That friend request is no longer available.</value>
+  </data>
+  <data name="NotFriendsMessage" xml:space="preserve">
+    <value>That player is no longer in your friends list.</value>
+  </data>
+  <data name="FriendServerErrorMessage" xml:space="preserve">
+    <value>The action could not be completed. Please try again.</value>
+  </data>
 </root>

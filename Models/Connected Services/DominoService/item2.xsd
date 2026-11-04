@@ -17,6 +17,13 @@
       <xs:enumeration value="AlreadyConnected" />
       <xs:enumeration value="InvalidLobbyRequest" />
       <xs:enumeration value="InvalidSessionToken" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="CannotTargetSelf" />
+      <xs:enumeration value="AlreadyFriends" />
+      <xs:enumeration value="FriendRequestAlreadyExists" />
+      <xs:enumeration value="PlayerBlocked" />
+      <xs:enumeration value="FriendRequestNotFound" />
+      <xs:enumeration value="NotFriends" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -124,4 +131,62 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LobbyChatMessage" nillable="true" type="tns:LobbyChatMessage" />
+  <xs:complexType name="ArrayOfFriendResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendResponse" nillable="true" type="tns:FriendResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFriendResponse" nillable="true" type="tns:ArrayOfFriendResponse" />
+  <xs:complexType name="FriendResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendResponse" nillable="true" type="tns:FriendResponse" />
+  <xs:complexType name="ArrayOfPendingFriendRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPendingFriendRequestResponse" nillable="true" type="tns:ArrayOfPendingFriendRequestResponse" />
+  <xs:complexType name="PendingFriendRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="xs:int" />
+      <xs:element minOccurs="0" name="RequestedAt" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RequesterUsername" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+  <xs:complexType name="PlayerSearchRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="UsernameFragment" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerSearchRequest" nillable="true" type="tns:PlayerSearchRequest" />
+  <xs:complexType name="ArrayOfPlayerSearchResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PlayerSearchResponse" nillable="true" type="tns:PlayerSearchResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPlayerSearchResponse" nillable="true" type="tns:ArrayOfPlayerSearchResponse" />
+  <xs:complexType name="PlayerSearchResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerSearchResponse" nillable="true" type="tns:PlayerSearchResponse" />
+  <xs:complexType name="FriendUsernameRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendUsernameRequest" nillable="true" type="tns:FriendUsernameRequest" />
+  <xs:complexType name="FriendshipDecisionRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendshipDecisionRequest" nillable="true" type="tns:FriendshipDecisionRequest" />
 </xs:schema>

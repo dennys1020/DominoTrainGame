@@ -1,0 +1,344 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceModel;
+using System.Threading.Tasks;
+using log4net.Ext.Trace;
+using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Client.Models.DominoService;
+using DominoTrainGame.Client.Models.Networking;
+
+namespace DominoTrainGame.Client.Models;
+
+public sealed class RemoteSocialServices : IRemoteSocialServices
+{
+    private static readonly ITraceLog _logger;
+    private static readonly IReadOnlyDictionary<GameServiceFaultCode, FriendResultStatus> _statusesByFaultCode;
+
+    private readonly ISocialConnectionFactory _connectionFactory;
+    private readonly GameChannelCloser _channelCloser;
+    private readonly IRemoteGameServices _gameServices;
+    private readonly object _clientSyncRoot;
+    private FriendServiceClient _friendClient;
+    private string _connectedSessionToken;
+
+    static RemoteSocialServices()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(RemoteSocialServices));
+        _statusesByFaultCode = new Dictionary<GameServiceFaultCode, FriendResultStatus>
+        {
+            [GameServiceFaultCode.InvalidInput] = FriendResultStatus.InvalidInput,
+            [GameServiceFaultCode.DatabaseUnavailable] = FriendResultStatus.DatabaseUnavailable,
+            [GameServiceFaultCode.SessionNotFound] = FriendResultStatus.SessionNotFound,
+            [GameServiceFaultCode.InvalidSessionToken] = FriendResultStatus.SessionNotFound,
+            [GameServiceFaultCode.PlayerNotFound] = FriendResultStatus.PlayerNotFound,
+            [GameServiceFaultCode.CannotTargetSelf] = FriendResultStatus.CannotTargetSelf,
+            [GameServiceFaultCode.AlreadyFriends] = FriendResultStatus.AlreadyFriends,
+            [GameServiceFaultCode.FriendRequestAlreadyExists] = FriendResultStatus.RequestAlreadyExists,
+            [GameServiceFaultCode.PlayerBlocked] = FriendResultStatus.PlayerBlocked,
+            [GameServiceFaultCode.FriendRequestNotFound] = FriendResultStatus.RequestNotFound,
+            [GameServiceFaultCode.NotFriends] = FriendResultStatus.NotFriends
+        };
+    }
+
+    public RemoteSocialServices(
+        ISocialConnectionFactory connectionFactory,
+        GameChannelCloser channelCloser,
+        IRemoteGameServices gameServices)
+    {
+        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+        _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _clientSyncRoot = new object();
+        _connectedSessionToken = string.Empty;
+    }
+
+    public async Task<FriendListResult> GetFriendsAsync()
+    {
+        FriendListResult result = await InvokeFriendServiceAsync(
+            RequestFriendsAsync,
+            CreateFailedFriendList).ConfigureAwait(false);
+        return result;
+    }
+
+    public async Task<FriendRequestListResult> GetPendingRequestsAsync()
+    {
+        FriendRequestListResult result = await InvokeFriendServiceAsync(
+            RequestPendingRequestsAsync,
+            CreateFailedRequestList).ConfigureAwait(false);
+        return result;
+    }
+
+    public async Task<PlayerSearchResult> SearchPlayersAsync(string usernameFragment)
+    {
+        PlayerSearchRequest request = new PlayerSearchRequest
+        {
+            UsernameFragment = usernameFragment
+        };
+        PlayerSearchResult result = await InvokeFriendServiceAsync(
+            friendClient => RequestPlayerSearchAsync(friendClient, request),
+            CreateFailedPlayerSearch).ConfigureAwait(false);
+        return result;
+    }
+
+    public async Task<FriendResultStatus> SendFriendRequestAsync(string username)
+    {
+        FriendUsernameRequest request = new FriendUsernameRequest
+        {
+            Username = username
+        };
+        FriendResultStatus status = await InvokeFriendServiceAsync(
+            friendClient => CompleteFriendCommandAsync(friendClient.SendFriendRequestAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return status;
+    }
+
+    public async Task<FriendResultStatus> AcceptFriendRequestAsync(int requestId)
+    {
+        FriendshipDecisionRequest request = new FriendshipDecisionRequest
+        {
+            RequestId = requestId
+        };
+        FriendResultStatus status = await InvokeFriendServiceAsync(
+            friendClient => CompleteFriendCommandAsync(friendClient.AcceptFriendRequestAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return status;
+    }
+
+    public async Task<FriendResultStatus> RejectFriendRequestAsync(int requestId)
+    {
+        FriendshipDecisionRequest request = new FriendshipDecisionRequest
+        {
+            RequestId = requestId
+        };
+        FriendResultStatus status = await InvokeFriendServiceAsync(
+            friendClient => CompleteFriendCommandAsync(friendClient.RejectFriendRequestAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return status;
+    }
+
+    public async Task<FriendResultStatus> RemoveFriendAsync(string username)
+    {
+        FriendUsernameRequest request = new FriendUsernameRequest
+        {
+            Username = username
+        };
+        FriendResultStatus status = await InvokeFriendServiceAsync(
+            friendClient => CompleteFriendCommandAsync(friendClient.RemoveFriendAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return status;
+    }
+
+    private static async Task<FriendListResult> RequestFriendsAsync(FriendServiceClient friendClient)
+    {
+        IEnumerable<FriendResponse> responses = await friendClient.GetFriendsAsync().ConfigureAwait(false);
+        List<FriendResult> friends = (responses ?? Enumerable.Empty<FriendResponse>())
+            .Select(response => new FriendResult(response.PlayerId, response.Username))
+            .ToList();
+        FriendListResult result = new FriendListResult(FriendResultStatus.Success, friends);
+
+        return result;
+    }
+
+    private static async Task<FriendRequestListResult> RequestPendingRequestsAsync(FriendServiceClient friendClient)
+    {
+        IEnumerable<PendingFriendRequestResponse> responses =
+            await friendClient.GetPendingRequestsAsync().ConfigureAwait(false);
+        List<FriendRequestResult> requests = (responses ?? Enumerable.Empty<PendingFriendRequestResponse>())
+            .Select(ToFriendRequestResult)
+            .ToList();
+        FriendRequestListResult result = new FriendRequestListResult(FriendResultStatus.Success, requests);
+
+        return result;
+    }
+
+    private static async Task<PlayerSearchResult> RequestPlayerSearchAsync(
+        FriendServiceClient friendClient,
+        PlayerSearchRequest request)
+    {
+        IEnumerable<PlayerSearchResponse> responses =
+            await friendClient.SearchPlayersAsync(request).ConfigureAwait(false);
+        List<FoundPlayerResult> players = (responses ?? Enumerable.Empty<PlayerSearchResponse>())
+            .Select(response => new FoundPlayerResult(response.PlayerId, response.Username))
+            .ToList();
+        PlayerSearchResult result = new PlayerSearchResult(FriendResultStatus.Success, players);
+
+        return result;
+    }
+
+    private static FriendRequestResult ToFriendRequestResult(PendingFriendRequestResponse response)
+    {
+        FriendRequestResult request = new FriendRequestResult(
+            response.RequestId,
+            response.RequesterUsername,
+            response.RequestedAt);
+        return request;
+    }
+
+    private static async Task<FriendResultStatus> CompleteFriendCommandAsync(Task command)
+    {
+        await command.ConfigureAwait(false);
+        FriendResultStatus status = FriendResultStatus.Success;
+        return status;
+    }
+
+    private static FriendResultStatus KeepStatus(FriendResultStatus status)
+    {
+        return status;
+    }
+
+    private static FriendListResult CreateFailedFriendList(FriendResultStatus status)
+    {
+        FriendListResult result = new FriendListResult(status, new List<FriendResult>());
+        return result;
+    }
+
+    private static FriendRequestListResult CreateFailedRequestList(FriendResultStatus status)
+    {
+        FriendRequestListResult result = new FriendRequestListResult(status, new List<FriendRequestResult>());
+        return result;
+    }
+
+    private static PlayerSearchResult CreateFailedPlayerSearch(FriendResultStatus status)
+    {
+        PlayerSearchResult result = new PlayerSearchResult(status, new List<FoundPlayerResult>());
+        return result;
+    }
+
+    private static FriendResultStatus MapFault(GameServiceFaultCode faultCode)
+    {
+        bool isKnownFault = _statusesByFaultCode.TryGetValue(faultCode, out FriendResultStatus knownStatus);
+        FriendResultStatus status = isKnownFault ? knownStatus : FriendResultStatus.ServerError;
+        return status;
+    }
+
+    private async Task<TResult> InvokeFriendServiceAsync<TResult>(
+        Func<FriendServiceClient, Task<TResult>> call,
+        Func<FriendResultStatus, TResult> createFailure)
+    {
+        TResult result;
+
+        try
+        {
+            FriendServiceClient friendClient = await GetConnectedClientAsync().ConfigureAwait(false);
+            result = await call(friendClient).ConfigureAwait(false);
+        }
+        catch (FaultException<GameServiceFault> exception)
+        {
+            _logger.WarnFormat("The server rejected a friends request. FaultCode: {0}.", exception.Detail.Code);
+            result = createFailure(MapFault(exception.Detail.Code));
+        }
+        catch (FaultException exception)
+        {
+            _logger.Error("The server reported an undeclared fault while processing a friends request.", exception);
+            result = createFailure(FriendResultStatus.ServerError);
+        }
+        catch (TimeoutException exception)
+        {
+            _logger.Warn("A friends request did not finish before the configured timeout.", exception);
+            DiscardCurrentClient();
+            result = createFailure(FriendResultStatus.ServerUnavailable);
+        }
+        catch (CommunicationException exception)
+        {
+            _logger.Warn("A friends request failed because of a communication error.", exception);
+            DiscardCurrentClient();
+            result = createFailure(FriendResultStatus.ServerUnavailable);
+        }
+        catch (ObjectDisposedException exception)
+        {
+            _logger.Warn("A friends request used a channel that was already closed.", exception);
+            DiscardCurrentClient();
+            result = createFailure(FriendResultStatus.ServerUnavailable);
+        }
+        catch (InvalidOperationException exception)
+        {
+            _logger.Error("The friends endpoint is missing or invalid in App.config.", exception);
+            result = createFailure(FriendResultStatus.ServerError);
+        }
+
+        return result;
+    }
+
+    private async Task<FriendServiceClient> GetConnectedClientAsync()
+    {
+        string sessionToken = _gameServices.SessionToken;
+        FriendServiceClient friendClient;
+        bool isReusable;
+
+        lock (_clientSyncRoot)
+        {
+            friendClient = _friendClient;
+            isReusable = friendClient?.State == CommunicationState.Opened
+                && string.Equals(_connectedSessionToken, sessionToken, StringComparison.Ordinal);
+        }
+
+        if (!isReusable)
+        {
+            friendClient = await OpenFriendClientAsync(sessionToken).ConfigureAwait(false);
+        }
+
+        return friendClient;
+    }
+
+    private async Task<FriendServiceClient> OpenFriendClientAsync(string sessionToken)
+    {
+        FriendServiceClient friendClient = _connectionFactory.CreateFriendClient();
+        bool isConnected = false;
+
+        try
+        {
+            ConnectRequest request = new ConnectRequest
+            {
+                SessionToken = sessionToken
+            };
+
+            await friendClient.ConnectFriendsAsync(request).ConfigureAwait(false);
+            ReplaceCurrentClient(friendClient, sessionToken);
+            isConnected = true;
+        }
+        finally
+        {
+            if (!isConnected)
+            {
+                _channelCloser.Close(friendClient);
+            }
+        }
+
+        return friendClient;
+    }
+
+    private void ReplaceCurrentClient(FriendServiceClient friendClient, string sessionToken)
+    {
+        FriendServiceClient previousClient;
+
+        lock (_clientSyncRoot)
+        {
+            previousClient = _friendClient;
+            _friendClient = friendClient;
+            _connectedSessionToken = sessionToken;
+        }
+
+        if (previousClient != null)
+        {
+            _channelCloser.Close(previousClient);
+        }
+    }
+
+    private void DiscardCurrentClient()
+    {
+        FriendServiceClient discardedClient;
+
+        lock (_clientSyncRoot)
+        {
+            discardedClient = _friendClient;
+            _friendClient = null;
+            _connectedSessionToken = string.Empty;
+        }
+
+        if (discardedClient != null)
+        {
+            _channelCloser.Close(discardedClient);
+        }
+    }
+}

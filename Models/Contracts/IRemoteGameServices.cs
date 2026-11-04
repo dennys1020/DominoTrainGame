@@ -33,5 +33,7 @@ public interface IRemoteGameServices
 
     int CurrentPlayerId { get; }
 
+    string SessionToken { get; }
+
     Task<SignUpResult> SignUpAsync(string username, string email, string password);
 }

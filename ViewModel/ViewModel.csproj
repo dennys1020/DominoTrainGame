@@ -88,5 +88,14 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FriendItemViewModel.cs" />
+    <Compile Include="FriendRequestItemViewModel.cs" />
+    <Compile Include="FriendsViewModel.cs" />
+    <Compile Include="PlayerSearchItemViewModel.cs" />
+    <Compile Include="Localization\FriendResultMessageKeys.cs" />
+    <Compile Include="Validation\FriendUsernameInputStatus.cs" />
+    <Compile Include="Validation\FriendUsernameInputValidator.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
