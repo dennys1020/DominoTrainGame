@@ -30,5 +30,26 @@ public enum GameServiceFaultCode
     InvalidLobbyRequest,
 
     [EnumMember]
-    InvalidSessionToken
+    InvalidSessionToken,
+
+    [EnumMember]
+    PlayerNotFound,
+
+    [EnumMember]
+    CannotTargetSelf,
+
+    [EnumMember]
+    AlreadyFriends,
+
+    [EnumMember]
+    FriendRequestAlreadyExists,
+
+    [EnumMember]
+    PlayerBlocked,
+
+    [EnumMember]
+    FriendRequestNotFound,
+
+    [EnumMember]
+    NotFriends
 }

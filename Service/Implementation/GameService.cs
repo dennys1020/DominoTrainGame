@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Connection;
@@ -9,13 +10,14 @@ using DominoTrainGame.Server.Service.DTO;
 namespace DominoTrainGame.Server.Service.Implementation;
 
 [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
-public sealed class GameService : IConnectionService, IAuthenticationService, ILobbyService
+public sealed class GameService : IConnectionService, IAuthenticationService, ILobbyService, IFriendService
 {
     private static readonly ITraceLog _logger;
 
     private readonly IConnectionUseCases _connectionUseCases;
     private readonly AuthenticationController _authenticationController;
     private readonly LobbyController _lobbyController;
+    private readonly FriendController _friendController;
 
     static GameService()
     {
@@ -25,12 +27,18 @@ public sealed class GameService : IConnectionService, IAuthenticationService, IL
     public GameService(
         IConnectionUseCases connectionUseCases,
         AuthenticationController authenticationController,
-        LobbyController lobbyController)
+        SessionController sessionController)
     {
+        if (sessionController == null)
+        {
+            throw new ArgumentNullException(nameof(sessionController));
+        }
+
         _connectionUseCases = connectionUseCases ?? throw new ArgumentNullException(nameof(connectionUseCases));
         _authenticationController = authenticationController
             ?? throw new ArgumentNullException(nameof(authenticationController));
-        _lobbyController = lobbyController ?? throw new ArgumentNullException(nameof(lobbyController));
+        _lobbyController = sessionController.LobbyController;
+        _friendController = sessionController.FriendController;
     }
 
     public void CheckConnection()
@@ -88,5 +96,48 @@ public sealed class GameService : IConnectionService, IAuthenticationService, IL
     public void SendLobbyMessage(SendLobbyMessageRequest request)
     {
         _lobbyController.SendLobbyMessage(request);
+    }
+
+    public void ConnectFriends(ConnectRequest request)
+    {
+        _friendController.Connect(request);
+    }
+
+    public List<FriendResponse> GetFriends()
+    {
+        List<FriendResponse> response = _friendController.GetFriends();
+        return response;
+    }
+
+    public List<PendingFriendRequestResponse> GetPendingRequests()
+    {
+        List<PendingFriendRequestResponse> response = _friendController.GetPendingRequests();
+        return response;
+    }
+
+    public List<PlayerSearchResponse> SearchPlayers(PlayerSearchRequest request)
+    {
+        List<PlayerSearchResponse> response = _friendController.SearchPlayers(request);
+        return response;
+    }
+
+    public void SendFriendRequest(FriendUsernameRequest request)
+    {
+        _friendController.SendFriendRequest(request);
+    }
+
+    public void AcceptFriendRequest(FriendshipDecisionRequest request)
+    {
+        _friendController.AcceptFriendRequest(request);
+    }
+
+    public void RejectFriendRequest(FriendshipDecisionRequest request)
+    {
+        _friendController.RejectFriendRequest(request);
+    }
+
+    public void RemoveFriend(FriendUsernameRequest request)
+    {
+        _friendController.RemoveFriend(request);
     }
 }
