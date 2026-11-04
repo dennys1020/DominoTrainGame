@@ -99,6 +99,7 @@
     <Compile Include="Data\EntityFramework\sysdiagram.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Data\Repositories\FriendshipRepository.cs" />
     <Compile Include="Data\SqlServerConfiguration.cs" />
     <Compile Include="Data\EntityFramework\Account.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
