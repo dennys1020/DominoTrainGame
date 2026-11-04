@@ -13,4 +13,7 @@ public sealed class LobbyPlayer
 
     [DataMember]
     public bool IsHost { get; set; }
+
+    [DataMember(IsRequired = false)]
+    public bool IsReady { get; set; }
 }

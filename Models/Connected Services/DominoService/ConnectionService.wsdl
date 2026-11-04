@@ -157,11 +157,23 @@
   <wsdl:message name="ILobbyService_LeaveLobby_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q7="http://dominotraingame/services" name="detail" element="q7:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_SetReady_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetReady" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SetReady_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetReadyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SetReady_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://dominotraingame/services" name="detail" element="q8:GameServiceFault" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerJoined" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerLeft_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerLeft" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceivePlayerReadyChanged" />
   </wsdl:message>
   <wsdl:portType name="IConnectionService">
     <wsdl:operation name="CheckConnection">
@@ -203,11 +215,19 @@
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/LeaveLobbyResponse" message="tns:ILobbyService_LeaveLobby_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/LeaveLobbyGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_LeaveLobby_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SetReady">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SetReady" message="tns:ILobbyService_SetReady_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SetReadyResponse" message="tns:ILobbyService_SetReady_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SetReadyGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SetReady_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerJoined">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" message="tns:ILobbyService_ReceivePlayerJoined_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerLeft">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerLeft" message="tns:ILobbyService_ReceivePlayerLeft_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerReadyChanged">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" message="tns:ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IConnectionService" type="tns:IConnectionService">
@@ -305,6 +325,18 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="SetReady">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/SetReady" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="ReceivePlayerJoined">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" style="document" />
       <wsdl:output>
@@ -317,6 +349,12 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="ReceivePlayerReadyChanged">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GameService">
     <wsdl:port name="NetTcpBinding_IConnectionService" binding="tns:NetTcpBinding_IConnectionService">
@@ -324,7 +362,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/ConnectionService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -333,7 +371,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/AuthenticationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -342,7 +380,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/LobbyService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>DENNYS\dom99</Upn>
+          <Upn>SAM\sam10</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

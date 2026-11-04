@@ -44,6 +44,13 @@ public sealed class LobbyState
         return lobby;
     }
 
+    public LobbyState WithReadyState(int playerId, bool isReady)
+    {
+        LobbyRoster roster = Roster.WithReadyState(playerId, isReady);
+        LobbyState lobby = new LobbyState(Code, MaximumPlayers, roster);
+        return lobby;
+    }
+
     public LobbyState WithoutPlayer(int playerId)
     {
         LobbyState lobby = new LobbyState(Code, MaximumPlayers, Roster.WithoutPlayer(playerId));

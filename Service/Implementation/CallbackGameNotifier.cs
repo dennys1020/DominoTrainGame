@@ -82,6 +82,33 @@ public sealed class CallbackGameNotifier : IGameNotifier
         }
     }
 
+    public void NotifyPlayerReadyChanged(PlayerReadyChangedNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        PlayerReadyChangedMessage message = new PlayerReadyChangedMessage
+        {
+            Version = notice.Version,
+            PlayerId = notice.Player.PlayerId,
+            IsReady = notice.Player.IsReady
+        };
+
+        foreach (int recipientPlayerId in notice.RecipientPlayerIds)
+        {
+            bool hasCallback = _connectedPlayers.TryGetCallback(
+                recipientPlayerId,
+                out IGameClientCallback callback);
+
+            if (hasCallback)
+            {
+                TrySendPlayerReadyChanged(callback, message);
+            }
+        }
+    }
+
     private static void TrySendPlayerJoined(
         IGameClientCallback callback,
         PlayerJoinedMessage message)
@@ -122,6 +149,34 @@ public sealed class CallbackGameNotifier : IGameNotifier
         {
             _logger.Warn(
                 "A player did not receive the leave notice because of a communication error.",
+                exception);
+        }
+    }
+
+    private static void TrySendPlayerReadyChanged(
+        IGameClientCallback callback,
+        PlayerReadyChangedMessage message)
+    {
+        try
+        {
+            callback.ReceivePlayerReadyChanged(message);
+        }
+        catch (TimeoutException exception)
+        {
+            _logger.Warn(
+                "A player did not receive the ready state notice before the timeout.",
+                exception);
+        }
+        catch (CommunicationException exception)
+        {
+            _logger.Warn(
+                "A player did not receive the ready state notice because of a communication error.",
+                exception);
+        }
+        catch (ObjectDisposedException exception)
+        {
+            _logger.Warn(
+                "A player did not receive the ready state notice because the channel was already closed.",
                 exception);
         }
     }

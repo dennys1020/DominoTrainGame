@@ -70,6 +70,8 @@
     <Compile Include="DTO\LoginResponse.cs" />
     <Compile Include="DTO\PlayerJoinedMessage.cs" />
     <Compile Include="DTO\PlayerLeftMessage.cs" />
+    <Compile Include="DTO\PlayerReadyChangedMessage.cs" />
+    <Compile Include="DTO\SetReadyRequest.cs" />
     <Compile Include="DTO\SignUpRequest.cs" />
     <Compile Include="Implementation\AuthenticationController.cs" />
     <Compile Include="Implementation\CallbackGameNotifier.cs" />

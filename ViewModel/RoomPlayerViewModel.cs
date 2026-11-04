@@ -7,6 +7,7 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class RoomPlayerViewModel : ObservableViewModel
 {
     private bool _isHost;
+    private bool _isReady;
 
     public RoomPlayerViewModel(LobbyPlayerResult player, int currentPlayerId)
     {
@@ -18,6 +19,7 @@ public sealed class RoomPlayerViewModel : ObservableViewModel
         PlayerId = player.PlayerId;
         Username = player.Username;
         _isHost = player.IsHost;
+        _isReady = player.IsReady;
         IsCurrentPlayer = player.PlayerId == currentPlayerId;
     }
 
@@ -27,7 +29,17 @@ public sealed class RoomPlayerViewModel : ObservableViewModel
 
     public bool IsCurrentPlayer { get; }
 
-    public bool IsReady => false;
+    public bool IsReady
+    {
+        get
+        {
+            return _isReady;
+        }
+        set
+        {
+            SetProperty(ref _isReady, value);
+        }
+    }
 
     public bool IsHost
     {

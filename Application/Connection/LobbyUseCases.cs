@@ -70,6 +70,24 @@ public sealed class LobbyUseCases : ILobbyUseCases
         }
     }
 
+    public bool TrySetReady(int playerId, bool isReady)
+    {
+        bool wasUpdated = _lobbyRegistry.TrySetReady(playerId, isReady, out LobbyState lobby);
+
+        if (wasUpdated)
+        {
+            NotifyPlayerReadyChanged(playerId, lobby);
+        }
+        else
+        {
+            _logger.WarnFormat(
+                "A ready state change was rejected because the player is not in a lobby. PlayerId: {0}.",
+                playerId);
+        }
+
+        return wasUpdated;
+    }
+
     private void NotifyPlayerJoined(LobbyMember member, LobbyState lobby)
     {
         List<int> recipientPlayerIds = lobby.Roster.GetPlayerIdsExcept(member.PlayerId);
@@ -87,6 +105,26 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
         _logger.InfoFormat("A player left a lobby. PlayerId: {0}.", playerId);
         _gameNotifier.NotifyPlayerLeft(notice);
+    }
+
+    private void NotifyPlayerReadyChanged(int playerId, LobbyState lobby)
+    {
+        LobbyRoster roster = lobby.Roster;
+        bool wasFound = roster.TryFindPlayer(playerId, out LobbyPlayerState player);
+
+        if (wasFound)
+        {
+            PlayerReadyChangedNotice notice = new PlayerReadyChangedNotice(
+                roster.GetPlayerIds(),
+                player,
+                roster.Version);
+
+            _logger.InfoFormat(
+                "A player changed the ready state. PlayerId: {0}. IsReady: {1}.",
+                playerId,
+                player.IsReady);
+            _gameNotifier.NotifyPlayerReadyChanged(notice);
+        }
     }
 
     private void ValidateCode(string code)
