@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DominoTrainGame.Server.Application.Connection;
 
@@ -35,6 +36,8 @@ public sealed class LobbyRoster
     public IReadOnlyList<LobbyPlayerState> Players { get; }
 
     public int Count => Players.Count;
+
+    public bool AreAllPlayersReady => Players.All(player => player.IsReady);
 
     public int HostPlayerId
     {

@@ -9,4 +9,6 @@ public interface IGameNotifier
     void NotifyPlayerReadyChanged(PlayerReadyChangedNotice notice);
 
     void NotifyLobbyMessage(LobbyMessageNotice notice);
+
+    void NotifyMatchStarting(MatchStartingNotice notice);
 }

@@ -13,4 +13,6 @@ public interface ILobbyUseCases
     bool TrySetReady(int playerId, bool isReady);
 
     bool TrySendMessage(int playerId, string text);
+
+    StartMatchStatus StartMatch(int playerId);
 }

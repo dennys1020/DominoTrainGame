@@ -6,6 +6,7 @@ public sealed class LobbyState
 {
     private const int EmptyMaximumPlayers = 0;
     private const int NoPlayers = 0;
+    private const int MinimumPlayers = 2;
 
     static LobbyState()
     {
@@ -30,6 +31,8 @@ public sealed class LobbyState
     public bool IsFull => Roster.Count >= MaximumPlayers;
 
     public bool IsEmpty => Roster.Count == NoPlayers;
+
+    public bool HasMinimumPlayers => Roster.Count >= MinimumPlayers;
 
     public static LobbyState CreateWithHost(string code, int maximumPlayers, LobbyMember host)
     {

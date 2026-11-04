@@ -99,6 +99,21 @@ public sealed class CallbackGameNotifier : IGameNotifier
         Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveLobbyMessage(message));
     }
 
+    public void NotifyMatchStarting(MatchStartingNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        MatchStartingMessage message = new MatchStartingMessage
+        {
+            Code = notice.Code
+        };
+
+        Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveMatchStarting(message));
+    }
+
     private void Broadcast(IReadOnlyList<int> recipientPlayerIds, Action<IGameClientCallback> send)
     {
         foreach (int recipientPlayerId in recipientPlayerIds)
