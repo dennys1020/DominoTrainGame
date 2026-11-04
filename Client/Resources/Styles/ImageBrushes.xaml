@@ -32,6 +32,18 @@
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
+    <DrawingBrush x:Key="ChatSendBrush" Stretch="Uniform">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="Transparent" Geometry="M0,0 H20 V16 H0 Z" />
+                <GeometryDrawing
+                    Brush="{StaticResource Ink}"
+                    Geometry="M1,1 H5 V3 H1 Z M1,3 H9 V5 H1 Z M3,5 H13 V7 H3 Z M5,7 H19 V9 H5 Z M3,9 H13 V11 H3 Z
+                        M1,11 H9 V13 H1 Z M1,13 H5 V15 H1 Z" />
+                <GeometryDrawing Brush="{StaticResource Aqua}" Geometry="M5,7 H13 V9 H5 Z" />
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
     <DrawingBrush x:Key="MatchDominoBrush" Stretch="Uniform">
         <DrawingBrush.Drawing>
             <DrawingGroup>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +19,6 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private const int ReconnectDelaySeconds = 2;
 
     private static readonly ITraceLog _logger;
-    private static readonly int _processId;
     private static readonly TimeSpan _reconnectDelay;
 
     private readonly IGameConnectionFactory _connectionFactory;
@@ -29,10 +27,23 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private readonly List<Func<LobbyResult, LobbyResult>> _pendingLobbyUpdates =
         new List<Func<LobbyResult, LobbyResult>>();
     private LobbyServiceClient _lobbyClient;
-    private LobbyResult _currentLobby;
+    private LobbyResult _currentLobby = LobbyResult.Empty;
+    private Task _reconnection = Task.CompletedTask;
     private int _currentPlayerId;
     private string _sessionToken = string.Empty;
-    private SynchronizationContext _synchronizationContext;
+    private SynchronizationContext _synchronizationContext = new SynchronizationContext();
+
+    static RemoteGameServices()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(RemoteGameServices));
+        _reconnectDelay = TimeSpan.FromSeconds(ReconnectDelaySeconds);
+    }
+
+    public RemoteGameServices(IGameConnectionFactory connectionFactory, GameChannelCloser channelCloser)
+    {
+        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
+        _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
+    }
 
     public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
@@ -42,18 +53,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
 
-    static RemoteGameServices()
-    {
-        _logger = TraceLogManager.GetLogger(typeof(RemoteGameServices));
-        _processId = Process.GetCurrentProcess().Id;
-        _reconnectDelay = TimeSpan.FromSeconds(ReconnectDelaySeconds);
-    }
-
-    public RemoteGameServices(IGameConnectionFactory connectionFactory, GameChannelCloser channelCloser)
-    {
-        _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-        _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
-    }
+    public event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 
     public LobbyResult CurrentLobby
     {
@@ -128,7 +128,6 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
         try
         {
-            // The await keeps the caller context so the duplex channel is opened from the UI thread.
             LoginResponse response = await SendLogInAsync(identifier, password);
             bool isAuthenticated = response?.IsAuthenticated ?? false;
 
@@ -190,58 +189,51 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public async Task<LobbyResult> CreateLobbyAsync()
     {
-        LobbyResult result = CreateEmptyLobbyResult(LobbyResultStatus.SessionNotFound);
-        LobbyServiceClient lobbyClient = GetLobbyClient();
-        bool hasSession = lobbyClient != null;
-
-        if (hasSession)
-        {
-            result = await SendCreateLobbyAsync(lobbyClient).ConfigureAwait(false);
-        }
-
+        LobbyResult result = await InvokeLobbyServiceAsync(
+            lobbyClient => StoreLobbyResponseAsync(lobbyClient.CreateLobbyAsync()),
+            CreateEmptyLobbyResult).ConfigureAwait(false);
         return result;
     }
 
     public async Task<LobbyResult> JoinLobbyAsync(string code)
     {
-        LobbyResult result = CreateEmptyLobbyResult(LobbyResultStatus.SessionNotFound);
-        LobbyServiceClient lobbyClient = GetLobbyClient();
-        bool hasSession = lobbyClient != null;
-
-        if (hasSession)
-        {
-            result = await SendJoinLobbyAsync(lobbyClient, code).ConfigureAwait(false);
-        }
-
+        LobbyResult result = await InvokeLobbyServiceAsync(
+            lobbyClient => RequestJoinLobbyAsync(lobbyClient, code),
+            CreateEmptyLobbyResult).ConfigureAwait(false);
         return result;
     }
 
     public async Task<LobbyResultStatus> LeaveLobbyAsync()
     {
-        LobbyResultStatus resultStatus = LobbyResultStatus.SessionNotFound;
-        LobbyServiceClient lobbyClient = GetLobbyClient();
-        bool hasSession = lobbyClient != null;
+        LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
+            lobbyClient => CompleteLobbyCommandAsync(lobbyClient.LeaveLobbyAsync()),
+            KeepStatus).ConfigureAwait(false);
 
-        if (hasSession)
-        {
-            resultStatus = await SendLeaveLobbyAsync(lobbyClient).ConfigureAwait(false);
-            ClearCurrentLobby();
-        }
-
+        ClearCurrentLobby();
         return resultStatus;
     }
 
     public async Task<LobbyResultStatus> SetReadyAsync(bool isReady)
     {
-        LobbyResultStatus resultStatus = LobbyResultStatus.SessionNotFound;
-        LobbyServiceClient lobbyClient = GetLobbyClient();
-        bool hasSession = lobbyClient != null;
-
-        if (hasSession)
+        SetReadyRequest request = new SetReadyRequest
         {
-            resultStatus = await SendSetReadyAsync(lobbyClient, isReady).ConfigureAwait(false);
-        }
+            IsReady = isReady
+        };
+        LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
+            lobbyClient => CompleteLobbyCommandAsync(lobbyClient.SetReadyAsync(request)),
+            KeepStatus).ConfigureAwait(false);
+        return resultStatus;
+    }
 
+    public async Task<LobbyResultStatus> SendLobbyMessageAsync(string text)
+    {
+        SendLobbyMessageRequest request = new SendLobbyMessageRequest
+        {
+            Text = text
+        };
+        LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
+            lobbyClient => CompleteLobbyCommandAsync(lobbyClient.SendLobbyMessageAsync(request)),
+            KeepStatus).ConfigureAwait(false);
         return resultStatus;
     }
 
@@ -279,174 +271,121 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return signUpResult;
     }
 
-    private async Task<LobbyResult> SendCreateLobbyAsync(LobbyServiceClient lobbyClient)
+    private async Task<TResult> InvokeLobbyServiceAsync<TResult>(
+        Func<LobbyServiceClient, Task<TResult>> call,
+        Func<LobbyResultStatus, TResult> createFailure)
     {
-        LobbyResult result;
+        Task reconnection;
 
-        try
+        lock (_sessionSyncRoot)
         {
-            LobbyResponse response = await lobbyClient.CreateLobbyAsync().ConfigureAwait(false);
-            result = MapLobbyResponse(response);
+            reconnection = _reconnection;
+        }
 
-            if (result.Status == LobbyResultStatus.Success)
-            {
-                result = SetCurrentLobby(result);
-            }
-        }
-        catch (FaultException<GameServiceFault> exception)
+        await reconnection.ConfigureAwait(false);
+        TResult result = await CallCurrentLobbyClientAsync(call, createFailure).ConfigureAwait(false);
+        return result;
+    }
+
+    private async Task<TResult> CallCurrentLobbyClientAsync<TResult>(
+        Func<LobbyServiceClient, Task<TResult>> call,
+        Func<LobbyResultStatus, TResult> createFailure)
+    {
+        TResult result = createFailure(LobbyResultStatus.SessionNotFound);
+        LobbyServiceClient lobbyClient;
+
+        lock (_sessionSyncRoot)
         {
-            result = CreateLobbyFaultResult(exception.Detail.Code);
+            lobbyClient = _lobbyClient;
         }
-        catch (FaultException exception)
+
+        bool hasSession = lobbyClient?.State == CommunicationState.Opened;
+
+        if (hasSession)
         {
-            _logger.Error("The server reported an undeclared fault while creating the lobby.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("The lobby could not be created before the configured timeout.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("The lobby could not be created because of a communication error.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
+            result = await CallLobbyServiceAsync(lobbyClient, call, createFailure).ConfigureAwait(false);
         }
 
         return result;
     }
 
-    private async Task<LobbyResult> SendJoinLobbyAsync(LobbyServiceClient lobbyClient, string code)
+    private static async Task<TResult> CallLobbyServiceAsync<TResult>(
+        LobbyServiceClient lobbyClient,
+        Func<LobbyServiceClient, Task<TResult>> call,
+        Func<LobbyResultStatus, TResult> createFailure)
     {
-        LobbyResult result;
+        TResult result;
 
         try
         {
-            JoinLobbyRequest request = new JoinLobbyRequest
-            {
-                Code = code
-            };
-            LobbyResponse response = await lobbyClient.JoinLobbyAsync(request).ConfigureAwait(false);
-            result = MapLobbyResponse(response);
-
-            if (result.Status == LobbyResultStatus.Success)
-            {
-                result = SetCurrentLobby(result);
-            }
+            result = await call(lobbyClient).ConfigureAwait(false);
         }
         catch (FaultException<GameServiceFault> exception)
         {
-            result = CreateLobbyFaultResult(exception.Detail.Code);
+            _logger.WarnFormat("The server rejected a lobby request. FaultCode: {0}.", exception.Detail.Code);
+            result = createFailure(MapLobbyFault(exception.Detail.Code));
         }
         catch (FaultException exception)
         {
-            _logger.Error("The server reported an undeclared fault while joining the lobby.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
+            _logger.Error("The server reported an undeclared fault while processing a lobby request.", exception);
+            result = createFailure(LobbyResultStatus.ServerError);
         }
         catch (TimeoutException exception)
         {
-            _logger.Warn("The lobby join request did not finish before the configured timeout.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerUnavailable);
+            _logger.Warn("A lobby request did not finish before the configured timeout.", exception);
+            result = createFailure(LobbyResultStatus.ServerUnavailable);
         }
         catch (CommunicationException exception)
         {
-            _logger.Warn("The lobby join request failed because of a communication error.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
-        }
-
-        return result;
-    }
-
-    private async Task<LobbyResultStatus> SendLeaveLobbyAsync(LobbyServiceClient lobbyClient)
-    {
-        LobbyResultStatus resultStatus = LobbyResultStatus.Success;
-
-        try
-        {
-            await lobbyClient.LeaveLobbyAsync().ConfigureAwait(false);
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            resultStatus = MapLobbyFault(exception.Detail.Code);
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error("The server reported an undeclared fault while leaving the lobby.", exception);
-            resultStatus = LobbyResultStatus.ServerError;
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("The lobby leave request did not finish before the configured timeout.", exception);
-            resultStatus = LobbyResultStatus.ServerUnavailable;
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("The lobby leave request failed because of a communication error.", exception);
-            resultStatus = LobbyResultStatus.ServerUnavailable;
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
-            resultStatus = LobbyResultStatus.ServerError;
-        }
-
-        return resultStatus;
-    }
-
-    private async Task<LobbyResultStatus> SendSetReadyAsync(LobbyServiceClient lobbyClient, bool isReady)
-    {
-        LobbyResultStatus resultStatus = LobbyResultStatus.Success;
-
-        try
-        {
-            SetReadyRequest request = new SetReadyRequest
-            {
-                IsReady = isReady
-            };
-
-            await lobbyClient.SetReadyAsync(request).ConfigureAwait(false);
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            _logger.WarnFormat("The server rejected the ready state request. FaultCode: {0}.", exception.Detail.Code);
-            resultStatus = MapLobbyFault(exception.Detail.Code);
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error("The server reported an undeclared fault while changing the ready state.", exception);
-            resultStatus = LobbyResultStatus.ServerError;
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("The ready state request did not finish before the configured timeout.", exception);
-            resultStatus = LobbyResultStatus.ServerUnavailable;
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("The ready state request failed because of a communication error.", exception);
-            resultStatus = LobbyResultStatus.ServerUnavailable;
+            _logger.Warn("A lobby request failed because of a communication error.", exception);
+            result = createFailure(LobbyResultStatus.ServerUnavailable);
         }
         catch (ObjectDisposedException exception)
         {
-            _logger.Warn("The ready state request used a lobby channel that was already closed.", exception);
-            resultStatus = LobbyResultStatus.ServerUnavailable;
+            _logger.Warn("A lobby request used a lobby channel that was already closed.", exception);
+            result = createFailure(LobbyResultStatus.ServerUnavailable);
         }
         catch (InvalidOperationException exception)
         {
             _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
-            resultStatus = LobbyResultStatus.ServerError;
+            result = createFailure(LobbyResultStatus.ServerError);
         }
 
+        return result;
+    }
+
+    private Task<LobbyResult> RequestJoinLobbyAsync(LobbyServiceClient lobbyClient, string code)
+    {
+        JoinLobbyRequest request = new JoinLobbyRequest
+        {
+            Code = code
+        };
+        Task<LobbyResult> joinTask = StoreLobbyResponseAsync(lobbyClient.JoinLobbyAsync(request));
+        return joinTask;
+    }
+
+    private async Task<LobbyResult> StoreLobbyResponseAsync(Task<LobbyResponse> responseTask)
+    {
+        LobbyResponse response = await responseTask.ConfigureAwait(false);
+        LobbyResult result = MapLobbyResponse(response);
+
+        if (result.Status == LobbyResultStatus.Success)
+        {
+            result = SetCurrentLobby(result);
+        }
+
+        return result;
+    }
+
+    private static async Task<LobbyResultStatus> CompleteLobbyCommandAsync(Task command)
+    {
+        await command.ConfigureAwait(false);
+        LobbyResultStatus resultStatus = LobbyResultStatus.Success;
+        return resultStatus;
+    }
+
+    private static LobbyResultStatus KeepStatus(LobbyResultStatus resultStatus)
+    {
         return resultStatus;
     }
 
@@ -454,7 +393,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         lock (_sessionSyncRoot)
         {
-            _currentLobby = null;
+            _currentLobby = LobbyResult.Empty;
             _pendingLobbyUpdates.Clear();
         }
     }
@@ -508,6 +447,9 @@ public sealed class RemoteGameServices : IRemoteGameServices
             case GameServiceFaultCode.InvalidLobbyRequest:
                 resultStatus = LobbyResultStatus.InvalidCode;
                 break;
+            case GameServiceFaultCode.InvalidInput:
+                resultStatus = LobbyResultStatus.InvalidInput;
+                break;
             case GameServiceFaultCode.LobbyNotFound:
                 resultStatus = LobbyResultStatus.LobbyNotFound;
                 break;
@@ -532,56 +474,48 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return resultStatus;
     }
 
-    private static LobbyResult CreateLobbyFaultResult(GameServiceFaultCode faultCode)
-    {
-        LobbyResultStatus status = MapLobbyFault(faultCode);
-        return CreateEmptyLobbyResult(status);
-    }
-
     private static LobbyResult CreateEmptyLobbyResult(LobbyResultStatus status)
     {
-        LobbyResult result = new LobbyResult(status, string.Empty, 0, 0, 0, Array.Empty<LobbyPlayerResult>());
+        LobbyResult result = new LobbyResult(status, LobbySettings.Empty, LobbyRoster.Empty);
         return result;
     }
 
     private static LobbyResult MapLobbyResponse(LobbyResponse response)
     {
-        LobbyResult result;
+        LobbyResult result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
 
-        if (response == null)
+        if (response != null)
         {
-            result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
-        }
-        else
-        {
-            List<LobbyPlayerResult> players = new List<LobbyPlayerResult>();
-            int hostPlayerId = NoHostPlayerId;
-
-            foreach (LobbyPlayer player in response.Players ?? Array.Empty<LobbyPlayer>())
-            {
-                if (player != null)
-                {
-                    LobbyMember member = new LobbyMember(player.PlayerId, player.Username);
-
-                    players.Add(new LobbyPlayerResult(member, player.IsHost, player.IsReady));
-
-                    if (player.IsHost)
-                    {
-                        hostPlayerId = player.PlayerId;
-                    }
-                }
-            }
-
-            result = new LobbyResult(
-                LobbyResultStatus.Success,
-                response.Code,
-                response.MaximumPlayers,
-                response.Version,
-                hostPlayerId,
-                players);
+            LobbySettings settings = new LobbySettings(response.Code, response.MaximumPlayers);
+            result = new LobbyResult(LobbyResultStatus.Success, settings, MapLobbyRoster(response));
         }
 
         return result;
+    }
+
+    private static LobbyRoster MapLobbyRoster(LobbyResponse response)
+    {
+        List<LobbyPlayerResult> players = new List<LobbyPlayerResult>();
+        int hostPlayerId = NoHostPlayerId;
+
+        foreach (LobbyPlayer player in response.Players ?? Array.Empty<LobbyPlayer>())
+        {
+            if (player != null)
+            {
+                players.Add(MapLobbyPlayer(player));
+                hostPlayerId = player.IsHost ? player.PlayerId : hostPlayerId;
+            }
+        }
+
+        LobbyRoster roster = new LobbyRoster(response.Version, hostPlayerId, players);
+        return roster;
+    }
+
+    private static LobbyPlayerResult MapLobbyPlayer(LobbyPlayer player)
+    {
+        LobbyMember member = new LobbyMember(player.PlayerId, player.Username);
+        LobbyPlayerResult lobbyPlayer = new LobbyPlayerResult(member, player.IsHost, player.IsReady);
+        return lobbyPlayer;
     }
 
     private LobbyResult SetCurrentLobby(LobbyResult lobby)
@@ -604,83 +538,29 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return currentLobby;
     }
 
-    private LobbyServiceClient GetLobbyClient()
+    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs e)
     {
-        LobbyServiceClient lobbyClient;
-
-        lock (_sessionSyncRoot)
-        {
-            lobbyClient = _lobbyClient;
-        }
-
-        return lobbyClient;
-    }
-
-    private void OnPlayerJoined(object sender, PlayerJoinedEventArgs eventArgs)
-    {
-        bool wasApplied;
-
-        lock (_sessionSyncRoot)
-        {
-            wasApplied = _currentLobby != null && eventArgs.Version > _currentLobby.Version;
-
-            if (_currentLobby == null)
-            {
-                _pendingLobbyUpdates.Add(lobby => AddPlayer(lobby, eventArgs));
-            }
-            else if (wasApplied)
-            {
-                _currentLobby = AddPlayer(_currentLobby, eventArgs);
-            }
-        }
+        bool wasApplied = TryApplyLobbyUpdate(e.Version, lobby => CreateLobbyWithPlayer(lobby, e));
 
         if (wasApplied)
         {
-            PlayerJoined?.Invoke(this, eventArgs);
+            OnPlayerJoined(e);
         }
     }
 
-    private void OnPlayerLeft(object sender, PlayerLeftEventArgs eventArgs)
+    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs e)
     {
-        bool wasApplied;
-
-        lock (_sessionSyncRoot)
-        {
-            wasApplied = _currentLobby != null && eventArgs.Version > _currentLobby.Version;
-
-            if (_currentLobby == null)
-            {
-                _pendingLobbyUpdates.Add(lobby => RemovePlayer(lobby, eventArgs));
-            }
-            else if (wasApplied)
-            {
-                _currentLobby = RemovePlayer(_currentLobby, eventArgs);
-            }
-        }
+        bool wasApplied = TryApplyLobbyUpdate(e.Version, lobby => CreateLobbyWithoutPlayer(lobby, e));
 
         if (wasApplied)
         {
-            PlayerLeft?.Invoke(this, eventArgs);
+            OnPlayerLeft(e);
         }
     }
 
     private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs e)
     {
-        bool wasApplied;
-
-        lock (_sessionSyncRoot)
-        {
-            wasApplied = _currentLobby != null && e.Version > _currentLobby.Version;
-
-            if (_currentLobby == null)
-            {
-                _pendingLobbyUpdates.Add(lobby => ApplyReadyState(lobby, e));
-            }
-            else if (wasApplied)
-            {
-                _currentLobby = ApplyReadyState(_currentLobby, e);
-            }
-        }
+        bool wasApplied = TryApplyLobbyUpdate(e.Version, lobby => CreateLobbyWithReadyState(lobby, e));
 
         if (wasApplied)
         {
@@ -688,22 +568,64 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
     }
 
+    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs e)
+    {
+        OnLobbyMessageReceived(e);
+    }
+
+    private bool TryApplyLobbyUpdate(long version, Func<LobbyResult, LobbyResult> update)
+    {
+        bool wasApplied;
+
+        lock (_sessionSyncRoot)
+        {
+            bool hasLobby = _currentLobby.Status == LobbyResultStatus.Success;
+            wasApplied = hasLobby && version > _currentLobby.Version;
+
+            if (!hasLobby)
+            {
+                _pendingLobbyUpdates.Add(lobby => ApplyIfNewer(lobby, version, update));
+            }
+            else if (wasApplied)
+            {
+                _currentLobby = update(_currentLobby);
+            }
+        }
+
+        return wasApplied;
+    }
+
+    private static LobbyResult ApplyIfNewer(LobbyResult lobby, long version, Func<LobbyResult, LobbyResult> update)
+    {
+        LobbyResult updatedLobby = lobby;
+        bool isNewerVersion = version > lobby.Version;
+
+        if (isNewerVersion)
+        {
+            updatedLobby = update(lobby);
+        }
+
+        return updatedLobby;
+    }
+
+    private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
+    {
+        PlayerJoined?.Invoke(this, eventArgs);
+    }
+
+    private void OnPlayerLeft(PlayerLeftEventArgs eventArgs)
+    {
+        PlayerLeft?.Invoke(this, eventArgs);
+    }
+
     private void OnPlayerReadyChanged(PlayerReadyChangedEventArgs eventArgs)
     {
         PlayerReadyChanged?.Invoke(this, eventArgs);
     }
 
-    private static LobbyResult AddPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
+    private void OnLobbyMessageReceived(LobbyMessageReceivedEventArgs eventArgs)
     {
-        LobbyResult updatedLobby = lobby;
-        bool isNewerVersion = eventArgs.Version > lobby.Version;
-
-        if (isNewerVersion)
-        {
-            updatedLobby = CreateLobbyWithPlayer(lobby, eventArgs);
-        }
-
-        return updatedLobby;
+        LobbyMessageReceived?.Invoke(this, eventArgs);
     }
 
     private static LobbyResult CreateLobbyWithPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
@@ -716,26 +638,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
             players.Add(eventArgs.Player);
         }
 
-        LobbyResult updatedLobby = new LobbyResult(
-            LobbyResultStatus.Success,
-            lobby.Code,
-            lobby.MaximumPlayers,
-            eventArgs.Version,
-            lobby.HostPlayerId,
-            players);
-        return updatedLobby;
-    }
-
-    private static LobbyResult RemovePlayer(LobbyResult lobby, PlayerLeftEventArgs eventArgs)
-    {
-        LobbyResult updatedLobby = lobby;
-        bool isNewerVersion = eventArgs.Version > lobby.Version;
-
-        if (isNewerVersion)
-        {
-            updatedLobby = CreateLobbyWithoutPlayer(lobby, eventArgs);
-        }
-
+        LobbyRoster roster = new LobbyRoster(eventArgs.Version, lobby.HostPlayerId, players);
+        LobbyResult updatedLobby = lobby.WithRoster(roster);
         return updatedLobby;
     }
 
@@ -752,26 +656,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
             }
         }
 
-        LobbyResult updatedLobby = new LobbyResult(
-            LobbyResultStatus.Success,
-            lobby.Code,
-            lobby.MaximumPlayers,
-            eventArgs.Version,
-            eventArgs.HostPlayerId,
-            players);
-        return updatedLobby;
-    }
-
-    private static LobbyResult ApplyReadyState(LobbyResult lobby, PlayerReadyChangedEventArgs eventArgs)
-    {
-        LobbyResult updatedLobby = lobby;
-        bool isNewerVersion = eventArgs.Version > lobby.Version;
-
-        if (isNewerVersion)
-        {
-            updatedLobby = CreateLobbyWithReadyState(lobby, eventArgs);
-        }
-
+        LobbyRoster roster = new LobbyRoster(eventArgs.Version, eventArgs.HostPlayerId, players);
+        LobbyResult updatedLobby = lobby.WithRoster(roster);
         return updatedLobby;
     }
 
@@ -788,22 +674,18 @@ public sealed class RemoteGameServices : IRemoteGameServices
             players.Add(updatedPlayer);
         }
 
-        LobbyResult updatedLobby = new LobbyResult(
-            LobbyResultStatus.Success,
-            lobby.Code,
-            lobby.MaximumPlayers,
-            eventArgs.Version,
-            lobby.HostPlayerId,
-            players);
+        LobbyRoster roster = new LobbyRoster(eventArgs.Version, lobby.HostPlayerId, players);
+        LobbyResult updatedLobby = lobby.WithRoster(roster);
         return updatedLobby;
     }
 
     private GameClientCallback CreateCallback()
     {
         GameClientCallback callback = new GameClientCallback();
-        callback.PlayerJoined += OnPlayerJoined;
-        callback.PlayerLeft += OnPlayerLeft;
+        callback.PlayerJoined += HandlePlayerJoined;
+        callback.PlayerLeft += HandlePlayerLeft;
         callback.PlayerReadyChanged += HandlePlayerReadyChanged;
+        callback.LobbyMessageReceived += HandleLobbyMessageReceived;
         return callback;
     }
 
@@ -811,7 +693,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         lock (_sessionSyncRoot)
         {
-            _synchronizationContext = callerContext;
+            _synchronizationContext = callerContext ?? _synchronizationContext;
             _currentPlayerId = response.PlayerId;
             _sessionToken = response.SessionToken ?? string.Empty;
         }
@@ -846,8 +728,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         ICommunicationObject channel = lobbyClient;
 
-        channel.Faulted += (sender, e) => OnLobbyChannelStateChanged(lobbyClient, e, "Faulted");
-        channel.Closed += (sender, e) => OnLobbyChannelStateChanged(lobbyClient, e, "Closed");
+        channel.Faulted += (sender, e) => RecoverLobbyChannel(lobbyClient);
+        channel.Closed += (sender, e) => RecoverLobbyChannel(lobbyClient);
 
         lock (_sessionSyncRoot)
         {
@@ -855,31 +737,23 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
     }
 
-    private void OnLobbyChannelStateChanged(object sender, EventArgs eventArgs, string channelEvent)
+    private void RecoverLobbyChannel(LobbyServiceClient endedClient)
     {
         bool isCurrentChannel;
         bool canReconnect = false;
         string lobbyCode = string.Empty;
 
-        // Logged before clearing the state so PlayerId is still available.
-        _logger.WarnFormat(
-            "Lobby channel event: {0}. Process: {1}. PlayerId: {2}. Stack: {3}",
-            channelEvent,
-            _processId,
-            CurrentPlayerId,
-            Environment.StackTrace);
-
         lock (_sessionSyncRoot)
         {
-            isCurrentChannel = ReferenceEquals(sender, _lobbyClient);
+            isCurrentChannel = ReferenceEquals(endedClient, _lobbyClient);
 
             if (isCurrentChannel)
             {
                 canReconnect = !string.IsNullOrEmpty(_sessionToken);
-                lobbyCode = _currentLobby?.Code ?? string.Empty;
+                lobbyCode = _currentLobby.Code;
 
                 _lobbyClient = null;
-                _currentLobby = null;
+                _currentLobby = LobbyResult.Empty;
                 _pendingLobbyUpdates.Clear();
 
                 if (!canReconnect)
@@ -909,24 +783,18 @@ public sealed class RemoteGameServices : IRemoteGameServices
             context = _synchronizationContext;
         }
 
-        // The new duplex channel must be created from the UI thread so its callbacks arrive there.
-        if (context == null)
-        {
-            StartReconnection(lobbyCode);
-        }
-        else
-        {
-            context.Post(StartReconnection, lobbyCode);
-        }
+        context.Post(StartReconnection, lobbyCode);
     }
 
     private void StartReconnection(object state)
     {
-        string lobbyCode = state as string ?? string.Empty;
+        string lobbyCode = state?.ToString() ?? string.Empty;
+        Task reconnection = ReconnectAsync(lobbyCode);
 
-        // The channel events are synchronous, so nobody can await this task; ReconnectAsync handles
-        // every expected failure itself and reports the outcome through ConnectionStateChanged.
-        _ = ReconnectAsync(lobbyCode);
+        lock (_sessionSyncRoot)
+        {
+            _reconnection = reconnection;
+        }
     }
 
     private async Task ReconnectAsync(string lobbyCode)
@@ -936,7 +804,6 @@ public sealed class RemoteGameServices : IRemoteGameServices
         ReconnectResult reconnectResult = ReconnectResult.Unavailable;
         int attemptCount = 0;
 
-        // The awaits keep the UI context so every attempt creates its channel on the UI thread.
         while (reconnectResult == ReconnectResult.Unavailable && attemptCount < MaximumReconnectAttempts)
         {
             attemptCount++;
@@ -964,7 +831,9 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
         if (wasInLobby)
         {
-            LobbyResult rejoinResult = await JoinLobbyAsync(lobbyCode);
+            LobbyResult rejoinResult = await CallCurrentLobbyClientAsync(
+                lobbyClient => RequestJoinLobbyAsync(lobbyClient, lobbyCode),
+                CreateEmptyLobbyResult);
             _logger.InfoFormat("The lobby was rejoined after reconnecting. Status: {0}.", rejoinResult.Status);
         }
     }

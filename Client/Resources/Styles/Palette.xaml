@@ -18,6 +18,8 @@
     <SolidColorBrush x:Key="NightText" Color="#E5F6F0" />
     <SolidColorBrush x:Key="NightMuted" Color="#8AAFA4" />
     <SolidColorBrush x:Key="NightInput" Color="#0B1613" />
+    <SolidColorBrush x:Key="ChatPanelBackground" Color="#173D35" Opacity="0.72" />
+    <SolidColorBrush x:Key="ChatInputBackground" Color="#0B1613" Opacity="0.35" />
     <SolidColorBrush x:Key="NightShadow" Color="#030706" />
     <SolidColorBrush x:Key="SceneCloud" Color="#24564A" />
     <SolidColorBrush x:Key="SceneSkyline" Color="#184038" />

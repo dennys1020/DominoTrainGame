@@ -22,6 +22,8 @@ public sealed class GameClientCallback : ILobbyServiceCallback
 
     public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
 
+    public event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
+
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
         if (message?.Player == null)
@@ -77,6 +79,21 @@ public sealed class GameClientCallback : ILobbyServiceCallback
         }
     }
 
+    public void ReceiveLobbyMessage(LobbyChatMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A lobby message notice without content was ignored.");
+        }
+        else
+        {
+            LobbyMember sender = new LobbyMember(message.PlayerId, message.Username);
+            LobbyMessageReceivedEventArgs eventArgs = new LobbyMessageReceivedEventArgs(sender, message.Text);
+
+            OnLobbyMessageReceived(eventArgs);
+        }
+    }
+
     private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
     {
         PlayerJoined?.Invoke(this, eventArgs);
@@ -90,5 +107,10 @@ public sealed class GameClientCallback : ILobbyServiceCallback
     private void OnPlayerReadyChanged(PlayerReadyChangedEventArgs eventArgs)
     {
         PlayerReadyChanged?.Invoke(this, eventArgs);
+    }
+
+    private void OnLobbyMessageReceived(LobbyMessageReceivedEventArgs eventArgs)
+    {
+        LobbyMessageReceived?.Invoke(this, eventArgs);
     }
 }

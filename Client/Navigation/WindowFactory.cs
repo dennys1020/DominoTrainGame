@@ -19,7 +19,7 @@ internal sealed class WindowFactory
     private readonly LocalizationViewModel _localization;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
-        _roomViewModelsByScreen;
+        _roleViewModelsByScreen;
 
     static WindowFactory()
     {
@@ -64,6 +64,7 @@ internal sealed class WindowFactory
                 windowService,
                 _gameServices,
                 _localization),
+            [Screen.Room] = windowService => new RoomViewModel(windowService, _gameServices, _localization),
             [Screen.Settings] = windowService => new DialogViewModel(windowService),
             [Screen.Rules] = windowService => new DialogViewModel(windowService),
             [Screen.Profile] = windowService => new DialogViewModel(windowService),
@@ -73,13 +74,8 @@ internal sealed class WindowFactory
             [Screen.Leaderboard] = windowService => new DialogViewModel(windowService)
         };
 
-        _roomViewModelsByScreen = new Dictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
+        _roleViewModelsByScreen = new Dictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
         {
-            [Screen.Room] = (windowService, roomRole) => new RoomViewModel(
-                windowService,
-                roomRole,
-                _gameServices,
-                _localization),
             [Screen.MatchResults] = (windowService, roomRole) => new MatchResultsViewModel(windowService, roomRole)
         };
     }
@@ -103,7 +99,7 @@ internal sealed class WindowFactory
 
     public Window Create(Screen screen, RoomRole roomRole)
     {
-        bool hasViewModel = _roomViewModelsByScreen.TryGetValue(
+        bool hasViewModel = _roleViewModelsByScreen.TryGetValue(
             screen,
             out Func<IWindowService, RoomRole, ScreenViewModel> createViewModel);
 

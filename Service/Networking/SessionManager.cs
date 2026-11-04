@@ -56,8 +56,6 @@ public sealed class SessionManager
     {
         AuthenticatedPlayer player = ResolveToken(sessionToken);
 
-        // The server may not have noticed that the previous channel dropped yet.
-        // The token proves it is the same player, so the new channel replaces the old one.
         ReplacePreviousConnection(player.PlayerId);
         Register(player, sessionToken);
     }

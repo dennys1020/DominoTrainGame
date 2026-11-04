@@ -49,7 +49,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
 
         if (result.Status == LobbyResultStatus.Success)
         {
-            WindowService.Navigate(Screen.Room, RoomRole.Guest);
+            WindowService.Navigate(Screen.Room);
         }
         else
         {

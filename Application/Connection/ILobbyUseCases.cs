@@ -11,4 +11,6 @@ public interface ILobbyUseCases
     void LeaveLobby(int playerId);
 
     bool TrySetReady(int playerId, bool isReady);
+
+    bool TrySendMessage(int playerId, string text);
 }

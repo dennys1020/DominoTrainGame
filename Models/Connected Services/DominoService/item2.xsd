@@ -87,6 +87,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SetReadyRequest" nillable="true" type="tns:SetReadyRequest" />
+  <xs:complexType name="SendLobbyMessageRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SendLobbyMessageRequest" nillable="true" type="tns:SendLobbyMessageRequest" />
   <xs:complexType name="PlayerJoinedMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Player" nillable="true" type="tns:LobbyPlayer" />
@@ -110,4 +116,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerReadyChangedMessage" nillable="true" type="tns:PlayerReadyChangedMessage" />
+  <xs:complexType name="LobbyChatMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyChatMessage" nillable="true" type="tns:LobbyChatMessage" />
 </xs:schema>

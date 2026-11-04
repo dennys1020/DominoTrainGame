@@ -1,4 +1,3 @@
-// Service/Networking/ConnectedPlayer.cs
 using System;
 using DominoTrainGame.Server.Application.Authentication;
 using DominoTrainGame.Server.Service.Contracts;

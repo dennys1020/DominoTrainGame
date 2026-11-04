@@ -38,7 +38,7 @@ public sealed class NewGameViewModel : ScreenViewModel
 
         if (result.Status == LobbyResultStatus.Success)
         {
-            WindowService.Navigate(Screen.Room, RoomRole.Host);
+            WindowService.Navigate(Screen.Room);
         }
         else
         {

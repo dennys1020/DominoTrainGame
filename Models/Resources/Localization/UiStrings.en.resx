@@ -544,4 +544,22 @@ on the train</value>
   <data name="SignUpSystemErrorMessage" xml:space="preserve">
     <value>A system error occurred while signing up. Please try again later.</value>
   </data>
+  <data name="RoomChatLabel" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="SendMessageButtonLabel" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="ChatMessageEmptyMessage" xml:space="preserve">
+    <value>Type a message before sending it.</value>
+  </data>
+  <data name="ChatMessageTooLongMessage" xml:space="preserve">
+    <value>The message cannot be longer than 200 characters.</value>
+  </data>
+  <data name="InvalidLobbyInputMessage" xml:space="preserve">
+    <value>The server rejected the text you sent.</value>
+  </data>
+  <data name="ChatMessagePlaceholder" xml:space="preserve">
+    <value>Type here...</value>
+  </data>
 </root>

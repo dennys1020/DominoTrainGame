@@ -5,6 +5,7 @@ namespace DominoTrainGame.Client.ViewModel.Localization;
 public static class LobbyResultMessageKeys
 {
     private const string InvalidLobbyCodeMessageKey = "InvalidLobbyCodeMessage";
+    private const string InvalidLobbyInputMessageKey = "InvalidLobbyInputMessage";
     private const string LobbyNotFoundMessageKey = "LobbyNotFoundMessage";
     private const string LobbyFullMessageKey = "LobbyFullMessage";
     private const string LobbyConflictMessageKey = "LobbyConflictMessage";
@@ -20,6 +21,9 @@ public static class LobbyResultMessageKeys
         {
             case LobbyResultStatus.InvalidCode:
                 messageKey = InvalidLobbyCodeMessageKey;
+                break;
+            case LobbyResultStatus.InvalidInput:
+                messageKey = InvalidLobbyInputMessageKey;
                 break;
             case LobbyResultStatus.LobbyNotFound:
                 messageKey = LobbyNotFoundMessageKey;

@@ -22,4 +22,9 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged",
         IsOneWay = true)]
     void ReceivePlayerReadyChanged(PlayerReadyChangedMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage",
+        IsOneWay = true)]
+    void ReceiveLobbyMessage(LobbyChatMessage message);
 }
