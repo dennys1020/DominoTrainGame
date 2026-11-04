@@ -85,5 +85,15 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ports\FriendRequestSummary.cs" />
+    <Compile Include="Ports\FriendshipState.cs" />
+    <Compile Include="Ports\FriendSummary.cs" />
+    <Compile Include="Ports\IFriendshipRepository.cs" />
+    <Compile Include="Results\RemoveFriendStatus.cs" />
+    <Compile Include="Results\SendFriendRequestStatus.cs" />
+    <Compile Include="Social\FriendUseCases.cs" />
+    <Compile Include="Social\IFriendUseCases.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
