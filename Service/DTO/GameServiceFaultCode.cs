@@ -30,5 +30,11 @@ public enum GameServiceFaultCode
     InvalidLobbyRequest,
 
     [EnumMember]
-    InvalidSessionToken
+    InvalidSessionToken,
+
+    [EnumMember]
+    NotLobbyHost,
+
+    [EnumMember]
+    PlayersNotReady
 }

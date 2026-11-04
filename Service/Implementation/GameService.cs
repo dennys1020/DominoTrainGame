@@ -89,4 +89,9 @@ public sealed class GameService : IConnectionService, IAuthenticationService, IL
     {
         _lobbyController.SendLobbyMessage(request);
     }
+
+    public void StartMatch()
+    {
+        _lobbyController.StartMatch();
+    }
 }

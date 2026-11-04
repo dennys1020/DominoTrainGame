@@ -125,6 +125,17 @@ public sealed class LobbyController
         }
     }
 
+    public void StartMatch()
+    {
+        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        StartMatchStatus status = _lobbyUseCases.StartMatch(caller.PlayerId);
+
+        if (status != StartMatchStatus.Success)
+        {
+            throw GameFaultFactory.Create(MapStartFaultCode(status));
+        }
+    }
+
     private static FaultException<GameServiceFault> CreateMissingRequestFault()
     {
         _logger.Warn("A lobby request was rejected because it has no content.");
@@ -175,6 +186,29 @@ public sealed class LobbyController
                 break;
             case JoinLobbyStatus.AlreadyInLobby:
                 faultCode = GameServiceFaultCode.LobbyConflict;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidLobbyRequest;
+                break;
+        }
+
+        return faultCode;
+    }
+
+    private static GameServiceFaultCode MapStartFaultCode(StartMatchStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case StartMatchStatus.LobbyNotFound:
+                faultCode = GameServiceFaultCode.LobbyNotFound;
+                break;
+            case StartMatchStatus.NotLobbyHost:
+                faultCode = GameServiceFaultCode.NotLobbyHost;
+                break;
+            case StartMatchStatus.PlayersNotReady:
+                faultCode = GameServiceFaultCode.PlayersNotReady;
                 break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;
