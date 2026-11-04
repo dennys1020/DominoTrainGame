@@ -80,6 +80,7 @@
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
     <Compile Include="Networking\GameConnectionFactory.cs" />
+    <Compile Include="Networking\ServiceFailureMapping.cs" />
     <Compile Include="Callbacks\GameClientCallback.cs" />
     <Compile Include="RemoteGameServices.cs" />
   </ItemGroup>

@@ -17,9 +17,15 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private const int NoPlayerId = 0;
     private const int MaximumReconnectAttempts = 5;
     private const int ReconnectDelaySeconds = 2;
+    private const string ConnectionOperationName = "connection";
+    private const string LoginOperationName = "login";
+    private const string SignUpOperationName = "sign up";
 
     private static readonly ITraceLog _logger;
     private static readonly TimeSpan _reconnectDelay;
+    private static readonly ServiceFailureMapping<ConnectionCheckResult> _connectionFailures;
+    private static readonly ServiceFailureMapping<LoginResult> _loginFailures;
+    private static readonly ServiceFailureMapping<SignUpResult> _signUpFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -37,6 +43,18 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         _logger = TraceLogManager.GetLogger(typeof(RemoteGameServices));
         _reconnectDelay = TimeSpan.FromSeconds(ReconnectDelaySeconds);
+        _connectionFailures = new ServiceFailureMapping<ConnectionCheckResult>(
+            MapConnectionFault,
+            ConnectionCheckResult.ServerError,
+            ConnectionCheckResult.ServerUnavailable);
+        _loginFailures = new ServiceFailureMapping<LoginResult>(
+            MapLoginFault,
+            LoginResult.ServerError,
+            LoginResult.ServerUnavailable);
+        _signUpFailures = new ServiceFailureMapping<SignUpResult>(
+            MapSignUpFault,
+            SignUpResult.ServerError,
+            SignUpResult.ServerUnavailable);
     }
 
     public RemoteGameServices(IGameConnectionFactory connectionFactory, GameChannelCloser channelCloser)
@@ -87,96 +105,20 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public async Task<ConnectionCheckResult> CheckConnectionAsync()
     {
-        ConnectionCheckResult connectionResult = ConnectionCheckResult.ServerUnavailable;
-
-        try
-        {
-            connectionResult = await SendCheckConnectionAsync().ConfigureAwait(false);
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            _logger.WarnFormat("The server rejected the connection request. FaultCode: {0}.", exception.Detail.Code);
-            connectionResult = MapConnectionFault(exception.Detail.Code);
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error("The server reported an undeclared fault while checking the connection.", exception);
-            connectionResult = ConnectionCheckResult.ServerError;
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Error(
-                "The server did not answer the connection request before the configured timeout.",
-                exception);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Error("The connection request could not reach the server.", exception);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error("The connection endpoint is missing or invalid in App.config.", exception);
-        }
-
+        ConnectionCheckResult connectionResult = await SendServiceRequestAsync(
+            SendCheckConnectionAsync,
+            _connectionFailures,
+            ConnectionOperationName).ConfigureAwait(false);
         return connectionResult;
     }
 
     public async Task<LoginResult> LogInAsync(string identifier, string password)
     {
-        LoginResult loginResult = LoginResult.ServerUnavailable;
         SynchronizationContext callerContext = SynchronizationContext.Current;
-
-        try
-        {
-            LoginResponse response = await SendLogInAsync(identifier, password);
-            bool isAuthenticated = response?.IsAuthenticated ?? false;
-
-            if (isAuthenticated)
-            {
-                StoreSession(response, callerContext);
-                await OpenLobbyChannelAsync(response.SessionToken);
-                loginResult = LoginResult.Success;
-            }
-            else
-            {
-                loginResult = LoginResult.InvalidCredentials;
-            }
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            _logger.WarnFormat(
-                "The server rejected the login request. FaultCode: {0}.",
-                exception.Detail.Code);
-
-            loginResult = MapLoginFault(exception.Detail.Code);
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error(
-                "The server reported an undeclared fault while processing the login request.",
-                exception);
-
-            loginResult = LoginResult.ServerError;
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Error(
-                "The login request did not finish before the configured timeout.",
-                exception);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Error(
-                "The login request could not reach the server.",
-                exception);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error(
-                "The authentication endpoint is missing or invalid in App.config.",
-                exception);
-        }
-
+        LoginResult loginResult = await SendServiceRequestAsync(
+            () => AuthenticateAsync(identifier, password, callerContext),
+            _loginFailures,
+            LoginOperationName);
         bool isLoggedIn = loginResult == LoginResult.Success;
 
         if (!isLoggedIn)
@@ -239,36 +181,73 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public async Task<SignUpResult> SignUpAsync(string username, string email, string password)
     {
-        SignUpResult signUpResult = SignUpResult.ServerUnavailable;
+        SignUpResult signUpResult = await SendServiceRequestAsync(
+            () => SendSignUpAsync(username, email, password),
+            _signUpFailures,
+            SignUpOperationName).ConfigureAwait(false);
+        return signUpResult;
+    }
+
+    private static async Task<TResult> SendServiceRequestAsync<TResult>(
+        Func<Task<TResult>> request,
+        ServiceFailureMapping<TResult> failures,
+        string operationName)
+    {
+        TResult result;
 
         try
         {
-            signUpResult = await SendSignUpAsync(username, email, password).ConfigureAwait(false);
+            result = await request().ConfigureAwait(false);
         }
         catch (FaultException<GameServiceFault> exception)
         {
-            _logger.WarnFormat("The server rejected the sign up request. FaultCode: {0}.", exception.Detail.Code);
-            signUpResult = MapSignUpFault(exception.Detail.Code);
+            _logger.WarnFormat(
+                "The server rejected the {0} request. FaultCode: {1}.",
+                operationName,
+                exception.Detail.Code);
+            result = failures.MapFault(exception.Detail.Code);
         }
         catch (FaultException exception)
         {
-            _logger.Error("The server reported an undeclared fault while processing the sign up request.", exception);
-            signUpResult = SignUpResult.ServerError;
+            _logger.Error("The server reported an undeclared fault while processing a request.", exception);
+            result = failures.ServerError;
         }
         catch (TimeoutException exception)
         {
-            _logger.Error("The sign up request did not finish before the configured timeout.", exception);
+            _logger.Error("A request did not finish before the configured timeout.", exception);
+            result = failures.ServerUnavailable;
         }
         catch (CommunicationException exception)
         {
-            _logger.Error("The sign up request could not reach the server.", exception);
+            _logger.Error("A request could not reach the server.", exception);
+            result = failures.ServerUnavailable;
         }
         catch (InvalidOperationException exception)
         {
-            _logger.Error("The authentication endpoint is missing or invalid in App.config.", exception);
+            _logger.Error("The service endpoint is missing or invalid in App.config.", exception);
+            result = failures.ServerUnavailable;
         }
 
-        return signUpResult;
+        return result;
+    }
+
+    private async Task<LoginResult> AuthenticateAsync(
+        string identifier,
+        string password,
+        SynchronizationContext callerContext)
+    {
+        LoginResult loginResult = LoginResult.InvalidCredentials;
+        LoginResponse response = await SendLogInAsync(identifier, password);
+        bool isAuthenticated = response?.IsAuthenticated ?? false;
+
+        if (isAuthenticated)
+        {
+            StoreSession(response, callerContext);
+            await OpenLobbyChannelAsync(response.SessionToken);
+            loginResult = LoginResult.Success;
+        }
+
+        return loginResult;
     }
 
     private async Task<TResult> InvokeLobbyServiceAsync<TResult>(
