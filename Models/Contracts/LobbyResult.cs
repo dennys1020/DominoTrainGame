@@ -5,39 +5,39 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class LobbyResult
 {
-    public LobbyResult(
-        LobbyResultStatus status,
-        string code,
-        int maximumPlayers,
-        long version,
-        int hostPlayerId,
-        IReadOnlyList<LobbyPlayerResult> players)
+    static LobbyResult()
     {
-        if (players == null)
-        {
-            throw new ArgumentNullException(nameof(players));
-        }
-
-        List<LobbyPlayerResult> copiedPlayers =
-            new List<LobbyPlayerResult>(players);
-
-        Status = status;
-        Code = code ?? string.Empty;
-        MaximumPlayers = maximumPlayers;
-        Version = version;
-        HostPlayerId = hostPlayerId;
-        Players = copiedPlayers.AsReadOnly();
+        Empty = new LobbyResult(LobbyResultStatus.LobbyNotFound, LobbySettings.Empty, LobbyRoster.Empty);
     }
+
+    public LobbyResult(LobbyResultStatus status, LobbySettings settings, LobbyRoster roster)
+    {
+        Status = status;
+        Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        Roster = roster ?? throw new ArgumentNullException(nameof(roster));
+    }
+
+    public static LobbyResult Empty { get; }
 
     public LobbyResultStatus Status { get; }
 
-    public string Code { get; }
+    public LobbySettings Settings { get; }
 
-    public int MaximumPlayers { get; }
+    public LobbyRoster Roster { get; }
 
-    public long Version { get; }
+    public string Code => Settings.Code;
 
-    public int HostPlayerId { get; }
+    public int MaximumPlayers => Settings.MaximumPlayers;
 
-    public IReadOnlyList<LobbyPlayerResult> Players { get; }
+    public long Version => Roster.Version;
+
+    public int HostPlayerId => Roster.HostPlayerId;
+
+    public IReadOnlyList<LobbyPlayerResult> Players => Roster.Players;
+
+    public LobbyResult WithRoster(LobbyRoster roster)
+    {
+        LobbyResult lobby = new LobbyResult(Status, Settings, roster);
+        return lobby;
+    }
 }

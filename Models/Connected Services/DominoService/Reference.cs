@@ -660,6 +660,51 @@ namespace DominoTrainGame.Client.Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SendLobbyMessageRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class SendLobbyMessageRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TextField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Text {
+            get {
+                return this.TextField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TextField, value) != true)) {
+                    this.TextField = value;
+                    this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PlayerJoinedMessage", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
     public partial class PlayerJoinedMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -873,6 +918,83 @@ namespace DominoTrainGame.Client.Models.DominoService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LobbyChatMessage", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class LobbyChatMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PlayerIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TextField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((this.PlayerIdField.Equals(value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Text {
+            get {
+                return this.TextField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TextField, value) != true)) {
+                    this.TextField = value;
+                    this.RaisePropertyChanged("Text");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoService.IConnectionService")]
     public interface IConnectionService {
@@ -1022,6 +1144,13 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/SetReady", ReplyAction="http://tempuri.org/ILobbyService/SetReadyResponse")]
         System.Threading.Tasks.Task SetReadyAsync(DominoTrainGame.Client.Models.DominoService.SetReadyRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/SendLobbyMessage", ReplyAction="http://tempuri.org/ILobbyService/SendLobbyMessageResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/ILobbyService/SendLobbyMessageGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void SendLobbyMessage(DominoTrainGame.Client.Models.DominoService.SendLobbyMessageRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/SendLobbyMessage", ReplyAction="http://tempuri.org/ILobbyService/SendLobbyMessageResponse")]
+        System.Threading.Tasks.Task SendLobbyMessageAsync(DominoTrainGame.Client.Models.DominoService.SendLobbyMessageRequest request);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1035,6 +1164,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged")]
         void ReceivePlayerReadyChanged(DominoTrainGame.Client.Models.DominoService.PlayerReadyChangedMessage message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage")]
+        void ReceiveLobbyMessage(DominoTrainGame.Client.Models.DominoService.LobbyChatMessage message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1103,6 +1235,14 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task SetReadyAsync(DominoTrainGame.Client.Models.DominoService.SetReadyRequest request) {
             return base.Channel.SetReadyAsync(request);
+        }
+        
+        public void SendLobbyMessage(DominoTrainGame.Client.Models.DominoService.SendLobbyMessageRequest request) {
+            base.Channel.SendLobbyMessage(request);
+        }
+        
+        public System.Threading.Tasks.Task SendLobbyMessageAsync(DominoTrainGame.Client.Models.DominoService.SendLobbyMessageRequest request) {
+            return base.Channel.SendLobbyMessageAsync(request);
         }
     }
 }

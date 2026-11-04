@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 
@@ -11,7 +11,9 @@ public sealed class LobbyRegistry
     private const int MaximumPlayers = 4;
 
     private readonly ILobbyCodeGenerator _codeGenerator;
-    private RegistrySnapshot _snapshot = RegistrySnapshot.Empty;
+    private readonly Dictionary<string, LobbyState> _lobbiesByCode =
+        new Dictionary<string, LobbyState>(StringComparer.Ordinal);
+    private readonly object _lobbiesLock = new object();
 
     public LobbyRegistry(ILobbyCodeGenerator codeGenerator)
     {
@@ -27,30 +29,13 @@ public sealed class LobbyRegistry
 
         lobbyState = LobbyState.Empty;
         bool wasCreated = false;
-        bool operationCompleted = false;
 
-        while (!operationCompleted)
+        lock (_lobbiesLock)
         {
-            RegistrySnapshot current = Volatile.Read(ref _snapshot);
-
-            if (ContainsPlayer(current, host.PlayerId))
+            if (!ContainsPlayer(host.PlayerId))
             {
-                operationCompleted = true;
-            }
-            else
-            {
-                string code = GenerateUniqueCode(current);
-                LobbyState createdLobby = LobbyState.CreateWithHost(code, MaximumPlayers, host);
-                Dictionary<string, LobbyState> updatedLobbies = CopyLobbies(current);
-
-                updatedLobbies.Add(code, createdLobby);
-
-                if (TryReplaceSnapshot(current, updatedLobbies))
-                {
-                    lobbyState = createdLobby;
-                    wasCreated = true;
-                    operationCompleted = true;
-                }
+                lobbyState = AddLobby(host);
+                wasCreated = true;
             }
         }
 
@@ -65,43 +50,11 @@ public sealed class LobbyRegistry
         }
 
         string normalizedCode = code?.Trim().ToUpperInvariant() ?? string.Empty;
+        JoinLobbyStatus status;
 
-        lobbyState = LobbyState.Empty;
-        JoinLobbyStatus status = JoinLobbyStatus.Success;
-        bool operationCompleted = false;
-
-        while (!operationCompleted)
+        lock (_lobbiesLock)
         {
-            RegistrySnapshot current = Volatile.Read(ref _snapshot);
-
-            if (ContainsPlayer(current, member.PlayerId))
-            {
-                status = JoinLobbyStatus.AlreadyInLobby;
-                operationCompleted = true;
-            }
-            else if (!current.LobbiesByCode.TryGetValue(normalizedCode, out LobbyState currentLobby))
-            {
-                status = JoinLobbyStatus.LobbyNotFound;
-                operationCompleted = true;
-            }
-            else if (currentLobby.IsFull)
-            {
-                status = JoinLobbyStatus.LobbyFull;
-                operationCompleted = true;
-            }
-            else
-            {
-                LobbyState updatedLobby = currentLobby.WithPlayer(member);
-                Dictionary<string, LobbyState> updatedLobbies = CopyLobbies(current);
-
-                updatedLobbies[normalizedCode] = updatedLobby;
-
-                if (TryReplaceSnapshot(current, updatedLobbies))
-                {
-                    lobbyState = updatedLobby;
-                    operationCompleted = true;
-                }
-            }
+            status = AddPlayer(member, normalizedCode, out lobbyState);
         }
 
         return status;
@@ -109,92 +62,109 @@ public sealed class LobbyRegistry
 
     public bool Remove(int playerId, out LobbyState remainingLobby)
     {
-        remainingLobby = LobbyState.Empty;
-        bool wasRemoved = false;
-        bool operationCompleted = false;
-
-        while (!operationCompleted)
-        {
-            RegistrySnapshot current = Volatile.Read(ref _snapshot);
-            bool wasFound = TryFindLobby(current, playerId, out LobbyState currentLobby);
-
-            if (!wasFound)
-            {
-                operationCompleted = true;
-            }
-            else
-            {
-                LobbyState updatedLobby = currentLobby.WithoutPlayer(playerId);
-                Dictionary<string, LobbyState> updatedLobbies = CopyLobbies(current);
-
-                if (updatedLobby.IsEmpty)
-                {
-                    updatedLobbies.Remove(currentLobby.Code);
-                }
-                else
-                {
-                    updatedLobbies[currentLobby.Code] = updatedLobby;
-                }
-
-                if (TryReplaceSnapshot(current, updatedLobbies))
-                {
-                    remainingLobby = updatedLobby;
-                    wasRemoved = true;
-                    operationCompleted = true;
-                }
-            }
-        }
-
+        bool wasRemoved = TryUpdateLobbyOfPlayer(
+            playerId,
+            lobby => lobby.WithoutPlayer(playerId),
+            out remainingLobby);
         return wasRemoved;
     }
 
     public bool TrySetReady(int playerId, bool isReady, out LobbyState lobbyState)
     {
-        lobbyState = LobbyState.Empty;
-        bool wasUpdated = false;
-        bool operationCompleted = false;
-
-        while (!operationCompleted)
-        {
-            RegistrySnapshot current = Volatile.Read(ref _snapshot);
-            bool wasFound = TryFindLobby(current, playerId, out LobbyState currentLobby);
-
-            if (!wasFound)
-            {
-                operationCompleted = true;
-            }
-            else
-            {
-                LobbyState updatedLobby = currentLobby.WithReadyState(playerId, isReady);
-                Dictionary<string, LobbyState> updatedLobbies = CopyLobbies(current);
-
-                updatedLobbies[currentLobby.Code] = updatedLobby;
-
-                if (TryReplaceSnapshot(current, updatedLobbies))
-                {
-                    lobbyState = updatedLobby;
-                    wasUpdated = true;
-                    operationCompleted = true;
-                }
-            }
-        }
-
+        bool wasUpdated = TryUpdateLobbyOfPlayer(
+            playerId,
+            lobby => lobby.WithReadyState(playerId, isReady),
+            out lobbyState);
         return wasUpdated;
     }
 
-    private bool TryReplaceSnapshot(RegistrySnapshot current, Dictionary<string, LobbyState> updatedLobbies)
+    public bool TryFindLobbyOfPlayer(int playerId, out LobbyState lobbyState)
     {
-        RegistrySnapshot updated = new RegistrySnapshot(updatedLobbies);
-        RegistrySnapshot previous = Interlocked.CompareExchange(ref _snapshot, updated, current);
-        bool wasReplaced = ReferenceEquals(previous, current);
-        return wasReplaced;
+        bool wasFound;
+
+        lock (_lobbiesLock)
+        {
+            wasFound = TryFindLobby(playerId, out lobbyState);
+        }
+
+        return wasFound;
     }
 
-    private string GenerateUniqueCode(RegistrySnapshot snapshot)
+    private bool TryUpdateLobbyOfPlayer(
+        int playerId,
+        Func<LobbyState, LobbyState> update,
+        out LobbyState lobbyState)
+    {
+        lobbyState = LobbyState.Empty;
+        bool wasFound;
+
+        lock (_lobbiesLock)
+        {
+            wasFound = TryFindLobby(playerId, out LobbyState currentLobby);
+
+            if (wasFound)
+            {
+                lobbyState = update(currentLobby);
+                StoreLobby(lobbyState);
+            }
+        }
+
+        return wasFound;
+    }
+
+    private LobbyState AddLobby(LobbyMember host)
+    {
+        string code = GenerateUniqueCode();
+        LobbyState createdLobby = LobbyState.CreateWithHost(code, MaximumPlayers, host);
+
+        _lobbiesByCode.Add(code, createdLobby);
+        return createdLobby;
+    }
+
+    private JoinLobbyStatus AddPlayer(LobbyMember member, string code, out LobbyState lobbyState)
+    {
+        lobbyState = LobbyState.Empty;
+        JoinLobbyStatus status = JoinLobbyStatus.Success;
+        bool wasFound = _lobbiesByCode.TryGetValue(code, out LobbyState currentLobby);
+
+        if (ContainsPlayer(member.PlayerId))
+        {
+            status = JoinLobbyStatus.AlreadyInLobby;
+        }
+        else if (!wasFound)
+        {
+            status = JoinLobbyStatus.LobbyNotFound;
+        }
+        else if (currentLobby.IsFull)
+        {
+            status = JoinLobbyStatus.LobbyFull;
+        }
+        else
+        {
+            lobbyState = currentLobby.WithPlayer(member);
+            _lobbiesByCode[code] = lobbyState;
+        }
+
+        return status;
+    }
+
+    private void StoreLobby(LobbyState lobby)
+    {
+        if (lobby.IsEmpty)
+        {
+            _lobbiesByCode.Remove(lobby.Code);
+        }
+        else
+        {
+            _lobbiesByCode[lobby.Code] = lobby;
+        }
+    }
+
+    private string GenerateUniqueCode()
     {
         string code = _codeGenerator.Generate();
 
-        while (snapshot.LobbiesByCode.ContainsKey(code))
+        while (_lobbiesByCode.ContainsKey(code))
         {
             code = _codeGenerator.Generate();
         }
@@ -202,18 +172,18 @@ public sealed class LobbyRegistry
         return code;
     }
 
-    private static bool ContainsPlayer(RegistrySnapshot snapshot, int playerId)
+    private bool ContainsPlayer(int playerId)
     {
-        bool isPresent = TryFindLobby(snapshot, playerId, out _);
+        bool isPresent = _lobbiesByCode.Values.Any(lobby => lobby.Roster.Contains(playerId));
         return isPresent;
     }
 
-    private static bool TryFindLobby(RegistrySnapshot snapshot, int playerId, out LobbyState lobby)
+    private bool TryFindLobby(int playerId, out LobbyState lobby)
     {
         lobby = LobbyState.Empty;
         bool wasFound = false;
 
-        foreach (LobbyState candidate in snapshot.LobbiesByCode.Values)
+        foreach (LobbyState candidate in _lobbiesByCode.Values)
         {
             if (!wasFound && candidate.Roster.Contains(playerId))
             {
@@ -223,29 +193,5 @@ public sealed class LobbyRegistry
         }
 
         return wasFound;
-    }
-
-    private static Dictionary<string, LobbyState> CopyLobbies(RegistrySnapshot snapshot)
-    {
-        Dictionary<string, LobbyState> copiedLobbies =
-            new Dictionary<string, LobbyState>(snapshot.LobbiesByCode, StringComparer.Ordinal);
-        return copiedLobbies;
-    }
-
-    private sealed class RegistrySnapshot
-    {
-        static RegistrySnapshot()
-        {
-            Empty = new RegistrySnapshot(new Dictionary<string, LobbyState>(StringComparer.Ordinal));
-        }
-
-        public RegistrySnapshot(Dictionary<string, LobbyState> lobbiesByCode)
-        {
-            LobbiesByCode = lobbiesByCode ?? throw new ArgumentNullException(nameof(lobbiesByCode));
-        }
-
-        public static RegistrySnapshot Empty { get; }
-
-        public Dictionary<string, LobbyState> LobbiesByCode { get; }
     }
 }

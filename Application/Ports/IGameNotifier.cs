@@ -7,4 +7,6 @@ public interface IGameNotifier
     void NotifyPlayerLeft(PlayerLeftNotice notice);
 
     void NotifyPlayerReadyChanged(PlayerReadyChangedNotice notice);
+
+    void NotifyLobbyMessage(LobbyMessageNotice notice);
 }

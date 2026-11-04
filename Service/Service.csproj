@@ -72,6 +72,8 @@
     <Compile Include="DTO\PlayerLeftMessage.cs" />
     <Compile Include="DTO\PlayerReadyChangedMessage.cs" />
     <Compile Include="DTO\SetReadyRequest.cs" />
+    <Compile Include="DTO\SendLobbyMessageRequest.cs" />
+    <Compile Include="DTO\LobbyChatMessage.cs" />
     <Compile Include="DTO\SignUpRequest.cs" />
     <Compile Include="Implementation\AuthenticationController.cs" />
     <Compile Include="Implementation\CallbackGameNotifier.cs" />

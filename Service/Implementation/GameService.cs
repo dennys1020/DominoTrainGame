@@ -84,4 +84,9 @@ public sealed class GameService : IConnectionService, IAuthenticationService, IL
     {
         _lobbyController.SetReady(request);
     }
+
+    public void SendLobbyMessage(SendLobbyMessageRequest request)
+    {
+        _lobbyController.SendLobbyMessage(request);
+    }
 }

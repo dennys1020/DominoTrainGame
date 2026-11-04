@@ -4,6 +4,7 @@ public enum LobbyResultStatus
 {
     Success,
     InvalidCode,
+    InvalidInput,
     LobbyNotFound,
     LobbyFull,
     AlreadyInLobby,

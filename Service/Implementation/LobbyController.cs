@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Authentication;
 using DominoTrainGame.Server.Application.Connection;
@@ -86,8 +87,7 @@ public sealed class LobbyController
 
         if (request == null)
         {
-            _logger.Warn("A ready state request was rejected because it has no content.");
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidLobbyRequest);
+            throw CreateMissingRequestFault();
         }
 
         bool wasUpdated = _lobbyUseCases.TrySetReady(caller.PlayerId, request.IsReady);
@@ -96,6 +96,40 @@ public sealed class LobbyController
         {
             throw GameFaultFactory.Create(GameServiceFaultCode.LobbyNotFound);
         }
+    }
+
+    public void SendLobbyMessage(SendLobbyMessageRequest request)
+    {
+        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+
+        if (request == null)
+        {
+            throw CreateMissingRequestFault();
+        }
+
+        bool wasSent;
+
+        try
+        {
+            wasSent = _lobbyUseCases.TrySendMessage(caller.PlayerId, request.Text);
+        }
+        catch (ArgumentException exception)
+        {
+            _logger.Warn("A lobby message was rejected because its text is invalid.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
+        }
+
+        if (!wasSent)
+        {
+            throw GameFaultFactory.Create(GameServiceFaultCode.LobbyNotFound);
+        }
+    }
+
+    private static FaultException<GameServiceFault> CreateMissingRequestFault()
+    {
+        _logger.Warn("A lobby request was rejected because it has no content.");
+        FaultException<GameServiceFault> fault = GameFaultFactory.Create(GameServiceFaultCode.InvalidLobbyRequest);
+        return fault;
     }
 
     private static LobbyResponse ToLobbyResponse(LobbyState lobby)

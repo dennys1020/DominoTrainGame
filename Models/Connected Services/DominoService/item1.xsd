@@ -99,24 +99,43 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="SendLobbyMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q9:SendLobbyMessageRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendLobbyMessageResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ReceivePlayerJoined">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q9:PlayerJoinedMessage" />
+        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerJoinedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerLeft">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerLeftMessage" />
+        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerLeftMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerReadyChanged">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerReadyChangedMessage" />
+        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:PlayerReadyChangedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveLobbyMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:LobbyChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

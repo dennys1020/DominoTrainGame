@@ -70,9 +70,12 @@
     <Compile Include="Contracts\LobbyMember.cs" />
     <Compile Include="Contracts\LobbyPlayerResult.cs" />
     <Compile Include="Contracts\LobbyResult.cs" />
+    <Compile Include="Contracts\LobbyRoster.cs" />
+    <Compile Include="Contracts\LobbySettings.cs" />
     <Compile Include="Contracts\PlayerJoinedEventArgs.cs" />
     <Compile Include="Contracts\PlayerLeftEventArgs.cs" />
     <Compile Include="Contracts\PlayerReadyChangedEventArgs.cs" />
+    <Compile Include="Contracts\LobbyMessageReceivedEventArgs.cs" />
     <Compile Include="Contracts\ConnectionCheckResult.cs" />
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />

@@ -166,6 +166,15 @@
   <wsdl:message name="ILobbyService_SetReady_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q8="http://dominotraingame/services" name="detail" element="q8:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_SendLobbyMessage_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendLobbyMessage" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SendLobbyMessage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendLobbyMessageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SendLobbyMessage_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://dominotraingame/services" name="detail" element="q9:GameServiceFault" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerJoined" />
   </wsdl:message>
@@ -174,6 +183,9 @@
   </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerReadyChanged" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveLobbyMessage" />
   </wsdl:message>
   <wsdl:portType name="IConnectionService">
     <wsdl:operation name="CheckConnection">
@@ -220,6 +232,11 @@
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SetReadyResponse" message="tns:ILobbyService_SetReady_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SetReadyGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SetReady_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SendLobbyMessage">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessage" message="tns:ILobbyService_SendLobbyMessage_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessageResponse" message="tns:ILobbyService_SendLobbyMessage_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessageGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SendLobbyMessage_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerJoined">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" message="tns:ILobbyService_ReceivePlayerJoined_OutputCallbackMessage" />
     </wsdl:operation>
@@ -228,6 +245,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerReadyChanged">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" message="tns:ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLobbyMessage">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" message="tns:ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IConnectionService" type="tns:IConnectionService">
@@ -337,6 +357,18 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="SendLobbyMessage">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/SendLobbyMessage" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="ReceivePlayerJoined">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" style="document" />
       <wsdl:output>
@@ -351,6 +383,12 @@
     </wsdl:operation>
     <wsdl:operation name="ReceivePlayerReadyChanged">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveLobbyMessage">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

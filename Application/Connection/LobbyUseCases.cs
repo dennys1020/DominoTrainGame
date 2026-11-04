@@ -8,6 +8,8 @@ namespace DominoTrainGame.Server.Application.Connection;
 
 public sealed class LobbyUseCases : ILobbyUseCases
 {
+    private const int MaximumMessageLength = 200;
+
     private static readonly ITraceLog _logger;
 
     private readonly LobbyRegistry _lobbyRegistry;
@@ -88,6 +90,27 @@ public sealed class LobbyUseCases : ILobbyUseCases
         return wasUpdated;
     }
 
+    public bool TrySendMessage(int playerId, string text)
+    {
+        string normalizedText = text?.Trim() ?? string.Empty;
+        ValidateMessageText(normalizedText);
+
+        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
+
+        if (isInLobby)
+        {
+            NotifyLobbyMessage(playerId, normalizedText, lobby);
+        }
+        else
+        {
+            _logger.WarnFormat(
+                "A lobby message was rejected because the player is not in a lobby. PlayerId: {0}.",
+                playerId);
+        }
+
+        return isInLobby;
+    }
+
     private void NotifyPlayerJoined(LobbyMember member, LobbyState lobby)
     {
         List<int> recipientPlayerIds = lobby.Roster.GetPlayerIdsExcept(member.PlayerId);
@@ -124,6 +147,33 @@ public sealed class LobbyUseCases : ILobbyUseCases
                 playerId,
                 player.IsReady);
             _gameNotifier.NotifyPlayerReadyChanged(notice);
+        }
+    }
+
+    private void NotifyLobbyMessage(int playerId, string text, LobbyState lobby)
+    {
+        LobbyRoster roster = lobby.Roster;
+        bool wasFound = roster.TryFindPlayer(playerId, out LobbyPlayerState sender);
+
+        if (wasFound)
+        {
+            LobbyMessageNotice notice = new LobbyMessageNotice(roster.GetPlayerIds(), sender.Member, text);
+
+            _logger.DebugFormat("A player sent a lobby message. PlayerId: {0}.", playerId);
+            _gameNotifier.NotifyLobbyMessage(notice);
+        }
+    }
+
+    private static void ValidateMessageText(string text)
+    {
+        bool isEmpty = string.IsNullOrEmpty(text);
+        bool isTooLong = text.Length > MaximumMessageLength;
+
+        if (isEmpty || isTooLong)
+        {
+            throw new ArgumentException(
+                "The lobby message is empty or longer than the allowed length.",
+                nameof(text));
         }
     }
 

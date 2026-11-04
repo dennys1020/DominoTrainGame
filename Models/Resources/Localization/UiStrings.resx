@@ -544,4 +544,22 @@ en el tren</value>
   <data name="SignUpSystemErrorMessage" xml:space="preserve">
     <value>Ocurrió un error del sistema al registrarte. Inténtalo de nuevo más tarde.</value>
   </data>
+  <data name="RoomChatLabel" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="SendMessageButtonLabel" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="ChatMessageEmptyMessage" xml:space="preserve">
+    <value>Escribe un mensaje antes de enviarlo.</value>
+  </data>
+  <data name="ChatMessageTooLongMessage" xml:space="preserve">
+    <value>El mensaje no puede tener más de 200 caracteres.</value>
+  </data>
+  <data name="InvalidLobbyInputMessage" xml:space="preserve">
+    <value>El servidor rechazó el texto enviado.</value>
+  </data>
+  <data name="ChatMessagePlaceholder" xml:space="preserve">
+    <value>Escribe aquí...</value>
+  </data>
 </root>

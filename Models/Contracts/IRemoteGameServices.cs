@@ -17,6 +17,8 @@ public interface IRemoteGameServices
 
     Task<LobbyResultStatus> SetReadyAsync(bool isReady);
 
+    Task<LobbyResultStatus> SendLobbyMessageAsync(string text);
+
     event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
     event EventHandler<PlayerLeftEventArgs> PlayerLeft;
@@ -24,6 +26,8 @@ public interface IRemoteGameServices
     event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged;
 
     event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
+
+    event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 
     LobbyResult CurrentLobby { get; }
 
