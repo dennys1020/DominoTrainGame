@@ -111,6 +111,41 @@ public sealed class LobbyUseCases : ILobbyUseCases
         return isInLobby;
     }
 
+    public StartMatchStatus StartMatch(int playerId)
+    {
+        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
+        StartMatchStatus status = isInLobby ? GetStartStatus(playerId, lobby) : StartMatchStatus.LobbyNotFound;
+
+        if (status == StartMatchStatus.Success)
+        {
+            NotifyMatchStarting(lobby);
+        }
+        else
+        {
+            _logger.WarnFormat("A match start was rejected. PlayerId: {0}. Status: {1}.", playerId, status);
+        }
+
+        return status;
+    }
+
+    private static StartMatchStatus GetStartStatus(int playerId, LobbyState lobby)
+    {
+        StartMatchStatus status = StartMatchStatus.Success;
+        bool isHost = lobby.Roster.HostPlayerId == playerId;
+        bool canStart = lobby.HasMinimumPlayers && lobby.Roster.AreAllPlayersReady;
+
+        if (!isHost)
+        {
+            status = StartMatchStatus.NotLobbyHost;
+        }
+        else if (!canStart)
+        {
+            status = StartMatchStatus.PlayersNotReady;
+        }
+
+        return status;
+    }
+
     private void NotifyPlayerJoined(LobbyMember member, LobbyState lobby)
     {
         List<int> recipientPlayerIds = lobby.Roster.GetPlayerIdsExcept(member.PlayerId);
@@ -162,6 +197,13 @@ public sealed class LobbyUseCases : ILobbyUseCases
             _logger.DebugFormat("A player sent a lobby message. PlayerId: {0}.", playerId);
             _gameNotifier.NotifyLobbyMessage(notice);
         }
+    }
+
+    private void NotifyMatchStarting(LobbyState lobby)
+    {
+        MatchStartingNotice notice = new MatchStartingNotice(lobby.Roster.GetPlayerIds(), lobby.Code);
+        _logger.InfoFormat("A match is starting. LobbyCode: {0}.", lobby.Code);
+        _gameNotifier.NotifyMatchStarting(notice);
     }
 
     private static void ValidateMessageText(string text)

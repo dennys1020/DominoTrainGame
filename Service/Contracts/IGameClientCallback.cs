@@ -27,4 +27,9 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage",
         IsOneWay = true)]
     void ReceiveLobbyMessage(LobbyChatMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveMatchStarting",
+        IsOneWay = true)]
+    void ReceiveMatchStarting(MatchStartingMessage message);
 }
