@@ -19,7 +19,6 @@ public sealed class RoomViewModel : ScreenViewModel
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayers = 2;
-    private const bool ReadyState = true;
     private const string SessionLostMessageKey = "LobbySessionExpiredMessage";
     private const string RoomLostMessageKey = "RoomLostAfterReconnectMessage";
     private const string ChatMessageEmptyMessageKey = "ChatMessageEmptyMessage";
@@ -46,7 +45,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
-        MarkReadyCommand = new AsyncRelayCommand(MarkReadyAsync);
+        ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
         SendMessageCommand = new AsyncRelayCommand(SendMessageAsync);
         StartMatchCommand = new AsyncRelayCommand(StartMatchAsync);
 
@@ -155,7 +154,7 @@ public sealed class RoomViewModel : ScreenViewModel
 
     public AsyncRelayCommand BackCommand { get; }
 
-    public AsyncRelayCommand MarkReadyCommand { get; }
+    public AsyncRelayCommand ToggleReadyCommand { get; }
 
     public AsyncRelayCommand SendMessageCommand { get; }
 
@@ -358,9 +357,11 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
-    private async Task MarkReadyAsync()
+    private async Task ToggleReadyAsync()
     {
-        await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(ReadyState));
+        bool isLocalPlayerReady = Players.Any(player => player.IsCurrentPlayer && player.IsReady);
+        bool requestedReadyState = !isLocalPlayerReady;
+        await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(requestedReadyState));
     }
 
     private async Task StartMatchAsync()

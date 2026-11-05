@@ -13,6 +13,25 @@
     mc:Ignorable="d">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="HostVisibility" />
+        <Style x:Key="ReadyButtonStyle" TargetType="Button" BasedOn="{StaticResource MatchButtonStyle}">
+            <Setter
+                Property="Command"
+                Value="{Binding DataContext.ToggleReadyCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+            <Setter Property="Content" Value="{Binding [MarkReadyButtonLabel], Source={StaticResource Localization}}" />
+            <Setter Property="MinWidth" Value="180" />
+            <Setter Property="FontSize" Value="9" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsCurrentPlayer}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsReady}" Value="True">
+                    <Setter
+                        Property="Content"
+                        Value="{Binding [CancelReadyButtonLabel], Source={StaticResource Localization}}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
@@ -352,41 +371,7 @@
                                                                         </TextBlock.Style>
                                                                     </TextBlock>
                                                                     <Button
-                                                                        Content="{Binding [MarkReadyButtonLabel],
-                                                                            Source={StaticResource Localization}}"
-                                                                        Command="{Binding DataContext.MarkReadyCommand,
-                                                                            RelativeSource={RelativeSource
-                                                                                AncestorType=Window}}"
-                                                                        MinWidth="180"
-                                                                        FontSize="9">
-                                                                        <Button.Style>
-                                                                            <Style
-                                                                                TargetType="Button"
-                                                                                BasedOn="{StaticResource
-                                                                                    MatchButtonStyle}">
-                                                                                <Setter
-                                                                                    Property="Visibility"
-                                                                                    Value="Collapsed" />
-                                                                                <Style.Triggers>
-                                                                                    <DataTrigger
-                                                                                        Binding="{Binding
-                                                                                            IsCurrentPlayer}"
-                                                                                        Value="True">
-                                                                                        <Setter
-                                                                                            Property="Visibility"
-                                                                                            Value="Visible" />
-                                                                                    </DataTrigger>
-                                                                                    <DataTrigger
-                                                                                        Binding="{Binding IsReady}"
-                                                                                        Value="True">
-                                                                                        <Setter
-                                                                                            Property="IsEnabled"
-                                                                                            Value="False" />
-                                                                                    </DataTrigger>
-                                                                                </Style.Triggers>
-                                                                            </Style>
-                                                                        </Button.Style>
-                                                                    </Button>
+                                                                        Style="{StaticResource ReadyButtonStyle}" />
                                                                 </StackPanel>
                                                             </Grid>
                                                         </Border>
