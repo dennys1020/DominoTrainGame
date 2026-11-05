@@ -18,6 +18,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private readonly IGameNotifier _gameNotifier;
     private readonly ILobbyCodeGenerator _lobbyCodeGenerator;
     private readonly IChatMessageFilter _chatMessageFilter;
+    private readonly IChatSanctionUseCases _chatSanctionUseCases;
 
     static LobbyUseCases()
     {
@@ -34,6 +35,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
         LobbyInputRules rules = inputRules ?? throw new ArgumentNullException(nameof(inputRules));
         _lobbyCodeGenerator = rules.CodeGenerator;
         _chatMessageFilter = rules.MessageFilter;
+        _chatSanctionUseCases = rules.ChatSanctions;
     }
 
     public bool TryCreateLobby(LobbyMember host, out LobbyState lobby)
@@ -95,17 +97,17 @@ public sealed class LobbyUseCases : ILobbyUseCases
         return wasUpdated;
     }
 
-    public bool TrySendMessage(int playerId, string text)
+    public SendMessageStatus SendMessage(int playerId, string text)
     {
         string normalizedText = text?.Trim() ?? string.Empty;
         ValidateMessageText(normalizedText);
-        string filteredText = FilterMessageText(playerId, normalizedText);
 
         bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
+        SendMessageStatus status = SendMessageStatus.NotInLobby;
 
         if (isInLobby)
         {
-            NotifyLobbyMessage(playerId, filteredText, lobby);
+            status = SendPermittedMessage(playerId, normalizedText, lobby);
         }
         else
         {
@@ -114,7 +116,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
                 playerId);
         }
 
-        return isInLobby;
+        return status;
     }
 
     public StartMatchStatus StartMatch(int playerId)
@@ -225,17 +227,61 @@ public sealed class LobbyUseCases : ILobbyUseCases
         }
     }
 
-    private string FilterMessageText(int playerId, string text)
+    private static SendMessageStatus ToSendMessageStatus(ChatInfractionStatus infraction)
+    {
+        SendMessageStatus status;
+
+        switch (infraction)
+        {
+            case ChatInfractionStatus.Warned:
+                status = SendMessageStatus.Warned;
+                break;
+            case ChatInfractionStatus.ChatBlocked:
+            case ChatInfractionStatus.GameBanned:
+                status = SendMessageStatus.ChatBlocked;
+                break;
+            default:
+                status = SendMessageStatus.Sent;
+                break;
+        }
+
+        return status;
+    }
+
+    private SendMessageStatus SendPermittedMessage(int playerId, string text, LobbyState lobby)
+    {
+        ChatPermissionStatus permission = _chatSanctionUseCases.CheckChatPermission(playerId);
+        SendMessageStatus status = SendMessageStatus.ChatBlocked;
+
+        if (permission == ChatPermissionStatus.Allowed)
+        {
+            status = SendFilteredMessage(playerId, text, lobby);
+        }
+        else
+        {
+            _logger.WarnFormat(
+                "A lobby message was rejected because the player chat is blocked. PlayerId: {0}.",
+                playerId);
+        }
+
+        return status;
+    }
+
+    private SendMessageStatus SendFilteredMessage(int playerId, string text, LobbyState lobby)
     {
         string filteredText = _chatMessageFilter.Filter(text);
         bool wasCensored = !string.Equals(filteredText, text, StringComparison.Ordinal);
+        SendMessageStatus status = SendMessageStatus.Sent;
+
+        NotifyLobbyMessage(playerId, filteredText, lobby);
 
         if (wasCensored)
         {
             _logger.InfoFormat("A lobby message was censored. PlayerId: {0}.", playerId);
+            status = ToSendMessageStatus(_chatSanctionUseCases.RegisterInfraction(playerId));
         }
 
-        return filteredText;
+        return status;
     }
 
     private void ValidateCode(string code)

@@ -530,6 +530,26 @@ public sealed class RemoteGameServices : IRemoteGameServices
                 resultStatus = LobbyResultStatus.AlreadyConnected;
                 break;
             default:
+                resultStatus = MapChatFault(faultCode);
+                break;
+        }
+
+        return resultStatus;
+    }
+
+    private static LobbyResultStatus MapChatFault(GameServiceFaultCode faultCode)
+    {
+        LobbyResultStatus resultStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.ChatWarning:
+                resultStatus = LobbyResultStatus.ChatWarning;
+                break;
+            case GameServiceFaultCode.ChatBlocked:
+                resultStatus = LobbyResultStatus.ChatBlocked;
+                break;
+            default:
                 resultStatus = LobbyResultStatus.ServerError;
                 break;
         }

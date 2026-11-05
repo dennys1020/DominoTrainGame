@@ -96,7 +96,67 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages\EntityFramework.6.5.2\.signature.p7s" />
+    <None Include="packages\EntityFramework.6.5.2\buildTransitive\EntityFramework.props" />
+    <None Include="packages\EntityFramework.6.5.2\buildTransitive\EntityFramework.targets" />
+    <None Include="packages\EntityFramework.6.5.2\buildTransitive\net6.0\EntityFramework.props" />
+    <None Include="packages\EntityFramework.6.5.2\buildTransitive\net6.0\EntityFramework.targets" />
+    <None Include="packages\EntityFramework.6.5.2\build\EntityFramework.DefaultItems.props" />
+    <None Include="packages\EntityFramework.6.5.2\build\EntityFramework.props" />
+    <None Include="packages\EntityFramework.6.5.2\build\EntityFramework.targets" />
+    <None Include="packages\EntityFramework.6.5.2\build\net6.0\EntityFramework.props" />
+    <None Include="packages\EntityFramework.6.5.2\build\net6.0\EntityFramework.targets" />
+    <None Include="packages\EntityFramework.6.5.2\content\net40\App.config.install.xdt" />
+    <None Include="packages\EntityFramework.6.5.2\content\net40\App.config.transform" />
+    <None Include="packages\EntityFramework.6.5.2\content\net40\Web.config.install.xdt" />
+    <None Include="packages\EntityFramework.6.5.2\content\net40\Web.config.transform" />
+    <None Include="packages\EntityFramework.6.5.2\EntityFramework.6.5.2.nupkg" />
+    <None Include="packages\EntityFramework.6.5.2\README.md" />
+    <None Include="packages\EntityFramework.6.5.2\tools\EntityFramework6.PS2.psd1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\EntityFramework6.PS2.psm1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\EntityFramework6.psd1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\EntityFramework6.psm1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\init.ps1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\install.ps1" />
+    <None Include="packages\EntityFramework.6.5.2\tools\net6.0\any\ef6.runtimeconfig.json" />
+    <None Include="packages\log4net.3.5.0\.signature.p7s" />
+    <None Include="packages\log4net.3.5.0\log4net.3.5.0.nupkg" />
+    <None Include="packages\log4net.3.5.0\README.md" />
+    <None Include="packages\log4net.Ext.Trace.2.0.5.3\.signature.p7s" />
+    <None Include="packages\log4net.Ext.Trace.2.0.5.3\log4net.Ext.Trace.2.0.5.3.nupkg" />
     <None Include="Secrets.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages\EntityFramework.6.5.2\build\Microsoft.Data.Entity.Build.Tasks.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\Icon.png" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net40\EntityFramework.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net40\EntityFramework.SqlServer.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net40\EntityFramework.SqlServer.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net40\EntityFramework.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\net45\EntityFramework.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\netstandard2.1\EntityFramework.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\netstandard2.1\EntityFramework.SqlServer.dll" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\netstandard2.1\EntityFramework.SqlServer.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\lib\netstandard2.1\EntityFramework.xml" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\about_EntityFramework6.help.txt" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net40\any\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net40\win-arm64\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net40\win-x86\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net45\any\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net45\win-arm64\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net45\win-x86\ef6.exe" />
+    <Content Include="packages\EntityFramework.6.5.2\tools\net6.0\any\ef6.dll" />
+    <Content Include="packages\log4net.3.5.0\lib\net462\log4net.dll" />
+    <Content Include="packages\log4net.3.5.0\lib\net462\log4net.pdb" />
+    <Content Include="packages\log4net.3.5.0\lib\net462\log4net.xml" />
+    <Content Include="packages\log4net.3.5.0\lib\netstandard2.0\log4net.dll" />
+    <Content Include="packages\log4net.3.5.0\lib\netstandard2.0\log4net.pdb" />
+    <Content Include="packages\log4net.3.5.0\lib\netstandard2.0\log4net.xml" />
+    <Content Include="packages\log4net.3.5.0\package-icon.png" />
+    <Content Include="packages\log4net.Ext.Trace.2.0.5.3\lib\net20\log4net.Ext.Trace.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -13,6 +13,7 @@
     mc:Ignorable="d">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="HostVisibility" />
+        <BooleanToVisibilityConverter x:Key="ChatNoticeVisibility" />
         <Style x:Key="ReadyButtonStyle" TargetType="Button" BasedOn="{StaticResource MatchButtonStyle}">
             <Setter
                 Property="Command"
@@ -465,6 +466,7 @@
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="*" />
                                                 <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
                                             <ScrollViewer
                                                 x:Name="ChatScrollViewer"
@@ -494,7 +496,23 @@
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
                                             </ScrollViewer>
-                                            <Grid Grid.Row="1" Margin="0,8,0,0">
+                                            <Border
+                                                Grid.Row="1"
+                                                Margin="0,8,0,0"
+                                                Padding="8,6"
+                                                Background="#B33A3A"
+                                                BorderBrush="{StaticResource NightBorder}"
+                                                BorderThickness="1"
+                                                Visibility="{Binding HasChatNotice,
+                                                    Converter={StaticResource ChatNoticeVisibility}}">
+                                                <TextBlock
+                                                    Text="{Binding ChatNotice}"
+                                                    Style="{StaticResource MatchBodyStyle}"
+                                                    Foreground="{StaticResource NightText}"
+                                                    FontSize="12"
+                                                    TextWrapping="Wrap" />
+                                            </Border>
+                                            <Grid Grid.Row="2" Margin="0,8,0,0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />

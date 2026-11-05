@@ -16,5 +16,7 @@ public enum LobbyResultStatus
     PlayersNotReady,
     PlayerNotFound,
     NotFriends,
-    PlayerOffline
+    PlayerOffline,
+    ChatWarning,
+    ChatBlocked
 }

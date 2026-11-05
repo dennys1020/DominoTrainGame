@@ -4,6 +4,7 @@ using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Time;
 using DominoTrainGame.Server.Service.Callbacks;
 using DominoTrainGame.Server.Service.Implementation;
 using DominoTrainGame.Server.Service.Sessions;
@@ -28,7 +29,17 @@ internal static class GameServiceFactory
         ILobbyCodeGenerator lobbyCodeGenerator = new LobbyCodeGenerator();
         LobbyRegistry lobbyRegistry = new LobbyRegistry(lobbyCodeGenerator);
         IChatMessageFilter chatMessageFilter = new ChatMessageFilter(ForbiddenWordResources.Load());
-        LobbyInputRules lobbyInputRules = new LobbyInputRules(lobbyCodeGenerator, chatMessageFilter);
+        ISanctionRepository sanctionRepository = new SanctionRepository(databaseExecutor);
+        ChatInfractionRegistry chatInfractions = new ChatInfractionRegistry();
+        IClock clock = new SystemClock();
+        IChatSanctionUseCases chatSanctionUseCases = new ChatSanctionUseCases(
+            sanctionRepository,
+            chatInfractions,
+            clock);
+        LobbyInputRules lobbyInputRules = new LobbyInputRules(
+            lobbyCodeGenerator,
+            chatMessageFilter,
+            chatSanctionUseCases);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyInputRules);
 
         IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);

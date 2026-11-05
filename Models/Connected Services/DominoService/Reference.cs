@@ -118,6 +118,12 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         PlayerOffline = 18,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatWarning = 19,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        ChatBlocked = 20,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

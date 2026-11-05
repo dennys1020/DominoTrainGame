@@ -114,21 +114,26 @@ public sealed class LobbyController
             throw CreateMissingRequestFault();
         }
 
-        bool wasSent;
+        SendMessageStatus status;
 
         try
         {
-            wasSent = _lobbyUseCases.TrySendMessage(caller.PlayerId, request.Text);
+            status = _lobbyUseCases.SendMessage(caller.PlayerId, request.Text);
         }
         catch (ArgumentException exception)
         {
             _logger.Warn("A lobby message was rejected because its text is invalid.", exception);
             throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
         }
-
-        if (!wasSent)
+        catch (DatabaseUnavailableException exception)
         {
-            throw GameFaultFactory.Create(GameServiceFaultCode.LobbyNotFound);
+            _logger.Error("A lobby message failed because the database is unavailable.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+        }
+
+        if (status != SendMessageStatus.Sent)
+        {
+            throw GameFaultFactory.Create(MapSendMessageFaultCode(status));
         }
     }
 
@@ -181,6 +186,26 @@ public sealed class LobbyController
         }
 
         return status;
+    }
+
+    private static GameServiceFaultCode MapSendMessageFaultCode(SendMessageStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case SendMessageStatus.Warned:
+                faultCode = GameServiceFaultCode.ChatWarning;
+                break;
+            case SendMessageStatus.ChatBlocked:
+                faultCode = GameServiceFaultCode.ChatBlocked;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.LobbyNotFound;
+                break;
+        }
+
+        return faultCode;
     }
 
     private static FaultException<GameServiceFault> CreateMissingRequestFault()

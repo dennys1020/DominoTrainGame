@@ -27,6 +27,8 @@
       <xs:enumeration value="FriendRequestNotFound" />
       <xs:enumeration value="NotFriends" />
       <xs:enumeration value="PlayerOffline" />
+      <xs:enumeration value="ChatWarning" />
+      <xs:enumeration value="ChatBlocked" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />

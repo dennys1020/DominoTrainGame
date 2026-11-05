@@ -17,6 +17,8 @@ public static class LobbyResultMessageKeys
     private const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
     private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
+    private const string ChatWarningMessageKey = "ChatWarningMessage";
+    private const string ChatBlockedMessageKey = "ChatBlockedMessage";
 
     public static string GetMessageKey(LobbyResultStatus status)
     {
@@ -73,6 +75,26 @@ public static class LobbyResultMessageKeys
                 break;
             case LobbyResultStatus.PlayerOffline:
                 messageKey = PlayerOfflineMessageKey;
+                break;
+            default:
+                messageKey = GetChatMessageKey(status);
+                break;
+        }
+
+        return messageKey;
+    }
+
+    private static string GetChatMessageKey(LobbyResultStatus status)
+    {
+        string messageKey;
+
+        switch (status)
+        {
+            case LobbyResultStatus.ChatWarning:
+                messageKey = ChatWarningMessageKey;
+                break;
+            case LobbyResultStatus.ChatBlocked:
+                messageKey = ChatBlockedMessageKey;
                 break;
             default:
                 messageKey = LobbyServerErrorMessageKey;
