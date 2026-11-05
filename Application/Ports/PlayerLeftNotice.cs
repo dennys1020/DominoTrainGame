@@ -8,7 +8,7 @@ public sealed class PlayerLeftNotice
     public PlayerLeftNotice(
         IReadOnlyList<int> recipientPlayerIds,
         int playerId,
-        DominoTrainGame.Server.Application.Connection.LobbyRoster roster)
+        DominoTrainGame.Server.Application.Domain.LobbyRoster roster)
     {
         RecipientPlayerIds = recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds));
         PlayerId = playerId;
@@ -19,7 +19,7 @@ public sealed class PlayerLeftNotice
 
     public int PlayerId { get; }
 
-    public DominoTrainGame.Server.Application.Connection.LobbyRoster Roster { get; }
+    public DominoTrainGame.Server.Application.Domain.LobbyRoster Roster { get; }
 
     public long Version => Roster.Version;
 

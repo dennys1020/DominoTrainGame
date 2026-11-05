@@ -5,9 +5,10 @@ using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
-using DominoTrainGame.Server.Application.Social;
-using DominoTrainGame.Server.Service.DTO;
-using DominoTrainGame.Server.Service.Networking;
+using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Service.DataContracts;
+using DominoTrainGame.Server.Service.Faults;
+using DominoTrainGame.Server.Service.Sessions;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 

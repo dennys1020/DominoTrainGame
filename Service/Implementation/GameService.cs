@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Application.Connection;
 using DominoTrainGame.Server.Application.Errors;
+using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
-using DominoTrainGame.Server.Service.DTO;
+using DominoTrainGame.Server.Service.DataContracts;
+using DominoTrainGame.Server.Service.Faults;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 

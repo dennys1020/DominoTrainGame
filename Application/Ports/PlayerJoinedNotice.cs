@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-
-using DominoTrainGame.Server.Application.Connection;
+using DominoTrainGame.Server.Application.Domain;
 
 namespace DominoTrainGame.Server.Application.Ports;
 
