@@ -27,7 +27,9 @@ internal static class GameServiceFactory
         IGameNotifier gameNotifier = new CallbackGameNotifier(connectedPlayers);
         ILobbyCodeGenerator lobbyCodeGenerator = new LobbyCodeGenerator();
         LobbyRegistry lobbyRegistry = new LobbyRegistry(lobbyCodeGenerator);
-        ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyCodeGenerator);
+        IChatMessageFilter chatMessageFilter = new ChatMessageFilter(ForbiddenWordResources.Load());
+        LobbyInputRules lobbyInputRules = new LobbyInputRules(lobbyCodeGenerator, chatMessageFilter);
+        ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyInputRules);
 
         IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
         SocialSessionRegistry socialSessions = new SocialSessionRegistry();

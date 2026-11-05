@@ -17,6 +17,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private readonly LobbyRegistry _lobbyRegistry;
     private readonly IGameNotifier _gameNotifier;
     private readonly ILobbyCodeGenerator _lobbyCodeGenerator;
+    private readonly IChatMessageFilter _chatMessageFilter;
 
     static LobbyUseCases()
     {
@@ -26,11 +27,13 @@ public sealed class LobbyUseCases : ILobbyUseCases
     public LobbyUseCases(
         LobbyRegistry lobbyRegistry,
         IGameNotifier gameNotifier,
-        ILobbyCodeGenerator lobbyCodeGenerator)
+        LobbyInputRules inputRules)
     {
         _lobbyRegistry = lobbyRegistry ?? throw new ArgumentNullException(nameof(lobbyRegistry));
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
-        _lobbyCodeGenerator = lobbyCodeGenerator ?? throw new ArgumentNullException(nameof(lobbyCodeGenerator));
+        LobbyInputRules rules = inputRules ?? throw new ArgumentNullException(nameof(inputRules));
+        _lobbyCodeGenerator = rules.CodeGenerator;
+        _chatMessageFilter = rules.MessageFilter;
     }
 
     public bool TryCreateLobby(LobbyMember host, out LobbyState lobby)
@@ -96,12 +99,13 @@ public sealed class LobbyUseCases : ILobbyUseCases
     {
         string normalizedText = text?.Trim() ?? string.Empty;
         ValidateMessageText(normalizedText);
+        string filteredText = FilterMessageText(playerId, normalizedText);
 
         bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
 
         if (isInLobby)
         {
-            NotifyLobbyMessage(playerId, normalizedText, lobby);
+            NotifyLobbyMessage(playerId, filteredText, lobby);
         }
         else
         {
@@ -219,6 +223,19 @@ public sealed class LobbyUseCases : ILobbyUseCases
                 "The lobby message is empty or longer than the allowed length.",
                 nameof(text));
         }
+    }
+
+    private string FilterMessageText(int playerId, string text)
+    {
+        string filteredText = _chatMessageFilter.Filter(text);
+        bool wasCensored = !string.Equals(filteredText, text, StringComparison.Ordinal);
+
+        if (wasCensored)
+        {
+            _logger.InfoFormat("A lobby message was censored. PlayerId: {0}.", playerId);
+        }
+
+        return filteredText;
     }
 
     private void ValidateCode(string code)
