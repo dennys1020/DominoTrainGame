@@ -625,4 +625,25 @@ en el tren</value>
   <data name="NoFriendsToInviteLabel" xml:space="preserve">
     <value>Todavía no tienes amigos para invitar.</value>
   </data>
+  <data name="FriendStatusOfflineLabel" xml:space="preserve">
+    <value>Desconectado</value>
+  </data>
+  <data name="FriendStatusOnlineLabel" xml:space="preserve">
+    <value>En línea</value>
+  </data>
+  <data name="FriendStatusInLobbyLabel" xml:space="preserve">
+    <value>En una sala</value>
+  </data>
+  <data name="FriendStatusInMatchLabel" xml:space="preserve">
+    <value>En partida</value>
+  </data>
+  <data name="FriendRequestAcceptedMessage" xml:space="preserve">
+    <value>Solicitud de amistad aceptada.</value>
+  </data>
+  <data name="FriendRequestRejectedMessage" xml:space="preserve">
+    <value>Solicitud de amistad rechazada.</value>
+  </data>
+  <data name="FriendRemovedMessage" xml:space="preserve">
+    <value>Amigo eliminado.</value>
+  </data>
 </root>

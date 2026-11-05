@@ -64,6 +64,11 @@
     <Compile Include="DataContracts\FriendResponse.cs" />
     <Compile Include="DataContracts\FriendshipDecisionRequest.cs" />
     <Compile Include="DataContracts\FriendUsernameRequest.cs" />
+    <Compile Include="Callbacks\CallbackSocialNotifier.cs" />
+    <Compile Include="Contracts\ISocialClientCallback.cs" />
+    <Compile Include="DataContracts\FriendStatusMessage.cs" />
+    <Compile Include="DataContracts\PlayerStatusCode.cs" />
+    <Compile Include="Implementation\PlayerStatusCodes.cs" />
     <Compile Include="Faults\GameFaultFactory.cs" />
     <Compile Include="Faults\GameServiceFault.cs" />
     <Compile Include="Faults\GameServiceFaultCode.cs" />

@@ -162,10 +162,20 @@
   <xs:complexType name="FriendResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:PlayerStatusCode" />
       <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FriendResponse" nillable="true" type="tns:FriendResponse" />
+  <xs:simpleType name="PlayerStatusCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Offline" />
+      <xs:enumeration value="Online" />
+      <xs:enumeration value="InLobby" />
+      <xs:enumeration value="InMatch" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PlayerStatusCode" nillable="true" type="tns:PlayerStatusCode" />
   <xs:complexType name="ArrayOfPendingFriendRequestResponse">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
@@ -205,4 +215,11 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FriendshipDecisionRequest" nillable="true" type="tns:FriendshipDecisionRequest" />
+  <xs:complexType name="FriendStatusMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:PlayerStatusCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendStatusMessage" nillable="true" type="tns:FriendStatusMessage" />
 </xs:schema>

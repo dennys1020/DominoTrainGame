@@ -69,6 +69,19 @@
                                             Text="{Binding Username}"
                                             Style="{StaticResource PixelTextStyle}"
                                             VerticalAlignment="Center" />
+                                        <Rectangle
+                                            Width="10"
+                                            Height="10"
+                                            Margin="12,0,6,0"
+                                            Fill="{StaticResource Mint}"
+                                            Visibility="{Binding IsConnected,
+                                                Converter={StaticResource TabVisibility}}" />
+                                        <TextBlock
+                                            Text="{Binding StatusLabel}"
+                                            Style="{StaticResource PixelTextStyle}"
+                                            FontSize="10"
+                                            Margin="6,0,0,0"
+                                            VerticalAlignment="Center" />
                                     </StackPanel>
                                     <Button
                                         Grid.Column="1"

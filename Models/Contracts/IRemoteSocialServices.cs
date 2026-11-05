@@ -1,9 +1,16 @@
+using System;
 using System.Threading.Tasks;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IRemoteSocialServices
 {
+    event EventHandler<FriendStatusChangedEventArgs> FriendStatusChanged;
+
+    event EventHandler<EventArgs> FriendsChanged;
+
+    Task<FriendResultStatus> ConnectAsync();
+
     Task<FriendListResult> GetFriendsAsync();
 
     Task<FriendRequestListResult> GetPendingRequestsAsync();
@@ -17,4 +24,6 @@ public interface IRemoteSocialServices
     Task<FriendResultStatus> RejectFriendRequestAsync(int requestId);
 
     Task<FriendResultStatus> RemoveFriendAsync(string username);
+
+    void Disconnect();
 }

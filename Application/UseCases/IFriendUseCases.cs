@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 
@@ -6,7 +7,7 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface IFriendUseCases
 {
-    IReadOnlyList<FriendSummary> GetFriends(int playerId);
+    IReadOnlyList<FriendPresence> GetFriends(int playerId);
 
     IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId);
 

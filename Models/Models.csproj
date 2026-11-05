@@ -151,6 +151,10 @@
     <Compile Include="Contracts\FriendRequestResult.cs" />
     <Compile Include="Contracts\FriendResult.cs" />
     <Compile Include="Contracts\FriendResultStatus.cs" />
+    <Compile Include="Callbacks\SocialClientCallback.cs" />
+    <Compile Include="Contracts\FriendStatus.cs" />
+    <Compile Include="Contracts\FriendStatusChangedEventArgs.cs" />
+    <Compile Include="Networking\FriendStatusCodes.cs" />
     <Compile Include="Contracts\IRemoteSocialServices.cs" />
     <Compile Include="Contracts\ISocialConnectionFactory.cs" />
     <Compile Include="Contracts\PlayerSearchResult.cs" />
