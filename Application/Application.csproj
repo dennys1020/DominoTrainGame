@@ -96,6 +96,16 @@
     <Compile Include="Results\StartMatchStatus.cs" />
     <Compile Include="UseCases\FriendUseCases.cs" />
     <Compile Include="UseCases\IFriendUseCases.cs" />
+    <Compile Include="Ports\IChatMessageFilter.cs" />
+    <Compile Include="Security\ChatMessageFilter.cs" />
+    <Compile Include="Security\ChatTextNormalizer.cs" />
+    <Compile Include="Security\ChatToken.cs" />
+    <Compile Include="Security\ForbiddenWordResources.cs" />
+    <Compile Include="UseCases\LobbyInputRules.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Security\ForbiddenWords\English.txt" />
+    <EmbeddedResource Include="Security\ForbiddenWords\Spanish.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
