@@ -1,9 +1,11 @@
 using System;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Application.Authentication;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
-using DominoTrainGame.Server.Service.DTO;
-using DominoTrainGame.Server.Service.Networking;
+using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Service.DataContracts;
+using DominoTrainGame.Server.Service.Faults;
+using DominoTrainGame.Server.Service.Sessions;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 

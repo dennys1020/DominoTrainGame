@@ -1,5 +1,6 @@
 using System.ServiceModel;
-using DominoTrainGame.Server.Service.DTO;
+using DominoTrainGame.Server.Service.DataContracts;
+using DominoTrainGame.Server.Service.Faults;
 
 namespace DominoTrainGame.Server.Service.Contracts;
 

@@ -51,21 +51,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\AuthenticatedPlayer.cs" />
-    <Compile Include="Authentication\ILoginUseCases.cs" />
-    <Compile Include="Authentication\ISignUpUseCases.cs" />
-    <Compile Include="Authentication\LoginUseCases.cs" />
-    <Compile Include="Authentication\SignUpUseCases.cs" />
-    <Compile Include="Connection\ConnectionUseCases.cs" />
-    <Compile Include="Connection\IConnectionUseCases.cs" />
-    <Compile Include="Connection\LobbyRegistry.cs" />
-    <Compile Include="Connection\LobbyUseCases.cs" />
+    <Compile Include="Domain\AuthenticatedPlayer.cs" />
+    <Compile Include="UseCases\ILoginUseCases.cs" />
+    <Compile Include="UseCases\ISignUpUseCases.cs" />
+    <Compile Include="UseCases\LoginUseCases.cs" />
+    <Compile Include="UseCases\SignUpUseCases.cs" />
+    <Compile Include="UseCases\ConnectionUseCases.cs" />
+    <Compile Include="UseCases\IConnectionUseCases.cs" />
+    <Compile Include="State\LobbyRegistry.cs" />
+    <Compile Include="UseCases\LobbyUseCases.cs" />
     <Compile Include="Ports\IGameNotifier.cs" />
-    <Compile Include="Connection\ILobbyUseCases.cs" />
-    <Compile Include="Connection\LobbyMember.cs" />
-    <Compile Include="Connection\LobbyPlayerState.cs" />
-    <Compile Include="Connection\LobbyRoster.cs" />
-    <Compile Include="Connection\LobbyState.cs" />
+    <Compile Include="UseCases\ILobbyUseCases.cs" />
+    <Compile Include="Domain\LobbyMember.cs" />
+    <Compile Include="Domain\LobbyPlayerState.cs" />
+    <Compile Include="Domain\LobbyRoster.cs" />
+    <Compile Include="Domain\LobbyState.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
@@ -94,8 +94,8 @@
     <Compile Include="Results\RemoveFriendStatus.cs" />
     <Compile Include="Results\SendFriendRequestStatus.cs" />
     <Compile Include="Results\StartMatchStatus.cs" />
-    <Compile Include="Social\FriendUseCases.cs" />
-    <Compile Include="Social\IFriendUseCases.cs" />
+    <Compile Include="UseCases\FriendUseCases.cs" />
+    <Compile Include="UseCases\IFriendUseCases.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
