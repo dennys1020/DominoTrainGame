@@ -70,9 +70,10 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     private static void ValidatePassword(string password)
     {
-        bool isPasswordValid = !string.IsNullOrEmpty(password)
-            && password.Length >= MinimumPasswordLength
-            && password.Length <= MaximumPasswordLength;
+        string enteredPassword = password ?? string.Empty;
+        bool isLongEnough = enteredPassword.Length >= MinimumPasswordLength;
+        bool isShortEnough = enteredPassword.Length <= MaximumPasswordLength;
+        bool isPasswordValid = isLongEnough && isShortEnough;
 
         if (!isPasswordValid)
         {

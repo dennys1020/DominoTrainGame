@@ -39,6 +39,7 @@
             Grid.Row="1"
             Margin="0,20,0,0">
             <Border
+                IsEnabled="{Binding IsIdle}"
                 Background="{StaticResource Glacier}"
                 BorderBrush="{StaticResource Ink}"
                 BorderThickness="2"
@@ -135,6 +136,7 @@
                         Padding="8"
                         Visibility="{Binding HasSearchResults, Converter={StaticResource TabVisibility}}">
                         <ListBox
+                            IsEnabled="{Binding IsIdle}"
                             MaxHeight="240"
                             Background="Transparent"
                             BorderThickness="0"
@@ -181,6 +183,7 @@
                     </Border>
                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                         <Button
+                            IsEnabled="{Binding IsIdle}"
                             Content="{Binding [AddButtonLabel], Source={StaticResource Localization}}"
                             Style="{StaticResource PixelButtonStyle}"
                             Command="{Binding AddFriendCommand}" />
@@ -193,6 +196,7 @@
             Margin="0,20,0,0"
             Visibility="{Binding IsRequestsSelected, Converter={StaticResource TabVisibility}}">
             <Border
+                IsEnabled="{Binding IsIdle}"
                 Background="{StaticResource Glacier}"
                 BorderBrush="{StaticResource Ink}"
                 BorderThickness="2"

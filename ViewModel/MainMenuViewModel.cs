@@ -42,7 +42,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
 
     private async Task ConnectSocialAsync()
     {
-        await _socialServices.ConnectAsync();
+        await RunWhileBusyAsync(() => _socialServices.ConnectAsync());
     }
 
     private void LogOut()

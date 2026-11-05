@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="GameChannelCloser.cs" />
     <Compile Include="GameServiceFactory.cs" />
+    <Compile Include="GameServiceHost.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

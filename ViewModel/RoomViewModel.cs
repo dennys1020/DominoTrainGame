@@ -28,7 +28,6 @@ public sealed class RoomViewModel : ScreenViewModel
     private readonly LocalizationViewModel _localization;
     private readonly Screen _previousScreen;
     private bool _canStartMatch;
-    private bool _isBusy;
     private bool _isHost;
     private bool _isReconnecting;
     private string _lobbyCode = string.Empty;
@@ -73,18 +72,6 @@ public sealed class RoomViewModel : ScreenViewModel
         private set
         {
             SetProperty(ref _isReconnecting, value);
-        }
-    }
-
-    public bool IsBusy
-    {
-        get
-        {
-            return _isBusy;
-        }
-        private set
-        {
-            SetProperty(ref _isBusy, value);
         }
     }
 

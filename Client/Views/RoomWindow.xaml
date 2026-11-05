@@ -576,6 +576,7 @@
                                 <Grid Grid.Row="2">
                                     <Grid
                                         DataContext="{Binding InviteFriends}"
+                                        IsEnabled="{Binding IsIdle}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center">
                                         <Button

@@ -115,7 +115,8 @@
     <Compile Include="Security\ChatMessageFilter.cs" />
     <Compile Include="Security\ChatTextNormalizer.cs" />
     <Compile Include="Security\ChatToken.cs" />
-    <Compile Include="Security\ForbiddenWordResources.cs" />
+    <Compile Include="Security\ForbiddenWordSource.cs" />
+    <Compile Include="Ports\IForbiddenWordSource.cs" />
     <Compile Include="UseCases\LobbyInputRules.cs" />
     <Compile Include="Domain\FriendPresence.cs" />
     <Compile Include="Domain\PlayerStatus.cs" />

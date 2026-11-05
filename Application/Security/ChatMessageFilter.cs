@@ -16,14 +16,14 @@ public sealed class ChatMessageFilter : IChatMessageFilter
     private readonly HashSet<string> _forbiddenWords = new HashSet<string>(StringComparer.Ordinal);
     private readonly List<string> _forbiddenPrefixes = new List<string>();
 
-    public ChatMessageFilter(IEnumerable<string> forbiddenEntries)
+    public ChatMessageFilter(IForbiddenWordSource forbiddenWordSource)
     {
-        if (forbiddenEntries == null)
+        if (forbiddenWordSource == null)
         {
-            throw new ArgumentNullException(nameof(forbiddenEntries));
+            throw new ArgumentNullException(nameof(forbiddenWordSource));
         }
 
-        foreach (string forbiddenEntry in forbiddenEntries)
+        foreach (string forbiddenEntry in forbiddenWordSource.LoadEntries())
         {
             AddForbiddenEntry(forbiddenEntry);
         }

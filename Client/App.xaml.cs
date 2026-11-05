@@ -30,9 +30,8 @@ public sealed partial class App : Application
         ConfigureLogging();
         base.OnStartup(e);
 
-        IGameConnectionFactory connectionFactory = new GameConnectionFactory();
         GameChannelCloser channelCloser = new GameChannelCloser();
-        IRemoteGameServices gameServices = new RemoteGameServices(connectionFactory, channelCloser);
+        IRemoteGameServices gameServices = CreateGameServices(channelCloser);
         ISocialConnectionFactory socialConnectionFactory = new SocialConnectionFactory();
         IRemoteSocialServices socialServices = new RemoteSocialServices(
             socialConnectionFactory,
@@ -43,6 +42,18 @@ public sealed partial class App : Application
 
         ShowLoginWindow(windowFactory);
         StartConnectionCheck(gameServices);
+    }
+
+    private static IRemoteGameServices CreateGameServices(GameChannelCloser channelCloser)
+    {
+        IGameConnectionFactory connectionFactory = new GameConnectionFactory();
+        ClientSession clientSession = new ClientSession();
+        LobbyEventRelay lobbyEvents = new LobbyEventRelay(clientSession);
+        LobbySessionContext sessionContext = new LobbySessionContext(clientSession, lobbyEvents);
+        AccountRequests accountRequests = new AccountRequests(connectionFactory, channelCloser);
+        LobbyChannel lobbyChannel = new LobbyChannel(connectionFactory, channelCloser, sessionContext);
+        IRemoteGameServices gameServices = new RemoteGameServices(accountRequests, lobbyChannel, sessionContext);
+        return gameServices;
     }
 
     private static void ConfigureLogging()

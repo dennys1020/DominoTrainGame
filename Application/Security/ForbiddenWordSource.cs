@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.Security;
 
-public static class ForbiddenWordResources
+public sealed class ForbiddenWordSource : IForbiddenWordSource
 {
     private const string ResourceFolder = ".Security.ForbiddenWords.";
     private const int NotFoundIndex = -1;
 
-    private static readonly char[] LineSeparators = { '\r', '\n' };
+    private static readonly char[] _lineSeparators;
 
-    public static List<string> Load()
+    static ForbiddenWordSource()
     {
-        Assembly assembly = typeof(ForbiddenWordResources).Assembly;
+        _lineSeparators = new[] { '\r', '\n' };
+    }
+
+    public IReadOnlyList<string> LoadEntries()
+    {
+        Assembly assembly = typeof(ForbiddenWordSource).Assembly;
         List<string> forbiddenEntries = new List<string>();
 
         foreach (string resourceName in assembly.GetManifestResourceNames())
@@ -39,7 +45,7 @@ public static class ForbiddenWordResources
             resourceText = reader.ReadToEnd();
         }
 
-        string[] entries = resourceText.Split(LineSeparators, StringSplitOptions.RemoveEmptyEntries);
+        string[] entries = resourceText.Split(_lineSeparators, StringSplitOptions.RemoveEmptyEntries);
         return entries;
     }
 }

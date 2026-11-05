@@ -69,6 +69,7 @@
     <Compile Include="DataContracts\FriendStatusMessage.cs" />
     <Compile Include="DataContracts\PlayerStatusCode.cs" />
     <Compile Include="Implementation\PlayerStatusCodes.cs" />
+    <Compile Include="Faults\GameErrorHandler.cs" />
     <Compile Include="Faults\GameFaultFactory.cs" />
     <Compile Include="Faults\GameServiceFault.cs" />
     <Compile Include="Faults\GameServiceFaultCode.cs" />

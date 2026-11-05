@@ -12,19 +12,24 @@ internal static class ChatTextNormalizer
     private const int RepetitionStep = 1;
     private const int NotFoundIndex = -1;
 
-    private static readonly char[] JoinerCharacters = { '.', '-', '_', '*' };
+    private static readonly char[] _joinerCharacters;
+    private static readonly Dictionary<char, char> _lookAlikeCharacters;
 
-    private static readonly Dictionary<char, char> LookAlikeCharacters = new Dictionary<char, char>
+    static ChatTextNormalizer()
     {
-        { '0', 'o' },
-        { '1', 'i' },
-        { '3', 'e' },
-        { '4', 'a' },
-        { '5', 's' },
-        { '7', 't' },
-        { '@', 'a' },
-        { '$', 's' },
-    };
+        _joinerCharacters = new[] { '.', '-', '_', '*' };
+        _lookAlikeCharacters = new Dictionary<char, char>
+        {
+            { '0', 'o' },
+            { '1', 'i' },
+            { '3', 'e' },
+            { '4', 'a' },
+            { '5', 's' },
+            { '7', 't' },
+            { '@', 'a' },
+            { '$', 's' }
+        };
+    }
 
     public static List<ChatToken> Tokenize(string text)
     {
@@ -59,9 +64,7 @@ internal static class ChatTextNormalizer
 
         foreach (char character in decomposedWord)
         {
-            bool isAccentMark = CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark;
-
-            if (!isAccentMark && !IsJoiner(character))
+            if (!IsAccentMark(character) && !IsJoiner(character))
             {
                 normalizedWord.Append(ReplaceLookAlike(character));
             }
@@ -94,8 +97,8 @@ internal static class ChatTextNormalizer
     private static void AddToken(List<ChatToken> tokens, StringBuilder currentToken, int tokenStart)
     {
         string rawToken = currentToken.ToString();
-        string tokenWithoutLeadingJoiners = rawToken.TrimStart(JoinerCharacters);
-        string tokenText = tokenWithoutLeadingJoiners.TrimEnd(JoinerCharacters);
+        string tokenWithoutLeadingJoiners = rawToken.TrimStart(_joinerCharacters);
+        string tokenText = tokenWithoutLeadingJoiners.TrimEnd(_joinerCharacters);
         int trimmedStart = tokenStart + rawToken.Length - tokenWithoutLeadingJoiners.Length;
 
         if (tokenText.Length > EmptyLength)
@@ -108,22 +111,27 @@ internal static class ChatTextNormalizer
 
     private static bool IsWordCharacter(char character)
     {
-        bool isWordCharacter = char.IsLetterOrDigit(character)
-            || CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark
-            || LookAlikeCharacters.ContainsKey(character)
-            || IsJoiner(character);
+        bool isLetterOrDigit = char.IsLetterOrDigit(character);
+        bool isSymbol = _lookAlikeCharacters.ContainsKey(character) || IsJoiner(character);
+        bool isWordCharacter = isLetterOrDigit || IsAccentMark(character) || isSymbol;
         return isWordCharacter;
+    }
+
+    private static bool IsAccentMark(char character)
+    {
+        bool isAccentMark = CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark;
+        return isAccentMark;
     }
 
     private static bool IsJoiner(char character)
     {
-        bool isJoiner = Array.IndexOf(JoinerCharacters, character) > NotFoundIndex;
+        bool isJoiner = Array.IndexOf(_joinerCharacters, character) > NotFoundIndex;
         return isJoiner;
     }
 
     private static char ReplaceLookAlike(char character)
     {
-        char replacement = LookAlikeCharacters.TryGetValue(character, out char letter) ? letter : character;
+        char replacement = _lookAlikeCharacters.TryGetValue(character, out char letter) ? letter : character;
         return replacement;
     }
 }
