@@ -10,6 +10,7 @@ public enum Screen
     NewGame,
     JoinGame,
     Room,
+    Match,
     MatchResults,
     Settings,
     Rules,

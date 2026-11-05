@@ -652,4 +652,13 @@ en el tren</value>
   <data name="ChatWarningMessage" xml:space="preserve">
     <value>Cuida tu lenguaje: si sigues usando palabras ofensivas, se bloqueará tu chat.</value>
   </data>
+  <data name="MatchTitle" xml:space="preserve">
+    <value>Partida en curso</value>
+  </data>
+  <data name="MatchPlaceholderDescription" xml:space="preserve">
+    <value>El tablero de juego estará disponible próximamente.</value>
+  </data>
+  <data name="ViewResultsButtonLabel" xml:space="preserve">
+    <value>Ver resultados</value>
+  </data>
 </root>

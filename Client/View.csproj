@@ -98,6 +98,9 @@
     <Compile Include="Views\MatchResultsWindow.xaml.cs">
       <DependentUpon>MatchResultsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MatchWindow.xaml.cs">
+      <DependentUpon>MatchWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewGameWindow.xaml.cs">
       <DependentUpon>NewGameWindow.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MatchResultsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MatchWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

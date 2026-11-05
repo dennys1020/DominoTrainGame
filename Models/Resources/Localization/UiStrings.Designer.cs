@@ -1192,4 +1192,28 @@ public class UiStrings
             return ResourceManager.GetString("ChatWarningMessage", _resourceCulture);
         }
     }
+
+    public static string MatchTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("MatchTitle", _resourceCulture);
+        }
+    }
+
+    public static string MatchPlaceholderDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("MatchPlaceholderDescription", _resourceCulture);
+        }
+    }
+
+    public static string ViewResultsButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ViewResultsButtonLabel", _resourceCulture);
+        }
+    }
 }
