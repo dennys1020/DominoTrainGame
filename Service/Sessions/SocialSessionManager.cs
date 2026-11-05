@@ -48,8 +48,8 @@ public sealed class SocialSessionManager
         ICommunicationObject channel = context.Channel;
 
         _socialSessions.Register(session);
-        channel.Closed += (sender, e) => HandleDisconnection(session, sessionToken);
-        channel.Faulted += (sender, e) => HandleDisconnection(session, sessionToken);
+        channel.Closed += (sender, eventArgs) => HandleDisconnection(session, sessionToken);
+        channel.Faulted += (sender, eventArgs) => HandleDisconnection(session, sessionToken);
         _logger.InfoFormat("A player connected to the social service. PlayerId: {0}.", player.PlayerId);
         _friendStatusUseCases.PublishStatus(player.PlayerId);
     }

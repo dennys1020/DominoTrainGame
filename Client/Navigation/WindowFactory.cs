@@ -96,7 +96,7 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
-        window.Closed += (sender, e) => UnsubscribeViewModel(window.DataContext);
+        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
         _invitationController.Attach(windowService);
         return window;
     }
@@ -106,7 +106,7 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
-        window.Closed += (sender, e) => UnsubscribeViewModel(window.DataContext);
+        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
         return window;
     }
 
@@ -124,7 +124,7 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = createViewModel(windowService, roomRole);
-        window.Closed += (sender, e) => UnsubscribeViewModel(window.DataContext);
+        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
         _invitationController.Attach(windowService);
         return window;
     }

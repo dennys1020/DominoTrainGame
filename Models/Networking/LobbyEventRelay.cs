@@ -45,56 +45,56 @@ public sealed class LobbyEventRelay
         OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
     }
 
-    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs e)
+    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs eventArgs)
     {
         bool wasApplied = _session.TryApplyLobbyUpdate(
-            e.Version,
-            lobby => LobbyRosterUpdates.CreateLobbyWithPlayer(lobby, e));
+            eventArgs.Version,
+            lobby => LobbyRosterUpdates.CreateLobbyWithPlayer(lobby, eventArgs));
 
         if (wasApplied)
         {
-            OnPlayerJoined(e);
+            OnPlayerJoined(eventArgs);
         }
     }
 
-    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs e)
+    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs eventArgs)
     {
         bool wasApplied = _session.TryApplyLobbyUpdate(
-            e.Version,
-            lobby => LobbyRosterUpdates.CreateLobbyWithoutPlayer(lobby, e));
+            eventArgs.Version,
+            lobby => LobbyRosterUpdates.CreateLobbyWithoutPlayer(lobby, eventArgs));
 
         if (wasApplied)
         {
-            OnPlayerLeft(e);
+            OnPlayerLeft(eventArgs);
         }
     }
 
-    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs e)
+    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs eventArgs)
     {
         bool wasApplied = _session.TryApplyLobbyUpdate(
-            e.Version,
-            lobby => LobbyRosterUpdates.CreateLobbyWithReadyState(lobby, e));
+            eventArgs.Version,
+            lobby => LobbyRosterUpdates.CreateLobbyWithReadyState(lobby, eventArgs));
 
         if (wasApplied)
         {
-            OnPlayerReadyChanged(e);
+            OnPlayerReadyChanged(eventArgs);
         }
     }
 
-    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs e)
+    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs eventArgs)
     {
-        OnLobbyMessageReceived(e);
+        OnLobbyMessageReceived(eventArgs);
     }
 
-    private void HandleMatchStarting(object sender, MatchStartingEventArgs e)
+    private void HandleMatchStarting(object sender, MatchStartingEventArgs eventArgs)
     {
-        OnMatchStarting(e);
+        OnMatchStarting(eventArgs);
     }
 
-    private void HandleLobbyInvitationReceived(object sender, LobbyInvitationReceivedEventArgs e)
+    private void HandleLobbyInvitationReceived(object sender, LobbyInvitationReceivedEventArgs eventArgs)
     {
         SynchronizationContext callerContext = _session.CallerContext;
-        callerContext.Post(state => OnLobbyInvitationReceived(e), e);
+        callerContext.Post(state => OnLobbyInvitationReceived(eventArgs), eventArgs);
     }
 
     private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)

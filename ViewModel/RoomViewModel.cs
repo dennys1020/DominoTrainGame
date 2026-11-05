@@ -208,24 +208,24 @@ public sealed class RoomViewModel : ScreenViewModel
         RefreshStartAvailability();
     }
 
-    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs e)
+    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs eventArgs)
     {
-        ApplyRosterChange(e.Version, () => AddPlayer(e.Player));
+        ApplyRosterChange(eventArgs.Version, () => AddPlayer(eventArgs.Player));
     }
 
-    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs e)
+    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs eventArgs)
     {
-        ApplyRosterChange(e.Version, () => RemovePlayer(e));
+        ApplyRosterChange(eventArgs.Version, () => RemovePlayer(eventArgs));
     }
 
-    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs e)
+    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs eventArgs)
     {
-        ApplyRosterChange(e.Version, () => UpdateReadyState(e));
+        ApplyRosterChange(eventArgs.Version, () => UpdateReadyState(eventArgs));
     }
 
-    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs e)
+    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs eventArgs)
     {
-        RoomChatMessageViewModel message = new RoomChatMessageViewModel(e.Sender.Username, e.Text);
+        RoomChatMessageViewModel message = new RoomChatMessageViewModel(eventArgs.Sender.Username, eventArgs.Text);
 
         Messages.Add(message);
 
@@ -235,9 +235,9 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
-    private void HandleMatchStarting(object sender, MatchStartingEventArgs e)
+    private void HandleMatchStarting(object sender, MatchStartingEventArgs eventArgs)
     {
-        bool isCurrentLobby = string.Equals(e.Code, LobbyCode, StringComparison.Ordinal);
+        bool isCurrentLobby = string.Equals(eventArgs.Code, LobbyCode, StringComparison.Ordinal);
 
         if (isCurrentLobby)
         {
@@ -310,9 +310,9 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
-    private void HandleConnectionStateChanged(object sender, ConnectionStateChangedEventArgs e)
+    private void HandleConnectionStateChanged(object sender, ConnectionStateChangedEventArgs eventArgs)
     {
-        switch (e.State)
+        switch (eventArgs.State)
         {
             case ConnectionState.Reconnecting:
                 IsReconnecting = true;

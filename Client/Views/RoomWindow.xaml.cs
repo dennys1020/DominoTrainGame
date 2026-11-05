@@ -12,9 +12,9 @@ public sealed partial class RoomWindow : Window
         InitializeComponent();
     }
 
-    private void OnChatScrollViewerScrollChanged(object sender, ScrollChangedEventArgs e)
+    private void OnChatScrollViewerScrollChanged(object sender, ScrollChangedEventArgs eventArgs)
     {
-        bool hasNewContent = e.ExtentHeightChange > NoExtentChange;
+        bool hasNewContent = eventArgs.ExtentHeightChange > NoExtentChange;
 
         if (hasNewContent)
         {

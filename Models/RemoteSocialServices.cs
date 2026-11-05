@@ -284,8 +284,8 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         ICommunicationObject channel = friendClient;
         FriendServiceClient previousClient;
 
-        channel.Faulted += (sender, e) => DiscardEndedClient(friendClient);
-        channel.Closed += (sender, e) => DiscardEndedClient(friendClient);
+        channel.Faulted += (sender, eventArgs) => DiscardEndedClient(friendClient);
+        channel.Closed += (sender, eventArgs) => DiscardEndedClient(friendClient);
 
         lock (_clientSyncRoot)
         {
@@ -347,14 +347,14 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         return callback;
     }
 
-    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs e)
+    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs eventArgs)
     {
-        OnFriendStatusChanged(e);
+        OnFriendStatusChanged(eventArgs);
     }
 
-    private void HandleFriendsChanged(object sender, EventArgs e)
+    private void HandleFriendsChanged(object sender, EventArgs eventArgs)
     {
-        OnFriendsChanged(e);
+        OnFriendsChanged(eventArgs);
     }
 
     private void OnFriendStatusChanged(FriendStatusChangedEventArgs eventArgs)

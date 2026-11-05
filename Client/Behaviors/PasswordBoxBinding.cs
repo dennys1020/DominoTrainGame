@@ -35,11 +35,11 @@ public static class PasswordBoxBinding
         target.SetValue(BoundPasswordProperty, value);
     }
 
-    private static void OnBoundPasswordChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+    private static void OnBoundPasswordChanged(DependencyObject target, DependencyPropertyChangedEventArgs eventArgs)
     {
         if (target is PasswordBox passwordBox)
         {
-            string newPassword = (string)e.NewValue ?? string.Empty;
+            string newPassword = (string)eventArgs.NewValue ?? string.Empty;
 
             passwordBox.PasswordChanged -= OnPasswordChanged;
 
@@ -57,7 +57,7 @@ public static class PasswordBoxBinding
         }
     }
 
-    private static void OnPasswordChanged(object sender, RoutedEventArgs e)
+    private static void OnPasswordChanged(object sender, RoutedEventArgs eventArgs)
     {
         PasswordBox passwordBox = (PasswordBox)sender;
         SetBoundPassword(passwordBox, passwordBox.Password);

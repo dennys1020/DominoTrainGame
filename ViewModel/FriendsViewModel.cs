@@ -166,18 +166,18 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         return friendItem;
     }
 
-    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs e)
+    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs eventArgs)
     {
-        FriendItemViewModel friendItem = Friends.FirstOrDefault(item => item.PlayerId == e.PlayerId);
+        FriendItemViewModel friendItem = Friends.FirstOrDefault(item => item.PlayerId == eventArgs.PlayerId);
 
         if (friendItem != null)
         {
-            FriendResult friend = new FriendResult(e.PlayerId, friendItem.Username, e.Status);
+            FriendResult friend = new FriendResult(eventArgs.PlayerId, friendItem.Username, eventArgs.Status);
             Friends[Friends.IndexOf(friendItem)] = CreateFriendItem(friend);
         }
     }
 
-    private void HandleFriendsChanged(object sender, EventArgs e)
+    private void HandleFriendsChanged(object sender, EventArgs eventArgs)
     {
         RefreshCommand.Execute(null);
     }
