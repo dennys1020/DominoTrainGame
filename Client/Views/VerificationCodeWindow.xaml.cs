@@ -35,66 +35,66 @@ public sealed partial class VerificationCodeWindow : Window
         };
     }
 
-    private void OnDigitTextBoxPreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void OnDigitTextBoxPreviewTextInput(object sender, TextCompositionEventArgs eventArgs)
     {
-        e.Handled = true;
+        eventArgs.Handled = true;
 
         int index = GetFocusedIndex();
 
         bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
-        bool canAcceptInput = hasFocusedTextBox && e.Text.Length == SingleDigitInputLength;
+        bool canAcceptInput = hasFocusedTextBox && eventArgs.Text.Length == SingleDigitInputLength;
 
-        if (canAcceptInput && IsAsciiDigit(e.Text[FirstCharacterIndex]))
+        if (canAcceptInput && IsAsciiDigit(eventArgs.Text[FirstCharacterIndex]))
         {
-            SetDigit(index, e.Text);
+            SetDigit(index, eventArgs.Text);
             FocusDigitTextBox(index + DigitTextBoxNavigationStep);
         }
     }
 
-    private void OnDigitTextBoxPreviewKeyDown(object sender, KeyEventArgs e)
+    private void OnDigitTextBoxPreviewKeyDown(object sender, KeyEventArgs eventArgs)
     {
         int index = GetFocusedIndex();
 
         if (index >= FirstDigitTextBoxIndex)
         {
-            if (e.Key == Key.Space)
+            if (eventArgs.Key == Key.Space)
             {
-                e.Handled = true;
+                eventArgs.Handled = true;
             }
-            else if (e.Key == Key.Back)
+            else if (eventArgs.Key == Key.Back)
             {
-                e.Handled = true;
+                eventArgs.Handled = true;
                 DeleteBackward(index);
             }
-            else if (e.Key == Key.Delete)
+            else if (eventArgs.Key == Key.Delete)
             {
-                e.Handled = true;
+                eventArgs.Handled = true;
                 SetDigit(index, string.Empty);
             }
-            else if (e.Key == Key.Left)
+            else if (eventArgs.Key == Key.Left)
             {
-                e.Handled = true;
+                eventArgs.Handled = true;
                 FocusDigitTextBox(index - DigitTextBoxNavigationStep);
             }
-            else if (e.Key == Key.Right)
+            else if (eventArgs.Key == Key.Right)
             {
-                e.Handled = true;
+                eventArgs.Handled = true;
                 FocusDigitTextBox(index + DigitTextBoxNavigationStep);
             }
         }
     }
 
-    private void OnDigitTextBoxGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+    private void OnDigitTextBoxGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs eventArgs)
     {
-        (e.NewFocus as TextBox)?.SelectAll();
+        (eventArgs.NewFocus as TextBox)?.SelectAll();
     }
 
-    private void OnDigitTextBoxPasting(object sender, DataObjectPastingEventArgs e)
+    private void OnDigitTextBoxPasting(object sender, DataObjectPastingEventArgs eventArgs)
     {
-        e.CancelCommand();
+        eventArgs.CancelCommand();
 
         int index = GetFocusedIndex();
-        string pastedText = e.DataObject.GetData(DataFormats.UnicodeText) as string ?? string.Empty;
+        string pastedText = eventArgs.DataObject.GetData(DataFormats.UnicodeText) as string ?? string.Empty;
         bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
         bool hasPastedText = pastedText.Length > EmptyTextLength;
 

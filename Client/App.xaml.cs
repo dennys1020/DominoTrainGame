@@ -25,10 +25,10 @@ public sealed partial class App : Application
         _logger = TraceLogManager.GetLogger(typeof(App));
     }
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override void OnStartup(StartupEventArgs eventArgs)
     {
         ConfigureLogging();
-        base.OnStartup(e);
+        base.OnStartup(eventArgs);
 
         GameChannelCloser channelCloser = new GameChannelCloser();
         IRemoteGameServices gameServices = CreateGameServices(channelCloser);

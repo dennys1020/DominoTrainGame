@@ -225,8 +225,8 @@ public sealed class LobbyChannel
     {
         ICommunicationObject channel = lobbyClient;
 
-        channel.Faulted += (sender, e) => RecoverLobbyChannel(lobbyClient);
-        channel.Closed += (sender, e) => RecoverLobbyChannel(lobbyClient);
+        channel.Faulted += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
+        channel.Closed += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
 
         lock (_channelSyncRoot)
         {

@@ -28,7 +28,7 @@ public sealed class LobbyInvitationController
         _windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
     }
 
-    private void HandleLobbyInvitationReceived(object sender, LobbyInvitationReceivedEventArgs e)
+    private void HandleLobbyInvitationReceived(object sender, LobbyInvitationReceivedEventArgs eventArgs)
     {
         IWindowService windowService = _windowService;
         bool hasWindow = windowService != null;
@@ -36,7 +36,7 @@ public sealed class LobbyInvitationController
 
         if (hasWindow && !isInLobby)
         {
-            AsyncRelayCommand answerCommand = new AsyncRelayCommand(() => AnswerInvitationAsync(windowService, e));
+            AsyncRelayCommand answerCommand = new AsyncRelayCommand(() => AnswerInvitationAsync(windowService, eventArgs));
             answerCommand.Execute(null);
         }
     }
