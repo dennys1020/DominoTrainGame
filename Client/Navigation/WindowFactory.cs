@@ -36,6 +36,7 @@ internal sealed class WindowFactory
             [Screen.NewGame] = () => new NewGameWindow(),
             [Screen.JoinGame] = () => new JoinGameWindow(),
             [Screen.Room] = () => new RoomWindow(),
+            [Screen.Match] = () => new MatchWindow(),
             [Screen.MatchResults] = () => new MatchResultsWindow(),
             [Screen.Settings] = () => new SettingsWindow(),
             [Screen.Rules] = () => new GameRulesWindow(),
@@ -85,6 +86,7 @@ internal sealed class WindowFactory
 
         _roleViewModelsByScreen = new Dictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
         {
+            [Screen.Match] = (windowService, roomRole) => new MatchViewModel(windowService, roomRole),
             [Screen.MatchResults] = (windowService, roomRole) => new MatchResultsViewModel(windowService, roomRole)
         };
     }

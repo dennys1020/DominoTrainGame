@@ -71,6 +71,7 @@
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MainMenuViewModel.cs" />
     <Compile Include="MatchResultsViewModel.cs" />
+    <Compile Include="MatchViewModel.cs" />
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
     <Compile Include="RoomDependencies.cs" />

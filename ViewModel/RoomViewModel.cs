@@ -242,7 +242,7 @@ public sealed class RoomViewModel : ScreenViewModel
         if (isCurrentLobby)
         {
             UnsubscribeFromGameServices();
-            WindowService.Navigate(Screen.MatchResults, CurrentRole);
+            WindowService.Navigate(Screen.Match, CurrentRole);
         }
     }
 

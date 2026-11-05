@@ -652,4 +652,13 @@ on the train</value>
   <data name="ChatWarningMessage" xml:space="preserve">
     <value>Watch your language: if you keep using offensive words, your chat will be blocked.</value>
   </data>
+  <data name="MatchTitle" xml:space="preserve">
+    <value>Match in progress</value>
+  </data>
+  <data name="MatchPlaceholderDescription" xml:space="preserve">
+    <value>The game board will be available soon.</value>
+  </data>
+  <data name="ViewResultsButtonLabel" xml:space="preserve">
+    <value>View results</value>
+  </data>
 </root>
