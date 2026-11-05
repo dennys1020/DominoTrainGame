@@ -13,16 +13,12 @@ public static class SignUpInputValidator
 
     public static SignUpInputStatus Validate(string username, string email, string password)
     {
-        string normalizedUsername = username?.Trim() ?? string.Empty;
-        string normalizedEmail = email?.Trim() ?? string.Empty;
+        string normalizedUsername = NormalizeIdentifier(username);
+        string normalizedEmail = NormalizeIdentifier(email);
         string enteredPassword = password ?? string.Empty;
         SignUpInputStatus inputStatus = SignUpInputStatus.Valid;
 
-        bool isUsernameEmpty = normalizedUsername.Length == EmptyLength;
-        bool isEmailEmpty = normalizedEmail.Length == EmptyLength;
-        bool isPasswordEmpty = enteredPassword.Length == EmptyLength;
-
-        if (isUsernameEmpty || isEmailEmpty || isPasswordEmpty)
+        if (HasEmptyField(normalizedUsername, normalizedEmail, enteredPassword))
         {
             inputStatus = SignUpInputStatus.EmptyFields;
         }
@@ -38,11 +34,38 @@ public static class SignUpInputValidator
         {
             inputStatus = SignUpInputStatus.EmailInvalid;
         }
-        else if (enteredPassword.Length < MinimumPasswordLength)
+        else
+        {
+            inputStatus = ValidatePasswordLength(enteredPassword);
+        }
+
+        return inputStatus;
+    }
+
+    private static string NormalizeIdentifier(string identifier)
+    {
+        string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
+        return normalizedIdentifier;
+    }
+
+    private static bool HasEmptyField(string username, string email, string password)
+    {
+        bool isUsernameEmpty = username.Length == EmptyLength;
+        bool isEmailEmpty = email.Length == EmptyLength;
+        bool isPasswordEmpty = password.Length == EmptyLength;
+        bool hasEmptyField = isUsernameEmpty || isEmailEmpty || isPasswordEmpty;
+        return hasEmptyField;
+    }
+
+    private static SignUpInputStatus ValidatePasswordLength(string password)
+    {
+        SignUpInputStatus inputStatus = SignUpInputStatus.Valid;
+
+        if (password.Length < MinimumPasswordLength)
         {
             inputStatus = SignUpInputStatus.PasswordTooShort;
         }
-        else if (enteredPassword.Length > MaximumPasswordLength)
+        else if (password.Length > MaximumPasswordLength)
         {
             inputStatus = SignUpInputStatus.PasswordTooLong;
         }

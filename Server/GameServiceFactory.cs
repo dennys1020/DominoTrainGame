@@ -28,7 +28,8 @@ internal static class GameServiceFactory
         IGameNotifier gameNotifier = new CallbackGameNotifier(connectedPlayers);
         ILobbyCodeGenerator lobbyCodeGenerator = new LobbyCodeGenerator();
         LobbyRegistry lobbyRegistry = new LobbyRegistry(lobbyCodeGenerator);
-        IChatMessageFilter chatMessageFilter = new ChatMessageFilter(ForbiddenWordResources.Load());
+        IForbiddenWordSource forbiddenWordSource = new ForbiddenWordSource();
+        IChatMessageFilter chatMessageFilter = new ChatMessageFilter(forbiddenWordSource);
         ISanctionRepository sanctionRepository = new SanctionRepository(databaseExecutor);
         ChatInfractionRegistry chatInfractions = new ChatInfractionRegistry();
         IClock clock = new SystemClock();

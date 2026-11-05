@@ -80,6 +80,8 @@
                         Margin="0,0,0,14"
                         Command="{Binding DataContext.FriendsCommand,
                             RelativeSource={RelativeSource AncestorType=Window}}"
+                        IsEnabled="{Binding DataContext.IsIdle,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
                         ToolTip="{Binding [FriendsLabel], Source={StaticResource Localization}}">
                         <Rectangle
                             Width="36"

@@ -14,7 +14,6 @@ namespace DominoTrainGame.Client.Models;
 public sealed class RemoteSocialServices : IRemoteSocialServices
 {
     private static readonly ITraceLog _logger;
-    private static readonly IReadOnlyDictionary<GameServiceFaultCode, FriendResultStatus> _statusesByFaultCode;
 
     private readonly ISocialConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -27,20 +26,6 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     static RemoteSocialServices()
     {
         _logger = TraceLogManager.GetLogger(typeof(RemoteSocialServices));
-        _statusesByFaultCode = new Dictionary<GameServiceFaultCode, FriendResultStatus>
-        {
-            [GameServiceFaultCode.InvalidInput] = FriendResultStatus.InvalidInput,
-            [GameServiceFaultCode.DatabaseUnavailable] = FriendResultStatus.DatabaseUnavailable,
-            [GameServiceFaultCode.SessionNotFound] = FriendResultStatus.SessionNotFound,
-            [GameServiceFaultCode.InvalidSessionToken] = FriendResultStatus.SessionNotFound,
-            [GameServiceFaultCode.PlayerNotFound] = FriendResultStatus.PlayerNotFound,
-            [GameServiceFaultCode.CannotTargetSelf] = FriendResultStatus.CannotTargetSelf,
-            [GameServiceFaultCode.AlreadyFriends] = FriendResultStatus.AlreadyFriends,
-            [GameServiceFaultCode.FriendRequestAlreadyExists] = FriendResultStatus.RequestAlreadyExists,
-            [GameServiceFaultCode.PlayerBlocked] = FriendResultStatus.PlayerBlocked,
-            [GameServiceFaultCode.FriendRequestNotFound] = FriendResultStatus.RequestNotFound,
-            [GameServiceFaultCode.NotFriends] = FriendResultStatus.NotFriends
-        };
     }
 
     public RemoteSocialServices(
@@ -72,7 +57,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     {
         FriendListResult result = await InvokeFriendServiceAsync(
             RequestFriendsAsync,
-            CreateFailedFriendList).ConfigureAwait(false);
+            FriendResultMapper.CreateFailedFriendList).ConfigureAwait(false);
         return result;
     }
 
@@ -80,7 +65,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     {
         FriendRequestListResult result = await InvokeFriendServiceAsync(
             RequestPendingRequestsAsync,
-            CreateFailedRequestList).ConfigureAwait(false);
+            FriendResultMapper.CreateFailedRequestList).ConfigureAwait(false);
         return result;
     }
 
@@ -92,7 +77,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         };
         PlayerSearchResult result = await InvokeFriendServiceAsync(
             friendClient => RequestPlayerSearchAsync(friendClient, request),
-            CreateFailedPlayerSearch).ConfigureAwait(false);
+            FriendResultMapper.CreateFailedPlayerSearch).ConfigureAwait(false);
         return result;
     }
 
@@ -153,18 +138,11 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     {
         IEnumerable<FriendResponse> responses = await friendClient.GetFriendsAsync().ConfigureAwait(false);
         List<FriendResult> friends = (responses ?? Enumerable.Empty<FriendResponse>())
-            .Select(ToFriendResult)
+            .Select(FriendResultMapper.ToFriendResult)
             .ToList();
         FriendListResult result = new FriendListResult(FriendResultStatus.Success, friends);
 
         return result;
-    }
-
-    private static FriendResult ToFriendResult(FriendResponse response)
-    {
-        FriendStatus status = FriendStatusCodes.ToFriendStatus(response.Status);
-        FriendResult friend = new FriendResult(response.PlayerId, response.Username, status);
-        return friend;
     }
 
     private static async Task<FriendRequestListResult> RequestPendingRequestsAsync(FriendServiceClient friendClient)
@@ -172,7 +150,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         IEnumerable<PendingFriendRequestResponse> responses =
             await friendClient.GetPendingRequestsAsync().ConfigureAwait(false);
         List<FriendRequestResult> requests = (responses ?? Enumerable.Empty<PendingFriendRequestResponse>())
-            .Select(ToFriendRequestResult)
+            .Select(FriendResultMapper.ToFriendRequestResult)
             .ToList();
         FriendRequestListResult result = new FriendRequestListResult(FriendResultStatus.Success, requests);
 
@@ -193,15 +171,6 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         return result;
     }
 
-    private static FriendRequestResult ToFriendRequestResult(PendingFriendRequestResponse response)
-    {
-        FriendRequestResult request = new FriendRequestResult(
-            response.RequestId,
-            response.RequesterUsername,
-            response.RequestedAt);
-        return request;
-    }
-
     private static async Task<FriendResultStatus> CompleteFriendCommandAsync(Task command)
     {
         await command.ConfigureAwait(false);
@@ -211,31 +180,6 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
 
     private static FriendResultStatus KeepStatus(FriendResultStatus status)
     {
-        return status;
-    }
-
-    private static FriendListResult CreateFailedFriendList(FriendResultStatus status)
-    {
-        FriendListResult result = new FriendListResult(status, new List<FriendResult>());
-        return result;
-    }
-
-    private static FriendRequestListResult CreateFailedRequestList(FriendResultStatus status)
-    {
-        FriendRequestListResult result = new FriendRequestListResult(status, new List<FriendRequestResult>());
-        return result;
-    }
-
-    private static PlayerSearchResult CreateFailedPlayerSearch(FriendResultStatus status)
-    {
-        PlayerSearchResult result = new PlayerSearchResult(status, new List<FoundPlayerResult>());
-        return result;
-    }
-
-    private static FriendResultStatus MapFault(GameServiceFaultCode faultCode)
-    {
-        bool isKnownFault = _statusesByFaultCode.TryGetValue(faultCode, out FriendResultStatus knownStatus);
-        FriendResultStatus status = isKnownFault ? knownStatus : FriendResultStatus.ServerError;
         return status;
     }
 
@@ -253,7 +197,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         catch (FaultException<GameServiceFault> exception)
         {
             _logger.WarnFormat("The server rejected a friends request. FaultCode: {0}.", exception.Detail.Code);
-            result = createFailure(MapFault(exception.Detail.Code));
+            result = createFailure(FriendResultMapper.MapFault(exception.Detail.Code));
         }
         catch (FaultException exception)
         {

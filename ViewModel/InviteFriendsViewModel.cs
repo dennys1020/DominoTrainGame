@@ -52,16 +52,16 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
 
     private async Task OpenAsync()
     {
-        FriendListResult friendList = await _socialServices.GetFriendsAsync();
+        FriendListResult friendsResult = await RunWhileBusyAsync(() => _socialServices.GetFriendsAsync());
 
-        if (friendList.Status == FriendResultStatus.Success)
+        if (friendsResult.Status == FriendResultStatus.Success)
         {
-            ShowFriends(friendList.Friends);
+            ShowFriends(friendsResult.Friends);
             IsOpen = true;
         }
         else
         {
-            ShowMessage(FriendResultMessageKeys.GetMessageKey(friendList.Status));
+            ShowMessage(FriendResultMessageKeys.GetMessageKey(friendsResult.Status));
         }
     }
 
@@ -77,7 +77,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
 
     private async Task InviteAsync(InvitableFriendViewModel friend)
     {
-        LobbyResultStatus result = await _gameServices.InviteFriendAsync(friend.Username);
+        LobbyResultStatus result = await RunWhileBusyAsync(() => _gameServices.InviteFriendAsync(friend.Username));
 
         if (result == LobbyResultStatus.Success)
         {

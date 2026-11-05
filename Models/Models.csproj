@@ -160,6 +160,15 @@
     <Compile Include="Contracts\PlayerSearchResult.cs" />
     <Compile Include="Networking\SocialConnectionFactory.cs" />
     <Compile Include="RemoteSocialServices.cs" />
+    <Compile Include="Networking\AccountRequests.cs" />
+    <Compile Include="Networking\ClientSession.cs" />
+    <Compile Include="Networking\FaultCodeMapper.cs" />
+    <Compile Include="Networking\FriendResultMapper.cs" />
+    <Compile Include="Networking\LobbyChannel.cs" />
+    <Compile Include="Networking\LobbyEventRelay.cs" />
+    <Compile Include="Networking\LobbyResultMapper.cs" />
+    <Compile Include="Networking\LobbyRosterUpdates.cs" />
+    <Compile Include="Networking\LobbySessionContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

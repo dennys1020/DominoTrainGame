@@ -34,7 +34,7 @@ public sealed class NewGameViewModel : ScreenViewModel
 
     private async Task CreateLobbyAsync()
     {
-        LobbyResult result = await _gameServices.CreateLobbyAsync();
+        LobbyResult result = await RunWhileBusyAsync(() => _gameServices.CreateLobbyAsync());
 
         if (result.Status == LobbyResultStatus.Success)
         {

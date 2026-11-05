@@ -48,7 +48,7 @@ public sealed class ConnectedPlayerRegistry
 
         foreach (ConnectedPlayer connectedPlayer in _playersById.Values)
         {
-            if (connectedPlayer.SessionId == sessionId)
+            if (IsSameSession(connectedPlayer, sessionId))
             {
                 player = connectedPlayer.Player;
                 wasFound = true;
@@ -100,27 +100,27 @@ public sealed class ConnectedPlayerRegistry
             throw new ArgumentNullException(nameof(sessionId));
         }
 
+        bool wasRemoved = false;
+        player = AuthenticatedPlayer.Empty;
+
         foreach (KeyValuePair<int, ConnectedPlayer> entry in _playersById)
         {
-            bool isMatchingSession = entry.Value.SessionId == sessionId;
+            bool isPendingMatch = !wasRemoved && IsSameSession(entry.Value, sessionId);
 
-            if (isMatchingSession)
+            if (isPendingMatch)
             {
-                ICollection<KeyValuePair<int, ConnectedPlayer>> entries =
-                    _playersById;
-
-                bool wasRemoved = entries.Remove(entry);
-
-                if (wasRemoved)
-                {
-                    player = entry.Value.Player;
-                    return true;
-                }
+                wasRemoved = TryRemoveEntry(entry);
+                player = wasRemoved ? entry.Value.Player : player;
             }
         }
 
-        player = null;
-        return false;
+        return wasRemoved;
+    }
+
+    private static bool IsSameSession(ConnectedPlayer connectedPlayer, string sessionId)
+    {
+        bool isSameSession = string.Equals(connectedPlayer.SessionId, sessionId, StringComparison.Ordinal);
+        return isSameSession;
     }
 
     private static void AbortChannel(IGameClientCallback callback)
@@ -136,5 +136,12 @@ public sealed class ConnectedPlayerRegistry
                 _logger.Warn("A stale channel could not be aborted cleanly.", exception);
             }
         }
+    }
+
+    private bool TryRemoveEntry(KeyValuePair<int, ConnectedPlayer> entry)
+    {
+        ICollection<KeyValuePair<int, ConnectedPlayer>> entries = _playersById;
+        bool wasRemoved = entries.Remove(entry);
+        return wasRemoved;
     }
 }

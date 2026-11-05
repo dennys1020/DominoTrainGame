@@ -37,7 +37,7 @@ public enum GameServiceFaultCode
 
     [EnumMember]
     PlayersNotReady,
-    
+
     [EnumMember]
     PlayerNotFound,
 

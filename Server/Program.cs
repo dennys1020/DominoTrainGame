@@ -6,6 +6,7 @@ using System.ServiceModel.Description;
 using System.Threading;
 using log4net.Config;
 using log4net.Ext.Trace;
+using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Implementation;
 
 namespace DominoTrainGame.Server.Host;
@@ -64,7 +65,7 @@ internal static class Program
     private static void RunServer()
     {
         GameService gameService = GameServiceFactory.Create();
-        ServiceHost serviceHost = new ServiceHost(gameService);
+        ServiceHost serviceHost = new GameServiceHost(gameService, new GameErrorHandler());
         GameChannelCloser channelCloser = new GameChannelCloser();
 
         try
