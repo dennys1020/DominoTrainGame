@@ -19,7 +19,6 @@ public sealed class RoomViewModel : ScreenViewModel
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayers = 2;
-    private const bool ReadyState = true;
     private const string SessionLostMessageKey = "LobbySessionExpiredMessage";
     private const string RoomLostMessageKey = "RoomLostAfterReconnectMessage";
     private const string ChatMessageEmptyMessageKey = "ChatMessageEmptyMessage";
@@ -37,16 +36,19 @@ public sealed class RoomViewModel : ScreenViewModel
     private string _messageText = string.Empty;
     private long _version;
 
-    public RoomViewModel(
-        IWindowService windowService,
-        IRemoteGameServices gameServices,
-        LocalizationViewModel localization) : base(windowService)
+    public RoomViewModel(IWindowService windowService, RoomDependencies dependencies) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
-        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        if (dependencies == null)
+        {
+            throw new ArgumentNullException(nameof(dependencies));
+        }
+
+        _gameServices = dependencies.GameServices;
+        _localization = dependencies.Localization;
+        InviteFriends = new InviteFriendsViewModel(windowService, dependencies);
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
-        MarkReadyCommand = new AsyncRelayCommand(MarkReadyAsync);
+        ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
         SendMessageCommand = new AsyncRelayCommand(SendMessageAsync);
         StartMatchCommand = new AsyncRelayCommand(StartMatchAsync);
 
@@ -147,6 +149,8 @@ public sealed class RoomViewModel : ScreenViewModel
 
     public int MaximumMessageLength => LobbyMessageInputValidator.MaximumMessageLength;
 
+    public InviteFriendsViewModel InviteFriends { get; }
+
     public ObservableCollection<RoomPlayerViewModel> Players { get; } =
         new ObservableCollection<RoomPlayerViewModel>();
 
@@ -155,7 +159,7 @@ public sealed class RoomViewModel : ScreenViewModel
 
     public AsyncRelayCommand BackCommand { get; }
 
-    public AsyncRelayCommand MarkReadyCommand { get; }
+    public AsyncRelayCommand ToggleReadyCommand { get; }
 
     public AsyncRelayCommand SendMessageCommand { get; }
 
@@ -358,9 +362,11 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
-    private async Task MarkReadyAsync()
+    private async Task ToggleReadyAsync()
     {
-        await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(ReadyState));
+        bool isLocalPlayerReady = Players.Any(player => player.IsCurrentPlayer && player.IsReady);
+        bool requestedReadyState = !isLocalPlayerReady;
+        await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(requestedReadyState));
     }
 
     private async Task StartMatchAsync()

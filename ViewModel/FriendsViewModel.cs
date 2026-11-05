@@ -15,8 +15,6 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class FriendsViewModel : ScreenViewModel
 {
     private const string FriendRequestSentMessageKey = "FriendRequestSentMessage";
-    private const string FriendUsernameRequiredMessageKey = "FriendUsernameRequiredMessage";
-    private const string FriendUsernameTooLongMessageKey = "FriendUsernameTooLongMessage";
     private const int SearchDelayMilliseconds = 300;
     private const int MinimumSearchLength = 2;
 
@@ -109,23 +107,6 @@ public sealed class FriendsViewModel : ScreenViewModel
 
     public AsyncRelayCommand SearchCommand { get; }
 
-    private static string GetInputMessageKey(FriendUsernameInputStatus inputStatus)
-    {
-        string messageKey;
-
-        switch (inputStatus)
-        {
-            case FriendUsernameInputStatus.UsernameTooLong:
-                messageKey = FriendUsernameTooLongMessageKey;
-                break;
-            default:
-                messageKey = FriendUsernameRequiredMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
     private async Task RefreshAsync()
     {
         FriendListResult friendList = await _socialServices.GetFriendsAsync();
@@ -182,7 +163,7 @@ public sealed class FriendsViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(_localization[GetInputMessageKey(inputStatus)]);
+            WindowService.ShowMessage(_localization[FriendUsernameInputMessageKeys.GetMessageKey(inputStatus)]);
         }
     }
 

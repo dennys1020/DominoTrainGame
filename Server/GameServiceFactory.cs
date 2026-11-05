@@ -34,9 +34,13 @@ internal static class GameServiceFactory
             loginUseCases,
             signUpUseCases,
             sessionManager);
-        LobbyController lobbyController = new LobbyController(lobbyUseCases, sessionManager);
-
         IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
+        IInvitationUseCases invitationUseCases = new InvitationUseCases(
+            lobbyRegistry,
+            friendshipRepository,
+            gameNotifier);
+        LobbyController lobbyController = new LobbyController(lobbyUseCases, invitationUseCases, sessionManager);
+
         IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository);
         SocialSessionRegistry socialSessions = new SocialSessionRegistry();
         SocialSessionManager socialSessionManager = new SocialSessionManager(sessionTokens, socialSessions);

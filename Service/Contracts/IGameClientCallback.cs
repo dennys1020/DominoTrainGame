@@ -32,4 +32,9 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceiveMatchStarting",
         IsOneWay = true)]
     void ReceiveMatchStarting(MatchStartingMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveLobbyInvitation",
+        IsOneWay = true)]
+    void ReceiveLobbyInvitation(LobbyInvitationMessage message);
 }

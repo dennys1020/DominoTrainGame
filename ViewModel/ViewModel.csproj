@@ -58,6 +58,8 @@
     <Compile Include="Contracts\IWindowService.cs" />
     <Compile Include="Navigation\RoomRole.cs" />
     <Compile Include="Navigation\Screen.cs" />
+    <Compile Include="Navigation\LobbyInvitationController.cs" />
+    <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />
     <Compile Include="Validation\LoginInputValidator.cs" />
     <Compile Include="Validation\LobbyMessageInputStatus.cs" />
@@ -71,6 +73,9 @@
     <Compile Include="MatchResultsViewModel.cs" />
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
+    <Compile Include="RoomDependencies.cs" />
+    <Compile Include="InviteFriendsViewModel.cs" />
+    <Compile Include="InvitableFriendViewModel.cs" />
     <Compile Include="RoomPlayerViewModel.cs" />
     <Compile Include="RoomChatMessageViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />

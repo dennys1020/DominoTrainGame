@@ -26,6 +26,8 @@ public sealed class GameClientCallback : ILobbyServiceCallback
 
     public event EventHandler<MatchStartingEventArgs> MatchStarting;
 
+    public event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived;
+
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
         if (message?.Player == null)
@@ -110,6 +112,22 @@ public sealed class GameClientCallback : ILobbyServiceCallback
         }
     }
 
+    public void ReceiveLobbyInvitation(LobbyInvitationMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A lobby invitation notice without content was ignored.");
+        }
+        else
+        {
+            LobbyInvitationReceivedEventArgs eventArgs = new LobbyInvitationReceivedEventArgs(
+                message.InviterUsername,
+                message.Code);
+
+            OnLobbyInvitationReceived(eventArgs);
+        }
+    }
+
     private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
     {
         PlayerJoined?.Invoke(this, eventArgs);
@@ -133,5 +151,10 @@ public sealed class GameClientCallback : ILobbyServiceCallback
     private void OnMatchStarting(MatchStartingEventArgs eventArgs)
     {
         MatchStarting?.Invoke(this, eventArgs);
+    }
+
+    private void OnLobbyInvitationReceived(LobbyInvitationReceivedEventArgs eventArgs)
+    {
+        LobbyInvitationReceived?.Invoke(this, eventArgs);
     }
 }

@@ -81,6 +81,7 @@
     <Compile Include="DataContracts\SetReadyRequest.cs" />
     <Compile Include="DataContracts\SendLobbyMessageRequest.cs" />
     <Compile Include="DataContracts\LobbyChatMessage.cs" />
+    <Compile Include="DataContracts\LobbyInvitationMessage.cs" />
     <Compile Include="DataContracts\MatchStartingMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
     <Compile Include="Implementation\AuthenticationController.cs" />

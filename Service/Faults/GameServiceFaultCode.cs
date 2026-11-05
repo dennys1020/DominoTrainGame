@@ -57,5 +57,8 @@ public enum GameServiceFaultCode
     FriendRequestNotFound,
 
     [EnumMember]
-    NotFriends
+    NotFriends,
+
+    [EnumMember]
+    PlayerOffline
 }
