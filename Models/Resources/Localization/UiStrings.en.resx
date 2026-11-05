@@ -646,4 +646,10 @@ on the train</value>
   <data name="FriendRemovedMessage" xml:space="preserve">
     <value>Friend removed.</value>
   </data>
+  <data name="ChatBlockedMessage" xml:space="preserve">
+    <value>Your chat is temporarily blocked for using offensive language.</value>
+  </data>
+  <data name="ChatWarningMessage" xml:space="preserve">
+    <value>Watch your language: if you keep using offensive words, your chat will be blocked.</value>
+  </data>
 </root>

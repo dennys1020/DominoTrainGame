@@ -60,5 +60,11 @@ public enum GameServiceFaultCode
     NotFriends,
 
     [EnumMember]
-    PlayerOffline
+    PlayerOffline,
+
+    [EnumMember]
+    ChatWarning,
+
+    [EnumMember]
+    ChatBlocked
 }

@@ -1176,4 +1176,20 @@ public class UiStrings
             return ResourceManager.GetString("FriendRemovedMessage", _resourceCulture);
         }
     }
+
+    public static string ChatBlockedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ChatBlockedMessage", _resourceCulture);
+        }
+    }
+
+    public static string ChatWarningMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ChatWarningMessage", _resourceCulture);
+        }
+    }
 }

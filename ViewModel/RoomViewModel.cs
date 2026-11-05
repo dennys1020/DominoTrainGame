@@ -34,6 +34,7 @@ public sealed class RoomViewModel : ScreenViewModel
     private string _lobbyCode = string.Empty;
     private int _maximumPlayers;
     private string _messageText = string.Empty;
+    private string _chatNotice = string.Empty;
     private long _version;
 
     public RoomViewModel(IWindowService windowService, RoomDependencies dependencies) : base(windowService)
@@ -146,6 +147,25 @@ public sealed class RoomViewModel : ScreenViewModel
             SetProperty(ref _messageText, value);
         }
     }
+
+    public string ChatNotice
+    {
+        get
+        {
+            return _chatNotice;
+        }
+        private set
+        {
+            bool hasChanged = SetProperty(ref _chatNotice, value);
+
+            if (hasChanged)
+            {
+                OnPropertyChanged(nameof(HasChatNotice));
+            }
+        }
+    }
+
+    public bool HasChatNotice => !string.IsNullOrEmpty(ChatNotice);
 
     public int MaximumMessageLength => LobbyMessageInputValidator.MaximumMessageLength;
 
@@ -394,10 +414,23 @@ public sealed class RoomViewModel : ScreenViewModel
         LobbyResultStatus result = await RunLobbyCommandAsync(
             () => _gameServices.SendLobbyMessageAsync(normalizedText));
 
-        if (result == LobbyResultStatus.Success)
+        bool wasDelivered = result == LobbyResultStatus.Success || result == LobbyResultStatus.ChatWarning;
+
+        if (wasDelivered)
         {
             MessageText = string.Empty;
         }
+
+        ChatNotice = GetChatNotice(result);
+    }
+
+    private string GetChatNotice(LobbyResultStatus result)
+    {
+        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
+        string chatNotice = isChatSanction
+            ? _localization[LobbyResultMessageKeys.GetMessageKey(result)]
+            : string.Empty;
+        return chatNotice;
     }
 
     private async Task<LobbyResultStatus> RunLobbyCommandAsync(Func<Task<LobbyResultStatus>> command)
@@ -414,7 +447,9 @@ public sealed class RoomViewModel : ScreenViewModel
             IsBusy = false;
         }
 
-        if (result != LobbyResultStatus.Success)
+        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
+
+        if (result != LobbyResultStatus.Success && !isChatSanction)
         {
             WindowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result)]);
         }

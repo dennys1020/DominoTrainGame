@@ -62,10 +62,10 @@ public sealed class PresenceTrackingLobbyUseCases : ILobbyUseCases
         return wasUpdated;
     }
 
-    public bool TrySendMessage(int playerId, string text)
+    public SendMessageStatus SendMessage(int playerId, string text)
     {
-        bool wasSent = _lobbyUseCases.TrySendMessage(playerId, text);
-        return wasSent;
+        SendMessageStatus status = _lobbyUseCases.SendMessage(playerId, text);
+        return status;
     }
 
     public StartMatchStatus StartMatch(int playerId)

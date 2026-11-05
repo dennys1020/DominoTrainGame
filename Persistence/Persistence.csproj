@@ -115,6 +115,8 @@
     </Compile>
     <Compile Include="Data\Repositories\ConnectionRepository.cs" />
     <Compile Include="Data\Repositories\PlayerRepository.cs" />
+    <Compile Include="Data\Repositories\SanctionRepository.cs" />
+    <Compile Include="Time\SystemClock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

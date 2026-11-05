@@ -52,6 +52,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\AuthenticatedPlayer.cs" />
+    <Compile Include="Domain\PlayerSanction.cs" />
+    <Compile Include="Domain\SanctionType.cs" />
+    <Compile Include="Ports\IClock.cs" />
+    <Compile Include="Ports\ISanctionRepository.cs" />
+    <Compile Include="Ports\SanctionRecord.cs" />
+    <Compile Include="Results\ChatInfractionStatus.cs" />
+    <Compile Include="Results\ChatPermissionStatus.cs" />
+    <Compile Include="State\ChatInfractionRegistry.cs" />
+    <Compile Include="UseCases\ChatSanctionUseCases.cs" />
+    <Compile Include="UseCases\IChatSanctionUseCases.cs" />
     <Compile Include="UseCases\ILoginUseCases.cs" />
     <Compile Include="UseCases\ISignUpUseCases.cs" />
     <Compile Include="UseCases\LoginUseCases.cs" />
@@ -79,6 +89,7 @@
     <Compile Include="Ports\PlayerRegistration.cs" />
     <Compile Include="Ports\ILobbyCodeGenerator.cs" />
     <Compile Include="Results\JoinLobbyStatus.cs" />
+    <Compile Include="Results\SendMessageStatus.cs" />
     <Compile Include="Security\LobbyCodeGenerator.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -121,15 +132,5 @@
     <EmbeddedResource Include="Security\ForbiddenWords\English.txt" />
     <EmbeddedResource Include="Security\ForbiddenWords\Spanish.txt" />
   </ItemGroup>
-    <Compile Include="Domain\FriendPresence.cs" />
-    <Compile Include="Domain\PlayerStatus.cs" />
-    <Compile Include="Ports\FriendStatusNotice.cs" />
-    <Compile Include="Ports\IPresenceTracker.cs" />
-    <Compile Include="Ports\ISocialNotifier.cs" />
-    <Compile Include="UseCases\FriendStatusUseCases.cs" />
-    <Compile Include="UseCases\IFriendStatusUseCases.cs" />
-    <Compile Include="UseCases\IPresenceUseCases.cs" />
-    <Compile Include="UseCases\PresenceTrackingLobbyUseCases.cs" />
-    <Compile Include="UseCases\PresenceUseCases.cs" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
