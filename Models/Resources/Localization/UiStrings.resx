@@ -598,4 +598,10 @@ en el tren</value>
   <data name="FriendServerErrorMessage" xml:space="preserve">
     <value>No se pudo completar la acción. Inténtalo de nuevo.</value>
   </data>
+  <data name="NotLobbyHostMessage" xml:space="preserve">
+    <value>Solo el anfitrión puede iniciar la partida.</value>
+  </data>
+  <data name="PlayersNotReadyMessage" xml:space="preserve">
+    <value>Para iniciar se necesitan al menos dos jugadores y que todos estén listos.</value>
+  </data>
 </root>

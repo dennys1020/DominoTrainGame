@@ -523,7 +523,7 @@
                                         Content="{Binding [StartMatchButtonLabel],
                                             Source={StaticResource Localization}}"
                                         Style="{StaticResource MatchButtonStyle}"
-                                        Command="{Binding DataContext.ResultsCommand,
+                                        Command="{Binding DataContext.StartMatchCommand,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                         HorizontalAlignment="Right"
                                         Width="270"
@@ -531,7 +531,7 @@
                                         Visibility="{Binding DataContext.IsHost,
                                             RelativeSource={RelativeSource AncestorType=Window},
                                             Converter={StaticResource HostVisibility}}"
-                                        IsEnabled="{Binding DataContext.IsHost,
+                                        IsEnabled="{Binding DataContext.CanStartMatch,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                         d:Visibility="Visible"
                                         d:IsEnabled="True" />
