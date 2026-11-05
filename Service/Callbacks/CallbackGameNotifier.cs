@@ -114,6 +114,28 @@ public sealed class CallbackGameNotifier : IGameNotifier
         Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveMatchStarting(message));
     }
 
+    public bool TryNotifyLobbyInvitation(LobbyInvitationNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        LobbyInvitationMessage message = new LobbyInvitationMessage
+        {
+            InviterUsername = notice.Inviter.Username,
+            Code = notice.Code
+        };
+        bool isConnected = _connectedPlayers.TryGetCallback(notice.RecipientPlayerId, out IGameClientCallback callback);
+
+        if (isConnected)
+        {
+            TrySend(callback, recipient => recipient.ReceiveLobbyInvitation(message));
+        }
+
+        return isConnected;
+    }
+
     private void Broadcast(IReadOnlyList<int> recipientPlayerIds, Action<IGameClientCallback> send)
     {
         foreach (int recipientPlayerId in recipientPlayerIds)

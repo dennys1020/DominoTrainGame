@@ -12,6 +12,11 @@ public static class LobbyResultMessageKeys
     private const string LobbySessionExpiredMessageKey = "LobbySessionExpiredMessage";
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LobbyServerErrorMessageKey = "LobbyServerErrorMessage";
+    private const string NotLobbyHostMessageKey = "NotLobbyHostMessage";
+    private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
+    private const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
+    private const string NotFriendsMessageKey = "NotFriendsMessage";
+    private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
 
     public static string GetMessageKey(LobbyResultStatus status)
     {
@@ -39,6 +44,35 @@ public static class LobbyResultMessageKeys
                 break;
             case LobbyResultStatus.ServerUnavailable:
                 messageKey = ServerUnavailableMessageKey;
+                break;
+            case LobbyResultStatus.NotLobbyHost:
+                messageKey = NotLobbyHostMessageKey;
+                break;
+            case LobbyResultStatus.PlayersNotReady:
+                messageKey = PlayersNotReadyMessageKey;
+                break;
+            default:
+                messageKey = GetInvitationMessageKey(status);
+                break;
+        }
+
+        return messageKey;
+    }
+
+    private static string GetInvitationMessageKey(LobbyResultStatus status)
+    {
+        string messageKey;
+
+        switch (status)
+        {
+            case LobbyResultStatus.PlayerNotFound:
+                messageKey = FriendPlayerNotFoundMessageKey;
+                break;
+            case LobbyResultStatus.NotFriends:
+                messageKey = NotFriendsMessageKey;
+                break;
+            case LobbyResultStatus.PlayerOffline:
+                messageKey = PlayerOfflineMessageKey;
                 break;
             default:
                 messageKey = LobbyServerErrorMessageKey;

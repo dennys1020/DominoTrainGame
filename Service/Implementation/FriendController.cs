@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using log4net.Ext.Trace;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
@@ -38,7 +39,7 @@ public sealed class FriendController
 
     public List<FriendResponse> GetFriends()
     {
-        IReadOnlyList<FriendSummary> friends = ExecuteForCaller(playerId => _friendUseCases.GetFriends(playerId));
+        IReadOnlyList<FriendPresence> friends = ExecuteForCaller(playerId => _friendUseCases.GetFriends(playerId));
         List<FriendResponse> response = friends.Select(ToFriendResponse).ToList();
 
         return response;
@@ -109,12 +110,13 @@ public sealed class FriendController
         }
     }
 
-    private static FriendResponse ToFriendResponse(FriendSummary friend)
+    private static FriendResponse ToFriendResponse(FriendPresence friend)
     {
         FriendResponse response = new FriendResponse
         {
             PlayerId = friend.PlayerId,
-            Username = friend.Username
+            Username = friend.Username,
+            Status = PlayerStatusCodes.FromStatus(friend.Status)
         };
 
         return response;

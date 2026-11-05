@@ -21,6 +21,8 @@ public interface IRemoteGameServices
 
     Task<LobbyResultStatus> StartMatchAsync();
 
+    Task<LobbyResultStatus> InviteFriendAsync(string username);
+
     event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
     event EventHandler<PlayerLeftEventArgs> PlayerLeft;
@@ -32,6 +34,8 @@ public interface IRemoteGameServices
     event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 
     event EventHandler<MatchStartingEventArgs> MatchStarting;
+
+    event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived;
 
     LobbyResult CurrentLobby { get; }
 

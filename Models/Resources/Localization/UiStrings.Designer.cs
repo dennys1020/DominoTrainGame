@@ -1120,4 +1120,60 @@ public class UiStrings
             return ResourceManager.GetString("SignUpSystemErrorMessage", _resourceCulture);
         }
     }
+
+    public static string FriendStatusOfflineLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendStatusOfflineLabel", _resourceCulture);
+        }
+    }
+
+    public static string FriendStatusOnlineLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendStatusOnlineLabel", _resourceCulture);
+        }
+    }
+
+    public static string FriendStatusInLobbyLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendStatusInLobbyLabel", _resourceCulture);
+        }
+    }
+
+    public static string FriendStatusInMatchLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendStatusInMatchLabel", _resourceCulture);
+        }
+    }
+
+    public static string FriendRequestAcceptedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendRequestAcceptedMessage", _resourceCulture);
+        }
+    }
+
+    public static string FriendRequestRejectedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendRequestRejectedMessage", _resourceCulture);
+        }
+    }
+
+    public static string FriendRemovedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("FriendRemovedMessage", _resourceCulture);
+        }
+    }
 }

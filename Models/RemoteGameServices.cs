@@ -75,6 +75,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public event EventHandler<MatchStartingEventArgs> MatchStarting;
 
+    public event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived;
+
     public LobbyResult CurrentLobby
     {
         get
@@ -200,6 +202,18 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
             lobbyClient => CompleteLobbyCommandAsync(lobbyClient.StartMatchAsync()),
+            KeepStatus).ConfigureAwait(false);
+        return resultStatus;
+    }
+
+    public async Task<LobbyResultStatus> InviteFriendAsync(string username)
+    {
+        FriendUsernameRequest request = new FriendUsernameRequest
+        {
+            Username = username
+        };
+        LobbyResultStatus resultStatus = await InvokeLobbyServiceAsync(
+            lobbyClient => CompleteLobbyCommandAsync(lobbyClient.InviteFriendAsync(request)),
             KeepStatus).ConfigureAwait(false);
         return resultStatus;
     }
@@ -351,7 +365,9 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
         catch (InvalidOperationException exception)
         {
-            _logger.Error("The lobby endpoint is missing or invalid in App.config.", exception);
+            _logger.Error(
+                "A lobby request could not be sent because the endpoint is invalid or the channel rejected the call.",
+                exception);
             result = createFailure(LobbyResultStatus.ServerError);
         }
 
@@ -468,6 +484,29 @@ public sealed class RemoteGameServices : IRemoteGameServices
                 break;
             case GameServiceFaultCode.PlayersNotReady:
                 resultStatus = LobbyResultStatus.PlayersNotReady;
+                break;
+            default:
+                resultStatus = MapInvitationFault(faultCode);
+                break;
+        }
+
+        return resultStatus;
+    }
+
+    private static LobbyResultStatus MapInvitationFault(GameServiceFaultCode faultCode)
+    {
+        LobbyResultStatus resultStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.PlayerNotFound:
+                resultStatus = LobbyResultStatus.PlayerNotFound;
+                break;
+            case GameServiceFaultCode.NotFriends:
+                resultStatus = LobbyResultStatus.NotFriends;
+                break;
+            case GameServiceFaultCode.PlayerOffline:
+                resultStatus = LobbyResultStatus.PlayerOffline;
                 break;
             default:
                 resultStatus = MapSessionFault(faultCode);
@@ -602,6 +641,12 @@ public sealed class RemoteGameServices : IRemoteGameServices
         OnMatchStarting(e);
     }
 
+    private void HandleLobbyInvitationReceived(object sender, LobbyInvitationReceivedEventArgs e)
+    {
+        SynchronizationContext context = GetSynchronizationContext();
+        context.Post(state => OnLobbyInvitationReceived(e), e);
+    }
+
     private bool TryApplyLobbyUpdate(long version, Func<LobbyResult, LobbyResult> update)
     {
         bool wasApplied;
@@ -660,6 +705,11 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private void OnMatchStarting(MatchStartingEventArgs eventArgs)
     {
         MatchStarting?.Invoke(this, eventArgs);
+    }
+
+    private void OnLobbyInvitationReceived(LobbyInvitationReceivedEventArgs eventArgs)
+    {
+        LobbyInvitationReceived?.Invoke(this, eventArgs);
     }
 
     private static LobbyResult CreateLobbyWithPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
@@ -721,6 +771,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
         callback.PlayerReadyChanged += HandlePlayerReadyChanged;
         callback.LobbyMessageReceived += HandleLobbyMessageReceived;
         callback.MatchStarting += HandleMatchStarting;
+        callback.LobbyInvitationReceived += HandleLobbyInvitationReceived;
         return callback;
     }
 
@@ -811,6 +862,12 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     private void ScheduleReconnection(string lobbyCode)
     {
+        SynchronizationContext context = GetSynchronizationContext();
+        context.Post(StartReconnection, lobbyCode);
+    }
+
+    private SynchronizationContext GetSynchronizationContext()
+    {
         SynchronizationContext context;
 
         lock (_sessionSyncRoot)
@@ -818,7 +875,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
             context = _synchronizationContext;
         }
 
-        context.Post(StartReconnection, lobbyCode);
+        return context;
     }
 
     private void StartReconnection(object state)

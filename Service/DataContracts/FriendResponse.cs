@@ -10,4 +10,7 @@ public sealed class FriendResponse
 
     [DataMember]
     public string Username { get; set; }
+
+    [DataMember]
+    public PlayerStatusCode Status { get; set; }
 }

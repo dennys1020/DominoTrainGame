@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -16,6 +17,7 @@ public sealed class LobbyController
     private static readonly ITraceLog _logger;
 
     private readonly ILobbyUseCases _lobbyUseCases;
+    private readonly IInvitationUseCases _invitationUseCases;
     private readonly SessionManager _sessionManager;
 
     static LobbyController()
@@ -23,9 +25,13 @@ public sealed class LobbyController
         _logger = TraceLogManager.GetLogger(typeof(LobbyController));
     }
 
-    public LobbyController(ILobbyUseCases lobbyUseCases, SessionManager sessionManager)
+    public LobbyController(
+        ILobbyUseCases lobbyUseCases,
+        IInvitationUseCases invitationUseCases,
+        SessionManager sessionManager)
     {
         _lobbyUseCases = lobbyUseCases ?? throw new ArgumentNullException(nameof(lobbyUseCases));
+        _invitationUseCases = invitationUseCases ?? throw new ArgumentNullException(nameof(invitationUseCases));
         _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
     }
 
@@ -137,6 +143,46 @@ public sealed class LobbyController
         }
     }
 
+    public void InviteFriend(FriendUsernameRequest request)
+    {
+        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+
+        if (request == null)
+        {
+            throw CreateMissingRequestFault();
+        }
+
+        LobbyMember inviter = new LobbyMember(caller.PlayerId, caller.Username);
+        InviteFriendStatus status = SendInvitation(inviter, request.Username);
+
+        if (status != InviteFriendStatus.Success)
+        {
+            throw GameFaultFactory.Create(MapInviteFaultCode(status));
+        }
+    }
+
+    private InviteFriendStatus SendInvitation(LobbyMember inviter, string friendUsername)
+    {
+        InviteFriendStatus status;
+
+        try
+        {
+            status = _invitationUseCases.InviteFriend(inviter, friendUsername);
+        }
+        catch (ArgumentException exception)
+        {
+            _logger.Warn("A lobby invitation was rejected because its username is invalid.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("A lobby invitation failed because the database is unavailable.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+        }
+
+        return status;
+    }
+
     private static FaultException<GameServiceFault> CreateMissingRequestFault()
     {
         _logger.Warn("A lobby request was rejected because it has no content.");
@@ -187,6 +233,35 @@ public sealed class LobbyController
                 break;
             case JoinLobbyStatus.AlreadyInLobby:
                 faultCode = GameServiceFaultCode.LobbyConflict;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidLobbyRequest;
+                break;
+        }
+
+        return faultCode;
+    }
+
+    private static GameServiceFaultCode MapInviteFaultCode(InviteFriendStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case InviteFriendStatus.LobbyNotFound:
+                faultCode = GameServiceFaultCode.LobbyNotFound;
+                break;
+            case InviteFriendStatus.LobbyFull:
+                faultCode = GameServiceFaultCode.LobbyFull;
+                break;
+            case InviteFriendStatus.PlayerNotFound:
+                faultCode = GameServiceFaultCode.PlayerNotFound;
+                break;
+            case InviteFriendStatus.NotFriends:
+                faultCode = GameServiceFaultCode.NotFriends;
+                break;
+            case InviteFriendStatus.PlayerOffline:
+                faultCode = GameServiceFaultCode.PlayerOffline;
                 break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;

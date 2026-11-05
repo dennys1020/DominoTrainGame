@@ -121,45 +121,64 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="InviteFriend">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q10:FriendUsernameRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InviteFriendResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="ReceivePlayerJoined">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerJoinedMessage" />
+        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerJoinedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerLeft">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerLeftMessage" />
+        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:PlayerLeftMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerReadyChanged">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:PlayerReadyChangedMessage" />
+        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:PlayerReadyChangedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveLobbyMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:LobbyChatMessage" />
+        <xs:element xmlns:q14="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q14:LobbyChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveMatchStarting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q14:MatchStartingMessage" />
+        <xs:element xmlns:q15="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q15:MatchStartingMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveLobbyInvitation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q16:LobbyInvitationMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ConnectFriends">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q15:ConnectRequest" />
+        <xs:element xmlns:q17="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q17:ConnectRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -176,7 +195,7 @@
   <xs:element name="GetFriendsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://dominotraingame/services" minOccurs="0" name="GetFriendsResult" nillable="true" type="q16:ArrayOfFriendResponse" />
+        <xs:element xmlns:q18="http://dominotraingame/services" minOccurs="0" name="GetFriendsResult" nillable="true" type="q18:ArrayOfFriendResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -188,28 +207,28 @@
   <xs:element name="GetPendingRequestsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://dominotraingame/services" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q17:ArrayOfPendingFriendRequestResponse" />
+        <xs:element xmlns:q19="http://dominotraingame/services" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q19:ArrayOfPendingFriendRequestResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SearchPlayers">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q18:PlayerSearchRequest" />
+        <xs:element xmlns:q20="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q20:PlayerSearchRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SearchPlayersResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://dominotraingame/services" minOccurs="0" name="SearchPlayersResult" nillable="true" type="q19:ArrayOfPlayerSearchResponse" />
+        <xs:element xmlns:q21="http://dominotraingame/services" minOccurs="0" name="SearchPlayersResult" nillable="true" type="q21:ArrayOfPlayerSearchResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SendFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q20:FriendUsernameRequest" />
+        <xs:element xmlns:q22="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q22:FriendUsernameRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -221,7 +240,7 @@
   <xs:element name="AcceptFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q21:FriendshipDecisionRequest" />
+        <xs:element xmlns:q23="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q23:FriendshipDecisionRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -233,7 +252,7 @@
   <xs:element name="RejectFriendRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q22="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q22:FriendshipDecisionRequest" />
+        <xs:element xmlns:q24="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q24:FriendshipDecisionRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -245,11 +264,23 @@
   <xs:element name="RemoveFriend">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q23="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q23:FriendUsernameRequest" />
+        <xs:element xmlns:q25="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q25:FriendUsernameRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RemoveFriendResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveFriendStatusChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q26:FriendStatusMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveFriendsChanged">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>

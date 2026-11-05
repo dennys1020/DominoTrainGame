@@ -3,10 +3,12 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Server.Service.Contracts;
 
 namespace DominoTrainGame.Server.Service.Sessions;
 
-public sealed class SocialSessionRegistry
+public sealed class SocialSessionRegistry : IPresenceTracker
 {
     private readonly ConcurrentDictionary<int, SocialSession> _sessionsByPlayerId;
 
@@ -23,6 +25,25 @@ public sealed class SocialSessionRegistry
         }
 
         _sessionsByPlayerId[session.Player.PlayerId] = session;
+    }
+
+    public bool IsOnline(int playerId)
+    {
+        bool isOnline = _sessionsByPlayerId.ContainsKey(playerId);
+        return isOnline;
+    }
+
+    public IReadOnlyList<ISocialClientCallback> FindCallbacks(int playerId)
+    {
+        List<ISocialClientCallback> callbacks = new List<ISocialClientCallback>();
+        bool isConnected = _sessionsByPlayerId.TryGetValue(playerId, out SocialSession session);
+
+        if (isConnected)
+        {
+            callbacks.Add(session.Callback);
+        }
+
+        return callbacks;
     }
 
     public bool TryGetPlayer(string sessionId, out AuthenticatedPlayer player)

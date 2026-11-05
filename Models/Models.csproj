@@ -77,6 +77,7 @@
     <Compile Include="Contracts\PlayerReadyChangedEventArgs.cs" />
     <Compile Include="Contracts\LobbyMessageReceivedEventArgs.cs" />
     <Compile Include="Contracts\MatchStartingEventArgs.cs" />
+    <Compile Include="Contracts\LobbyInvitationReceivedEventArgs.cs" />
     <Compile Include="Contracts\ConnectionCheckResult.cs" />
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
     <Compile Include="Networking\GameChannelCloser.cs" />
@@ -150,6 +151,10 @@
     <Compile Include="Contracts\FriendRequestResult.cs" />
     <Compile Include="Contracts\FriendResult.cs" />
     <Compile Include="Contracts\FriendResultStatus.cs" />
+    <Compile Include="Callbacks\SocialClientCallback.cs" />
+    <Compile Include="Contracts\FriendStatus.cs" />
+    <Compile Include="Contracts\FriendStatusChangedEventArgs.cs" />
+    <Compile Include="Networking\FriendStatusCodes.cs" />
     <Compile Include="Contracts\IRemoteSocialServices.cs" />
     <Compile Include="Contracts\ISocialConnectionFactory.cs" />
     <Compile Include="Contracts\PlayerSearchResult.cs" />

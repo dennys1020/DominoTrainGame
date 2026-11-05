@@ -94,6 +94,10 @@
     <Compile Include="Results\RemoveFriendStatus.cs" />
     <Compile Include="Results\SendFriendRequestStatus.cs" />
     <Compile Include="Results\StartMatchStatus.cs" />
+    <Compile Include="Results\InviteFriendStatus.cs" />
+    <Compile Include="Ports\LobbyInvitationNotice.cs" />
+    <Compile Include="UseCases\IInvitationUseCases.cs" />
+    <Compile Include="UseCases\InvitationUseCases.cs" />
     <Compile Include="UseCases\FriendUseCases.cs" />
     <Compile Include="UseCases\IFriendUseCases.cs" />
     <Compile Include="Ports\IChatMessageFilter.cs" />
@@ -102,10 +106,30 @@
     <Compile Include="Security\ChatToken.cs" />
     <Compile Include="Security\ForbiddenWordResources.cs" />
     <Compile Include="UseCases\LobbyInputRules.cs" />
+    <Compile Include="Domain\FriendPresence.cs" />
+    <Compile Include="Domain\PlayerStatus.cs" />
+    <Compile Include="Ports\FriendStatusNotice.cs" />
+    <Compile Include="Ports\IPresenceTracker.cs" />
+    <Compile Include="Ports\ISocialNotifier.cs" />
+    <Compile Include="UseCases\FriendStatusUseCases.cs" />
+    <Compile Include="UseCases\IFriendStatusUseCases.cs" />
+    <Compile Include="UseCases\IPresenceUseCases.cs" />
+    <Compile Include="UseCases\PresenceTrackingLobbyUseCases.cs" />
+    <Compile Include="UseCases\PresenceUseCases.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Security\ForbiddenWords\English.txt" />
     <EmbeddedResource Include="Security\ForbiddenWords\Spanish.txt" />
   </ItemGroup>
+    <Compile Include="Domain\FriendPresence.cs" />
+    <Compile Include="Domain\PlayerStatus.cs" />
+    <Compile Include="Ports\FriendStatusNotice.cs" />
+    <Compile Include="Ports\IPresenceTracker.cs" />
+    <Compile Include="Ports\ISocialNotifier.cs" />
+    <Compile Include="UseCases\FriendStatusUseCases.cs" />
+    <Compile Include="UseCases\IFriendStatusUseCases.cs" />
+    <Compile Include="UseCases\IPresenceUseCases.cs" />
+    <Compile Include="UseCases\PresenceTrackingLobbyUseCases.cs" />
+    <Compile Include="UseCases\PresenceUseCases.cs" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -598,4 +598,52 @@ en el tren</value>
   <data name="FriendServerErrorMessage" xml:space="preserve">
     <value>No se pudo completar la acción. Inténtalo de nuevo.</value>
   </data>
+  <data name="NotLobbyHostMessage" xml:space="preserve">
+    <value>Solo el anfitrión puede iniciar la partida.</value>
+  </data>
+  <data name="PlayersNotReadyMessage" xml:space="preserve">
+    <value>Para iniciar se necesitan al menos dos jugadores y que todos estén listos.</value>
+  </data>
+  <data name="CancelReadyButtonLabel" xml:space="preserve">
+    <value>Cancelar listo</value>
+  </data>
+  <data name="InviteFriendButtonLabel" xml:space="preserve">
+    <value>Invitar</value>
+  </data>
+  <data name="PlayerOfflineMessage" xml:space="preserve">
+    <value>Tu amigo no está conectado en este momento.</value>
+  </data>
+  <data name="LobbyInvitationReceivedMessage" xml:space="preserve">
+    <value>{0} te invitó a su sala. ¿Quieres unirte?</value>
+  </data>
+  <data name="InviteFriendsButtonLabel" xml:space="preserve">
+    <value>Invitar amigos</value>
+  </data>
+  <data name="InvitedFriendLabel" xml:space="preserve">
+    <value>Invitado</value>
+  </data>
+  <data name="NoFriendsToInviteLabel" xml:space="preserve">
+    <value>Todavía no tienes amigos para invitar.</value>
+  </data>
+  <data name="FriendStatusOfflineLabel" xml:space="preserve">
+    <value>Desconectado</value>
+  </data>
+  <data name="FriendStatusOnlineLabel" xml:space="preserve">
+    <value>En línea</value>
+  </data>
+  <data name="FriendStatusInLobbyLabel" xml:space="preserve">
+    <value>En una sala</value>
+  </data>
+  <data name="FriendStatusInMatchLabel" xml:space="preserve">
+    <value>En partida</value>
+  </data>
+  <data name="FriendRequestAcceptedMessage" xml:space="preserve">
+    <value>Solicitud de amistad aceptada.</value>
+  </data>
+  <data name="FriendRequestRejectedMessage" xml:space="preserve">
+    <value>Solicitud de amistad rechazada.</value>
+  </data>
+  <data name="FriendRemovedMessage" xml:space="preserve">
+    <value>Amigo eliminado.</value>
+  </data>
 </root>

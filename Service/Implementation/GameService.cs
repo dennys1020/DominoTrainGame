@@ -103,7 +103,12 @@ public sealed class GameService : IConnectionService, IAuthenticationService, IL
     {
         _lobbyController.StartMatch();
     }
-    
+
+    public void InviteFriend(FriendUsernameRequest request)
+    {
+        _lobbyController.InviteFriend(request);
+    }
+
     public void ConnectFriends(ConnectRequest request)
     {
         _friendController.Connect(request);

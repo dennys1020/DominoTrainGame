@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
 using log4net.Ext.Trace;
+using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 using DominoTrainGame.Client.Models.Networking;
@@ -19,6 +20,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     private readonly GameChannelCloser _channelCloser;
     private readonly IRemoteGameServices _gameServices;
     private readonly object _clientSyncRoot;
+    private readonly SocialClientCallback _callback;
     private FriendServiceClient _friendClient;
     private string _connectedSessionToken;
 
@@ -51,6 +53,19 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _clientSyncRoot = new object();
         _connectedSessionToken = string.Empty;
+        _callback = CreateCallback();
+    }
+
+    public event EventHandler<FriendStatusChangedEventArgs> FriendStatusChanged;
+
+    public event EventHandler<EventArgs> FriendsChanged;
+
+    public async Task<FriendResultStatus> ConnectAsync()
+    {
+        FriendResultStatus status = await InvokeFriendServiceAsync(
+            friendClient => Task.FromResult(FriendResultStatus.Success),
+            KeepStatus).ConfigureAwait(false);
+        return status;
     }
 
     public async Task<FriendListResult> GetFriendsAsync()
@@ -129,15 +144,27 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         return status;
     }
 
+    public void Disconnect()
+    {
+        DiscardCurrentClient();
+    }
+
     private static async Task<FriendListResult> RequestFriendsAsync(FriendServiceClient friendClient)
     {
         IEnumerable<FriendResponse> responses = await friendClient.GetFriendsAsync().ConfigureAwait(false);
         List<FriendResult> friends = (responses ?? Enumerable.Empty<FriendResponse>())
-            .Select(response => new FriendResult(response.PlayerId, response.Username))
+            .Select(ToFriendResult)
             .ToList();
         FriendListResult result = new FriendListResult(FriendResultStatus.Success, friends);
 
         return result;
+    }
+
+    private static FriendResult ToFriendResult(FriendResponse response)
+    {
+        FriendStatus status = FriendStatusCodes.ToFriendStatus(response.Status);
+        FriendResult friend = new FriendResult(response.PlayerId, response.Username, status);
+        return friend;
     }
 
     private static async Task<FriendRequestListResult> RequestPendingRequestsAsync(FriendServiceClient friendClient)
@@ -283,7 +310,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
 
     private async Task<FriendServiceClient> OpenFriendClientAsync(string sessionToken)
     {
-        FriendServiceClient friendClient = _connectionFactory.CreateFriendClient();
+        FriendServiceClient friendClient = _connectionFactory.CreateFriendClient(_callback);
         bool isConnected = false;
 
         try
@@ -310,7 +337,11 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
 
     private void ReplaceCurrentClient(FriendServiceClient friendClient, string sessionToken)
     {
+        ICommunicationObject channel = friendClient;
         FriendServiceClient previousClient;
+
+        channel.Faulted += (sender, e) => DiscardEndedClient(friendClient);
+        channel.Closed += (sender, e) => DiscardEndedClient(friendClient);
 
         lock (_clientSyncRoot)
         {
@@ -340,5 +371,55 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         {
             _channelCloser.Close(discardedClient);
         }
+    }
+
+    private void DiscardEndedClient(FriendServiceClient endedClient)
+    {
+        bool isCurrentClient;
+
+        lock (_clientSyncRoot)
+        {
+            isCurrentClient = ReferenceEquals(endedClient, _friendClient);
+
+            if (isCurrentClient)
+            {
+                _friendClient = null;
+                _connectedSessionToken = string.Empty;
+            }
+        }
+
+        if (isCurrentClient)
+        {
+            _logger.Warn("The friends channel ended. It will be opened again on the next friends request.");
+            _channelCloser.Close(endedClient);
+        }
+    }
+
+    private SocialClientCallback CreateCallback()
+    {
+        SocialClientCallback callback = new SocialClientCallback();
+        callback.FriendStatusChanged += HandleFriendStatusChanged;
+        callback.FriendsChanged += HandleFriendsChanged;
+        return callback;
+    }
+
+    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs e)
+    {
+        OnFriendStatusChanged(e);
+    }
+
+    private void HandleFriendsChanged(object sender, EventArgs e)
+    {
+        OnFriendsChanged(e);
+    }
+
+    private void OnFriendStatusChanged(FriendStatusChangedEventArgs eventArgs)
+    {
+        FriendStatusChanged?.Invoke(this, eventArgs);
+    }
+
+    private void OnFriendsChanged(EventArgs eventArgs)
+    {
+        FriendsChanged?.Invoke(this, eventArgs);
     }
 }

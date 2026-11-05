@@ -13,5 +13,8 @@ public enum LobbyResultStatus
     ServerUnavailable,
     ServerError,
     NotLobbyHost,
-    PlayersNotReady
+    PlayersNotReady,
+    PlayerNotFound,
+    NotFriends,
+    PlayerOffline
 }
