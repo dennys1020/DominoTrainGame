@@ -18,6 +18,7 @@ public sealed class RoomViewModel : ScreenViewModel
     private const long NextVersionOffset = 1;
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
+    private const int MinimumPlayers = 2;
     private const bool ReadyState = true;
     private const string SessionLostMessageKey = "LobbySessionExpiredMessage";
     private const string RoomLostMessageKey = "RoomLostAfterReconnectMessage";
@@ -27,6 +28,7 @@ public sealed class RoomViewModel : ScreenViewModel
     private readonly IRemoteGameServices _gameServices;
     private readonly LocalizationViewModel _localization;
     private readonly Screen _previousScreen;
+    private bool _canStartMatch;
     private bool _isBusy;
     private bool _isHost;
     private bool _isReconnecting;
@@ -46,7 +48,7 @@ public sealed class RoomViewModel : ScreenViewModel
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
         MarkReadyCommand = new AsyncRelayCommand(MarkReadyAsync);
         SendMessageCommand = new AsyncRelayCommand(SendMessageAsync);
-        ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults, CurrentRole));
+        StartMatchCommand = new AsyncRelayCommand(StartMatchAsync);
 
         TryApplyCurrentLobby();
         _previousScreen = IsHost ? Screen.NewGame : Screen.JoinGame;
@@ -56,6 +58,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _gameServices.ConnectionStateChanged += HandleConnectionStateChanged;
         _gameServices.PlayerReadyChanged += HandlePlayerReadyChanged;
         _gameServices.LobbyMessageReceived += HandleLobbyMessageReceived;
+        _gameServices.MatchStarting += HandleMatchStarting;
     }
 
     public bool IsReconnecting
@@ -91,6 +94,18 @@ public sealed class RoomViewModel : ScreenViewModel
         private set
         {
             SetProperty(ref _isHost, value);
+        }
+    }
+
+    public bool CanStartMatch
+    {
+        get
+        {
+            return _canStartMatch;
+        }
+        private set
+        {
+            SetProperty(ref _canStartMatch, value);
         }
     }
 
@@ -144,7 +159,7 @@ public sealed class RoomViewModel : ScreenViewModel
 
     public AsyncRelayCommand SendMessageCommand { get; }
 
-    public RelayCommand ResultsCommand { get; }
+    public AsyncRelayCommand StartMatchCommand { get; }
 
     private RoomRole CurrentRole => IsHost ? RoomRole.Host : RoomRole.Guest;
 
@@ -179,6 +194,7 @@ public sealed class RoomViewModel : ScreenViewModel
         MaximumPlayers = lobby.MaximumPlayers;
         IsHost = lobby.HostPlayerId == _gameServices.CurrentPlayerId;
         _version = lobby.Version;
+        RefreshStartAvailability();
     }
 
     private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs e)
@@ -208,6 +224,24 @@ public sealed class RoomViewModel : ScreenViewModel
         }
     }
 
+    private void HandleMatchStarting(object sender, MatchStartingEventArgs e)
+    {
+        bool isCurrentLobby = string.Equals(e.Code, LobbyCode, StringComparison.Ordinal);
+
+        if (isCurrentLobby)
+        {
+            UnsubscribeFromGameServices();
+            WindowService.Navigate(Screen.MatchResults, CurrentRole);
+        }
+    }
+
+    private void RefreshStartAvailability()
+    {
+        bool hasMinimumPlayers = Players.Count >= MinimumPlayers;
+        bool areAllPlayersReady = Players.All(player => player.IsReady);
+        CanStartMatch = IsHost && hasMinimumPlayers && areAllPlayersReady;
+    }
+
     private void ApplyRosterChange(long version, Action applyChange)
     {
         bool isNewerVersion = version > _version;
@@ -217,6 +251,7 @@ public sealed class RoomViewModel : ScreenViewModel
         {
             applyChange();
             _version = version;
+            RefreshStartAvailability();
         }
         else if (isNewerVersion)
         {
@@ -309,6 +344,7 @@ public sealed class RoomViewModel : ScreenViewModel
         _gameServices.ConnectionStateChanged -= HandleConnectionStateChanged;
         _gameServices.PlayerReadyChanged -= HandlePlayerReadyChanged;
         _gameServices.LobbyMessageReceived -= HandleLobbyMessageReceived;
+        _gameServices.MatchStarting -= HandleMatchStarting;
     }
 
     private async Task LeaveRoomAsync()
@@ -325,6 +361,11 @@ public sealed class RoomViewModel : ScreenViewModel
     private async Task MarkReadyAsync()
     {
         await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(ReadyState));
+    }
+
+    private async Task StartMatchAsync()
+    {
+        await RunLobbyCommandAsync(() => _gameServices.StartMatchAsync());
     }
 
     private async Task SendMessageAsync()

@@ -1,6 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:Double x:Key="DisabledOpacity">0.45</sys:Double>
     <SolidColorBrush x:Key="Glacier" Color="#D5FAF9" />
     <SolidColorBrush x:Key="Mist" Color="#C1F0E2" />
     <SolidColorBrush x:Key="Frost" Color="#7FE3D7" />

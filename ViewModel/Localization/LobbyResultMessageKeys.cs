@@ -12,6 +12,8 @@ public static class LobbyResultMessageKeys
     private const string LobbySessionExpiredMessageKey = "LobbySessionExpiredMessage";
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LobbyServerErrorMessageKey = "LobbyServerErrorMessage";
+    private const string NotLobbyHostMessageKey = "NotLobbyHostMessage";
+    private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
 
     public static string GetMessageKey(LobbyResultStatus status)
     {
@@ -39,6 +41,12 @@ public static class LobbyResultMessageKeys
                 break;
             case LobbyResultStatus.ServerUnavailable:
                 messageKey = ServerUnavailableMessageKey;
+                break;
+            case LobbyResultStatus.NotLobbyHost:
+                messageKey = NotLobbyHostMessageKey;
+                break;
+            case LobbyResultStatus.PlayersNotReady:
+                messageKey = PlayersNotReadyMessageKey;
                 break;
             default:
                 messageKey = LobbyServerErrorMessageKey;
