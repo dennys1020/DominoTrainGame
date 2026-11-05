@@ -28,22 +28,40 @@ internal static class GameServiceFactory
         ILobbyCodeGenerator lobbyCodeGenerator = new LobbyCodeGenerator();
         LobbyRegistry lobbyRegistry = new LobbyRegistry(lobbyCodeGenerator);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyCodeGenerator);
+
+        IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
+        SocialSessionRegistry socialSessions = new SocialSessionRegistry();
+        ISocialNotifier socialNotifier = new CallbackSocialNotifier(socialSessions);
+        IPresenceUseCases presenceUseCases = new PresenceUseCases(socialSessions, lobbyRegistry);
+        IFriendStatusUseCases friendStatusUseCases = new FriendStatusUseCases(
+            friendshipRepository,
+            presenceUseCases,
+            socialNotifier);
+        ILobbyUseCases trackedLobbyUseCases = new PresenceTrackingLobbyUseCases(
+            lobbyUseCases,
+            presenceUseCases,
+            friendStatusUseCases);
+
         SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
-        SessionManager sessionManager = new SessionManager(connectedPlayers, lobbyUseCases, sessionTokens);
+        SessionManager sessionManager = new SessionManager(connectedPlayers, trackedLobbyUseCases, sessionTokens);
         AuthenticationController authenticationController = new AuthenticationController(
             loginUseCases,
             signUpUseCases,
             sessionManager);
-        IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
         IInvitationUseCases invitationUseCases = new InvitationUseCases(
             lobbyRegistry,
             friendshipRepository,
             gameNotifier);
-        LobbyController lobbyController = new LobbyController(lobbyUseCases, invitationUseCases, sessionManager);
+        LobbyController lobbyController = new LobbyController(
+            trackedLobbyUseCases,
+            invitationUseCases,
+            sessionManager);
 
-        IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository);
-        SocialSessionRegistry socialSessions = new SocialSessionRegistry();
-        SocialSessionManager socialSessionManager = new SocialSessionManager(sessionTokens, socialSessions);
+        IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
+        SocialSessionManager socialSessionManager = new SocialSessionManager(
+            sessionTokens,
+            socialSessions,
+            friendStatusUseCases);
         FriendController friendController = new FriendController(friendUseCases, socialSessionManager);
         SessionController sessionController = new SessionController(lobbyController, friendController);
 

@@ -312,6 +312,12 @@
   <wsdl:message name="IFriendService_RemoveFriend_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q19="http://dominotraingame/services" name="detail" element="q19:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IFriendService_ReceiveFriendStatusChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveFriendStatusChanged" />
+  </wsdl:message>
+  <wsdl:message name="IFriendService_ReceiveFriendsChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveFriendsChanged" />
+  </wsdl:message>
   <wsdl:portType name="IConnectionService">
     <wsdl:operation name="CheckConnection">
       <wsdl:input wsaw:Action="http://tempuri.org/IConnectionService/CheckConnection" message="tns:IConnectionService_CheckConnection_InputMessage" />
@@ -431,6 +437,12 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/RemoveFriend" message="tns:IFriendService_RemoveFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/RemoveFriendResponse" message="tns:IFriendService_RemoveFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/RemoveFriendGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_RemoveFriend_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveFriendStatusChanged">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/ReceiveFriendStatusChanged" message="tns:IFriendService_ReceiveFriendStatusChanged_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveFriendsChanged">
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/ReceiveFriendsChanged" message="tns:IFriendService_ReceiveFriendsChanged_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IConnectionService" type="tns:IConnectionService">
@@ -712,6 +724,18 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="ReceiveFriendStatusChanged">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/ReceiveFriendStatusChanged" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveFriendsChanged">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/ReceiveFriendsChanged" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="GameService">
     <wsdl:port name="NetTcpBinding_IConnectionService" binding="tns:NetTcpBinding_IConnectionService">
@@ -719,7 +743,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/ConnectionService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -728,7 +752,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/AuthenticationService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -737,7 +761,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/LobbyService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
@@ -746,7 +770,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/FriendService</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>SAM\sam10</Upn>
+          <Upn>DENNYS\dom99</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

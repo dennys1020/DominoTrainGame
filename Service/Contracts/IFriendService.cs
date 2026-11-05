@@ -5,7 +5,9 @@ using DominoTrainGame.Server.Service.Faults;
 
 namespace DominoTrainGame.Server.Service.Contracts;
 
-[ServiceContract(SessionMode = SessionMode.Required)]
+[ServiceContract(
+    CallbackContract = typeof(ISocialClientCallback),
+    SessionMode = SessionMode.Required)]
 public interface IFriendService
 {
     [OperationContract(IsInitiating = true)]

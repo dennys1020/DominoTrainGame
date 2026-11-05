@@ -273,4 +273,16 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReceiveFriendStatusChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q26="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q26:FriendStatusMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveFriendsChanged">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

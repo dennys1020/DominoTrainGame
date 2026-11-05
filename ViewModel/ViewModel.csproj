@@ -97,6 +97,8 @@
     <Compile Include="FriendItemViewModel.cs" />
     <Compile Include="FriendRequestItemViewModel.cs" />
     <Compile Include="FriendsViewModel.cs" />
+    <Compile Include="Contracts\ISubscribingViewModel.cs" />
+    <Compile Include="Localization\FriendStatusLabelKeys.cs" />
     <Compile Include="PlayerSearchItemViewModel.cs" />
     <Compile Include="Localization\FriendResultMessageKeys.cs" />
     <Compile Include="Validation\FriendUsernameInputStatus.cs" />

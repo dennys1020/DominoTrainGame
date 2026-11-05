@@ -625,4 +625,25 @@ on the train</value>
   <data name="NoFriendsToInviteLabel" xml:space="preserve">
     <value>You do not have friends to invite yet.</value>
   </data>
+  <data name="FriendStatusOfflineLabel" xml:space="preserve">
+    <value>Offline</value>
+  </data>
+  <data name="FriendStatusOnlineLabel" xml:space="preserve">
+    <value>Online</value>
+  </data>
+  <data name="FriendStatusInLobbyLabel" xml:space="preserve">
+    <value>In a room</value>
+  </data>
+  <data name="FriendStatusInMatchLabel" xml:space="preserve">
+    <value>In a match</value>
+  </data>
+  <data name="FriendRequestAcceptedMessage" xml:space="preserve">
+    <value>Friend request accepted.</value>
+  </data>
+  <data name="FriendRequestRejectedMessage" xml:space="preserve">
+    <value>Friend request rejected.</value>
+  </data>
+  <data name="FriendRemovedMessage" xml:space="preserve">
+    <value>Friend removed.</value>
+  </data>
 </root>

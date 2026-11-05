@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net.Ext.Trace;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 
@@ -9,25 +11,37 @@ namespace DominoTrainGame.Server.Application.UseCases;
 public sealed class FriendUseCases : IFriendUseCases
 {
     private const int MaximumUsernameLength = 45;
+
     private static readonly ITraceLog _logger;
+
     private readonly IFriendshipRepository _friendshipRepository;
+    private readonly IPresenceUseCases _presenceUseCases;
+    private readonly ISocialNotifier _socialNotifier;
 
     static FriendUseCases()
     {
         _logger = TraceLogManager.GetLogger(typeof(FriendUseCases));
     }
 
-    public FriendUseCases(IFriendshipRepository friendshipRepository)
+    public FriendUseCases(
+        IFriendshipRepository friendshipRepository,
+        IPresenceUseCases presenceUseCases,
+        ISocialNotifier socialNotifier)
     {
-        _friendshipRepository = friendshipRepository ?? throw new
-            ArgumentNullException(nameof(friendshipRepository));
+        _friendshipRepository = friendshipRepository
+            ?? throw new ArgumentNullException(nameof(friendshipRepository));
+        _presenceUseCases = presenceUseCases ?? throw new ArgumentNullException(nameof(presenceUseCases));
+        _socialNotifier = socialNotifier ?? throw new ArgumentNullException(nameof(socialNotifier));
     }
 
-    public IReadOnlyList<FriendSummary> GetFriends(int playerId)
+    public IReadOnlyList<FriendPresence> GetFriends(int playerId)
     {
-        IReadOnlyList<FriendSummary> friend = _friendshipRepository.GetFriends(playerId);
+        IReadOnlyList<FriendSummary> friends = _friendshipRepository.GetFriends(playerId);
+        List<FriendPresence> friendPresences = friends
+            .Select(friend => new FriendPresence(friend, _presenceUseCases.GetStatus(friend.PlayerId)))
+            .ToList();
 
-        return friend;
+        return friendPresences;
     }
 
     public IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId)
@@ -61,7 +75,13 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public bool AcceptFriendRequest(int playerId, int requestId)
     {
+        bool isRequesterFound = TryFindRequester(playerId, requestId, out int requesterPlayerId);
         bool isAccepted = _friendshipRepository.AcceptRequest(requestId, playerId);
+
+        if (isAccepted && isRequesterFound)
+        {
+            _socialNotifier.NotifyFriendsChanged(requesterPlayerId);
+        }
 
         LogRequestDecision(playerId, isAccepted);
         return isAccepted;
@@ -186,6 +206,11 @@ public sealed class FriendUseCases : IFriendUseCases
             status = isCreated ? SendFriendRequestStatus.Success : SendFriendRequestStatus.RequestAlreadyExists;
         }
 
+        if (status == SendFriendRequestStatus.Success)
+        {
+            _socialNotifier.NotifyFriendsChanged(addresseePlayerId);
+        }
+
         return status;
     }
 
@@ -193,6 +218,22 @@ public sealed class FriendUseCases : IFriendUseCases
     {
         bool isRemoved = _friendshipRepository.RemoveFriendship(playerId, friendPlayerId);
         RemoveFriendStatus status = isRemoved ? RemoveFriendStatus.Success : RemoveFriendStatus.NotFriends;
+
+        if (isRemoved)
+        {
+            _socialNotifier.NotifyFriendsChanged(friendPlayerId);
+        }
+
         return status;
+    }
+
+    private bool TryFindRequester(int playerId, int requestId, out int requesterPlayerId)
+    {
+        FriendRequestSummary request = _friendshipRepository.GetPendingRequests(playerId)
+            .FirstOrDefault(pendingRequest => pendingRequest.RequestId == requestId);
+        requesterPlayerId = default;
+        bool isFound = request != null
+            && _friendshipRepository.TryFindFriendship(request.RequesterUsername, out requesterPlayerId);
+        return isFound;
     }
 }

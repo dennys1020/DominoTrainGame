@@ -1,20 +1,21 @@
 using System;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Service.Contracts;
 
 namespace DominoTrainGame.Server.Service.Sessions;
 
 public sealed class SocialSession
 {
-    public SocialSession(string sessionId, string sessionToken, AuthenticatedPlayer player)
+    public SocialSession(string sessionId, AuthenticatedPlayer player, ISocialClientCallback callback)
     {
         SessionId = sessionId ?? throw new ArgumentNullException(nameof(sessionId));
-        SessionToken = sessionToken ?? throw new ArgumentNullException(nameof(sessionToken));
         Player = player ?? throw new ArgumentNullException(nameof(player));
+        Callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 
     public string SessionId { get; }
 
-    public string SessionToken { get; }
-
     public AuthenticatedPlayer Player { get; }
+
+    public ISocialClientCallback Callback { get; }
 }

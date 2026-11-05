@@ -1,3 +1,6 @@
+using System;
+using System.ServiceModel;
+using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 
@@ -7,9 +10,15 @@ public sealed class SocialConnectionFactory : ISocialConnectionFactory
 {
     private const string FriendEndpointName = "NetTcpBinding_IFriendService";
 
-    public FriendServiceClient CreateFriendClient()
+    public FriendServiceClient CreateFriendClient(SocialClientCallback callback)
     {
-        FriendServiceClient friendClient = new FriendServiceClient(FriendEndpointName);
+        if (callback == null)
+        {
+            throw new ArgumentNullException(nameof(callback));
+        }
+
+        InstanceContext callbackContext = new InstanceContext(callback);
+        FriendServiceClient friendClient = new FriendServiceClient(callbackContext, FriendEndpointName);
         return friendClient;
     }
 }

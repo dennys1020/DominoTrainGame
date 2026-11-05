@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
@@ -12,9 +13,12 @@ using DominoTrainGame.Client.ViewModel.Validation;
 
 namespace DominoTrainGame.Client.ViewModel;
 
-public sealed class FriendsViewModel : ScreenViewModel
+public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 {
     private const string FriendRequestSentMessageKey = "FriendRequestSentMessage";
+    private const string FriendRequestAcceptedMessageKey = "FriendRequestAcceptedMessage";
+    private const string FriendRequestRejectedMessageKey = "FriendRequestRejectedMessage";
+    private const string FriendRemovedMessageKey = "FriendRemovedMessage";
     private const int SearchDelayMilliseconds = 300;
     private const int MinimumSearchLength = 2;
 
@@ -46,6 +50,8 @@ public sealed class FriendsViewModel : ScreenViewModel
         AddFriendCommand = new AsyncRelayCommand(SendFriendRequestAsync);
         RefreshCommand = new AsyncRelayCommand(RefreshAsync);
         SearchCommand = new AsyncRelayCommand(SearchPlayersAsync);
+        _socialServices.FriendStatusChanged += HandleFriendStatusChanged;
+        _socialServices.FriendsChanged += HandleFriendsChanged;
         RefreshCommand.Execute(null);
     }
 
@@ -57,7 +63,12 @@ public sealed class FriendsViewModel : ScreenViewModel
         }
         set
         {
-            SetProperty(ref _isFriendsSelected, value);
+            bool hasChanged = SetProperty(ref _isFriendsSelected, value);
+
+            if (hasChanged && value)
+            {
+                RefreshCommand.Execute(null);
+            }
         }
     }
 
@@ -69,7 +80,12 @@ public sealed class FriendsViewModel : ScreenViewModel
         }
         set
         {
-            SetProperty(ref _isRequestsSelected, value);
+            bool hasChanged = SetProperty(ref _isRequestsSelected, value);
+
+            if (hasChanged && value)
+            {
+                RefreshCommand.Execute(null);
+            }
         }
     }
 
@@ -107,6 +123,13 @@ public sealed class FriendsViewModel : ScreenViewModel
 
     public AsyncRelayCommand SearchCommand { get; }
 
+    public void Unsubscribe()
+    {
+        _socialServices.FriendStatusChanged -= HandleFriendStatusChanged;
+        _socialServices.FriendsChanged -= HandleFriendsChanged;
+        _searchCancellation.Cancel();
+    }
+
     private async Task RefreshAsync()
     {
         FriendListResult friendList = await _socialServices.GetFriendsAsync();
@@ -130,8 +153,31 @@ public sealed class FriendsViewModel : ScreenViewModel
 
         foreach (FriendResult friend in friends)
         {
-            Friends.Add(new FriendItemViewModel(friend, RemoveFriendAsync));
+            Friends.Add(CreateFriendItem(friend));
         }
+    }
+
+    private FriendItemViewModel CreateFriendItem(FriendResult friend)
+    {
+        string statusLabel = _localization[FriendStatusLabelKeys.GetLabelKey(friend.Status)];
+        FriendItemViewModel friendItem = new FriendItemViewModel(friend, statusLabel, RemoveFriendAsync);
+        return friendItem;
+    }
+
+    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs e)
+    {
+        FriendItemViewModel friendItem = Friends.FirstOrDefault(item => item.PlayerId == e.PlayerId);
+
+        if (friendItem != null)
+        {
+            FriendResult friend = new FriendResult(e.PlayerId, friendItem.Username, e.Status);
+            Friends[Friends.IndexOf(friendItem)] = CreateFriendItem(friend);
+        }
+    }
+
+    private void HandleFriendsChanged(object sender, EventArgs e)
+    {
+        RefreshCommand.Execute(null);
     }
 
     private void ShowPendingRequests(FriendRequestListResult requestList)
@@ -240,24 +286,28 @@ public sealed class FriendsViewModel : ScreenViewModel
     private async Task RemoveFriendAsync(FriendResult friend)
     {
         FriendResultStatus status = await _socialServices.RemoveFriendAsync(friend.Username);
-        await ApplyCommandResultAsync(status);
+        await ApplyCommandResultAsync(status, FriendRemovedMessageKey);
     }
 
     private async Task AcceptRequestAsync(FriendRequestResult request)
     {
         FriendResultStatus status = await _socialServices.AcceptFriendRequestAsync(request.RequestId);
-        await ApplyCommandResultAsync(status);
+        await ApplyCommandResultAsync(status, FriendRequestAcceptedMessageKey);
     }
 
     private async Task RejectRequestAsync(FriendRequestResult request)
     {
         FriendResultStatus status = await _socialServices.RejectFriendRequestAsync(request.RequestId);
-        await ApplyCommandResultAsync(status);
+        await ApplyCommandResultAsync(status, FriendRequestRejectedMessageKey);
     }
 
-    private async Task ApplyCommandResultAsync(FriendResultStatus status)
+    private async Task ApplyCommandResultAsync(FriendResultStatus status, string successMessageKey)
     {
-        if (status != FriendResultStatus.Success)
+        if (status == FriendResultStatus.Success)
+        {
+            WindowService.ShowMessage(_localization[successMessageKey]);
+        }
+        else
         {
             ShowFailure(status);
         }
