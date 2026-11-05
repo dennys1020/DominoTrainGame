@@ -36,4 +36,8 @@ public interface ILobbyService
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]
     void StartMatch();
+
+    [OperationContract(IsInitiating = false)]
+    [FaultContract(typeof(GameServiceFault))]
+    void InviteFriend(FriendUsernameRequest request);
 }

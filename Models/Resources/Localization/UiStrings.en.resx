@@ -607,4 +607,22 @@ on the train</value>
   <data name="CancelReadyButtonLabel" xml:space="preserve">
     <value>Cancel ready</value>
   </data>
+  <data name="InviteFriendButtonLabel" xml:space="preserve">
+    <value>Invite</value>
+  </data>
+  <data name="PlayerOfflineMessage" xml:space="preserve">
+    <value>Your friend is not online right now.</value>
+  </data>
+  <data name="LobbyInvitationReceivedMessage" xml:space="preserve">
+    <value>{0} invited you to their room. Do you want to join?</value>
+  </data>
+  <data name="InviteFriendsButtonLabel" xml:space="preserve">
+    <value>Invite friends</value>
+  </data>
+  <data name="InvitedFriendLabel" xml:space="preserve">
+    <value>Invited</value>
+  </data>
+  <data name="NoFriendsToInviteLabel" xml:space="preserve">
+    <value>You do not have friends to invite yet.</value>
+  </data>
 </root>

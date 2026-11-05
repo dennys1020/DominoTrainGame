@@ -35,7 +35,7 @@ internal sealed class WindowService : IWindowService
 
     public void ShowDialog(Screen screen)
     {
-        Window dialog = _windowFactory.Create(screen);
+        Window dialog = _windowFactory.CreateDialog(screen);
 
         dialog.Owner = _window;
         dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -47,6 +47,19 @@ internal sealed class WindowService : IWindowService
     {
         string title = _localization[MessageTitleKey];
         MessageBox.Show(_window, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    public bool Confirm(string message)
+    {
+        string title = _localization[MessageTitleKey];
+        MessageBoxResult answer = MessageBox.Show(
+            _window,
+            message,
+            title,
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+        bool isConfirmed = answer == MessageBoxResult.Yes;
+        return isConfirmed;
     }
 
     public void Close()

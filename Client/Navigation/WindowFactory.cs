@@ -18,6 +18,8 @@ internal sealed class WindowFactory
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
+    private readonly LobbyInvitationController _invitationController;
+    private readonly RoomDependencies _roomDependencies;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
         _roleViewModelsByScreen;
@@ -53,6 +55,8 @@ internal sealed class WindowFactory
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        _invitationController = new LobbyInvitationController(_gameServices, _localization);
+        _roomDependencies = new RoomDependencies(_gameServices, _socialServices, _localization);
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
@@ -69,7 +73,7 @@ internal sealed class WindowFactory
                 windowService,
                 _gameServices,
                 _localization),
-            [Screen.Room] = windowService => new RoomViewModel(windowService, _gameServices, _localization),
+            [Screen.Room] = windowService => new RoomViewModel(windowService, _roomDependencies),
             [Screen.Settings] = windowService => new DialogViewModel(windowService),
             [Screen.Rules] = windowService => new DialogViewModel(windowService),
             [Screen.Profile] = windowService => new DialogViewModel(windowService),
@@ -87,18 +91,18 @@ internal sealed class WindowFactory
 
     public Window Create(Screen screen)
     {
-        bool hasViewModel = _viewModelsByScreen.TryGetValue(
-            screen,
-            out Func<IWindowService, ScreenViewModel> createViewModel);
-
-        if (!hasViewModel)
-        {
-            throw new ArgumentOutOfRangeException(nameof(screen));
-        }
-
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
-        window.DataContext = createViewModel(windowService);
+        window.DataContext = CreateViewModel(screen, windowService);
+        _invitationController.Attach(windowService);
+        return window;
+    }
+
+    public Window CreateDialog(Screen screen)
+    {
+        Window window = CreateWindow(screen);
+        IWindowService windowService = new WindowService(window, this, _localization);
+        window.DataContext = CreateViewModel(screen, windowService);
         return window;
     }
 
@@ -116,7 +120,23 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = createViewModel(windowService, roomRole);
+        _invitationController.Attach(windowService);
         return window;
+    }
+
+    private ScreenViewModel CreateViewModel(Screen screen, IWindowService windowService)
+    {
+        bool hasViewModel = _viewModelsByScreen.TryGetValue(
+            screen,
+            out Func<IWindowService, ScreenViewModel> createViewModel);
+
+        if (!hasViewModel)
+        {
+            throw new ArgumentOutOfRangeException(nameof(screen));
+        }
+
+        ScreenViewModel viewModel = createViewModel(windowService);
+        return viewModel;
     }
 
     private static Window CreateWindow(Screen screen)

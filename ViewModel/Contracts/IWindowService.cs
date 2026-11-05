@@ -12,5 +12,7 @@ public interface IWindowService
 
     void ShowMessage(string message);
 
+    bool Confirm(string message);
+
     void Close();
 }

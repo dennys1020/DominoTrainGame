@@ -26,6 +26,7 @@
       <xs:enumeration value="PlayerBlocked" />
       <xs:enumeration value="FriendRequestNotFound" />
       <xs:enumeration value="NotFriends" />
+      <xs:enumeration value="PlayerOffline" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -102,6 +103,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SendLobbyMessageRequest" nillable="true" type="tns:SendLobbyMessageRequest" />
+  <xs:complexType name="FriendUsernameRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendUsernameRequest" nillable="true" type="tns:FriendUsernameRequest" />
   <xs:complexType name="PlayerJoinedMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Player" nillable="true" type="tns:LobbyPlayer" />
@@ -139,6 +146,13 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="MatchStartingMessage" nillable="true" type="tns:MatchStartingMessage" />
+  <xs:complexType name="LobbyInvitationMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="InviterUsername" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LobbyInvitationMessage" nillable="true" type="tns:LobbyInvitationMessage" />
   <xs:complexType name="ArrayOfFriendResponse">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendResponse" nillable="true" type="tns:FriendResponse" />
@@ -185,12 +199,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerSearchResponse" nillable="true" type="tns:PlayerSearchResponse" />
-  <xs:complexType name="FriendUsernameRequest">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="FriendUsernameRequest" nillable="true" type="tns:FriendUsernameRequest" />
   <xs:complexType name="FriendshipDecisionRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="RequestId" type="xs:int" />

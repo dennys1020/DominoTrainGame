@@ -36,13 +36,16 @@ public sealed class RoomViewModel : ScreenViewModel
     private string _messageText = string.Empty;
     private long _version;
 
-    public RoomViewModel(
-        IWindowService windowService,
-        IRemoteGameServices gameServices,
-        LocalizationViewModel localization) : base(windowService)
+    public RoomViewModel(IWindowService windowService, RoomDependencies dependencies) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
-        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        if (dependencies == null)
+        {
+            throw new ArgumentNullException(nameof(dependencies));
+        }
+
+        _gameServices = dependencies.GameServices;
+        _localization = dependencies.Localization;
+        InviteFriends = new InviteFriendsViewModel(windowService, dependencies);
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
         ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
@@ -145,6 +148,8 @@ public sealed class RoomViewModel : ScreenViewModel
     }
 
     public int MaximumMessageLength => LobbyMessageInputValidator.MaximumMessageLength;
+
+    public InviteFriendsViewModel InviteFriends { get; }
 
     public ObservableCollection<RoomPlayerViewModel> Players { get; } =
         new ObservableCollection<RoomPlayerViewModel>();

@@ -11,4 +11,6 @@ public interface IGameNotifier
     void NotifyLobbyMessage(LobbyMessageNotice notice);
 
     void NotifyMatchStarting(MatchStartingNotice notice);
+
+    bool TryNotifyLobbyInvitation(LobbyInvitationNotice notice);
 }

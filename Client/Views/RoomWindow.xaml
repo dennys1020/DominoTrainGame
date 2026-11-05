@@ -32,6 +32,58 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="InviteFriendsButtonStyle" TargetType="Button" BasedOn="{StaticResource MatchButtonStyle}">
+            <Setter Property="Command" Value="{Binding OpenCommand}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="InviteFriendItemButtonStyle" TargetType="Button" BasedOn="{StaticResource MatchButtonStyle}">
+            <Setter Property="Command" Value="{Binding InviteCommand}" />
+            <Setter
+                Property="Content"
+                Value="{Binding [InviteFriendButtonLabel], Source={StaticResource Localization}}" />
+            <Setter Property="MinWidth" Value="140" />
+            <Setter Property="MinHeight" Value="40" />
+            <Setter Property="Padding" Value="12,8" />
+            <Setter Property="FontSize" Value="9" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsInvited}" Value="True">
+                    <Setter
+                        Property="Content"
+                        Value="{Binding [InvitedFriendLabel], Source={StaticResource Localization}}" />
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="InvitableFriendNameStyle" TargetType="TextBlock" BasedOn="{StaticResource MatchBodyStyle}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextWrapping" Value="NoWrap" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+        </Style>
+        <Style x:Key="NoFriendsToInviteStyle" TargetType="TextBlock" BasedOn="{StaticResource MatchBodyStyle}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Friends.Count}" Value="0">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="InvitableFriendTemplate">
+            <Grid Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Username}" Style="{StaticResource InvitableFriendNameStyle}" />
+                <Button Grid.Column="1" Style="{StaticResource InviteFriendItemButtonStyle}" />
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
@@ -504,6 +556,47 @@
                                     </Border>
                                 </Grid>
                                 <Grid Grid.Row="2">
+                                    <Grid
+                                        DataContext="{Binding InviteFriends}"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center">
+                                        <Button
+                                            Content="{Binding [InviteFriendsButtonLabel],
+                                                Source={StaticResource Localization}}"
+                                            Style="{StaticResource InviteFriendsButtonStyle}"
+                                            MinWidth="270" />
+                                        <Popup
+                                            IsOpen="{Binding IsOpen, Mode=TwoWay}"
+                                            StaysOpen="False"
+                                            Placement="Top"
+                                            VerticalOffset="-8">
+                                            <Border
+                                                Width="380"
+                                                Background="{StaticResource Glacier}"
+                                                BorderBrush="{StaticResource Ink}"
+                                                BorderThickness="3"
+                                                Padding="16">
+                                                <StackPanel>
+                                                    <TextBlock
+                                                        Text="{Binding [InviteFriendsButtonLabel],
+                                                            Source={StaticResource Localization}}"
+                                                        Style="{StaticResource MatchSectionStyle}" />
+                                                    <ScrollViewer
+                                                        MaxHeight="260"
+                                                        VerticalScrollBarVisibility="Auto"
+                                                        HorizontalScrollBarVisibility="Disabled">
+                                                        <ItemsControl
+                                                            ItemsSource="{Binding Friends}"
+                                                            ItemTemplate="{StaticResource InvitableFriendTemplate}" />
+                                                    </ScrollViewer>
+                                                    <TextBlock
+                                                        Text="{Binding [NoFriendsToInviteLabel],
+                                                            Source={StaticResource Localization}}"
+                                                        Style="{StaticResource NoFriendsToInviteStyle}" />
+                                                </StackPanel>
+                                            </Border>
+                                        </Popup>
+                                    </Grid>
                                     <Button
                                         Content="{Binding [StartMatchButtonLabel],
                                             Source={StaticResource Localization}}"
