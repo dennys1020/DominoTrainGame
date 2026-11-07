@@ -1,37 +1,40 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
 using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Sessions;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 
-public sealed class FriendController
+[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+public sealed class FriendService : IFriendService
 {
     private static readonly ITraceLog _logger;
 
     private readonly IFriendUseCases _friendUseCases;
     private readonly SocialSessionManager _socialSessionManager;
 
-    static FriendController()
+    static FriendService()
     {
-        _logger = TraceLogManager.GetLogger(typeof(FriendController));
+        _logger = TraceLogManager.GetLogger(typeof(FriendService));
     }
 
-    public FriendController(IFriendUseCases friendUseCases, SocialSessionManager socialSessionManager)
+    public FriendService(IFriendUseCases friendUseCases, SocialSessionManager socialSessionManager)
     {
         _friendUseCases = friendUseCases ?? throw new ArgumentNullException(nameof(friendUseCases));
         _socialSessionManager = socialSessionManager ?? throw new ArgumentNullException(nameof(socialSessionManager));
     }
 
-    public void Connect(ConnectRequest request)
+    public void ConnectFriends(ConnectRequest request)
     {
         string sessionToken = request?.SessionToken ?? string.Empty;
         _socialSessionManager.Connect(sessionToken);

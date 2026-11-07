@@ -90,12 +90,11 @@
     <Compile Include="DataContracts\LobbyInvitationMessage.cs" />
     <Compile Include="DataContracts\MatchStartingMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
-    <Compile Include="Implementation\AuthenticationController.cs" />
+    <Compile Include="Implementation\AuthenticationService.cs" />
+    <Compile Include="Implementation\ConnectionService.cs" />
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
-    <Compile Include="Implementation\FriendController.cs" />
-    <Compile Include="Implementation\SessionController.cs" />
-    <Compile Include="Implementation\GameService.cs" />
-    <Compile Include="Implementation\LobbyController.cs" />
+    <Compile Include="Implementation\FriendService.cs" />
+    <Compile Include="Implementation\LobbyService.cs" />
     <Compile Include="Sessions\ConnectedPlayer.cs" />
     <Compile Include="Sessions\ConnectedPlayerRegistry.cs" />
     <Compile Include="Sessions\SessionManager.cs" />

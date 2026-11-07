@@ -6,13 +6,15 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
 using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Sessions;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 
-public sealed class LobbyController
+[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+public sealed class LobbyService : ILobbyService
 {
     private static readonly ITraceLog _logger;
 
@@ -20,12 +22,12 @@ public sealed class LobbyController
     private readonly IInvitationUseCases _invitationUseCases;
     private readonly SessionManager _sessionManager;
 
-    static LobbyController()
+    static LobbyService()
     {
-        _logger = TraceLogManager.GetLogger(typeof(LobbyController));
+        _logger = TraceLogManager.GetLogger(typeof(LobbyService));
     }
 
-    public LobbyController(
+    public LobbyService(
         ILobbyUseCases lobbyUseCases,
         IInvitationUseCases invitationUseCases,
         SessionManager sessionManager)
