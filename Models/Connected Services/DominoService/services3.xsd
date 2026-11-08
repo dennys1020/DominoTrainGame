@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://dominotraingame/services" elementFormDefault="qualified" targetNamespace="http://dominotraingame/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ConnectRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ConnectRequest" nillable="true" type="tns:ConnectRequest" />
+  <xs:complexType name="GameServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:GameServiceFaultCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameServiceFault" nillable="true" type="tns:GameServiceFault" />
+  <xs:simpleType name="GameServiceFaultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InvalidInput" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="SessionNotFound" />
+      <xs:enumeration value="LobbyNotFound" />
+      <xs:enumeration value="LobbyFull" />
+      <xs:enumeration value="LobbyConflict" />
+      <xs:enumeration value="AlreadyConnected" />
+      <xs:enumeration value="InvalidLobbyRequest" />
+      <xs:enumeration value="InvalidSessionToken" />
+      <xs:enumeration value="NotLobbyHost" />
+      <xs:enumeration value="PlayersNotReady" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="CannotTargetSelf" />
+      <xs:enumeration value="AlreadyFriends" />
+      <xs:enumeration value="FriendRequestAlreadyExists" />
+      <xs:enumeration value="PlayerBlocked" />
+      <xs:enumeration value="FriendRequestNotFound" />
+      <xs:enumeration value="NotFriends" />
+      <xs:enumeration value="PlayerOffline" />
+      <xs:enumeration value="ChatWarning" />
+      <xs:enumeration value="ChatBlocked" />
+      <xs:enumeration value="PlayerBanned" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
+  <xs:complexType name="ArrayOfFriendResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FriendResponse" nillable="true" type="tns:FriendResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFriendResponse" nillable="true" type="tns:ArrayOfFriendResponse" />
+  <xs:complexType name="FriendResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:PlayerStatusCode" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendResponse" nillable="true" type="tns:FriendResponse" />
+  <xs:simpleType name="PlayerStatusCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Offline" />
+      <xs:enumeration value="Online" />
+      <xs:enumeration value="InLobby" />
+      <xs:enumeration value="InMatch" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="PlayerStatusCode" nillable="true" type="tns:PlayerStatusCode" />
+  <xs:complexType name="ArrayOfPendingFriendRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPendingFriendRequestResponse" nillable="true" type="tns:ArrayOfPendingFriendRequestResponse" />
+  <xs:complexType name="PendingFriendRequestResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="xs:int" />
+      <xs:element minOccurs="0" name="RequestedAt" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RequesterUsername" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+  <xs:complexType name="PlayerSearchRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="UsernameFragment" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerSearchRequest" nillable="true" type="tns:PlayerSearchRequest" />
+  <xs:complexType name="ArrayOfPlayerSearchResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PlayerSearchResponse" nillable="true" type="tns:PlayerSearchResponse" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPlayerSearchResponse" nillable="true" type="tns:ArrayOfPlayerSearchResponse" />
+  <xs:complexType name="PlayerSearchResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerSearchResponse" nillable="true" type="tns:PlayerSearchResponse" />
+  <xs:complexType name="FriendUsernameRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendUsernameRequest" nillable="true" type="tns:FriendUsernameRequest" />
+  <xs:complexType name="FriendshipDecisionRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RequestId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendshipDecisionRequest" nillable="true" type="tns:FriendshipDecisionRequest" />
+  <xs:complexType name="FriendStatusMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Status" type="tns:PlayerStatusCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FriendStatusMessage" nillable="true" type="tns:FriendStatusMessage" />
+</xs:schema>

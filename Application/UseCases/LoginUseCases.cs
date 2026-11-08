@@ -8,7 +8,7 @@ namespace DominoTrainGame.Server.Application.UseCases;
 public sealed class LoginUseCases : ILoginUseCases
 {
     private const int MaximumIdentifierLength = 255;
-    private const int MaximumPasswordLength = 128;
+    private const int MinimumPasswordLength = 1;
 
     private static readonly ITraceLog _logger;
 
@@ -26,12 +26,12 @@ public sealed class LoginUseCases : ILoginUseCases
         _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
-    public bool LogIn(string identifier, string password, out AuthenticatedPlayer player)
+    public bool LogIn(string identifier, string password, out PlayerIdentity player)
     {
         string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
 
         ValidateIdentifier(normalizedIdentifier);
-        ValidatePassword(password);
+        PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
 
         bool isAuthenticated = VerifyCredentials(normalizedIdentifier, password, out player);
         return isAuthenticated;
@@ -50,20 +50,7 @@ public sealed class LoginUseCases : ILoginUseCases
         }
     }
 
-    private static void ValidatePassword(string password)
-    {
-        bool isPasswordValid = !string.IsNullOrEmpty(password)
-            && password.Length <= MaximumPasswordLength;
-
-        if (!isPasswordValid)
-        {
-            throw new ArgumentException(
-                "The password is empty or exceeds the maximum allowed length.",
-                nameof(password));
-        }
-    }
-
-    private bool VerifyCredentials(string identifier, string password, out AuthenticatedPlayer player)
+    private bool VerifyCredentials(string identifier, string password, out PlayerIdentity player)
     {
         bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
         bool isAuthenticated = isRegistered && _passwordHasher.Verify(credentials.PasswordHash, password);
@@ -71,8 +58,8 @@ public sealed class LoginUseCases : ILoginUseCases
         LogLoginAttempt(isAuthenticated, credentials);
 
         player = isAuthenticated
-            ? new AuthenticatedPlayer(credentials.PlayerId, credentials.Username)
-            : AuthenticatedPlayer.Empty;
+            ? new PlayerIdentity(credentials.PlayerId, credentials.Username)
+            : PlayerIdentity.Empty;
         return isAuthenticated;
     }
 

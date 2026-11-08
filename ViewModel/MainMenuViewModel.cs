@@ -10,11 +10,16 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class MainMenuViewModel : ScreenViewModel
 {
+    private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteSocialServices _socialServices;
     private readonly AsyncRelayCommand _connectSocialCommand;
 
-    public MainMenuViewModel(IWindowService windowService, IRemoteSocialServices socialServices) : base(windowService)
+    public MainMenuViewModel(
+        IWindowService windowService,
+        IRemoteGameServices gameServices,
+        IRemoteSocialServices socialServices) : base(windowService)
     {
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
         NewGameCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
@@ -48,6 +53,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
     private void LogOut()
     {
         _socialServices.Disconnect();
+        _gameServices.LogOut();
         WindowService.Navigate(Screen.Login);
     }
 }

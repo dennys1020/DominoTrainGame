@@ -29,7 +29,6 @@ public sealed class SignUpViewModel : ScreenViewModel
     private string _email;
     private string _username;
     private string _password;
-    private bool _isSigningUp;
 
     public SignUpViewModel(
         IWindowService windowService,
@@ -81,21 +80,6 @@ public sealed class SignUpViewModel : ScreenViewModel
             SetProperty(ref _password, value ?? string.Empty);
         }
     }
-
-    public bool IsSigningUp
-    {
-        get
-        {
-            return _isSigningUp;
-        }
-        private set
-        {
-            SetProperty(ref _isSigningUp, value);
-            OnPropertyChanged(nameof(IsContentEnabled));
-        }
-    }
-
-    public bool IsContentEnabled => !IsSigningUp;
 
     public RelayCommand LogInCommand { get; }
 
@@ -172,18 +156,8 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     private async Task SubmitSignUpAsync()
     {
-        SignUpResult signUpResult;
-        IsSigningUp = true;
-
-        try
-        {
-            signUpResult = await _gameServices.SignUpAsync(Username.Trim(), Email.Trim(), Password);
-        }
-        finally
-        {
-            IsSigningUp = false;
-        }
-
+        SignUpResult signUpResult = await RunWhileBusyAsync(
+            () => _gameServices.SignUpAsync(Username.Trim(), Email.Trim(), Password));
         HandleSignUpResult(signUpResult);
     }
 

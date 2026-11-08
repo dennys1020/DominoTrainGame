@@ -21,7 +21,7 @@ public sealed class LobbyRegistry
         _codeGenerator = codeGenerator ?? throw new ArgumentNullException(nameof(codeGenerator));
     }
 
-    public bool TryCreate(LobbyMember host, out LobbyState lobbyState)
+    public bool TryCreate(PlayerIdentity host, out LobbyState lobbyState)
     {
         if (host == null)
         {
@@ -43,22 +43,34 @@ public sealed class LobbyRegistry
         return wasCreated;
     }
 
-    public JoinLobbyStatus TryJoin(LobbyMember member, string code, out LobbyState lobbyState)
+    public JoinLobbyStatus TryJoin(PlayerIdentity member, string code, out LobbyState lobbyState)
     {
         if (member == null)
         {
             throw new ArgumentNullException(nameof(member));
         }
 
-        string normalizedCode = code?.Trim().ToUpperInvariant() ?? string.Empty;
+        string lobbyCode = code ?? string.Empty;
         JoinLobbyStatus status;
 
         lock (_lobbiesLock)
         {
-            status = AddPlayer(member, normalizedCode, out lobbyState);
+            status = AddPlayer(member, lobbyCode, out lobbyState);
         }
 
         return status;
+    }
+
+    public string NormalizeCode(string code)
+    {
+        string normalizedCode = code?.Trim().ToUpperInvariant() ?? string.Empty;
+
+        if (!_codeGenerator.IsValid(normalizedCode))
+        {
+            throw new ArgumentException("The lobby code format is invalid.", nameof(code));
+        }
+
+        return normalizedCode;
     }
 
     public bool Remove(int playerId, out LobbyState remainingLobby)
@@ -113,7 +125,7 @@ public sealed class LobbyRegistry
         return wasFound;
     }
 
-    private LobbyState AddLobby(LobbyMember host)
+    private LobbyState AddLobby(PlayerIdentity host)
     {
         string code = GenerateUniqueCode();
         LobbyState createdLobby = LobbyState.CreateWithHost(code, MaximumPlayers, host);
@@ -122,7 +134,7 @@ public sealed class LobbyRegistry
         return createdLobby;
     }
 
-    private JoinLobbyStatus AddPlayer(LobbyMember member, string code, out LobbyState lobbyState)
+    private JoinLobbyStatus AddPlayer(PlayerIdentity member, string code, out LobbyState lobbyState)
     {
         lobbyState = LobbyState.Empty;
         JoinLobbyStatus status = JoinLobbyStatus.Success;

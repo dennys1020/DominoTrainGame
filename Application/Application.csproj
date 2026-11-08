@@ -51,14 +51,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\AuthenticatedPlayer.cs" />
+    <Compile Include="Results\CreateLobbyStatus.cs" />
+    <Compile Include="UseCases\LobbyCollaborators.cs" />
+    <Compile Include="UseCases\PlayerInputValidator.cs" />
+    <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />
     <Compile Include="Domain\SanctionType.cs" />
     <Compile Include="Ports\IClock.cs" />
     <Compile Include="Ports\ISanctionRepository.cs" />
     <Compile Include="Ports\SanctionRecord.cs" />
     <Compile Include="Results\ChatInfractionStatus.cs" />
-    <Compile Include="Results\ChatPermissionStatus.cs" />
     <Compile Include="State\ChatInfractionRegistry.cs" />
     <Compile Include="UseCases\ChatSanctionUseCases.cs" />
     <Compile Include="UseCases\IChatSanctionUseCases.cs" />
@@ -72,7 +74,6 @@
     <Compile Include="UseCases\LobbyUseCases.cs" />
     <Compile Include="Ports\IGameNotifier.cs" />
     <Compile Include="UseCases\ILobbyUseCases.cs" />
-    <Compile Include="Domain\LobbyMember.cs" />
     <Compile Include="Domain\LobbyPlayerState.cs" />
     <Compile Include="Domain\LobbyRoster.cs" />
     <Compile Include="Domain\LobbyState.cs" />
@@ -117,7 +118,6 @@
     <Compile Include="Security\ChatToken.cs" />
     <Compile Include="Security\ForbiddenWordSource.cs" />
     <Compile Include="Ports\IForbiddenWordSource.cs" />
-    <Compile Include="UseCases\LobbyInputRules.cs" />
     <Compile Include="Domain\FriendPresence.cs" />
     <Compile Include="Domain\PlayerStatus.cs" />
     <Compile Include="Ports\FriendStatusNotice.cs" />
@@ -126,7 +126,6 @@
     <Compile Include="UseCases\FriendStatusUseCases.cs" />
     <Compile Include="UseCases\IFriendStatusUseCases.cs" />
     <Compile Include="UseCases\IPresenceUseCases.cs" />
-    <Compile Include="UseCases\PresenceTrackingLobbyUseCases.cs" />
     <Compile Include="UseCases\PresenceUseCases.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -11,9 +11,6 @@ public sealed class LobbyPlayer
     [DataMember]
     public string Username { get; set; }
 
-    [DataMember]
-    public bool IsHost { get; set; }
-
     [DataMember(IsRequired = false)]
     public bool IsReady { get; set; }
 }

@@ -3,6 +3,7 @@ using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net.Ext.Trace;
+using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 
@@ -20,7 +21,7 @@ public sealed class LobbyChannel
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
     private readonly ClientSession _session;
-    private readonly LobbyEventRelay _lobbyEvents;
+    private readonly GameClientCallback _callback;
     private readonly object _channelSyncRoot = new object();
     private LobbyServiceClient _lobbyClient;
     private Task _reconnection = Task.CompletedTask;
@@ -44,12 +45,12 @@ public sealed class LobbyChannel
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
         _session = sessionContext.Session;
-        _lobbyEvents = sessionContext.Events;
+        _callback = sessionContext.Callback;
     }
 
     public async Task OpenAsync(string sessionToken)
     {
-        LobbyServiceClient lobbyClient = _connectionFactory.CreateLobbyClient(_lobbyEvents.CreateCallback());
+        LobbyServiceClient lobbyClient = _connectionFactory.CreateLobbyClient(_callback);
         bool isConnected = false;
 
         try
@@ -99,6 +100,22 @@ public sealed class LobbyChannel
             lobbyClient => CompleteLobbyCommandAsync(command(lobbyClient)),
             KeepStatus);
         return commandTask;
+    }
+
+    public void Close()
+    {
+        LobbyServiceClient closedClient;
+
+        lock (_channelSyncRoot)
+        {
+            closedClient = _lobbyClient;
+            _lobbyClient = null;
+        }
+
+        if (closedClient != null)
+        {
+            _channelCloser.Close(closedClient);
+        }
     }
 
     private static async Task<TResult> CallLobbyServiceAsync<TResult>(
@@ -224,13 +241,20 @@ public sealed class LobbyChannel
     private void AttachLobbyClient(LobbyServiceClient lobbyClient)
     {
         ICommunicationObject channel = lobbyClient;
+        LobbyServiceClient previousClient;
 
         channel.Faulted += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
         channel.Closed += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
 
         lock (_channelSyncRoot)
         {
+            previousClient = _lobbyClient;
             _lobbyClient = lobbyClient;
+        }
+
+        if (previousClient != null)
+        {
+            _channelCloser.Close(previousClient);
         }
     }
 
@@ -288,7 +312,7 @@ public sealed class LobbyChannel
 
     private async Task ReconnectAsync(string lobbyCode)
     {
-        _lobbyEvents.ReportConnectionState(ConnectionState.Reconnecting);
+        _callback.ReportConnectionState(ConnectionState.Reconnecting);
 
         ReconnectResult reconnectResult = ReconnectResult.Unavailable;
         int attemptCount = NoReconnectAttempts;
@@ -304,13 +328,13 @@ public sealed class LobbyChannel
         {
             await RejoinLobbyAsync(lobbyCode);
             _logger.InfoFormat("The lobby channel was restored. Attempts: {0}.", attemptCount);
-            _lobbyEvents.ReportConnectionState(ConnectionState.Reconnected);
+            _callback.ReportConnectionState(ConnectionState.Reconnected);
         }
         else
         {
             _session.Forget();
             _logger.WarnFormat("The lobby channel could not be restored. Result: {0}.", reconnectResult);
-            _lobbyEvents.ReportConnectionState(ConnectionState.Lost);
+            _callback.ReportConnectionState(ConnectionState.Lost);
         }
     }
 

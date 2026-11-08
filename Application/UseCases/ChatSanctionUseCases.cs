@@ -38,20 +38,15 @@ public sealed class ChatSanctionUseCases : IChatSanctionUseCases
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
-    public ChatPermissionStatus CheckChatPermission(int playerId)
+    public bool CanChat(int playerId)
     {
         bool isSanctioned = _sanctionRepository.TryFindActiveSanction(
             playerId,
             _clock.UtcNow,
-            out PlayerSanction sanction);
-        ChatPermissionStatus status = ChatPermissionStatus.Allowed;
+            out PlayerSanction _);
+        bool canChat = !isSanctioned;
 
-        if (isSanctioned)
-        {
-            status = ToPermissionStatus(sanction.Type);
-        }
-
-        return status;
+        return canChat;
     }
 
     public ChatInfractionStatus RegisterInfraction(int playerId)
@@ -84,23 +79,6 @@ public sealed class ChatSanctionUseCases : IChatSanctionUseCases
             out PlayerSanction sanction);
         bool isBanned = isSanctioned && sanction.Type == SanctionType.GameBan;
         return isBanned;
-    }
-
-    private static ChatPermissionStatus ToPermissionStatus(SanctionType sanctionType)
-    {
-        ChatPermissionStatus status;
-
-        switch (sanctionType)
-        {
-            case SanctionType.GameBan:
-                status = ChatPermissionStatus.GameBanned;
-                break;
-            default:
-                status = ChatPermissionStatus.ChatBlocked;
-                break;
-        }
-
-        return status;
     }
 
     private static PlayerSanction CreateSanction(int previousSanctions, DateTime startedAt)

@@ -19,14 +19,28 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8080" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8080/ConnectionService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="http://localhost:8080/AuthenticationService/mex" Protocol="mex" SourceId="2" />
+    <MetadataSource Address="http://localhost:8080/LobbyService/mex" Protocol="mex" SourceId="3" />
+    <MetadataSource Address="http://localhost:8080/FriendService/mex" Protocol="mex" SourceId="4" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="f51d47db-ebaf-4f91-8531-ae8103e9596e" SourceId="1" SourceUrl="http://localhost:8080/?disco" />
-    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="12d9c7b9-b022-4c90-9d5c-ef2ffda4887b" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd2" />
-    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="497c9f10-db4f-4d89-9686-d36efd2b742e" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd1" />
-    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="452f332b-3c60-4add-b9fb-a00433ebb2bf" SourceId="1" SourceUrl="http://localhost:8080/?xsd=xsd0" />
-    <MetadataFile FileName="ConnectionService.wsdl" MetadataType="Wsdl" ID="1b82f1e9-6dec-4beb-af77-e20bed7011f4" SourceId="1" SourceUrl="http://localhost:8080/?wsdl" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="70929501-a74b-4450-937c-e66df86e8533" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="8593eaf3-2eee-42b7-bed8-3c70dd5c4e76" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="4645e031-7027-4eb9-8c78-fc33a78187ee" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />
+    <MetadataFile FileName="services.xsd" MetadataType="Schema" ID="0bc32db3-1f5b-4680-892a-ccda906141da" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="003a65dc-03bf-4a66-b1dc-9da639baca26" SourceId="2" SourceUrl="http://localhost:8080/AuthenticationService/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="dec86f74-6610-4704-aee4-0d953dedf9d9" SourceId="2" SourceUrl="http://localhost:8080/AuthenticationService/mex" />
+    <MetadataFile FileName="service3.xsd" MetadataType="Schema" ID="a817fbae-c21e-4085-8c39-e616534e22cd" SourceId="2" SourceUrl="http://localhost:8080/AuthenticationService/mex" />
+    <MetadataFile FileName="services1.xsd" MetadataType="Schema" ID="bef8acf3-88bc-4ec5-b58b-488fa2093738" SourceId="2" SourceUrl="http://localhost:8080/AuthenticationService/mex" />
+    <MetadataFile FileName="service2.wsdl" MetadataType="Wsdl" ID="75513f55-0a01-4e02-8c70-7e86d6d6a666" SourceId="3" SourceUrl="http://localhost:8080/LobbyService/mex" />
+    <MetadataFile FileName="service4.xsd" MetadataType="Schema" ID="6f067e1e-f434-41f8-92de-6a3a1304b812" SourceId="3" SourceUrl="http://localhost:8080/LobbyService/mex" />
+    <MetadataFile FileName="service5.xsd" MetadataType="Schema" ID="78ee4bd1-ef50-4fee-8677-567a5f69c810" SourceId="3" SourceUrl="http://localhost:8080/LobbyService/mex" />
+    <MetadataFile FileName="services2.xsd" MetadataType="Schema" ID="ddde7ffa-3c64-4d9f-a9c2-5d455a331a1d" SourceId="3" SourceUrl="http://localhost:8080/LobbyService/mex" />
+    <MetadataFile FileName="service3.wsdl" MetadataType="Wsdl" ID="0573435d-cc83-4eaf-9ab1-88f5ee04d157" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
+    <MetadataFile FileName="service6.xsd" MetadataType="Schema" ID="9d01fce7-c8e7-4c58-a338-5d98bb1b2261" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
+    <MetadataFile FileName="service7.xsd" MetadataType="Schema" ID="d20aba31-c0cd-4bc8-91e8-655382f1dec9" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
+    <MetadataFile FileName="services3.xsd" MetadataType="Schema" ID="978e7e13-1c69-4444-9a72-9fdb5a18b5e9" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

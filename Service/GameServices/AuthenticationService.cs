@@ -18,7 +18,7 @@ public sealed class AuthenticationService : IAuthenticationService
 
     private readonly ILoginUseCases _loginUseCases;
     private readonly ISignUpUseCases _signUpUseCases;
-    private readonly SessionManager _sessionManager;
+    private readonly PlayerSessionManager<IGameClientCallback> _lobbySessionManager;
 
     static AuthenticationService()
     {
@@ -28,14 +28,55 @@ public sealed class AuthenticationService : IAuthenticationService
     public AuthenticationService(
         ILoginUseCases loginUseCases,
         ISignUpUseCases signUpUseCases,
-        SessionManager sessionManager)
+        PlayerSessionManager<IGameClientCallback> lobbySessionManager)
     {
         _loginUseCases = loginUseCases ?? throw new ArgumentNullException(nameof(loginUseCases));
         _signUpUseCases = signUpUseCases ?? throw new ArgumentNullException(nameof(signUpUseCases));
-        _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
+        _lobbySessionManager = lobbySessionManager ?? throw new ArgumentNullException(nameof(lobbySessionManager));
     }
 
     public LoginResponse LogIn(LoginRequest request)
+    {
+        PlayerIdentity player = PlayerIdentity.Empty;
+        bool isAuthenticated = ExecuteAccountRequest(
+            () => _loginUseCases.LogIn(request?.Identifier, request?.Password, out player));
+        LoginResponse response = isAuthenticated
+            ? CreateLoginResponse(player)
+            : CreateRejectedLoginResponse();
+
+        return response;
+    }
+
+    public bool SignUp(SignUpRequest request)
+    {
+        bool isRegistered = ExecuteAccountRequest(
+            () => _signUpUseCases.SignUp(request?.Username, request?.Email, request?.Password));
+        return isRegistered;
+    }
+
+    private static TResult ExecuteAccountRequest<TResult>(Func<TResult> request)
+    {
+        TResult result;
+
+        try
+        {
+            result = request();
+        }
+        catch (ArgumentException exception)
+        {
+            _logger.Warn("An account request was rejected because its input is invalid.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("An account request failed because the database is unavailable.", exception);
+            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+        }
+
+        return result;
+    }
+
+    private static LoginResponse CreateRejectedLoginResponse()
     {
         LoginResponse response = new LoginResponse
         {
@@ -44,57 +85,12 @@ public sealed class AuthenticationService : IAuthenticationService
             SessionToken = string.Empty
         };
 
-        try
-        {
-            bool isAuthenticated = _loginUseCases.LogIn(
-                request?.Identifier,
-                request?.Password,
-                out AuthenticatedPlayer player);
-
-            if (isAuthenticated)
-            {
-                response = CreateLoginResponse(player);
-            }
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn("A login request was rejected because its input is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            _logger.Error("A login request failed because the database is unavailable.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
-        }
-
         return response;
     }
 
-    public bool SignUp(SignUpRequest request)
+    private LoginResponse CreateLoginResponse(PlayerIdentity player)
     {
-        bool isRegistered;
-
-        try
-        {
-            isRegistered = _signUpUseCases.SignUp(request?.Username, request?.Email, request?.Password);
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn("A sign up request was rejected because its input is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            _logger.Error("A sign up request failed because the database is unavailable.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
-        }
-
-        return isRegistered;
-    }
-
-    private LoginResponse CreateLoginResponse(AuthenticatedPlayer player)
-    {
-        string sessionToken = _sessionManager.IssueToken(player);
+        string sessionToken = _lobbySessionManager.IssueToken(player);
         LoginResponse response = new LoginResponse
         {
             IsAuthenticated = true,

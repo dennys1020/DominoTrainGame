@@ -1,16 +1,17 @@
 using System;
+using DominoTrainGame.Client.Models.Callbacks;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
 public sealed class LobbySessionContext
 {
-    public LobbySessionContext(ClientSession session, LobbyEventRelay events)
+    public LobbySessionContext(ClientSession session, GameClientCallback callback)
     {
         Session = session ?? throw new ArgumentNullException(nameof(session));
-        Events = events ?? throw new ArgumentNullException(nameof(events));
+        Callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 
     public ClientSession Session { get; }
 
-    public LobbyEventRelay Events { get; }
+    public GameClientCallback Callback { get; }
 }

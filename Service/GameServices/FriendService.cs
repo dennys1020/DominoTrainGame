@@ -21,14 +21,16 @@ public sealed class FriendService : IFriendService
     private static readonly ITraceLog _logger;
 
     private readonly IFriendUseCases _friendUseCases;
-    private readonly SocialSessionManager _socialSessionManager;
+    private readonly PlayerSessionManager<ISocialClientCallback> _socialSessionManager;
 
     static FriendService()
     {
         _logger = TraceLogManager.GetLogger(typeof(FriendService));
     }
 
-    public FriendService(IFriendUseCases friendUseCases, SocialSessionManager socialSessionManager)
+    public FriendService(
+        IFriendUseCases friendUseCases,
+        PlayerSessionManager<ISocialClientCallback> socialSessionManager)
     {
         _friendUseCases = friendUseCases ?? throw new ArgumentNullException(nameof(friendUseCases));
         _socialSessionManager = socialSessionManager ?? throw new ArgumentNullException(nameof(socialSessionManager));
@@ -199,7 +201,7 @@ public sealed class FriendService : IFriendService
 
     private TResult ExecuteForCaller<TResult>(Func<int, TResult> operation)
     {
-        int playerId = _socialSessionManager.ResolveCallerId();
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
         TResult result;
 
         try

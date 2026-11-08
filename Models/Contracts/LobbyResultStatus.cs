@@ -18,5 +18,6 @@ public enum LobbyResultStatus
     NotFriends,
     PlayerOffline,
     ChatWarning,
-    ChatBlocked
+    ChatBlocked,
+    PlayerBanned
 }

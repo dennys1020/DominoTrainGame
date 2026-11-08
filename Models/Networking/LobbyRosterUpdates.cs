@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DominoTrainGame.Client.Models.Contracts;
 
 namespace DominoTrainGame.Client.Models.Networking;
@@ -36,19 +37,12 @@ internal static class LobbyRosterUpdates
 
     public static LobbyResult CreateLobbyWithoutPlayer(LobbyResult lobby, PlayerLeftEventArgs eventArgs)
     {
-        List<LobbyPlayerResult> players = new List<LobbyPlayerResult>();
-
-        foreach (LobbyPlayerResult player in lobby.Players)
-        {
-            if (player.PlayerId != eventArgs.PlayerId)
-            {
-                bool isHost = player.PlayerId == eventArgs.HostPlayerId;
-                players.Add(player.WithHostState(isHost));
-            }
-        }
-
+        List<LobbyPlayerResult> players = lobby.Players
+            .Where(player => player.PlayerId != eventArgs.PlayerId)
+            .ToList();
         LobbyRoster roster = new LobbyRoster(eventArgs.Version, eventArgs.HostPlayerId, players);
         LobbyResult updatedLobby = lobby.WithRoster(roster);
+
         return updatedLobby;
     }
 

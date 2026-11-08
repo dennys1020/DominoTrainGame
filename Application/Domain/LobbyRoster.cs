@@ -39,66 +39,37 @@ public sealed class LobbyRoster
 
     public bool AreAllPlayersReady => Players.All(player => player.IsReady);
 
-    public int HostPlayerId
-    {
-        get
-        {
-            int hostPlayerId = NoHostPlayerId;
-
-            if (Players.Count > NoPlayers)
-            {
-                hostPlayerId = Players[HostIndex].PlayerId;
-            }
-
-            return hostPlayerId;
-        }
-    }
+    public int HostPlayerId => Players.Count > NoPlayers ? Players[HostIndex].PlayerId : NoHostPlayerId;
 
     public bool Contains(int playerId)
     {
-        bool wasFound = false;
-
-        foreach (LobbyPlayerState player in Players)
-        {
-            if (player.PlayerId == playerId)
-            {
-                wasFound = true;
-            }
-        }
-
+        bool wasFound = Players.Any(player => player.PlayerId == playerId);
         return wasFound;
     }
 
-    public LobbyRoster WithPlayer(LobbyMember member)
+    public LobbyRoster WithPlayer(PlayerIdentity member)
     {
         if (member == null)
         {
             throw new ArgumentNullException(nameof(member));
         }
 
-        List<LobbyPlayerState> players = new List<LobbyPlayerState>(Players);
-        bool isHost = players.Count == NoPlayers;
-
-        players.Add(new LobbyPlayerState(member, isHost, InitialReadyState));
-
+        List<LobbyPlayerState> players = new List<LobbyPlayerState>(Players)
+        {
+            new LobbyPlayerState(member, InitialReadyState)
+        };
         LobbyRoster roster = new LobbyRoster(Version + VersionStep, players);
+
         return roster;
     }
 
     public LobbyRoster WithoutPlayer(int playerId)
     {
-        List<LobbyPlayerState> players = new List<LobbyPlayerState>();
-
-        foreach (LobbyPlayerState player in Players)
-        {
-            if (player.PlayerId != playerId)
-            {
-                bool isHost = players.Count == NoPlayers;
-                players.Add(player.WithHostState(isHost));
-            }
-        }
-
+        List<LobbyPlayerState> players = Players
+            .Where(player => player.PlayerId != playerId)
+            .ToList();
         LobbyRoster roster = new LobbyRoster(Version + VersionStep, players);
+
         return roster;
     }
 

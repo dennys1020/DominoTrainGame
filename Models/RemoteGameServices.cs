@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 using DominoTrainGame.Client.Models.Networking;
@@ -12,7 +13,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private readonly AccountRequests _accountRequests;
     private readonly LobbyChannel _lobbyChannel;
     private readonly ClientSession _session;
-    private readonly LobbyEventRelay _lobbyEvents;
+    private readonly GameClientCallback _callback;
 
     public RemoteGameServices(
         AccountRequests accountRequests,
@@ -27,92 +28,10 @@ public sealed class RemoteGameServices : IRemoteGameServices
         _accountRequests = accountRequests ?? throw new ArgumentNullException(nameof(accountRequests));
         _lobbyChannel = lobbyChannel ?? throw new ArgumentNullException(nameof(lobbyChannel));
         _session = sessionContext.Session;
-        _lobbyEvents = sessionContext.Events;
+        _callback = sessionContext.Callback;
     }
 
-    public event EventHandler<PlayerJoinedEventArgs> PlayerJoined
-    {
-        add
-        {
-            _lobbyEvents.PlayerJoined += value;
-        }
-        remove
-        {
-            _lobbyEvents.PlayerJoined -= value;
-        }
-    }
-
-    public event EventHandler<PlayerLeftEventArgs> PlayerLeft
-    {
-        add
-        {
-            _lobbyEvents.PlayerLeft += value;
-        }
-        remove
-        {
-            _lobbyEvents.PlayerLeft -= value;
-        }
-    }
-
-    public event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged
-    {
-        add
-        {
-            _lobbyEvents.ConnectionStateChanged += value;
-        }
-        remove
-        {
-            _lobbyEvents.ConnectionStateChanged -= value;
-        }
-    }
-
-    public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged
-    {
-        add
-        {
-            _lobbyEvents.PlayerReadyChanged += value;
-        }
-        remove
-        {
-            _lobbyEvents.PlayerReadyChanged -= value;
-        }
-    }
-
-    public event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived
-    {
-        add
-        {
-            _lobbyEvents.LobbyMessageReceived += value;
-        }
-        remove
-        {
-            _lobbyEvents.LobbyMessageReceived -= value;
-        }
-    }
-
-    public event EventHandler<MatchStartingEventArgs> MatchStarting
-    {
-        add
-        {
-            _lobbyEvents.MatchStarting += value;
-        }
-        remove
-        {
-            _lobbyEvents.MatchStarting -= value;
-        }
-    }
-
-    public event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived
-    {
-        add
-        {
-            _lobbyEvents.LobbyInvitationReceived += value;
-        }
-        remove
-        {
-            _lobbyEvents.LobbyInvitationReceived -= value;
-        }
-    }
+    public ILobbyEvents LobbyEvents => _callback;
 
     public LobbyResult CurrentLobby => _session.CurrentLobby;
 
@@ -139,6 +58,13 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
 
         return loginResult;
+    }
+
+    public void LogOut()
+    {
+        _lobbyChannel.Close();
+        _session.ClearLobby();
+        _session.Forget();
     }
 
     public Task<LobbyResult> CreateLobbyAsync()

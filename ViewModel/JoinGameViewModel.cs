@@ -53,39 +53,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(_localization[GetMessageKey(result.Status)]);
+            WindowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result.Status)]);
         }
-    }
-
-    private static string GetMessageKey(LobbyResultStatus status)
-    {
-        string messageKey;
-
-        switch (status)
-        {
-            case LobbyResultStatus.InvalidCode:
-                messageKey = "InvalidLobbyCodeMessage";
-                break;
-            case LobbyResultStatus.LobbyNotFound:
-                messageKey = "LobbyNotFoundMessage";
-                break;
-            case LobbyResultStatus.LobbyFull:
-                messageKey = "LobbyFullMessage";
-                break;
-            case LobbyResultStatus.AlreadyInLobby:
-                messageKey = "LobbyConflictMessage";
-                break;
-            case LobbyResultStatus.SessionNotFound:
-                messageKey = "LobbySessionExpiredMessage";
-                break;
-            case LobbyResultStatus.ServerUnavailable:
-                messageKey = "ServerUnavailableMessage";
-                break;
-            default:
-                messageKey = "LobbyServerErrorMessage";
-                break;
-        }
-
-        return messageKey;
     }
 }

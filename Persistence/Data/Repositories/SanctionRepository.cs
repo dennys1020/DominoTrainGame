@@ -10,7 +10,8 @@ public sealed class SanctionRepository : ISanctionRepository
 {
     private const int NoSavedRows = 0;
     private const string TemporaryBanType = "Temporal";
-    private const string ChatSanctionReason = "Repeated offensive language in the lobby chat.";
+    private const string ChatMuteReason = "Repeated offensive language in the lobby chat.";
+    private const string GameBanReason = "Repeated chat sanctions for offensive language.";
 
     private readonly DatabaseExecutor _databaseExecutor;
 
@@ -24,7 +25,7 @@ public sealed class SanctionRepository : ISanctionRepository
         List<Ban> activeBans = _databaseExecutor.Execute(context => FindActiveBans(context, playerId, now));
         bool isSanctioned = activeBans.Any();
 
-        sanction = isSanctioned ? ToChatSanction(activeBans) : PlayerSanction.Empty;
+        sanction = isSanctioned ? ToSanction(activeBans) : PlayerSanction.Empty;
         return isSanctioned;
     }
 
@@ -58,7 +59,7 @@ public sealed class SanctionRepository : ISanctionRepository
     {
         int sanctionCount = context.Bans
             .Where(ban => ban.PlayerId == playerId)
-            .Count(ban => ban.Reason == ChatSanctionReason);
+            .Count(ban => ban.Reason == ChatMuteReason || ban.Reason == GameBanReason);
         return sanctionCount;
     }
 
@@ -67,7 +68,7 @@ public sealed class SanctionRepository : ISanctionRepository
         Ban ban = new Ban
         {
             PlayerId = sanctionRecord.PlayerId,
-            Reason = ChatSanctionReason,
+            Reason = ToReason(sanctionRecord.Sanction.Type),
             BanType = TemporaryBanType,
             StartedAt = sanctionRecord.StartedAt,
             ExpiresAt = sanctionRecord.Sanction.ExpiresAt
@@ -78,10 +79,30 @@ public sealed class SanctionRepository : ISanctionRepository
         return wasSaved;
     }
 
-    private static PlayerSanction ToChatSanction(List<Ban> activeBans)
+    private static string ToReason(SanctionType sanctionType)
+    {
+        string reason;
+
+        switch (sanctionType)
+        {
+            case SanctionType.GameBan:
+                reason = GameBanReason;
+                break;
+            default:
+                reason = ChatMuteReason;
+                break;
+        }
+
+        return reason;
+    }
+
+    private static PlayerSanction ToSanction(List<Ban> activeBans)
     {
         DateTime expiresAt = activeBans.Max(ban => ban.ExpiresAt ?? DateTime.MaxValue);
-        PlayerSanction sanction = new PlayerSanction(SanctionType.ChatMute, expiresAt);
+        bool isOnlyChatMuted = activeBans.All(ban => ban.Reason == ChatMuteReason);
+        SanctionType sanctionType = isOnlyChatMuted ? SanctionType.ChatMute : SanctionType.GameBan;
+        PlayerSanction sanction = new PlayerSanction(sanctionType, expiresAt);
+
         return sanction;
     }
 }

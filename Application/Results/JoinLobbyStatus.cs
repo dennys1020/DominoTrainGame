@@ -5,5 +5,6 @@ public enum JoinLobbyStatus
     Success,
     LobbyNotFound,
     LobbyFull,
-    AlreadyInLobby
+    AlreadyInLobby,
+    PlayerBanned
 }

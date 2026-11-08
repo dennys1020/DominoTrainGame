@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ServiceModel;
-using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -11,20 +9,11 @@ namespace DominoTrainGame.Server.Service.Callbacks;
 
 public sealed class CallbackGameNotifier : IGameNotifier
 {
-    private const bool JoiningPlayerHostState = false;
+    private readonly PlayerSessionRegistry<IGameClientCallback> _lobbySessions;
 
-    private static readonly ITraceLog _logger;
-
-    private readonly ConnectedPlayerRegistry _connectedPlayers;
-
-    static CallbackGameNotifier()
+    public CallbackGameNotifier(PlayerSessionRegistry<IGameClientCallback> lobbySessions)
     {
-        _logger = TraceLogManager.GetLogger(typeof(CallbackGameNotifier));
-    }
-
-    public CallbackGameNotifier(ConnectedPlayerRegistry connectedPlayers)
-    {
-        _connectedPlayers = connectedPlayers ?? throw new ArgumentNullException(nameof(connectedPlayers));
+        _lobbySessions = lobbySessions ?? throw new ArgumentNullException(nameof(lobbySessions));
     }
 
     public void NotifyPlayerJoined(PlayerJoinedNotice notice)
@@ -39,8 +28,7 @@ public sealed class CallbackGameNotifier : IGameNotifier
             Player = new LobbyPlayer
             {
                 PlayerId = notice.Member.PlayerId,
-                Username = notice.Member.Username,
-                IsHost = JoiningPlayerHostState
+                Username = notice.Member.Username
             },
             Version = notice.Version
         };
@@ -126,12 +114,9 @@ public sealed class CallbackGameNotifier : IGameNotifier
             InviterUsername = notice.Inviter.Username,
             Code = notice.Code
         };
-        bool isConnected = _connectedPlayers.TryGetCallback(notice.RecipientPlayerId, out IGameClientCallback callback);
-
-        if (isConnected)
-        {
-            TrySend(callback, recipient => recipient.ReceiveLobbyInvitation(message));
-        }
+        bool isConnected = _lobbySessions.TrySend(
+            notice.RecipientPlayerId,
+            callback => callback.ReceiveLobbyInvitation(message));
 
         return isConnected;
     }
@@ -140,32 +125,7 @@ public sealed class CallbackGameNotifier : IGameNotifier
     {
         foreach (int recipientPlayerId in recipientPlayerIds)
         {
-            bool hasCallback = _connectedPlayers.TryGetCallback(recipientPlayerId, out IGameClientCallback callback);
-
-            if (hasCallback)
-            {
-                TrySend(callback, send);
-            }
-        }
-    }
-
-    private static void TrySend(IGameClientCallback callback, Action<IGameClientCallback> send)
-    {
-        try
-        {
-            send(callback);
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("A player did not receive a lobby notice before the timeout.", exception);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("A player did not receive a lobby notice because of a communication error.", exception);
-        }
-        catch (ObjectDisposedException exception)
-        {
-            _logger.Warn("A player did not receive a lobby notice because the channel was already closed.", exception);
+            _lobbySessions.TrySend(recipientPlayerId, send);
         }
     }
 }

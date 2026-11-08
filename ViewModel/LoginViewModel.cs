@@ -26,7 +26,6 @@ public sealed class LoginViewModel : ScreenViewModel
     private readonly LocalizationViewModel _localization;
     private string _usernameOrEmail;
     private string _password;
-    private bool _isLoggingIn;
 
     public LoginViewModel(
         IWindowService windowService,
@@ -41,6 +40,9 @@ public sealed class LoginViewModel : ScreenViewModel
         LogInCommand = new AsyncRelayCommand(LogInAsync);
         SignUpCommand = new RelayCommand(() => WindowService.Navigate(Screen.SignUp));
         RecoverPasswordCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.RecoverPassword));
+
+        AsyncRelayCommand checkConnectionCommand = new AsyncRelayCommand(CheckConnectionAsync);
+        checkConnectionCommand.Execute(null);
     }
 
     public string UsernameOrEmail
@@ -66,21 +68,6 @@ public sealed class LoginViewModel : ScreenViewModel
             SetProperty(ref _password, value ?? string.Empty);
         }
     }
-
-    public bool IsLoggingIn
-    {
-        get
-        {
-            return _isLoggingIn;
-        }
-        private set
-        {
-            SetProperty(ref _isLoggingIn, value);
-            OnPropertyChanged(nameof(IsContentEnabled));
-        }
-    }
-
-    public bool IsContentEnabled => !IsLoggingIn;
 
     public AsyncRelayCommand LogInCommand { get; }
 
@@ -137,6 +124,26 @@ public sealed class LoginViewModel : ScreenViewModel
         return messageKey;
     }
 
+    private static string GetConnectionMessageKey(ConnectionCheckResult connectionResult)
+    {
+        string messageKey;
+
+        switch (connectionResult)
+        {
+            case ConnectionCheckResult.ServerUnavailable:
+                messageKey = ServerUnavailableMessageKey;
+                break;
+            case ConnectionCheckResult.DatabaseUnavailable:
+                messageKey = DatabaseErrorMessageKey;
+                break;
+            default:
+                messageKey = LoginSystemErrorMessageKey;
+                break;
+        }
+
+        return messageKey;
+    }
+
     private async Task LogInAsync()
     {
         LoginInputStatus inputStatus = LoginInputValidator.Validate(UsernameOrEmail, Password);
@@ -153,19 +160,19 @@ public sealed class LoginViewModel : ScreenViewModel
 
     private async Task SubmitLogInAsync()
     {
-        LoginResult loginResult;
-        IsLoggingIn = true;
-
-        try
-        {
-            loginResult = await _gameServices.LogInAsync(UsernameOrEmail.Trim(), Password);
-        }
-        finally
-        {
-            IsLoggingIn = false;
-        }
-
+        LoginResult loginResult = await RunWhileBusyAsync(
+            () => _gameServices.LogInAsync(UsernameOrEmail.Trim(), Password));
         HandleLoginResult(loginResult);
+    }
+
+    private async Task CheckConnectionAsync()
+    {
+        ConnectionCheckResult connectionResult = await _gameServices.CheckConnectionAsync();
+
+        if (connectionResult != ConnectionCheckResult.Connected)
+        {
+            ShowLocalizedMessage(GetConnectionMessageKey(connectionResult));
+        }
     }
 
     private void HandleLoginResult(LoginResult loginResult)

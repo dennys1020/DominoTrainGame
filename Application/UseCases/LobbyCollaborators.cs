@@ -3,21 +3,21 @@ using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
-public sealed class LobbyInputRules
+public sealed class LobbyCollaborators
 {
-    public LobbyInputRules(
-        ILobbyCodeGenerator codeGenerator,
+    public LobbyCollaborators(
         IChatMessageFilter messageFilter,
-        IChatSanctionUseCases chatSanctions)
+        IChatSanctionUseCases chatSanctions,
+        IFriendStatusUseCases friendStatus)
     {
-        CodeGenerator = codeGenerator ?? throw new ArgumentNullException(nameof(codeGenerator));
         MessageFilter = messageFilter ?? throw new ArgumentNullException(nameof(messageFilter));
         ChatSanctions = chatSanctions ?? throw new ArgumentNullException(nameof(chatSanctions));
+        FriendStatus = friendStatus ?? throw new ArgumentNullException(nameof(friendStatus));
     }
-
-    public ILobbyCodeGenerator CodeGenerator { get; }
 
     public IChatMessageFilter MessageFilter { get; }
 
     public IChatSanctionUseCases ChatSanctions { get; }
+
+    public IFriendStatusUseCases FriendStatus { get; }
 }

@@ -1,21 +1,21 @@
 namespace DominoTrainGame.Server.Application.Domain;
 
-public sealed class AuthenticatedPlayer
+public sealed class PlayerIdentity
 {
     private const int EmptyPlayerId = 0;
 
-    static AuthenticatedPlayer()
+    static PlayerIdentity()
     {
-        Empty = new AuthenticatedPlayer(EmptyPlayerId, string.Empty);
+        Empty = new PlayerIdentity(EmptyPlayerId, string.Empty);
     }
 
-    public AuthenticatedPlayer(int playerId, string username)
+    public PlayerIdentity(int playerId, string username)
     {
         PlayerId = playerId;
         Username = username ?? string.Empty;
     }
 
-    public static AuthenticatedPlayer Empty { get; }
+    public static PlayerIdentity Empty { get; }
 
     public int PlayerId { get; }
 

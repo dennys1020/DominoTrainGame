@@ -59,6 +59,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Contracts\ILobbyEvents.cs" />
     <Compile Include="Contracts\ConnectionState.cs" />
     <Compile Include="Contracts\ConnectionStateChangedEventArgs.cs" />
     <Compile Include="Contracts\SignUpResult.cs" />
@@ -96,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Connected Services\DominoService\ConnectionService.wsdl" />
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.FriendResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -112,13 +112,44 @@
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PlayerSearchResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\DominoService\item.xsd">
+    <None Include="Connected Services\DominoService\service.wsdl" />
+    <None Include="Connected Services\DominoService\service.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\DominoService\item1.xsd">
+    <None Include="Connected Services\DominoService\service1.wsdl" />
+    <None Include="Connected Services\DominoService\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Connected Services\DominoService\item2.xsd">
+    <None Include="Connected Services\DominoService\service2.wsdl" />
+    <None Include="Connected Services\DominoService\service2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service3.wsdl" />
+    <None Include="Connected Services\DominoService\service3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service5.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service6.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service7.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
@@ -128,9 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\DominoService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\DominoService\item.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Connected Services\DominoService\configuration91.svcinfo" />
@@ -165,7 +193,6 @@
     <Compile Include="Networking\FaultCodeMapper.cs" />
     <Compile Include="Networking\FriendResultMapper.cs" />
     <Compile Include="Networking\LobbyChannel.cs" />
-    <Compile Include="Networking\LobbyEventRelay.cs" />
     <Compile Include="Networking\LobbyResultMapper.cs" />
     <Compile Include="Networking\LobbyRosterUpdates.cs" />
     <Compile Include="Networking\LobbySessionContext.cs" />

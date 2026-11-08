@@ -20,7 +20,7 @@ public sealed class LobbyService : ILobbyService
 
     private readonly ILobbyUseCases _lobbyUseCases;
     private readonly IInvitationUseCases _invitationUseCases;
-    private readonly SessionManager _sessionManager;
+    private readonly PlayerSessionManager<IGameClientCallback> _lobbySessionManager;
 
     static LobbyService()
     {
@@ -30,28 +30,30 @@ public sealed class LobbyService : ILobbyService
     public LobbyService(
         ILobbyUseCases lobbyUseCases,
         IInvitationUseCases invitationUseCases,
-        SessionManager sessionManager)
+        PlayerSessionManager<IGameClientCallback> lobbySessionManager)
     {
         _lobbyUseCases = lobbyUseCases ?? throw new ArgumentNullException(nameof(lobbyUseCases));
         _invitationUseCases = invitationUseCases ?? throw new ArgumentNullException(nameof(invitationUseCases));
-        _sessionManager = sessionManager ?? throw new ArgumentNullException(nameof(sessionManager));
+        _lobbySessionManager = lobbySessionManager ?? throw new ArgumentNullException(nameof(lobbySessionManager));
     }
 
     public void Connect(ConnectRequest request)
     {
         string sessionToken = request?.SessionToken ?? string.Empty;
-        _sessionManager.Connect(sessionToken);
+        _lobbySessionManager.Connect(sessionToken);
     }
 
     public LobbyResponse CreateLobby()
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
-        LobbyMember host = new LobbyMember(caller.PlayerId, caller.Username);
-        bool wasCreated = _lobbyUseCases.TryCreateLobby(host, out LobbyState lobby);
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
+        LobbyState lobby = LobbyState.Empty;
+        CreateLobbyStatus status = ExecuteLobbyRequest(
+            () => _lobbyUseCases.CreateLobby(caller, out lobby),
+            GameServiceFaultCode.InvalidLobbyRequest);
 
-        if (!wasCreated)
+        if (status != CreateLobbyStatus.Success)
         {
-            throw GameFaultFactory.Create(GameServiceFaultCode.LobbyConflict);
+            throw GameFaultFactory.Create(MapCreateFaultCode(status));
         }
 
         LobbyResponse response = ToLobbyResponse(lobby);
@@ -60,39 +62,30 @@ public sealed class LobbyService : ILobbyService
 
     public LobbyResponse JoinLobby(JoinLobbyRequest request)
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
-        LobbyMember member = new LobbyMember(caller.PlayerId, caller.Username);
-        LobbyResponse response;
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
+        LobbyState lobby = LobbyState.Empty;
+        JoinLobbyStatus status = ExecuteLobbyRequest(
+            () => _lobbyUseCases.JoinLobby(caller, request?.Code, out lobby),
+            GameServiceFaultCode.InvalidLobbyRequest);
 
-        try
+        if (status != JoinLobbyStatus.Success)
         {
-            JoinLobbyStatus status = _lobbyUseCases.JoinLobby(member, request?.Code, out LobbyState lobby);
-
-            if (status != JoinLobbyStatus.Success)
-            {
-                throw GameFaultFactory.Create(MapJoinFaultCode(status));
-            }
-
-            response = ToLobbyResponse(lobby);
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn("A join request was rejected because its input is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidLobbyRequest);
+            throw GameFaultFactory.Create(MapJoinFaultCode(status));
         }
 
+        LobbyResponse response = ToLobbyResponse(lobby);
         return response;
     }
 
     public void LeaveLobby()
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         _lobbyUseCases.LeaveLobby(caller.PlayerId);
     }
 
     public void SetReady(SetReadyRequest request)
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
 
         if (request == null)
         {
@@ -109,29 +102,16 @@ public sealed class LobbyService : ILobbyService
 
     public void SendLobbyMessage(SendLobbyMessageRequest request)
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
 
         if (request == null)
         {
             throw CreateMissingRequestFault();
         }
 
-        SendMessageStatus status;
-
-        try
-        {
-            status = _lobbyUseCases.SendMessage(caller.PlayerId, request.Text);
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn("A lobby message was rejected because its text is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            _logger.Error("A lobby message failed because the database is unavailable.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
-        }
+        SendMessageStatus status = ExecuteLobbyRequest(
+            () => _lobbyUseCases.SendMessage(caller.PlayerId, request.Text),
+            GameServiceFaultCode.InvalidInput);
 
         if (status != SendMessageStatus.Sent)
         {
@@ -141,7 +121,7 @@ public sealed class LobbyService : ILobbyService
 
     public void StartMatch()
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         StartMatchStatus status = _lobbyUseCases.StartMatch(caller.PlayerId);
 
         if (status != StartMatchStatus.Success)
@@ -152,15 +132,16 @@ public sealed class LobbyService : ILobbyService
 
     public void InviteFriend(FriendUsernameRequest request)
     {
-        AuthenticatedPlayer caller = _sessionManager.ResolveCaller();
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
 
         if (request == null)
         {
             throw CreateMissingRequestFault();
         }
 
-        LobbyMember inviter = new LobbyMember(caller.PlayerId, caller.Username);
-        InviteFriendStatus status = SendInvitation(inviter, request.Username);
+        InviteFriendStatus status = ExecuteLobbyRequest(
+            () => _invitationUseCases.InviteFriend(caller, request.Username),
+            GameServiceFaultCode.InvalidInput);
 
         if (status != InviteFriendStatus.Success)
         {
@@ -168,46 +149,28 @@ public sealed class LobbyService : ILobbyService
         }
     }
 
-    private InviteFriendStatus SendInvitation(LobbyMember inviter, string friendUsername)
+    private static TResult ExecuteLobbyRequest<TResult>(
+        Func<TResult> request,
+        GameServiceFaultCode invalidInputFaultCode)
     {
-        InviteFriendStatus status;
+        TResult result;
 
         try
         {
-            status = _invitationUseCases.InviteFriend(inviter, friendUsername);
+            result = request();
         }
         catch (ArgumentException exception)
         {
-            _logger.Warn("A lobby invitation was rejected because its username is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
+            _logger.Warn("A lobby request was rejected because its input is invalid.", exception);
+            throw GameFaultFactory.Create(invalidInputFaultCode);
         }
         catch (DatabaseUnavailableException exception)
         {
-            _logger.Error("A lobby invitation failed because the database is unavailable.", exception);
+            _logger.Error("A lobby request failed because the database is unavailable.", exception);
             throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
         }
 
-        return status;
-    }
-
-    private static GameServiceFaultCode MapSendMessageFaultCode(SendMessageStatus status)
-    {
-        GameServiceFaultCode faultCode;
-
-        switch (status)
-        {
-            case SendMessageStatus.Warned:
-                faultCode = GameServiceFaultCode.ChatWarning;
-                break;
-            case SendMessageStatus.ChatBlocked:
-                faultCode = GameServiceFaultCode.ChatBlocked;
-                break;
-            default:
-                faultCode = GameServiceFaultCode.LobbyNotFound;
-                break;
-        }
-
-        return faultCode;
+        return result;
     }
 
     private static FaultException<GameServiceFault> CreateMissingRequestFault()
@@ -227,7 +190,6 @@ public sealed class LobbyService : ILobbyService
             {
                 PlayerId = player.PlayerId,
                 Username = player.Username,
-                IsHost = player.IsHost,
                 IsReady = player.IsReady
             };
 
@@ -246,6 +208,26 @@ public sealed class LobbyService : ILobbyService
         return response;
     }
 
+    private static GameServiceFaultCode MapCreateFaultCode(CreateLobbyStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case CreateLobbyStatus.AlreadyInLobby:
+                faultCode = GameServiceFaultCode.LobbyConflict;
+                break;
+            case CreateLobbyStatus.PlayerBanned:
+                faultCode = GameServiceFaultCode.PlayerBanned;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidLobbyRequest;
+                break;
+        }
+
+        return faultCode;
+    }
+
     private static GameServiceFaultCode MapJoinFaultCode(JoinLobbyStatus status)
     {
         GameServiceFaultCode faultCode;
@@ -261,8 +243,31 @@ public sealed class LobbyService : ILobbyService
             case JoinLobbyStatus.AlreadyInLobby:
                 faultCode = GameServiceFaultCode.LobbyConflict;
                 break;
+            case JoinLobbyStatus.PlayerBanned:
+                faultCode = GameServiceFaultCode.PlayerBanned;
+                break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;
+                break;
+        }
+
+        return faultCode;
+    }
+
+    private static GameServiceFaultCode MapSendMessageFaultCode(SendMessageStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case SendMessageStatus.Warned:
+                faultCode = GameServiceFaultCode.ChatWarning;
+                break;
+            case SendMessageStatus.ChatBlocked:
+                faultCode = GameServiceFaultCode.ChatBlocked;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.LobbyNotFound;
                 break;
         }
 

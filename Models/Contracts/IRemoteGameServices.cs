@@ -1,23 +1,10 @@
-using System;
 using System.Threading.Tasks;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IRemoteGameServices
 {
-    event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
-
-    event EventHandler<PlayerLeftEventArgs> PlayerLeft;
-
-    event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged;
-
-    event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
-
-    event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
-
-    event EventHandler<MatchStartingEventArgs> MatchStarting;
-
-    event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived;
+    ILobbyEvents LobbyEvents { get; }
 
     LobbyResult CurrentLobby { get; }
 
@@ -28,6 +15,8 @@ public interface IRemoteGameServices
     Task<ConnectionCheckResult> CheckConnectionAsync();
 
     Task<LoginResult> LogInAsync(string identifier, string password);
+
+    void LogOut();
 
     Task<LobbyResult> CreateLobbyAsync();
 

@@ -34,14 +34,14 @@ public sealed class LobbyState
 
     public bool HasMinimumPlayers => Roster.Count >= MinimumPlayers;
 
-    public static LobbyState CreateWithHost(string code, int maximumPlayers, LobbyMember host)
+    public static LobbyState CreateWithHost(string code, int maximumPlayers, PlayerIdentity host)
     {
         LobbyState emptyLobby = new LobbyState(code, maximumPlayers, LobbyRoster.Empty);
         LobbyState lobby = emptyLobby.WithPlayer(host);
         return lobby;
     }
 
-    public LobbyState WithPlayer(LobbyMember member)
+    public LobbyState WithPlayer(PlayerIdentity member)
     {
         LobbyState lobby = new LobbyState(Code, MaximumPlayers, Roster.WithPlayer(member));
         return lobby;
