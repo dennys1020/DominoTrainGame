@@ -68,7 +68,7 @@
     <Compile Include="Contracts\ISocialClientCallback.cs" />
     <Compile Include="DataContracts\FriendStatusMessage.cs" />
     <Compile Include="DataContracts\PlayerStatusCode.cs" />
-    <Compile Include="Implementation\PlayerStatusCodes.cs" />
+    <Compile Include="GameServices\PlayerStatusCodes.cs" />
     <Compile Include="Faults\GameErrorHandler.cs" />
     <Compile Include="Faults\GameFaultFactory.cs" />
     <Compile Include="Faults\GameServiceFault.cs" />
@@ -90,11 +90,11 @@
     <Compile Include="DataContracts\LobbyInvitationMessage.cs" />
     <Compile Include="DataContracts\MatchStartingMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
-    <Compile Include="Implementation\AuthenticationService.cs" />
-    <Compile Include="Implementation\ConnectionService.cs" />
+    <Compile Include="GameServices\AuthenticationService.cs" />
+    <Compile Include="GameServices\ConnectionService.cs" />
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
-    <Compile Include="Implementation\FriendService.cs" />
-    <Compile Include="Implementation\LobbyService.cs" />
+    <Compile Include="GameServices\FriendService.cs" />
+    <Compile Include="GameServices\LobbyService.cs" />
     <Compile Include="Sessions\ConnectedPlayer.cs" />
     <Compile Include="Sessions\ConnectedPlayerRegistry.cs" />
     <Compile Include="Sessions\SessionManager.cs" />
