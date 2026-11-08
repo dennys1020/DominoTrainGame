@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.ServiceModel;
@@ -6,8 +7,6 @@ using System.ServiceModel.Description;
 using System.Threading;
 using log4net.Config;
 using log4net.Ext.Trace;
-using DominoTrainGame.Server.Service.Faults;
-using DominoTrainGame.Server.Service.Implementation;
 
 namespace DominoTrainGame.Server.Host;
 
@@ -64,22 +63,37 @@ internal static class Program
 
     private static void RunServer()
     {
-        GameService gameService = GameServiceFactory.Create();
-        ServiceHost serviceHost = new GameServiceHost(gameService, new GameErrorHandler());
+        List<ServiceHost> serviceHosts = GameServiceFactory.CreateHosts();
         GameChannelCloser channelCloser = new GameChannelCloser();
 
         try
         {
-            serviceHost.Open();
-            LogEndpoints(serviceHost);
+            OpenHosts(serviceHosts);
             WaitForStopRequest();
         }
         finally
         {
-            channelCloser.Close(serviceHost);
+            CloseHosts(serviceHosts, channelCloser);
         }
 
         _logger.Info("Domino Train server stopped.");
+    }
+
+    private static void OpenHosts(List<ServiceHost> serviceHosts)
+    {
+        foreach (ServiceHost serviceHost in serviceHosts)
+        {
+            serviceHost.Open();
+            LogEndpoints(serviceHost);
+        }
+    }
+
+    private static void CloseHosts(List<ServiceHost> serviceHosts, GameChannelCloser channelCloser)
+    {
+        foreach (ServiceHost serviceHost in serviceHosts)
+        {
+            channelCloser.Close(serviceHost);
+        }
     }
 
     private static void LogEndpoints(ServiceHost serviceHost)

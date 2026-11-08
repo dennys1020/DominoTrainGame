@@ -1,15 +1,18 @@
 using System;
+using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
 using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Sessions;
 
 namespace DominoTrainGame.Server.Service.Implementation;
 
-public sealed class AuthenticationController
+[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
+public sealed class AuthenticationService : IAuthenticationService
 {
     private static readonly ITraceLog _logger;
 
@@ -17,12 +20,12 @@ public sealed class AuthenticationController
     private readonly ISignUpUseCases _signUpUseCases;
     private readonly SessionManager _sessionManager;
 
-    static AuthenticationController()
+    static AuthenticationService()
     {
-        _logger = TraceLogManager.GetLogger(typeof(AuthenticationController));
+        _logger = TraceLogManager.GetLogger(typeof(AuthenticationService));
     }
 
-    public AuthenticationController(
+    public AuthenticationService(
         ILoginUseCases loginUseCases,
         ISignUpUseCases signUpUseCases,
         SessionManager sessionManager)

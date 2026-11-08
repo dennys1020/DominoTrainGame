@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.ServiceModel;
+using System.ServiceModel.Dispatcher;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Security;
 using DominoTrainGame.Server.Application.State;
@@ -6,6 +9,7 @@ using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Persistence.Time;
 using DominoTrainGame.Server.Service.Callbacks;
+using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Implementation;
 using DominoTrainGame.Server.Service.Sessions;
 
@@ -13,7 +17,7 @@ namespace DominoTrainGame.Server.Host;
 
 internal static class GameServiceFactory
 {
-    public static GameService Create()
+    public static List<ServiceHost> CreateHosts()
     {
         DatabaseExecutor databaseExecutor = new DatabaseExecutor();
         IConnectionRepository connectionRepository = new ConnectionRepository(databaseExecutor);
@@ -58,28 +62,34 @@ internal static class GameServiceFactory
 
         SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
         SessionManager sessionManager = new SessionManager(connectedPlayers, trackedLobbyUseCases, sessionTokens);
-        AuthenticationController authenticationController = new AuthenticationController(
-            loginUseCases,
-            signUpUseCases,
-            sessionManager);
         IInvitationUseCases invitationUseCases = new InvitationUseCases(
             lobbyRegistry,
             friendshipRepository,
             gameNotifier);
-        LobbyController lobbyController = new LobbyController(
-            trackedLobbyUseCases,
-            invitationUseCases,
-            sessionManager);
 
         IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
         SocialSessionManager socialSessionManager = new SocialSessionManager(
             sessionTokens,
             socialSessions,
             friendStatusUseCases);
-        FriendController friendController = new FriendController(friendUseCases, socialSessionManager);
-        SessionController sessionController = new SessionController(lobbyController, friendController);
 
-        GameService gameService = new GameService(connectionUseCases, authenticationController, sessionController);
-        return gameService;
+        ConnectionService connectionService = new ConnectionService(connectionUseCases);
+        AuthenticationService authenticationService = new AuthenticationService(
+            loginUseCases,
+            signUpUseCases,
+            sessionManager);
+        LobbyService lobbyService = new LobbyService(trackedLobbyUseCases, invitationUseCases, sessionManager);
+        FriendService friendService = new FriendService(friendUseCases, socialSessionManager);
+
+        IErrorHandler errorHandler = new GameErrorHandler();
+        List<ServiceHost> serviceHosts = new List<ServiceHost>
+        {
+            new GameServiceHost(connectionService, errorHandler),
+            new GameServiceHost(authenticationService, errorHandler),
+            new GameServiceHost(lobbyService, errorHandler),
+            new GameServiceHost(friendService, errorHandler)
+        };
+
+        return serviceHosts;
     }
 }
