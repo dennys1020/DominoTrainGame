@@ -3,27 +3,31 @@ using DominoTrainGame.Client.Models.DominoService;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
-internal sealed class ServiceFailureMapping<TResult>
+internal sealed class ServiceFailureMapping<TStatus>
 {
-    private readonly Func<GameServiceFaultCode, TResult> _mapFault;
+    private readonly Func<GameServiceFaultCode, TStatus> _mapFault;
 
     public ServiceFailureMapping(
-        Func<GameServiceFaultCode, TResult> mapFault,
-        TResult serverError,
-        TResult serverUnavailable)
+        string operationName,
+        Func<GameServiceFaultCode, TStatus> mapFault,
+        TStatus serverError,
+        TStatus serverUnavailable)
     {
+        OperationName = operationName ?? throw new ArgumentNullException(nameof(operationName));
         _mapFault = mapFault ?? throw new ArgumentNullException(nameof(mapFault));
         ServerError = serverError;
         ServerUnavailable = serverUnavailable;
     }
 
-    public TResult ServerError { get; }
+    public string OperationName { get; }
 
-    public TResult ServerUnavailable { get; }
+    public TStatus ServerError { get; }
 
-    public TResult MapFault(GameServiceFaultCode faultCode)
+    public TStatus ServerUnavailable { get; }
+
+    public TStatus MapFault(GameServiceFaultCode faultCode)
     {
-        TResult result = _mapFault(faultCode);
-        return result;
+        TStatus status = _mapFault(faultCode);
+        return status;
     }
 }

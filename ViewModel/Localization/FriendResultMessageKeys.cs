@@ -12,9 +12,6 @@ public static class FriendResultMessageKeys
     private const string PlayerBlockedMessageKey = "FriendPlayerBlockedMessage";
     private const string RequestNotFoundMessageKey = "FriendRequestNotFoundMessage";
     private const string NotFriendsMessageKey = "NotFriendsMessage";
-    private const string SessionExpiredMessageKey = "LobbySessionExpiredMessage";
-    private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
-    private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string ServerErrorMessageKey = "FriendServerErrorMessage";
 
     public static string GetMessageKey(FriendResultStatus status)
@@ -27,13 +24,13 @@ public static class FriendResultMessageKeys
                 messageKey = InvalidInputMessageKey;
                 break;
             case FriendResultStatus.SessionNotFound:
-                messageKey = SessionExpiredMessageKey;
+                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
                 break;
             case FriendResultStatus.DatabaseUnavailable:
-                messageKey = DatabaseErrorMessageKey;
+                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
                 break;
             case FriendResultStatus.ServerUnavailable:
-                messageKey = ServerUnavailableMessageKey;
+                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
             default:
                 messageKey = GetFriendshipMessageKey(status);

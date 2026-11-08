@@ -30,7 +30,7 @@ public sealed class FriendService : IFriendService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void ConnectFriends(ConnectRequest request)
+    public void Connect(ConnectRequest request)
     {
         string sessionToken = request?.SessionToken ?? string.Empty;
         _socialSessionManager.Connect(sessionToken);
@@ -69,10 +69,7 @@ public sealed class FriendService : IFriendService
         SendFriendRequestStatus status = ExecuteForCaller(
             playerId => _friendUseCases.SendFriendRequest(playerId, addresseeUsername));
 
-        if (status != SendFriendRequestStatus.Success)
-        {
-            throw GameFaultFactory.Create(MapSendFaultCode(status));
-        }
+        GameFaultFactory.ThrowIfRejected(status, SendFriendRequestStatus.Success, MapSendFaultCode);
     }
 
     public void AcceptFriendRequest(FriendshipDecisionRequest request)
@@ -80,10 +77,7 @@ public sealed class FriendService : IFriendService
         int requestId = request?.RequestId ?? default;
         bool isAccepted = ExecuteForCaller(playerId => _friendUseCases.AcceptFriendRequest(playerId, requestId));
 
-        if (!isAccepted)
-        {
-            throw GameFaultFactory.Create(GameServiceFaultCode.FriendRequestNotFound);
-        }
+        GameFaultFactory.ThrowIfRejected(isAccepted, GameServiceFaultCode.FriendRequestNotFound);
     }
 
     public void RejectFriendRequest(FriendshipDecisionRequest request)
@@ -91,10 +85,7 @@ public sealed class FriendService : IFriendService
         int requestId = request?.RequestId ?? default;
         bool isRejected = ExecuteForCaller(playerId => _friendUseCases.RejectFriendRequest(playerId, requestId));
 
-        if (!isRejected)
-        {
-            throw GameFaultFactory.Create(GameServiceFaultCode.FriendRequestNotFound);
-        }
+        GameFaultFactory.ThrowIfRejected(isRejected, GameServiceFaultCode.FriendRequestNotFound);
     }
 
     public void RemoveFriend(FriendUsernameRequest request)
@@ -103,10 +94,7 @@ public sealed class FriendService : IFriendService
         RemoveFriendStatus status = ExecuteForCaller(
             playerId => _friendUseCases.RemoveFriend(playerId, friendUsername));
 
-        if (status != RemoveFriendStatus.Success)
-        {
-            throw GameFaultFactory.Create(MapRemoveFaultCode(status));
-        }
+        GameFaultFactory.ThrowIfRejected(status, RemoveFriendStatus.Success, MapRemoveFaultCode);
     }
 
     private static FriendResponse ToFriendResponse(FriendPresence friend)

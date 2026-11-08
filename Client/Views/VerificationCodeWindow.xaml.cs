@@ -54,33 +54,12 @@ public sealed partial class VerificationCodeWindow : Window
     private void OnDigitTextBoxPreviewKeyDown(object sender, KeyEventArgs eventArgs)
     {
         int index = GetFocusedIndex();
+        bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
+        bool isHandled = hasFocusedTextBox && HandleDigitKey(eventArgs.Key, index);
 
-        if (index >= FirstDigitTextBoxIndex)
+        if (isHandled)
         {
-            if (eventArgs.Key == Key.Space)
-            {
-                eventArgs.Handled = true;
-            }
-            else if (eventArgs.Key == Key.Back)
-            {
-                eventArgs.Handled = true;
-                DeleteBackward(index);
-            }
-            else if (eventArgs.Key == Key.Delete)
-            {
-                eventArgs.Handled = true;
-                SetDigit(index, string.Empty);
-            }
-            else if (eventArgs.Key == Key.Left)
-            {
-                eventArgs.Handled = true;
-                FocusDigitTextBox(index - DigitTextBoxNavigationStep);
-            }
-            else if (eventArgs.Key == Key.Right)
-            {
-                eventArgs.Handled = true;
-                FocusDigitTextBox(index + DigitTextBoxNavigationStep);
-            }
+            eventArgs.Handled = true;
         }
     }
 
@@ -102,6 +81,34 @@ public sealed partial class VerificationCodeWindow : Window
         {
             PasteDigits(index, pastedText);
         }
+    }
+
+    private bool HandleDigitKey(Key key, int index)
+    {
+        bool isHandled = true;
+
+        switch (key)
+        {
+            case Key.Space:
+                break;
+            case Key.Back:
+                DeleteBackward(index);
+                break;
+            case Key.Delete:
+                SetDigit(index, string.Empty);
+                break;
+            case Key.Left:
+                FocusDigitTextBox(index - DigitTextBoxNavigationStep);
+                break;
+            case Key.Right:
+                FocusDigitTextBox(index + DigitTextBoxNavigationStep);
+                break;
+            default:
+                isHandled = false;
+                break;
+        }
+
+        return isHandled;
     }
 
     private void PasteDigits(int focusedIndex, string pastedText)

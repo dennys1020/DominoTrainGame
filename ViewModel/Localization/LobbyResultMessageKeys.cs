@@ -9,8 +9,6 @@ public static class LobbyResultMessageKeys
     private const string LobbyNotFoundMessageKey = "LobbyNotFoundMessage";
     private const string LobbyFullMessageKey = "LobbyFullMessage";
     private const string LobbyConflictMessageKey = "LobbyConflictMessage";
-    private const string LobbySessionExpiredMessageKey = "LobbySessionExpiredMessage";
-    private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string LobbyServerErrorMessageKey = "LobbyServerErrorMessage";
     private const string NotLobbyHostMessageKey = "NotLobbyHostMessage";
     private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
@@ -43,10 +41,10 @@ public static class LobbyResultMessageKeys
                 messageKey = LobbyConflictMessageKey;
                 break;
             case LobbyResultStatus.SessionNotFound:
-                messageKey = LobbySessionExpiredMessageKey;
+                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
                 break;
             case LobbyResultStatus.ServerUnavailable:
-                messageKey = ServerUnavailableMessageKey;
+                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
             case LobbyResultStatus.NotLobbyHost:
                 messageKey = NotLobbyHostMessageKey;

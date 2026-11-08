@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
@@ -15,6 +14,7 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
     private static readonly ITraceLog _logger;
 
     private readonly ConcurrentDictionary<int, PlayerSession<TCallback>> _sessionsByPlayerId;
+    private readonly ConcurrentDictionary<string, int> _playerIdsBySessionId;
 
     static PlayerSessionRegistry()
     {
@@ -24,6 +24,7 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
     public PlayerSessionRegistry()
     {
         _sessionsByPlayerId = new ConcurrentDictionary<int, PlayerSession<TCallback>>();
+        _playerIdsBySessionId = new ConcurrentDictionary<string, int>(StringComparer.Ordinal);
     }
 
     public bool TryAdd(PlayerSession<TCallback> session)
@@ -34,6 +35,12 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
         }
 
         bool wasAdded = _sessionsByPlayerId.TryAdd(session.Player.PlayerId, session);
+
+        if (wasAdded)
+        {
+            _playerIdsBySessionId[session.SessionId] = session.Player.PlayerId;
+        }
+
         return wasAdded;
     }
 
@@ -50,11 +57,13 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             throw new ArgumentNullException(nameof(sessionId));
         }
 
-        PlayerSession<TCallback> foundSession = _sessionsByPlayerId.Values.FirstOrDefault(
-            session => string.Equals(session.SessionId, sessionId, StringComparison.Ordinal));
-        bool wasFound = foundSession != null;
+        bool isKnownSession = _playerIdsBySessionId.TryGetValue(sessionId, out int playerId);
+        bool hasSession = _sessionsByPlayerId.TryGetValue(playerId, out PlayerSession<TCallback> session);
+        bool wasFound = isKnownSession
+            && hasSession
+            && string.Equals(session.SessionId, sessionId, StringComparison.Ordinal);
 
-        player = foundSession?.Player ?? PlayerIdentity.Empty;
+        player = wasFound ? session.Player : PlayerIdentity.Empty;
         return wasFound;
     }
 
@@ -81,6 +90,7 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
 
         if (wasRemoved)
         {
+            ForgetSessionId(removedSession);
             AbortChannel(removedSession.Callback);
         }
 
@@ -100,7 +110,20 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             session);
         bool wasRemoved = entries.Remove(entry);
 
+        if (wasRemoved)
+        {
+            ForgetSessionId(session);
+        }
+
         return wasRemoved;
+    }
+
+    private void ForgetSessionId(PlayerSession<TCallback> session)
+    {
+        ICollection<KeyValuePair<string, int>> entries = _playerIdsBySessionId;
+        KeyValuePair<string, int> entry = new KeyValuePair<string, int>(session.SessionId, session.Player.PlayerId);
+
+        entries.Remove(entry);
     }
 
     private static void SendSafely(TCallback callback, Action<TCallback> send)

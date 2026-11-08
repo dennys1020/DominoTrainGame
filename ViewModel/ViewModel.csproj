@@ -63,7 +63,10 @@
     <Compile Include="Validation\LoginInputValidator.cs" />
     <Compile Include="Validation\LobbyMessageInputStatus.cs" />
     <Compile Include="Validation\LobbyMessageInputValidator.cs" />
+    <Compile Include="Localization\CommonMessageKeys.cs" />
     <Compile Include="Localization\LobbyResultMessageKeys.cs" />
+    <Compile Include="Localization\LoginMessageKeys.cs" />
+    <Compile Include="Localization\SignUpMessageKeys.cs" />
     <Compile Include="Localization\LocalizationViewModel.cs" />
     <Compile Include="DialogViewModel.cs" />
     <Compile Include="JoinGameViewModel.cs" />
