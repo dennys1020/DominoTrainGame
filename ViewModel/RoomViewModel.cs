@@ -17,7 +17,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayers = 2;
-    private const string SessionLostMessageKey = "LobbySessionExpiredMessage";
     private const string RoomLostMessageKey = "RoomLostAfterReconnectMessage";
     private const string ChatMessageEmptyMessageKey = "ChatMessageEmptyMessage";
     private const string ChatMessageTooLongMessageKey = "ChatMessageTooLongMessage";
@@ -256,7 +255,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
                 break;
             case ConnectionState.Lost:
                 IsReconnecting = false;
-                ExitRoom(Screen.Login, SessionLostMessageKey);
+                ExitRoom(Screen.Login, CommonMessageKeys.SessionExpiredMessageKey);
                 break;
             default:
                 IsReconnecting = false;
@@ -334,8 +333,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private string GetChatNotice(LobbyResultStatus result)
     {
-        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
-        string chatNotice = isChatSanction
+        string chatNotice = IsChatSanction(result)
             ? _localization[LobbyResultMessageKeys.GetMessageKey(result)]
             : string.Empty;
         return chatNotice;
@@ -344,14 +342,20 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private async Task<LobbyResultStatus> RunLobbyCommandAsync(Func<Task<LobbyResultStatus>> command)
     {
         LobbyResultStatus result = await RunWhileBusyAsync(command);
-        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
+        bool isFailure = result != LobbyResultStatus.Success && !IsChatSanction(result);
 
-        if (result != LobbyResultStatus.Success && !isChatSanction)
+        if (isFailure)
         {
             WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
         }
 
         return result;
+    }
+
+    private static bool IsChatSanction(LobbyResultStatus result)
+    {
+        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
+        return isChatSanction;
     }
 
     private static string GetInputMessageKey(LobbyMessageInputStatus inputStatus)

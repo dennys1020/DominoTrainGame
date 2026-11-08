@@ -12,7 +12,7 @@ public interface IFriendService
 {
     [OperationContract(IsInitiating = true)]
     [FaultContract(typeof(GameServiceFault))]
-    void ConnectFriends(ConnectRequest request);
+    void Connect(ConnectRequest request);
 
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]

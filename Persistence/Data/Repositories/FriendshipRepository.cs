@@ -62,8 +62,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
     {
         List<int> statusIds = _databaseExecutor.Execute(
             context => FindPairStatusIds(context, playerId, friendPlayerId));
-        FriendshipState friendshipState = statusIds.Any() ? ToFriendshipState(statusIds.First()) :
-        FriendshipState.None;
+        FriendshipState friendshipState = ToFriendshipState(statusIds.FirstOrDefault());
 
         return friendshipState;
     }

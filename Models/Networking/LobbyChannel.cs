@@ -14,22 +14,29 @@ public sealed class LobbyChannel
     private const int MaximumReconnectAttempts = 5;
     private const int ReconnectDelaySeconds = 2;
     private const int NoReconnectAttempts = 0;
+    private const string LobbyOperationName = "lobby";
 
     private static readonly ITraceLog _logger;
     private static readonly TimeSpan _reconnectDelay;
+    private static readonly ServiceFailureMapping<LobbyResultStatus> _lobbyFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
-    private readonly GameChannelCloser _channelCloser;
     private readonly ClientSession _session;
     private readonly GameClientCallback _callback;
-    private readonly object _channelSyncRoot = new object();
-    private LobbyServiceClient _lobbyClient;
+    private readonly DuplexClientSlot<LobbyServiceClient> _lobbyClientSlot;
+    private readonly RemoteCallGuard _callGuard;
+    private readonly object _reconnectionSyncRoot = new object();
     private Task _reconnection = Task.CompletedTask;
 
     static LobbyChannel()
     {
         _logger = TraceLogManager.GetLogger(typeof(LobbyChannel));
         _reconnectDelay = TimeSpan.FromSeconds(ReconnectDelaySeconds);
+        _lobbyFailures = new ServiceFailureMapping<LobbyResultStatus>(
+            LobbyOperationName,
+            FaultCodeMapper.MapLobbyFault,
+            LobbyResultStatus.ServerError,
+            LobbyResultStatus.ServerUnavailable);
     }
 
     public LobbyChannel(
@@ -39,50 +46,39 @@ public sealed class LobbyChannel
         GameClientCallback callback)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
-        _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
         _session = session ?? throw new ArgumentNullException(nameof(session));
         _callback = callback ?? throw new ArgumentNullException(nameof(callback));
+        _lobbyClientSlot = new DuplexClientSlot<LobbyServiceClient>(channelCloser);
+        _callGuard = new RemoteCallGuard();
+        _lobbyClientSlot.ClientEnded += HandleLobbyClientEnded;
     }
 
-    public async Task OpenAsync(string sessionToken)
+    public Task OpenAsync(string sessionToken)
     {
         LobbyServiceClient lobbyClient = _connectionFactory.CreateLobbyClient(_callback);
-        bool isConnected = false;
-
-        try
+        ConnectRequest request = new ConnectRequest
         {
-            ConnectRequest request = new ConnectRequest
-            {
-                SessionToken = sessionToken
-            };
+            SessionToken = sessionToken
+        };
+        Task opening = _lobbyClientSlot.OpenAsync(lobbyClient, sessionToken, client => client.ConnectAsync(request));
 
-            await lobbyClient.ConnectAsync(request).ConfigureAwait(false);
-            AttachLobbyClient(lobbyClient);
-            isConnected = true;
-        }
-        finally
-        {
-            if (!isConnected)
-            {
-                _channelCloser.Close(lobbyClient);
-            }
-        }
+        return opening;
     }
 
-    public async Task<LobbyResult> CreateLobbyAsync()
+    public Task<LobbyResult> CreateLobbyAsync()
     {
-        LobbyResult result = await InvokeAsync(
+        Task<LobbyResult> creation = InvokeAsync(
             lobbyClient => StoreLobbyResponseAsync(lobbyClient.CreateLobbyAsync()),
-            LobbyResult.CreateFailure).ConfigureAwait(false);
-        return result;
+            LobbyResult.CreateFailure);
+        return creation;
     }
 
-    public async Task<LobbyResult> JoinLobbyAsync(string code)
+    public Task<LobbyResult> JoinLobbyAsync(string code)
     {
-        LobbyResult result = await InvokeAsync(
+        Task<LobbyResult> joining = InvokeAsync(
             lobbyClient => RequestJoinLobbyAsync(lobbyClient, code),
-            LobbyResult.CreateFailure).ConfigureAwait(false);
-        return result;
+            LobbyResult.CreateFailure);
+        return joining;
     }
 
     public Task<LobbyResultStatus> SendCommandAsync(Func<LobbyServiceClient, Task> command)
@@ -93,84 +89,14 @@ public sealed class LobbyChannel
         }
 
         Task<LobbyResultStatus> commandTask = InvokeAsync(
-            lobbyClient => CompleteLobbyCommandAsync(command(lobbyClient)),
-            KeepStatus);
+            lobbyClient => RemoteCallGuard.CompleteCommandAsync(command(lobbyClient), LobbyResultStatus.Success),
+            RemoteCallGuard.KeepStatus<LobbyResultStatus>);
         return commandTask;
     }
 
     public void Close()
     {
-        LobbyServiceClient closedClient;
-
-        lock (_channelSyncRoot)
-        {
-            closedClient = _lobbyClient;
-            _lobbyClient = null;
-        }
-
-        if (closedClient != null)
-        {
-            _channelCloser.Close(closedClient);
-        }
-    }
-
-    private static async Task<TResult> CallLobbyServiceAsync<TResult>(
-        LobbyServiceClient lobbyClient,
-        Func<LobbyServiceClient, Task<TResult>> call,
-        Func<LobbyResultStatus, TResult> createFailure)
-    {
-        TResult result;
-
-        try
-        {
-            result = await call(lobbyClient).ConfigureAwait(false);
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            _logger.WarnFormat("The server rejected a lobby request. FaultCode: {0}.", exception.Detail.Code);
-            result = createFailure(FaultCodeMapper.MapLobbyFault(exception.Detail.Code));
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error("The server reported an undeclared fault while processing a lobby request.", exception);
-            result = createFailure(LobbyResultStatus.ServerError);
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("A lobby request did not finish before the configured timeout.", exception);
-            result = createFailure(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("A lobby request failed because of a communication error.", exception);
-            result = createFailure(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (ObjectDisposedException exception)
-        {
-            _logger.Warn("A lobby request used a lobby channel that was already closed.", exception);
-            result = createFailure(LobbyResultStatus.ServerUnavailable);
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error(
-                "A lobby request could not be sent because the endpoint is invalid or the channel rejected the call.",
-                exception);
-            result = createFailure(LobbyResultStatus.ServerError);
-        }
-
-        return result;
-    }
-
-    private static async Task<LobbyResultStatus> CompleteLobbyCommandAsync(Task command)
-    {
-        await command.ConfigureAwait(false);
-        LobbyResultStatus resultStatus = LobbyResultStatus.Success;
-        return resultStatus;
-    }
-
-    private static LobbyResultStatus KeepStatus(LobbyResultStatus resultStatus)
-    {
-        return resultStatus;
+        _lobbyClientSlot.Close();
     }
 
     private async Task<TResult> InvokeAsync<TResult>(
@@ -179,7 +105,7 @@ public sealed class LobbyChannel
     {
         Task reconnection;
 
-        lock (_channelSyncRoot)
+        lock (_reconnectionSyncRoot)
         {
             reconnection = _reconnection;
         }
@@ -189,26 +115,27 @@ public sealed class LobbyChannel
         return result;
     }
 
-    private async Task<TResult> CallCurrentLobbyClientAsync<TResult>(
+    private Task<TResult> CallCurrentLobbyClientAsync<TResult>(
         Func<LobbyServiceClient, Task<TResult>> call,
         Func<LobbyResultStatus, TResult> createFailure)
     {
-        TResult result = createFailure(LobbyResultStatus.SessionNotFound);
-        LobbyServiceClient lobbyClient;
+        Task<TResult> callTask = _callGuard.ExecuteAsync(
+            () => CallOpenedLobbyClientAsync(call, createFailure),
+            _lobbyFailures,
+            createFailure);
+        return callTask;
+    }
 
-        lock (_channelSyncRoot)
-        {
-            lobbyClient = _lobbyClient;
-        }
-
-        bool hasSession = lobbyClient?.State == CommunicationState.Opened;
-
-        if (hasSession)
-        {
-            result = await CallLobbyServiceAsync(lobbyClient, call, createFailure).ConfigureAwait(false);
-        }
-
-        return result;
+    private Task<TResult> CallOpenedLobbyClientAsync<TResult>(
+        Func<LobbyServiceClient, Task<TResult>> call,
+        Func<LobbyResultStatus, TResult> createFailure)
+    {
+        TResult sessionNotFound = createFailure(LobbyResultStatus.SessionNotFound);
+        Task<TResult> callTask = _lobbyClientSlot.CallAsync(
+            _session.SessionToken,
+            call,
+            () => Task.FromResult(sessionNotFound));
+        return callTask;
     }
 
     private Task<LobbyResult> RequestJoinLobbyAsync(LobbyServiceClient lobbyClient, string code)
@@ -234,47 +161,7 @@ public sealed class LobbyChannel
         return result;
     }
 
-    private void AttachLobbyClient(LobbyServiceClient lobbyClient)
-    {
-        ICommunicationObject channel = lobbyClient;
-        LobbyServiceClient previousClient;
-
-        channel.Faulted += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
-        channel.Closed += (sender, eventArgs) => RecoverLobbyChannel(lobbyClient);
-
-        lock (_channelSyncRoot)
-        {
-            previousClient = _lobbyClient;
-            _lobbyClient = lobbyClient;
-        }
-
-        if (previousClient != null)
-        {
-            _channelCloser.Close(previousClient);
-        }
-    }
-
-    private void RecoverLobbyChannel(LobbyServiceClient endedClient)
-    {
-        bool isCurrentChannel;
-
-        lock (_channelSyncRoot)
-        {
-            isCurrentChannel = ReferenceEquals(endedClient, _lobbyClient);
-
-            if (isCurrentChannel)
-            {
-                _lobbyClient = null;
-            }
-        }
-
-        if (isCurrentChannel)
-        {
-            HandleEndedChannel();
-        }
-    }
-
-    private void HandleEndedChannel()
+    private void HandleLobbyClientEnded(object sender, EventArgs eventArgs)
     {
         bool canReconnect = _session.TryPrepareReconnection(out string lobbyCode);
 
@@ -300,7 +187,7 @@ public sealed class LobbyChannel
         string lobbyCode = state?.ToString() ?? string.Empty;
         Task reconnection = ReconnectAsync(lobbyCode);
 
-        lock (_channelSyncRoot)
+        lock (_reconnectionSyncRoot)
         {
             _reconnection = reconnection;
         }

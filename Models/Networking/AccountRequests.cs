@@ -1,8 +1,6 @@
 using System;
-using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 
@@ -14,7 +12,6 @@ public sealed class AccountRequests
     private const string LoginOperationName = "login";
     private const string SignUpOperationName = "sign up";
 
-    private static readonly ITraceLog _logger;
     private static readonly ServiceFailureMapping<ConnectionCheckResult> _connectionFailures;
     private static readonly ServiceFailureMapping<LoginResult> _loginFailures;
     private static readonly ServiceFailureMapping<SignUpResult> _signUpFailures;
@@ -23,19 +20,22 @@ public sealed class AccountRequests
     private readonly GameChannelCloser _channelCloser;
     private readonly ClientSession _session;
     private readonly LobbyChannel _lobbyChannel;
+    private readonly RemoteCallGuard _callGuard;
 
     static AccountRequests()
     {
-        _logger = TraceLogManager.GetLogger(typeof(AccountRequests));
         _connectionFailures = new ServiceFailureMapping<ConnectionCheckResult>(
+            ConnectionOperationName,
             FaultCodeMapper.MapConnectionFault,
             ConnectionCheckResult.ServerError,
             ConnectionCheckResult.ServerUnavailable);
         _loginFailures = new ServiceFailureMapping<LoginResult>(
+            LoginOperationName,
             FaultCodeMapper.MapLoginFault,
             LoginResult.ServerError,
             LoginResult.ServerUnavailable);
         _signUpFailures = new ServiceFailureMapping<SignUpResult>(
+            SignUpOperationName,
             FaultCodeMapper.MapSignUpFault,
             SignUpResult.ServerError,
             SignUpResult.ServerUnavailable);
@@ -51,33 +51,31 @@ public sealed class AccountRequests
         _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
         _session = session ?? throw new ArgumentNullException(nameof(session));
         _lobbyChannel = lobbyChannel ?? throw new ArgumentNullException(nameof(lobbyChannel));
+        _callGuard = new RemoteCallGuard();
     }
 
-    public async Task<ConnectionCheckResult> CheckConnectionAsync()
+    public Task<ConnectionCheckResult> CheckConnectionAsync()
     {
-        ConnectionCheckResult connectionResult = await SendServiceRequestAsync(
+        Task<ConnectionCheckResult> connectionCheck = _callGuard.ExecuteAsync(
             SendCheckConnectionAsync,
-            _connectionFailures,
-            ConnectionOperationName).ConfigureAwait(false);
-        return connectionResult;
+            _connectionFailures);
+        return connectionCheck;
     }
 
-    public async Task<SignUpResult> SignUpAsync(string username, string email, string password)
+    public Task<SignUpResult> SignUpAsync(string username, string email, string password)
     {
-        SignUpResult signUpResult = await SendServiceRequestAsync(
+        Task<SignUpResult> signUp = _callGuard.ExecuteAsync(
             () => SendSignUpAsync(username, email, password),
-            _signUpFailures,
-            SignUpOperationName).ConfigureAwait(false);
-        return signUpResult;
+            _signUpFailures);
+        return signUp;
     }
 
     public async Task<LoginResult> LogInAsync(string identifier, string password)
     {
         SynchronizationContext callerContext = SynchronizationContext.Current;
-        LoginResult loginResult = await SendServiceRequestAsync(
+        LoginResult loginResult = await _callGuard.ExecuteAsync(
             () => AuthenticateAsync(identifier, password, callerContext),
-            _loginFailures,
-            LoginOperationName);
+            _loginFailures);
 
         if (loginResult != LoginResult.Success)
         {
@@ -85,49 +83,6 @@ public sealed class AccountRequests
         }
 
         return loginResult;
-    }
-
-    private static async Task<TResult> SendServiceRequestAsync<TResult>(
-        Func<Task<TResult>> request,
-        ServiceFailureMapping<TResult> failures,
-        string operationName)
-    {
-        TResult result;
-
-        try
-        {
-            result = await request().ConfigureAwait(false);
-        }
-        catch (FaultException<GameServiceFault> exception)
-        {
-            _logger.WarnFormat(
-                "The server rejected the {0} request. FaultCode: {1}.",
-                operationName,
-                exception.Detail.Code);
-            result = failures.MapFault(exception.Detail.Code);
-        }
-        catch (FaultException exception)
-        {
-            _logger.Error("The server reported an undeclared fault while processing a request.", exception);
-            result = failures.ServerError;
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Error("A request did not finish before the configured timeout.", exception);
-            result = failures.ServerUnavailable;
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Error("A request could not reach the server.", exception);
-            result = failures.ServerUnavailable;
-        }
-        catch (InvalidOperationException exception)
-        {
-            _logger.Error("The service endpoint is missing or invalid in App.config.", exception);
-            result = failures.ServerUnavailable;
-        }
-
-        return result;
     }
 
     private async Task<LoginResult> AuthenticateAsync(

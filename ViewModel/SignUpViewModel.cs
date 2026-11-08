@@ -4,6 +4,7 @@ using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.ViewModel.Commands;
 using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
 using DominoTrainGame.Client.ViewModel.Validation;
 
@@ -11,18 +12,6 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class SignUpViewModel : ScreenViewModel
 {
-    private const string RequiredFieldsMessageKey = "RequiredFieldsMessage";
-    private const string UsernameTooLongMessageKey = "UsernameTooLongMessage";
-    private const string EmailTooLongMessageKey = "EmailTooLongMessage";
-    private const string EmailInvalidMessageKey = "EmailInvalidMessage";
-    private const string PasswordTooShortMessageKey = "PasswordTooShortMessage";
-    private const string PasswordTooLongMessageKey = "PasswordTooLongMessage";
-    private const string AccountAlreadyExistsMessageKey = "AccountAlreadyExistsMessage";
-    private const string SignUpFailedMessageKey = "SignUpFailedMessage";
-    private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
-    private const string SignUpSystemErrorMessageKey = "SignUpSystemErrorMessage";
-    private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
-
     private readonly IRemoteGameServices _gameServices;
     private string _email;
     private string _username;
@@ -81,61 +70,6 @@ public sealed class SignUpViewModel : ScreenViewModel
 
     public AsyncRelayCommand SignUpCommand { get; }
 
-    private static string GetInputMessageKey(SignUpInputStatus inputStatus)
-    {
-        string messageKey;
-
-        switch (inputStatus)
-        {
-            case SignUpInputStatus.UsernameTooLong:
-                messageKey = UsernameTooLongMessageKey;
-                break;
-            case SignUpInputStatus.EmailTooLong:
-                messageKey = EmailTooLongMessageKey;
-                break;
-            case SignUpInputStatus.EmailInvalid:
-                messageKey = EmailInvalidMessageKey;
-                break;
-            case SignUpInputStatus.PasswordTooShort:
-                messageKey = PasswordTooShortMessageKey;
-                break;
-            case SignUpInputStatus.PasswordTooLong:
-                messageKey = PasswordTooLongMessageKey;
-                break;
-            default:
-                messageKey = RequiredFieldsMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
-    private static string GetResultMessageKey(SignUpResult signUpResult)
-    {
-        string messageKey;
-
-        switch (signUpResult)
-        {
-            case SignUpResult.AlreadyExists:
-                messageKey = AccountAlreadyExistsMessageKey;
-                break;
-            case SignUpResult.InvalidInput:
-                messageKey = SignUpFailedMessageKey;
-                break;
-            case SignUpResult.ServerUnavailable:
-                messageKey = ServerUnavailableMessageKey;
-                break;
-            case SignUpResult.DatabaseUnavailable:
-                messageKey = DatabaseErrorMessageKey;
-                break;
-            default:
-                messageKey = SignUpSystemErrorMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
     private async Task SignUpAsync()
     {
         SignUpInputStatus inputStatus = SignUpInputValidator.Validate(Username, Email, Password);
@@ -146,7 +80,7 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(GetInputMessageKey(inputStatus));
+            WindowService.ShowMessage(SignUpMessageKeys.GetInputMessageKey(inputStatus));
         }
     }
 
@@ -166,8 +100,7 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(GetResultMessageKey(signUpResult));
+            WindowService.ShowMessage(SignUpMessageKeys.GetResultMessageKey(signUpResult));
         }
     }
-
 }

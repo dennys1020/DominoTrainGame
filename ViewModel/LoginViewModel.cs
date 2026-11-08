@@ -4,6 +4,7 @@ using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.ViewModel.Commands;
 using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
+using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
 using DominoTrainGame.Client.ViewModel.Validation;
 
@@ -11,16 +12,6 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class LoginViewModel : ScreenViewModel
 {
-    private const string RequiredFieldsMessageKey = "RequiredFieldsMessage";
-    private const string IdentifierTooLongMessageKey = "IdentifierTooLongMessage";
-    private const string PasswordTooLongMessageKey = "PasswordTooLongMessage";
-    private const string InvalidCredentialsMessageKey = "InvalidCredentialsMessage";
-    private const string LoginFailedMessageKey = "LoginFailedMessage";
-    private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
-    private const string LoginSystemErrorMessageKey = "LoginSystemErrorMessage";
-    private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
-    private const string AlreadyConnectedMessageKey = "AlreadyConnectedMessage";
-
     private readonly IRemoteGameServices _gameServices;
     private string _usernameOrEmail;
     private string _password;
@@ -71,75 +62,6 @@ public sealed class LoginViewModel : ScreenViewModel
 
     public RelayCommand RecoverPasswordCommand { get; }
 
-    private static string GetInputMessageKey(LoginInputStatus inputStatus)
-    {
-        string messageKey;
-
-        switch (inputStatus)
-        {
-            case LoginInputStatus.IdentifierTooLong:
-                messageKey = IdentifierTooLongMessageKey;
-                break;
-            case LoginInputStatus.PasswordTooLong:
-                messageKey = PasswordTooLongMessageKey;
-                break;
-            default:
-                messageKey = RequiredFieldsMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
-    private static string GetResultMessageKey(LoginResult loginResult)
-    {
-        string messageKey;
-
-        switch (loginResult)
-        {
-            case LoginResult.InvalidCredentials:
-                messageKey = InvalidCredentialsMessageKey;
-                break;
-            case LoginResult.InvalidInput:
-                messageKey = LoginFailedMessageKey;
-                break;
-            case LoginResult.AlreadyConnected:
-                messageKey = AlreadyConnectedMessageKey;
-                break;
-            case LoginResult.ServerUnavailable:
-                messageKey = ServerUnavailableMessageKey;
-                break;
-            case LoginResult.DatabaseUnavailable:
-                messageKey = DatabaseErrorMessageKey;
-                break;
-            default:
-                messageKey = LoginSystemErrorMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
-    private static string GetConnectionMessageKey(ConnectionCheckResult connectionResult)
-    {
-        string messageKey;
-
-        switch (connectionResult)
-        {
-            case ConnectionCheckResult.ServerUnavailable:
-                messageKey = ServerUnavailableMessageKey;
-                break;
-            case ConnectionCheckResult.DatabaseUnavailable:
-                messageKey = DatabaseErrorMessageKey;
-                break;
-            default:
-                messageKey = LoginSystemErrorMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
-
     private async Task LogInAsync()
     {
         LoginInputStatus inputStatus = LoginInputValidator.Validate(UsernameOrEmail, Password);
@@ -150,7 +72,7 @@ public sealed class LoginViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(GetInputMessageKey(inputStatus));
+            WindowService.ShowMessage(LoginMessageKeys.GetInputMessageKey(inputStatus));
         }
     }
 
@@ -167,7 +89,7 @@ public sealed class LoginViewModel : ScreenViewModel
 
         if (connectionResult != ConnectionCheckResult.Connected)
         {
-            WindowService.ShowMessage(GetConnectionMessageKey(connectionResult));
+            WindowService.ShowMessage(LoginMessageKeys.GetConnectionMessageKey(connectionResult));
         }
     }
 
@@ -180,8 +102,7 @@ public sealed class LoginViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(GetResultMessageKey(loginResult));
+            WindowService.ShowMessage(LoginMessageKeys.GetResultMessageKey(loginResult));
         }
     }
-
 }

@@ -60,7 +60,6 @@ internal sealed class WindowFactory
             [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
             [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
             [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
-            [Screen.RecoverPassword] = windowService => new DialogViewModel(windowService),
             [Screen.Main] = windowService => new MainMenuViewModel(
                 windowService,
                 _gameServices,
@@ -74,13 +73,7 @@ internal sealed class WindowFactory
                 _localization),
             [Screen.Match] = windowService => new MatchViewModel(windowService),
             [Screen.MatchResults] = windowService => new MatchResultsViewModel(windowService, _gameServices),
-            [Screen.Settings] = windowService => new DialogViewModel(windowService),
-            [Screen.Rules] = windowService => new DialogViewModel(windowService),
-            [Screen.Profile] = windowService => new DialogViewModel(windowService),
-            [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
-            [Screen.ChangePassword] = windowService => new DialogViewModel(windowService),
-            [Screen.DeleteAccount] = windowService => new DialogViewModel(windowService),
-            [Screen.Leaderboard] = windowService => new DialogViewModel(windowService)
+            [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization)
         };
     }
 
@@ -105,13 +98,10 @@ internal sealed class WindowFactory
         bool hasViewModel = _viewModelsByScreen.TryGetValue(
             screen,
             out Func<IWindowService, ScreenViewModel> createViewModel);
+        ScreenViewModel viewModel = hasViewModel
+            ? createViewModel(windowService)
+            : new DialogViewModel(windowService);
 
-        if (!hasViewModel)
-        {
-            throw new ArgumentOutOfRangeException(nameof(screen));
-        }
-
-        ScreenViewModel viewModel = createViewModel(windowService);
         return viewModel;
     }
 
