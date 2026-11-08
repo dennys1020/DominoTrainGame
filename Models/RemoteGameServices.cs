@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
@@ -18,17 +17,13 @@ public sealed class RemoteGameServices : IRemoteGameServices
     public RemoteGameServices(
         AccountRequests accountRequests,
         LobbyChannel lobbyChannel,
-        LobbySessionContext sessionContext)
+        ClientSession session,
+        GameClientCallback callback)
     {
-        if (sessionContext == null)
-        {
-            throw new ArgumentNullException(nameof(sessionContext));
-        }
-
         _accountRequests = accountRequests ?? throw new ArgumentNullException(nameof(accountRequests));
         _lobbyChannel = lobbyChannel ?? throw new ArgumentNullException(nameof(lobbyChannel));
-        _session = sessionContext.Session;
-        _callback = sessionContext.Callback;
+        _session = session ?? throw new ArgumentNullException(nameof(session));
+        _callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 
     public ILobbyEvents LobbyEvents => _callback;
@@ -45,19 +40,10 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return connectionCheck;
     }
 
-    public async Task<LoginResult> LogInAsync(string identifier, string password)
+    public Task<LoginResult> LogInAsync(string identifier, string password)
     {
-        SynchronizationContext callerContext = SynchronizationContext.Current;
-        LoginResult loginResult = await _accountRequests.RunLogInAsync(
-            () => AuthenticateAsync(identifier, password, callerContext));
-        bool isLoggedIn = loginResult == LoginResult.Success;
-
-        if (!isLoggedIn)
-        {
-            _session.Forget();
-        }
-
-        return loginResult;
+        Task<LoginResult> login = _accountRequests.LogInAsync(identifier, password);
+        return login;
     }
 
     public void LogOut()
@@ -132,24 +118,5 @@ public sealed class RemoteGameServices : IRemoteGameServices
     {
         Task<SignUpResult> signUp = _accountRequests.SignUpAsync(username, email, password);
         return signUp;
-    }
-
-    private async Task<LoginResult> AuthenticateAsync(
-        string identifier,
-        string password,
-        SynchronizationContext callerContext)
-    {
-        LoginResult loginResult = LoginResult.InvalidCredentials;
-        LoginResponse response = await _accountRequests.SendLogInAsync(identifier, password);
-        bool isAuthenticated = response?.IsAuthenticated ?? false;
-
-        if (isAuthenticated)
-        {
-            _session.Store(response.PlayerId, response.SessionToken, callerContext);
-            await _lobbyChannel.OpenAsync(response.SessionToken);
-            loginResult = LoginResult.Success;
-        }
-
-        return loginResult;
     }
 }

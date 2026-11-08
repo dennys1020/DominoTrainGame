@@ -4,7 +4,6 @@ using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.ViewModel.Commands;
 using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
-using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
 using DominoTrainGame.Client.ViewModel.Validation;
 
@@ -25,18 +24,15 @@ public sealed class SignUpViewModel : ScreenViewModel
     private const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
 
     private readonly IRemoteGameServices _gameServices;
-    private readonly LocalizationViewModel _localization;
     private string _email;
     private string _username;
     private string _password;
 
     public SignUpViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices,
-        LocalizationViewModel localization) : base(windowService)
+        IRemoteGameServices gameServices) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
-        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _email = string.Empty;
         _username = string.Empty;
         _password = string.Empty;
@@ -150,7 +146,7 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            ShowLocalizedMessage(GetInputMessageKey(inputStatus));
+            WindowService.ShowMessage(GetInputMessageKey(inputStatus));
         }
     }
 
@@ -170,13 +166,8 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            ShowLocalizedMessage(GetResultMessageKey(signUpResult));
+            WindowService.ShowMessage(GetResultMessageKey(signUpResult));
         }
     }
 
-    private void ShowLocalizedMessage(string messageKey)
-    {
-        string message = _localization[messageKey];
-        WindowService.ShowMessage(message);
-    }
 }

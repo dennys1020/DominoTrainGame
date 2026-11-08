@@ -25,11 +25,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         _session = session ?? throw new ArgumentNullException(nameof(session));
     }
 
-    public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
-
-    public event EventHandler<PlayerLeftEventArgs> PlayerLeft;
-
-    public event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
+    public event EventHandler<EventArgs> LobbyChanged;
 
     public event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 
@@ -47,17 +43,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         }
         else
         {
-            LobbyMember member = new LobbyMember(message.Player.PlayerId, message.Player.Username);
-            LobbyPlayerResult player = new LobbyPlayerResult(member, message.Player.IsReady);
-            PlayerJoinedEventArgs eventArgs = new PlayerJoinedEventArgs(player, message.Version);
-            bool wasApplied = _session.TryApplyLobbyUpdate(
-                eventArgs.Version,
-                lobby => LobbyRosterUpdates.CreateLobbyWithPlayer(lobby, eventArgs));
-
-            if (wasApplied)
-            {
-                OnPlayerJoined(eventArgs);
-            }
+            ApplyLobbyUpdate(message.Version, lobby => LobbyRosterUpdates.CreateLobbyWithPlayer(lobby, message));
         }
     }
 
@@ -69,18 +55,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         }
         else
         {
-            PlayerLeftEventArgs eventArgs = new PlayerLeftEventArgs(
-                message.PlayerId,
-                message.Version,
-                message.HostPlayerId);
-            bool wasApplied = _session.TryApplyLobbyUpdate(
-                eventArgs.Version,
-                lobby => LobbyRosterUpdates.CreateLobbyWithoutPlayer(lobby, eventArgs));
-
-            if (wasApplied)
-            {
-                OnPlayerLeft(eventArgs);
-            }
+            ApplyLobbyUpdate(message.Version, lobby => LobbyRosterUpdates.CreateLobbyWithoutPlayer(lobby, message));
         }
     }
 
@@ -92,18 +67,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         }
         else
         {
-            PlayerReadyChangedEventArgs eventArgs = new PlayerReadyChangedEventArgs(
-                message.PlayerId,
-                message.IsReady,
-                message.Version);
-            bool wasApplied = _session.TryApplyLobbyUpdate(
-                eventArgs.Version,
-                lobby => LobbyRosterUpdates.CreateLobbyWithReadyState(lobby, eventArgs));
-
-            if (wasApplied)
-            {
-                OnPlayerReadyChanged(eventArgs);
-            }
+            ApplyLobbyUpdate(message.Version, lobby => LobbyRosterUpdates.CreateLobbyWithReadyState(lobby, message));
         }
     }
 
@@ -115,7 +79,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         }
         else
         {
-            LobbyMember sender = new LobbyMember(message.PlayerId, message.Username);
+            PlayerSummary sender = new PlayerSummary(message.PlayerId, message.Username);
             OnLobbyMessageReceived(new LobbyMessageReceivedEventArgs(sender, message.Text));
         }
     }
@@ -154,19 +118,19 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
     }
 
-    private void OnPlayerJoined(PlayerJoinedEventArgs eventArgs)
+    private void ApplyLobbyUpdate(long version, Func<LobbyResult, LobbyResult> update)
     {
-        PlayerJoined?.Invoke(this, eventArgs);
+        bool wasApplied = _session.TryApplyLobbyUpdate(version, update);
+
+        if (wasApplied)
+        {
+            OnLobbyChanged(EventArgs.Empty);
+        }
     }
 
-    private void OnPlayerLeft(PlayerLeftEventArgs eventArgs)
+    private void OnLobbyChanged(EventArgs eventArgs)
     {
-        PlayerLeft?.Invoke(this, eventArgs);
-    }
-
-    private void OnPlayerReadyChanged(PlayerReadyChangedEventArgs eventArgs)
-    {
-        PlayerReadyChanged?.Invoke(this, eventArgs);
+        LobbyChanged?.Invoke(this, eventArgs);
     }
 
     private void OnLobbyMessageReceived(LobbyMessageReceivedEventArgs eventArgs)

@@ -77,6 +77,7 @@
     <Compile Include="Faults\GameFaultFactory.cs" />
     <Compile Include="Faults\GameServiceFault.cs" />
     <Compile Include="Faults\GameServiceFaultCode.cs" />
+    <Compile Include="Faults\ServiceFaultTranslator.cs" />
     <Compile Include="DataContracts\JoinLobbyRequest.cs" />
     <Compile Include="DataContracts\LobbyPlayer.cs" />
     <Compile Include="DataContracts\LobbyResponse.cs" />

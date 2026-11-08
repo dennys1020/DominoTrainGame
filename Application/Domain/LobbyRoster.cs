@@ -92,45 +92,25 @@ public sealed class LobbyRoster
 
     public bool TryFindPlayer(int playerId, out LobbyPlayerState player)
     {
-        player = LobbyPlayerState.Empty;
-        bool wasFound = false;
+        LobbyPlayerState foundPlayer = Players.FirstOrDefault(candidate => candidate.PlayerId == playerId);
+        bool wasFound = foundPlayer != null;
 
-        foreach (LobbyPlayerState candidate in Players)
-        {
-            if (!wasFound && candidate.PlayerId == playerId)
-            {
-                player = candidate;
-                wasFound = true;
-            }
-        }
-
+        player = foundPlayer ?? LobbyPlayerState.Empty;
         return wasFound;
     }
 
     public List<int> GetPlayerIds()
     {
-        List<int> playerIds = new List<int>();
-
-        foreach (LobbyPlayerState player in Players)
-        {
-            playerIds.Add(player.PlayerId);
-        }
-
+        List<int> playerIds = Players.Select(player => player.PlayerId).ToList();
         return playerIds;
     }
 
     public List<int> GetPlayerIdsExcept(int excludedPlayerId)
     {
-        List<int> playerIds = new List<int>();
-
-        foreach (LobbyPlayerState player in Players)
-        {
-            if (player.PlayerId != excludedPlayerId)
-            {
-                playerIds.Add(player.PlayerId);
-            }
-        }
-
+        List<int> playerIds = Players
+            .Where(player => player.PlayerId != excludedPlayerId)
+            .Select(player => player.PlayerId)
+            .ToList();
         return playerIds;
     }
 }

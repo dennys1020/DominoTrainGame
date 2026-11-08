@@ -5,7 +5,7 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class PlayerSearchResult
 {
-    public PlayerSearchResult(FriendResultStatus status, IReadOnlyList<FoundPlayerResult> players)
+    public PlayerSearchResult(FriendResultStatus status, IReadOnlyList<PlayerSummary> players)
     {
         Status = status;
         Players = players ?? throw new ArgumentNullException(nameof(players));
@@ -13,5 +13,5 @@ public sealed class PlayerSearchResult
 
     public FriendResultStatus Status { get; }
 
-    public IReadOnlyList<FoundPlayerResult> Players { get; }
+    public IReadOnlyList<PlayerSummary> Players { get; }
 }

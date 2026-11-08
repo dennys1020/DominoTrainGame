@@ -51,7 +51,7 @@ dotnet_naming_rule.parameters.severity = warning
 dotnet_naming_symbols.parameters.applicable_kinds = parameter, local
 dotnet_naming_style.camel_case.capitalization = camel_case
 
-[*.Designer.cs]
+[*.{Designer.cs,g.cs,g.i.cs}]
 generated_code = true
 
 [**/Connected Services/**.cs]

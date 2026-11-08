@@ -4,11 +4,7 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface ILobbyEvents
 {
-    event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
-
-    event EventHandler<PlayerLeftEventArgs> PlayerLeft;
-
-    event EventHandler<PlayerReadyChangedEventArgs> PlayerReadyChanged;
+    event EventHandler<EventArgs> LobbyChanged;
 
     event EventHandler<LobbyMessageReceivedEventArgs> LobbyMessageReceived;
 

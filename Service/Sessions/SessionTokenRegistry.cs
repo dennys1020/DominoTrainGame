@@ -25,10 +25,7 @@ public sealed class SessionTokenRegistry
         }
 
         string token = GenerateToken();
-        DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
-
-        _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
-
+        Store(token, player);
         return token;
     }
 
@@ -63,9 +60,14 @@ public sealed class SessionTokenRegistry
 
         if (!string.IsNullOrEmpty(token))
         {
-            DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
-            _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
+            Store(token, player);
         }
+    }
+
+    private void Store(string token, PlayerIdentity player)
+    {
+        DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
+        _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
     }
 
     private static string GenerateToken()

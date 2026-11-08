@@ -35,17 +35,13 @@ public sealed class LobbyChannel
     public LobbyChannel(
         IGameConnectionFactory connectionFactory,
         GameChannelCloser channelCloser,
-        LobbySessionContext sessionContext)
+        ClientSession session,
+        GameClientCallback callback)
     {
-        if (sessionContext == null)
-        {
-            throw new ArgumentNullException(nameof(sessionContext));
-        }
-
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
-        _session = sessionContext.Session;
-        _callback = sessionContext.Callback;
+        _session = session ?? throw new ArgumentNullException(nameof(session));
+        _callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 
     public async Task OpenAsync(string sessionToken)
@@ -77,7 +73,7 @@ public sealed class LobbyChannel
     {
         LobbyResult result = await InvokeAsync(
             lobbyClient => StoreLobbyResponseAsync(lobbyClient.CreateLobbyAsync()),
-            LobbyResultMapper.CreateEmptyLobbyResult).ConfigureAwait(false);
+            LobbyResult.CreateFailure).ConfigureAwait(false);
         return result;
     }
 
@@ -85,7 +81,7 @@ public sealed class LobbyChannel
     {
         LobbyResult result = await InvokeAsync(
             lobbyClient => RequestJoinLobbyAsync(lobbyClient, code),
-            LobbyResultMapper.CreateEmptyLobbyResult).ConfigureAwait(false);
+            LobbyResult.CreateFailure).ConfigureAwait(false);
         return result;
     }
 
@@ -346,7 +342,7 @@ public sealed class LobbyChannel
         {
             LobbyResult rejoinResult = await CallCurrentLobbyClientAsync(
                 lobbyClient => RequestJoinLobbyAsync(lobbyClient, lobbyCode),
-                LobbyResultMapper.CreateEmptyLobbyResult);
+                LobbyResult.CreateFailure);
             _logger.InfoFormat("The lobby was rejoined after reconnecting. Status: {0}.", rejoinResult.Status);
         }
     }

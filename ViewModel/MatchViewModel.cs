@@ -7,9 +7,9 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class MatchViewModel : ScreenViewModel
 {
-    public MatchViewModel(IWindowService windowService, RoomRole roomRole) : base(windowService)
+    public MatchViewModel(IWindowService windowService) : base(windowService)
     {
-        ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults, roomRole));
+        ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults));
     }
 
     public RelayCommand ResultsCommand { get; }

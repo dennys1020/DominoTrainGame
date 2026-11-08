@@ -48,20 +48,17 @@ internal static class GameServiceFactory
             new PlayerSessionRegistry<ISocialClientCallback>();
         ISocialNotifier socialNotifier = new CallbackSocialNotifier(socialSessions);
         IPresenceUseCases presenceUseCases = new PresenceUseCases(socialSessions, lobbyRegistry);
-        IFriendStatusUseCases friendStatusUseCases = new FriendStatusUseCases(
-            friendshipRepository,
-            presenceUseCases,
-            socialNotifier);
-        LobbyCollaborators lobbyCollaborators = new LobbyCollaborators(
+        IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
+        ILobbyUseCases lobbyUseCases = new LobbyUseCases(
+            lobbyRegistry,
+            gameNotifier,
             chatMessageFilter,
             chatSanctionUseCases,
-            friendStatusUseCases);
-        ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyCollaborators);
+            friendUseCases);
         IInvitationUseCases invitationUseCases = new InvitationUseCases(
             lobbyRegistry,
             friendshipRepository,
             gameNotifier);
-        IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
 
         SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
         PlayerSessionManager<IGameClientCallback> lobbySessionManager =
@@ -71,17 +68,23 @@ internal static class GameServiceFactory
 
         lobbySessionManager.PlayerDisconnected += (sender, eventArgs) => lobbyUseCases.LeaveLobby(eventArgs.PlayerId);
         socialSessionManager.PlayerConnected +=
-            (sender, eventArgs) => friendStatusUseCases.PublishStatus(eventArgs.PlayerId);
+            (sender, eventArgs) => friendUseCases.PublishStatus(eventArgs.PlayerId);
         socialSessionManager.PlayerDisconnected +=
-            (sender, eventArgs) => friendStatusUseCases.PublishStatus(eventArgs.PlayerId);
+            (sender, eventArgs) => friendUseCases.PublishStatus(eventArgs.PlayerId);
 
+        ServiceFaultTranslator faultTranslator = new ServiceFaultTranslator();
         ConnectionService connectionService = new ConnectionService(connectionUseCases);
         AuthenticationService authenticationService = new AuthenticationService(
             loginUseCases,
             signUpUseCases,
-            lobbySessionManager);
-        LobbyService lobbyService = new LobbyService(lobbyUseCases, invitationUseCases, lobbySessionManager);
-        FriendService friendService = new FriendService(friendUseCases, socialSessionManager);
+            lobbySessionManager,
+            faultTranslator);
+        LobbyService lobbyService = new LobbyService(
+            lobbyUseCases,
+            invitationUseCases,
+            lobbySessionManager,
+            faultTranslator);
+        FriendService friendService = new FriendService(friendUseCases, socialSessionManager, faultTranslator);
 
         IErrorHandler errorHandler = new GameErrorHandler();
         List<ServiceHost> serviceHosts = new List<ServiceHost>

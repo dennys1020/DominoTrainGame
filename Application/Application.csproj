@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Results\CreateLobbyStatus.cs" />
-    <Compile Include="UseCases\LobbyCollaborators.cs" />
     <Compile Include="UseCases\PlayerInputValidator.cs" />
     <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />
@@ -101,7 +100,6 @@
   <ItemGroup>
     <Compile Include="Ports\FriendRequestSummary.cs" />
     <Compile Include="Ports\FriendshipState.cs" />
-    <Compile Include="Ports\FriendSummary.cs" />
     <Compile Include="Ports\IFriendshipRepository.cs" />
     <Compile Include="Results\RemoveFriendStatus.cs" />
     <Compile Include="Results\SendFriendRequestStatus.cs" />
@@ -123,8 +121,6 @@
     <Compile Include="Ports\FriendStatusNotice.cs" />
     <Compile Include="Ports\IPresenceTracker.cs" />
     <Compile Include="Ports\ISocialNotifier.cs" />
-    <Compile Include="UseCases\FriendStatusUseCases.cs" />
-    <Compile Include="UseCases\IFriendStatusUseCases.cs" />
     <Compile Include="UseCases\IPresenceUseCases.cs" />
     <Compile Include="UseCases\PresenceUseCases.cs" />
   </ItemGroup>

@@ -2,7 +2,7 @@ namespace DominoTrainGame.Server.Application.Results;
 
 public enum SendMessageStatus
 {
-    Sent,
+    Success,
     Warned,
     ChatBlocked,
     NotInLobby

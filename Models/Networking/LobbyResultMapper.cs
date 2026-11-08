@@ -8,23 +8,27 @@ namespace DominoTrainGame.Client.Models.Networking;
 
 internal static class LobbyResultMapper
 {
-    public static LobbyResult CreateEmptyLobbyResult(LobbyResultStatus status)
-    {
-        LobbyResult result = new LobbyResult(status, LobbySettings.Empty, LobbyRoster.Empty);
-        return result;
-    }
-
     public static LobbyResult MapLobbyResponse(LobbyResponse response)
     {
-        LobbyResult result = CreateEmptyLobbyResult(LobbyResultStatus.ServerError);
+        LobbyResult result = LobbyResult.CreateFailure(LobbyResultStatus.ServerError);
 
         if (response != null)
         {
-            LobbySettings settings = new LobbySettings(response.Code, response.MaximumPlayers);
-            result = new LobbyResult(LobbyResultStatus.Success, settings, MapLobbyRoster(response));
+            result = new LobbyResult(
+                LobbyResultStatus.Success,
+                response.Code,
+                response.MaximumPlayers,
+                MapLobbyRoster(response));
         }
 
         return result;
+    }
+
+    public static LobbyPlayerResult MapLobbyPlayer(LobbyPlayer player)
+    {
+        PlayerSummary member = new PlayerSummary(player.PlayerId, player.Username);
+        LobbyPlayerResult lobbyPlayer = new LobbyPlayerResult(member, player.IsReady);
+        return lobbyPlayer;
     }
 
     private static LobbyRoster MapLobbyRoster(LobbyResponse response)
@@ -36,12 +40,5 @@ internal static class LobbyResultMapper
         LobbyRoster roster = new LobbyRoster(response.Version, response.HostPlayerId, players);
 
         return roster;
-    }
-
-    private static LobbyPlayerResult MapLobbyPlayer(LobbyPlayer player)
-    {
-        LobbyMember member = new LobbyMember(player.PlayerId, player.Username);
-        LobbyPlayerResult lobbyPlayer = new LobbyPlayerResult(member, player.IsReady);
-        return lobbyPlayer;
     }
 }

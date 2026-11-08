@@ -34,17 +34,16 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private string _messageText = string.Empty;
     private string _chatNotice = string.Empty;
 
-    public RoomViewModel(IWindowService windowService, RoomDependencies dependencies) : base(windowService)
+    public RoomViewModel(
+        IWindowService windowService,
+        IRemoteGameServices gameServices,
+        InviteFriendsViewModel inviteFriends,
+        LocalizationViewModel localization) : base(windowService)
     {
-        if (dependencies == null)
-        {
-            throw new ArgumentNullException(nameof(dependencies));
-        }
-
-        _gameServices = dependencies.GameServices;
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _lobbyEvents = _gameServices.LobbyEvents;
-        _localization = dependencies.Localization;
-        InviteFriends = new InviteFriendsViewModel(windowService, dependencies);
+        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
+        InviteFriends = inviteFriends ?? throw new ArgumentNullException(nameof(inviteFriends));
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
         ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
@@ -54,9 +53,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         TryApplyCurrentLobby();
         _previousScreen = IsHost ? Screen.NewGame : Screen.JoinGame;
 
-        _lobbyEvents.PlayerJoined += HandleRosterChanged;
-        _lobbyEvents.PlayerLeft += HandleRosterChanged;
-        _lobbyEvents.PlayerReadyChanged += HandleRosterChanged;
+        _lobbyEvents.LobbyChanged += HandleLobbyChanged;
         _lobbyEvents.ConnectionStateChanged += HandleConnectionStateChanged;
         _lobbyEvents.LobbyMessageReceived += HandleLobbyMessageReceived;
         _lobbyEvents.MatchStarting += HandleMatchStarting;
@@ -171,13 +168,9 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     public AsyncRelayCommand StartMatchCommand { get; }
 
-    private RoomRole CurrentRole => IsHost ? RoomRole.Host : RoomRole.Guest;
-
     public void Unsubscribe()
     {
-        _lobbyEvents.PlayerJoined -= HandleRosterChanged;
-        _lobbyEvents.PlayerLeft -= HandleRosterChanged;
-        _lobbyEvents.PlayerReadyChanged -= HandleRosterChanged;
+        _lobbyEvents.LobbyChanged -= HandleLobbyChanged;
         _lobbyEvents.ConnectionStateChanged -= HandleConnectionStateChanged;
         _lobbyEvents.LobbyMessageReceived -= HandleLobbyMessageReceived;
         _lobbyEvents.MatchStarting -= HandleMatchStarting;
@@ -204,9 +197,9 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         {
             RoomPlayerViewModel playerViewModel = new RoomPlayerViewModel(
                 player,
-                _gameServices.CurrentPlayerId);
+                _gameServices.CurrentPlayerId,
+                lobby.HostPlayerId);
 
-            playerViewModel.IsHost = player.PlayerId == lobby.HostPlayerId;
             Players.Add(playerViewModel);
         }
 
@@ -216,7 +209,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         RefreshStartAvailability();
     }
 
-    private void HandleRosterChanged(object sender, EventArgs eventArgs)
+    private void HandleLobbyChanged(object sender, EventArgs eventArgs)
     {
         TryApplyCurrentLobby();
     }
@@ -239,7 +232,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (isCurrentLobby)
         {
-            WindowService.Navigate(Screen.Match, CurrentRole);
+            WindowService.Navigate(Screen.Match);
         }
     }
 
@@ -283,7 +276,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ExitRoom(Screen destination, string messageKey)
     {
-        WindowService.ShowMessage(_localization[messageKey]);
+        WindowService.ShowMessage(messageKey);
         WindowService.Navigate(destination);
     }
 
@@ -319,7 +312,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         }
         else
         {
-            WindowService.ShowMessage(_localization[GetInputMessageKey(inputStatus)]);
+            WindowService.ShowMessage(GetInputMessageKey(inputStatus));
         }
     }
 
@@ -355,7 +348,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (result != LobbyResultStatus.Success && !isChatSanction)
         {
-            WindowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result)]);
+            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
         }
 
         return result;

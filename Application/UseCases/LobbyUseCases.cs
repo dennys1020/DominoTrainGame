@@ -18,7 +18,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private readonly IGameNotifier _gameNotifier;
     private readonly IChatMessageFilter _chatMessageFilter;
     private readonly IChatSanctionUseCases _chatSanctionUseCases;
-    private readonly IFriendStatusUseCases _friendStatusUseCases;
+    private readonly IFriendUseCases _friendUseCases;
 
     static LobbyUseCases()
     {
@@ -28,15 +28,16 @@ public sealed class LobbyUseCases : ILobbyUseCases
     public LobbyUseCases(
         LobbyRegistry lobbyRegistry,
         IGameNotifier gameNotifier,
-        LobbyCollaborators collaborators)
+        IChatMessageFilter chatMessageFilter,
+        IChatSanctionUseCases chatSanctionUseCases,
+        IFriendUseCases friendUseCases)
     {
         _lobbyRegistry = lobbyRegistry ?? throw new ArgumentNullException(nameof(lobbyRegistry));
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
-        LobbyCollaborators lobbyCollaborators = collaborators
-            ?? throw new ArgumentNullException(nameof(collaborators));
-        _chatMessageFilter = lobbyCollaborators.MessageFilter;
-        _chatSanctionUseCases = lobbyCollaborators.ChatSanctions;
-        _friendStatusUseCases = lobbyCollaborators.FriendStatus;
+        _chatMessageFilter = chatMessageFilter ?? throw new ArgumentNullException(nameof(chatMessageFilter));
+        _chatSanctionUseCases = chatSanctionUseCases
+            ?? throw new ArgumentNullException(nameof(chatSanctionUseCases));
+        _friendUseCases = friendUseCases ?? throw new ArgumentNullException(nameof(friendUseCases));
     }
 
     public CreateLobbyStatus CreateLobby(PlayerIdentity host, out LobbyState lobby)
@@ -59,7 +60,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
         if (status == CreateLobbyStatus.Success)
         {
             _logger.InfoFormat("A lobby was created. HostPlayerId: {0}.", host.PlayerId);
-            _friendStatusUseCases.PublishStatus(host.PlayerId);
+            _friendUseCases.PublishStatus(host.PlayerId);
         }
         else
         {
@@ -89,7 +90,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
         if (status == JoinLobbyStatus.Success)
         {
             NotifyPlayerJoined(member, lobby);
-            _friendStatusUseCases.PublishStatus(member.PlayerId);
+            _friendUseCases.PublishStatus(member.PlayerId);
         }
         else
         {
@@ -106,7 +107,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
         if (wasInLobby)
         {
             NotifyPlayerLeft(playerId, remainingLobby);
-            _friendStatusUseCases.PublishStatus(playerId);
+            _friendUseCases.PublishStatus(playerId);
         }
     }
 
@@ -212,7 +213,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
                 status = SendMessageStatus.ChatBlocked;
                 break;
             default:
-                status = SendMessageStatus.Sent;
+                status = SendMessageStatus.Success;
                 break;
         }
 
@@ -303,7 +304,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
     {
         string filteredText = _chatMessageFilter.Filter(text);
         bool wasCensored = !string.Equals(filteredText, text, StringComparison.Ordinal);
-        SendMessageStatus status = SendMessageStatus.Sent;
+        SendMessageStatus status = SendMessageStatus.Success;
 
         NotifyLobbyMessage(playerId, filteredText, lobby);
 

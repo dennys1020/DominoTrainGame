@@ -19,10 +19,7 @@ internal sealed class WindowFactory
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;
-    private readonly RoomDependencies _roomDependencies;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
-    private readonly IReadOnlyDictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
-        _roleViewModelsByScreen;
 
     static WindowFactory()
     {
@@ -57,27 +54,26 @@ internal sealed class WindowFactory
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _invitationController = new LobbyInvitationController(_gameServices, _localization);
-        _roomDependencies = new RoomDependencies(_gameServices, _socialServices, _localization);
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
-            [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices, _localization),
-            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices, _localization),
+            [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
+            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
             [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
             [Screen.RecoverPassword] = windowService => new DialogViewModel(windowService),
             [Screen.Main] = windowService => new MainMenuViewModel(
                 windowService,
                 _gameServices,
                 _socialServices),
-            [Screen.NewGame] = windowService => new NewGameViewModel(
+            [Screen.NewGame] = windowService => new NewGameViewModel(windowService, _gameServices),
+            [Screen.JoinGame] = windowService => new JoinGameViewModel(windowService, _gameServices),
+            [Screen.Room] = windowService => new RoomViewModel(
                 windowService,
                 _gameServices,
+                new InviteFriendsViewModel(windowService, _gameServices, _socialServices),
                 _localization),
-            [Screen.JoinGame] = windowService => new JoinGameViewModel(
-                windowService,
-                _gameServices,
-                _localization),
-            [Screen.Room] = windowService => new RoomViewModel(windowService, _roomDependencies),
+            [Screen.Match] = windowService => new MatchViewModel(windowService),
+            [Screen.MatchResults] = windowService => new MatchResultsViewModel(windowService, _gameServices),
             [Screen.Settings] = windowService => new DialogViewModel(windowService),
             [Screen.Rules] = windowService => new DialogViewModel(windowService),
             [Screen.Profile] = windowService => new DialogViewModel(windowService),
@@ -86,21 +82,12 @@ internal sealed class WindowFactory
             [Screen.DeleteAccount] = windowService => new DialogViewModel(windowService),
             [Screen.Leaderboard] = windowService => new DialogViewModel(windowService)
         };
-
-        _roleViewModelsByScreen = new Dictionary<Screen, Func<IWindowService, RoomRole, ScreenViewModel>>
-        {
-            [Screen.Match] = (windowService, roomRole) => new MatchViewModel(windowService, roomRole),
-            [Screen.MatchResults] = (windowService, roomRole) => new MatchResultsViewModel(windowService, roomRole)
-        };
     }
 
     public Window Create(Screen screen)
     {
-        Window window = CreateWindow(screen);
-        IWindowService windowService = new WindowService(window, this, _localization);
-        window.DataContext = CreateViewModel(screen, windowService);
-        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
-        _invitationController.Attach(windowService);
+        Window window = CreateDialog(screen);
+        _invitationController.Attach(new WindowService(window, this, _localization));
         return window;
     }
 
@@ -110,25 +97,6 @@ internal sealed class WindowFactory
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
         window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
-        return window;
-    }
-
-    public Window Create(Screen screen, RoomRole roomRole)
-    {
-        bool hasViewModel = _roleViewModelsByScreen.TryGetValue(
-            screen,
-            out Func<IWindowService, RoomRole, ScreenViewModel> createViewModel);
-
-        if (!hasViewModel)
-        {
-            throw new ArgumentOutOfRangeException(nameof(screen));
-        }
-
-        Window window = CreateWindow(screen);
-        IWindowService windowService = new WindowService(window, this, _localization);
-        window.DataContext = createViewModel(windowService, roomRole);
-        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
-        _invitationController.Attach(windowService);
         return window;
     }
 

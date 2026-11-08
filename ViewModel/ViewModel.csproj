@@ -56,7 +56,6 @@
     <Compile Include="Common\ObservableViewModel.cs" />
     <Compile Include="Common\ScreenViewModel.cs" />
     <Compile Include="Contracts\IWindowService.cs" />
-    <Compile Include="Navigation\RoomRole.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
@@ -74,7 +73,6 @@
     <Compile Include="MatchViewModel.cs" />
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />
-    <Compile Include="RoomDependencies.cs" />
     <Compile Include="InviteFriendsViewModel.cs" />
     <Compile Include="InvitableFriendViewModel.cs" />
     <Compile Include="RoomPlayerViewModel.cs" />
@@ -98,12 +96,12 @@
     <Compile Include="FriendItemViewModel.cs" />
     <Compile Include="FriendRequestItemViewModel.cs" />
     <Compile Include="FriendsViewModel.cs" />
+    <Compile Include="Validation\FriendUsernameInputStatus.cs" />
+    <Compile Include="Validation\FriendUsernameInputValidator.cs" />
     <Compile Include="Contracts\ISubscribingViewModel.cs" />
     <Compile Include="Localization\FriendStatusLabelKeys.cs" />
     <Compile Include="PlayerSearchItemViewModel.cs" />
     <Compile Include="Localization\FriendResultMessageKeys.cs" />
-    <Compile Include="Validation\FriendUsernameInputStatus.cs" />
-    <Compile Include="Validation\FriendUsernameInputValidator.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,7 @@ public interface IFriendUseCases
 
     IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId);
 
-    IReadOnlyList<FriendSummary> SearchPlayers(int playerId, string usernameFragment);
+    IReadOnlyList<PlayerIdentity> SearchPlayers(int playerId, string usernameFragment);
 
     SendFriendRequestStatus SendFriendRequest(int requesterPlayerId, string addresseeUsername);
 
@@ -20,4 +20,6 @@ public interface IFriendUseCases
     bool RejectFriendRequest(int playerId, int requestId);
 
     RemoveFriendStatus RemoveFriend(int playerId, string friendUsername);
+
+    void PublishStatus(int playerId);
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Client.Models.DominoService;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
@@ -20,46 +21,47 @@ internal static class LobbyRosterUpdates
         return updatedLobby;
     }
 
-    public static LobbyResult CreateLobbyWithPlayer(LobbyResult lobby, PlayerJoinedEventArgs eventArgs)
+    public static LobbyResult CreateLobbyWithPlayer(LobbyResult lobby, PlayerJoinedMessage message)
     {
+        LobbyPlayerResult joinedPlayer = LobbyResultMapper.MapLobbyPlayer(message.Player);
         List<LobbyPlayerResult> players = new List<LobbyPlayerResult>(lobby.Players);
-        bool alreadyPresent = players.Exists(player => player.PlayerId == eventArgs.Player.PlayerId);
+        bool isAlreadyPresent = players.Exists(player => player.PlayerId == joinedPlayer.PlayerId);
 
-        if (!alreadyPresent)
+        if (!isAlreadyPresent)
         {
-            players.Add(eventArgs.Player);
+            players.Add(joinedPlayer);
         }
 
-        LobbyRoster roster = new LobbyRoster(eventArgs.Version, lobby.HostPlayerId, players);
+        LobbyRoster roster = new LobbyRoster(message.Version, lobby.HostPlayerId, players);
         LobbyResult updatedLobby = lobby.WithRoster(roster);
         return updatedLobby;
     }
 
-    public static LobbyResult CreateLobbyWithoutPlayer(LobbyResult lobby, PlayerLeftEventArgs eventArgs)
+    public static LobbyResult CreateLobbyWithoutPlayer(LobbyResult lobby, PlayerLeftMessage message)
     {
         List<LobbyPlayerResult> players = lobby.Players
-            .Where(player => player.PlayerId != eventArgs.PlayerId)
+            .Where(player => player.PlayerId != message.PlayerId)
             .ToList();
-        LobbyRoster roster = new LobbyRoster(eventArgs.Version, eventArgs.HostPlayerId, players);
+        LobbyRoster roster = new LobbyRoster(message.Version, message.HostPlayerId, players);
         LobbyResult updatedLobby = lobby.WithRoster(roster);
 
         return updatedLobby;
     }
 
-    public static LobbyResult CreateLobbyWithReadyState(LobbyResult lobby, PlayerReadyChangedEventArgs eventArgs)
+    public static LobbyResult CreateLobbyWithReadyState(LobbyResult lobby, PlayerReadyChangedMessage message)
     {
         List<LobbyPlayerResult> players = new List<LobbyPlayerResult>();
 
         foreach (LobbyPlayerResult player in lobby.Players)
         {
-            LobbyPlayerResult updatedPlayer = player.PlayerId == eventArgs.PlayerId
-                ? player.WithReadyState(eventArgs.IsReady)
+            LobbyPlayerResult updatedPlayer = player.PlayerId == message.PlayerId
+                ? player.WithReadyState(message.IsReady)
                 : player;
 
             players.Add(updatedPlayer);
         }
 
-        LobbyRoster roster = new LobbyRoster(eventArgs.Version, lobby.HostPlayerId, players);
+        LobbyRoster roster = new LobbyRoster(message.Version, lobby.HostPlayerId, players);
         LobbyResult updatedLobby = lobby.WithRoster(roster);
         return updatedLobby;
     }

@@ -23,7 +23,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
         NewGameCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
-        ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults, RoomRole.Host));
+        ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults));
         LogoutCommand = new RelayCommand(LogOut);
         LeaderboardCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Leaderboard));
         ProfileCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Profile));

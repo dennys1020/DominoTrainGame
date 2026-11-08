@@ -12,8 +12,6 @@ namespace DominoTrainGame.Server.Service.Sessions;
 public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
     where TCallback : class
 {
-    private const int FirstMatchIndex = 0;
-
     private static readonly ITraceLog _logger;
 
     private readonly ConcurrentDictionary<int, PlayerSession<TCallback>> _sessionsByPlayerId;
@@ -52,13 +50,11 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             throw new ArgumentNullException(nameof(sessionId));
         }
 
-        List<PlayerIdentity> matchingPlayers = _sessionsByPlayerId.Values
-            .Where(session => string.Equals(session.SessionId, sessionId, StringComparison.Ordinal))
-            .Select(session => session.Player)
-            .ToList();
-        bool wasFound = matchingPlayers.Any();
+        PlayerSession<TCallback> foundSession = _sessionsByPlayerId.Values.FirstOrDefault(
+            session => string.Equals(session.SessionId, sessionId, StringComparison.Ordinal));
+        bool wasFound = foundSession != null;
 
-        player = wasFound ? matchingPlayers[FirstMatchIndex] : PlayerIdentity.Empty;
+        player = foundSession?.Player ?? PlayerIdentity.Empty;
         return wasFound;
     }
 

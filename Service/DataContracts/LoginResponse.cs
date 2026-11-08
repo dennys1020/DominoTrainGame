@@ -12,8 +12,5 @@ public sealed class LoginResponse
     public int PlayerId { get; set; }
 
     [DataMember]
-    public string Username { get; set; }
-
-    [DataMember]
     public string SessionToken { get; set; }
 }

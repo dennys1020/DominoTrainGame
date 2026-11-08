@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 
@@ -34,7 +35,7 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public IReadOnlyList<FriendPresence> GetFriends(int playerId)
     {
-        IReadOnlyList<FriendSummary> friends = _friendshipRepository.GetFriends(playerId);
+        IReadOnlyList<PlayerIdentity> friends = _friendshipRepository.GetFriends(playerId);
         List<FriendPresence> friendPresences = friends
             .Select(friend => new FriendPresence(friend, _presenceUseCases.GetStatus(friend.PlayerId)))
             .ToList();
@@ -49,10 +50,10 @@ public sealed class FriendUseCases : IFriendUseCases
         return pendingRequests;
     }
 
-    public IReadOnlyList<FriendSummary> SearchPlayers(int playerId, string usernameFragment)
+    public IReadOnlyList<PlayerIdentity> SearchPlayers(int playerId, string usernameFragment)
     {
         string normalizedFragment = PlayerInputValidator.NormalizeUsername(usernameFragment);
-        IReadOnlyList<FriendSummary> players = _friendshipRepository.SearchRegisteredPlayers(
+        IReadOnlyList<PlayerIdentity> players = _friendshipRepository.SearchRegisteredPlayers(
             playerId,
             normalizedFragment);
 
@@ -102,6 +103,22 @@ public sealed class FriendUseCases : IFriendUseCases
 
         LogFriendRemoval(playerId, status);
         return status;
+    }
+
+    public void PublishStatus(int playerId)
+    {
+        try
+        {
+            IReadOnlyList<PlayerIdentity> friends = _friendshipRepository.GetFriends(playerId);
+            List<int> friendPlayerIds = friends.Select(friend => friend.PlayerId).ToList();
+            PlayerStatus status = _presenceUseCases.GetStatus(playerId);
+
+            _socialNotifier.NotifyFriendStatusChanged(new FriendStatusNotice(friendPlayerIds, playerId, status));
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("A status change was not published because the database is unavailable.", exception);
+        }
     }
 
     private static SendFriendRequestStatus ToRequestStatus(FriendshipState state)

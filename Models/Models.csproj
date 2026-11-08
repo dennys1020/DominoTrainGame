@@ -68,14 +68,10 @@
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
     <Compile Include="Contracts\LobbyResultStatus.cs" />
-    <Compile Include="Contracts\LobbyMember.cs" />
+    <Compile Include="Contracts\PlayerSummary.cs" />
     <Compile Include="Contracts\LobbyPlayerResult.cs" />
     <Compile Include="Contracts\LobbyResult.cs" />
     <Compile Include="Contracts\LobbyRoster.cs" />
-    <Compile Include="Contracts\LobbySettings.cs" />
-    <Compile Include="Contracts\PlayerJoinedEventArgs.cs" />
-    <Compile Include="Contracts\PlayerLeftEventArgs.cs" />
-    <Compile Include="Contracts\PlayerReadyChangedEventArgs.cs" />
     <Compile Include="Contracts\LobbyMessageReceivedEventArgs.cs" />
     <Compile Include="Contracts\MatchStartingEventArgs.cs" />
     <Compile Include="Contracts\LobbyInvitationReceivedEventArgs.cs" />
@@ -173,7 +169,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\FoundPlayerResult.cs" />
     <Compile Include="Contracts\FriendListResult.cs" />
     <Compile Include="Contracts\FriendRequestListResult.cs" />
     <Compile Include="Contracts\FriendRequestResult.cs" />
@@ -184,9 +179,8 @@
     <Compile Include="Contracts\FriendStatusChangedEventArgs.cs" />
     <Compile Include="Networking\FriendStatusCodes.cs" />
     <Compile Include="Contracts\IRemoteSocialServices.cs" />
-    <Compile Include="Contracts\ISocialConnectionFactory.cs" />
+    <Compile Include="Contracts\IFriendEvents.cs" />
     <Compile Include="Contracts\PlayerSearchResult.cs" />
-    <Compile Include="Networking\SocialConnectionFactory.cs" />
     <Compile Include="RemoteSocialServices.cs" />
     <Compile Include="Networking\AccountRequests.cs" />
     <Compile Include="Networking\ClientSession.cs" />
@@ -195,7 +189,6 @@
     <Compile Include="Networking\LobbyChannel.cs" />
     <Compile Include="Networking\LobbyResultMapper.cs" />
     <Compile Include="Networking\LobbyRosterUpdates.cs" />
-    <Compile Include="Networking\LobbySessionContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

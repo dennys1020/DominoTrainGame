@@ -1,11 +1,10 @@
 using System;
-using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class FriendPresence
 {
-    public FriendPresence(FriendSummary friend, PlayerStatus status)
+    public FriendPresence(PlayerIdentity friend, PlayerStatus status)
     {
         if (friend == null)
         {
