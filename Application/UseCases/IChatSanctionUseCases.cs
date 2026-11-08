@@ -4,7 +4,7 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface IChatSanctionUseCases
 {
-    ChatPermissionStatus CheckChatPermission(int playerId);
+    bool CanChat(int playerId);
 
     ChatInfractionStatus RegisterInfraction(int playerId);
 

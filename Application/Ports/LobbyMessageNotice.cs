@@ -6,7 +6,7 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public sealed class LobbyMessageNotice
 {
-    public LobbyMessageNotice(IReadOnlyList<int> recipientPlayerIds, LobbyMember sender, string text)
+    public LobbyMessageNotice(IReadOnlyList<int> recipientPlayerIds, PlayerIdentity sender, string text)
     {
         RecipientPlayerIds = recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds));
         Sender = sender ?? throw new ArgumentNullException(nameof(sender));
@@ -15,7 +15,7 @@ public sealed class LobbyMessageNotice
 
     public IReadOnlyList<int> RecipientPlayerIds { get; }
 
-    public LobbyMember Sender { get; }
+    public PlayerIdentity Sender { get; }
 
     public string Text { get; }
 }

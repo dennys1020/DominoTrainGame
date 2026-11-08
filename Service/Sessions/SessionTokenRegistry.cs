@@ -17,7 +17,7 @@ public sealed class SessionTokenRegistry
         _sessionsByToken = new ConcurrentDictionary<string, IssuedSession>(StringComparer.Ordinal);
     }
 
-    public string Issue(AuthenticatedPlayer player)
+    public string Issue(PlayerIdentity player)
     {
         if (player == null)
         {
@@ -32,11 +32,11 @@ public sealed class SessionTokenRegistry
         return token;
     }
 
-    public bool TryResolve(string token, out AuthenticatedPlayer player)
+    public bool TryResolve(string token, out PlayerIdentity player)
     {
         bool isValid = false;
 
-        player = AuthenticatedPlayer.Empty;
+        player = PlayerIdentity.Empty;
 
         if (!string.IsNullOrEmpty(token) && _sessionsByToken.TryGetValue(token, out IssuedSession session))
         {
@@ -54,7 +54,7 @@ public sealed class SessionTokenRegistry
         return isValid;
     }
 
-    public void Renew(string token, AuthenticatedPlayer player)
+    public void Renew(string token, PlayerIdentity player)
     {
         if (player == null)
         {
@@ -65,14 +65,6 @@ public sealed class SessionTokenRegistry
         {
             DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
             _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
-        }
-    }
-
-    public void Revoke(string token)
-    {
-        if (!string.IsNullOrEmpty(token))
-        {
-            _sessionsByToken.TryRemove(token, out IssuedSession revokedSession);
         }
     }
 
@@ -92,13 +84,13 @@ public sealed class SessionTokenRegistry
 
     private sealed class IssuedSession
     {
-        public IssuedSession(AuthenticatedPlayer player, DateTime expiresAtUtc)
+        public IssuedSession(PlayerIdentity player, DateTime expiresAtUtc)
         {
             Player = player;
             ExpiresAtUtc = expiresAtUtc;
         }
 
-        public AuthenticatedPlayer Player { get; }
+        public PlayerIdentity Player { get; }
 
         public DateTime ExpiresAtUtc { get; }
     }

@@ -9,6 +9,7 @@ using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Persistence.Time;
 using DominoTrainGame.Server.Service.Callbacks;
+using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.Faults;
 using DominoTrainGame.Server.Service.Implementation;
 using DominoTrainGame.Server.Service.Sessions;
@@ -28,8 +29,8 @@ internal static class GameServiceFactory
         ILoginUseCases loginUseCases = new LoginUseCases(playerRepository, passwordHasher);
         ISignUpUseCases signUpUseCases = new SignUpUseCases(playerRepository, passwordHasher);
 
-        ConnectedPlayerRegistry connectedPlayers = new ConnectedPlayerRegistry();
-        IGameNotifier gameNotifier = new CallbackGameNotifier(connectedPlayers);
+        PlayerSessionRegistry<IGameClientCallback> lobbySessions = new PlayerSessionRegistry<IGameClientCallback>();
+        IGameNotifier gameNotifier = new CallbackGameNotifier(lobbySessions);
         ILobbyCodeGenerator lobbyCodeGenerator = new LobbyCodeGenerator();
         LobbyRegistry lobbyRegistry = new LobbyRegistry(lobbyCodeGenerator);
         IForbiddenWordSource forbiddenWordSource = new ForbiddenWordSource();
@@ -41,44 +42,45 @@ internal static class GameServiceFactory
             sanctionRepository,
             chatInfractions,
             clock);
-        LobbyInputRules lobbyInputRules = new LobbyInputRules(
-            lobbyCodeGenerator,
-            chatMessageFilter,
-            chatSanctionUseCases);
-        ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyInputRules);
 
         IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
-        SocialSessionRegistry socialSessions = new SocialSessionRegistry();
+        PlayerSessionRegistry<ISocialClientCallback> socialSessions =
+            new PlayerSessionRegistry<ISocialClientCallback>();
         ISocialNotifier socialNotifier = new CallbackSocialNotifier(socialSessions);
         IPresenceUseCases presenceUseCases = new PresenceUseCases(socialSessions, lobbyRegistry);
         IFriendStatusUseCases friendStatusUseCases = new FriendStatusUseCases(
             friendshipRepository,
             presenceUseCases,
             socialNotifier);
-        ILobbyUseCases trackedLobbyUseCases = new PresenceTrackingLobbyUseCases(
-            lobbyUseCases,
-            presenceUseCases,
+        LobbyCollaborators lobbyCollaborators = new LobbyCollaborators(
+            chatMessageFilter,
+            chatSanctionUseCases,
             friendStatusUseCases);
-
-        SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
-        SessionManager sessionManager = new SessionManager(connectedPlayers, trackedLobbyUseCases, sessionTokens);
+        ILobbyUseCases lobbyUseCases = new LobbyUseCases(lobbyRegistry, gameNotifier, lobbyCollaborators);
         IInvitationUseCases invitationUseCases = new InvitationUseCases(
             lobbyRegistry,
             friendshipRepository,
             gameNotifier);
-
         IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
-        SocialSessionManager socialSessionManager = new SocialSessionManager(
-            sessionTokens,
-            socialSessions,
-            friendStatusUseCases);
+
+        SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
+        PlayerSessionManager<IGameClientCallback> lobbySessionManager =
+            new PlayerSessionManager<IGameClientCallback>(lobbySessions, sessionTokens);
+        PlayerSessionManager<ISocialClientCallback> socialSessionManager =
+            new PlayerSessionManager<ISocialClientCallback>(socialSessions, sessionTokens);
+
+        lobbySessionManager.PlayerDisconnected += (sender, eventArgs) => lobbyUseCases.LeaveLobby(eventArgs.PlayerId);
+        socialSessionManager.PlayerConnected +=
+            (sender, eventArgs) => friendStatusUseCases.PublishStatus(eventArgs.PlayerId);
+        socialSessionManager.PlayerDisconnected +=
+            (sender, eventArgs) => friendStatusUseCases.PublishStatus(eventArgs.PlayerId);
 
         ConnectionService connectionService = new ConnectionService(connectionUseCases);
         AuthenticationService authenticationService = new AuthenticationService(
             loginUseCases,
             signUpUseCases,
-            sessionManager);
-        LobbyService lobbyService = new LobbyService(trackedLobbyUseCases, invitationUseCases, sessionManager);
+            lobbySessionManager);
+        LobbyService lobbyService = new LobbyService(lobbyUseCases, invitationUseCases, lobbySessionManager);
         FriendService friendService = new FriendService(friendUseCases, socialSessionManager);
 
         IErrorHandler errorHandler = new GameErrorHandler();

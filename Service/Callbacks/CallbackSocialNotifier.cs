@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ServiceModel;
-using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -12,16 +9,9 @@ namespace DominoTrainGame.Server.Service.Callbacks;
 
 public sealed class CallbackSocialNotifier : ISocialNotifier
 {
-    private static readonly ITraceLog _logger;
+    private readonly PlayerSessionRegistry<ISocialClientCallback> _socialSessions;
 
-    private readonly SocialSessionRegistry _socialSessions;
-
-    static CallbackSocialNotifier()
-    {
-        _logger = TraceLogManager.GetLogger(typeof(CallbackSocialNotifier));
-    }
-
-    public CallbackSocialNotifier(SocialSessionRegistry socialSessions)
+    public CallbackSocialNotifier(PlayerSessionRegistry<ISocialClientCallback> socialSessions)
     {
         _socialSessions = socialSessions ?? throw new ArgumentNullException(nameof(socialSessions));
     }
@@ -41,42 +31,12 @@ public sealed class CallbackSocialNotifier : ISocialNotifier
 
         foreach (int recipientPlayerId in notice.RecipientPlayerIds)
         {
-            Send(recipientPlayerId, callback => callback.ReceiveFriendStatusChanged(message));
+            _socialSessions.TrySend(recipientPlayerId, callback => callback.ReceiveFriendStatusChanged(message));
         }
     }
 
     public void NotifyFriendsChanged(int playerId)
     {
-        Send(playerId, callback => callback.ReceiveFriendsChanged());
-    }
-
-    private static void TrySend(ISocialClientCallback callback, Action<ISocialClientCallback> send)
-    {
-        try
-        {
-            send(callback);
-        }
-        catch (TimeoutException exception)
-        {
-            _logger.Warn("A player did not receive a social notice before the timeout.", exception);
-        }
-        catch (CommunicationException exception)
-        {
-            _logger.Warn("A player did not receive a social notice because of a communication error.", exception);
-        }
-        catch (ObjectDisposedException exception)
-        {
-            _logger.Warn("A player did not receive a social notice because the channel was already closed.", exception);
-        }
-    }
-
-    private void Send(int recipientPlayerId, Action<ISocialClientCallback> send)
-    {
-        IReadOnlyList<ISocialClientCallback> callbacks = _socialSessions.FindCallbacks(recipientPlayerId);
-
-        foreach (ISocialClientCallback callback in callbacks)
-        {
-            TrySend(callback, send);
-        }
+        _socialSessions.TrySend(playerId, callback => callback.ReceiveFriendsChanged());
     }
 }

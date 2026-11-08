@@ -7,10 +7,8 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class SignUpUseCases : ISignUpUseCases
 {
-    private const int MaximumUsernameLength = 45;
     private const int MaximumEmailLength = 255;
     private const int MinimumPasswordLength = 8;
-    private const int MaximumPasswordLength = 128;
 
     private static readonly ITraceLog _logger;
 
@@ -30,28 +28,14 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     public bool SignUp(string username, string email, string password)
     {
-        string normalizedUsername = username?.Trim() ?? string.Empty;
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(username);
         string normalizedEmail = email?.Trim() ?? string.Empty;
 
-        ValidateUsername(normalizedUsername);
         ValidateEmail(normalizedEmail);
-        ValidatePassword(password);
+        PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
 
         bool isRegistered = RegisterPlayer(normalizedUsername, normalizedEmail, password);
         return isRegistered;
-    }
-
-    private static void ValidateUsername(string username)
-    {
-        bool isUsernameValid = !string.IsNullOrWhiteSpace(username)
-            && username.Length <= MaximumUsernameLength;
-
-        if (!isUsernameValid)
-        {
-            throw new ArgumentException(
-                "The username is empty or exceeds the maximum allowed length.",
-                nameof(username));
-        }
     }
 
     private static void ValidateEmail(string email)
@@ -65,21 +49,6 @@ public sealed class SignUpUseCases : ISignUpUseCases
             throw new ArgumentException(
                 "The email is empty, malformed or exceeds the maximum allowed length.",
                 nameof(email));
-        }
-    }
-
-    private static void ValidatePassword(string password)
-    {
-        string enteredPassword = password ?? string.Empty;
-        bool isLongEnough = enteredPassword.Length >= MinimumPasswordLength;
-        bool isShortEnough = enteredPassword.Length <= MaximumPasswordLength;
-        bool isPasswordValid = isLongEnough && isShortEnough;
-
-        if (!isPasswordValid)
-        {
-            throw new ArgumentException(
-                "The password is shorter or longer than the allowed length.",
-                nameof(password));
         }
     }
 

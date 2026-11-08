@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://dominotraingame/services" />
+  <xs:element name="Connect">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q1:ConnectRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ConnectResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLobby">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLobbyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="CreateLobbyResult" nillable="true" type="q2:LobbyResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinLobby">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q3:JoinLobbyRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="JoinLobbyResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://dominotraingame/services" minOccurs="0" name="JoinLobbyResult" nillable="true" type="q4:LobbyResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveLobby">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveLobbyResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReady">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q5:SetReadyRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SetReadyResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendLobbyMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q6:SendLobbyMessageRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SendLobbyMessageResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartMatch">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="StartMatchResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InviteFriend">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q7:FriendUsernameRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="InviteFriendResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceivePlayerJoined">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q8:PlayerJoinedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceivePlayerLeft">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q9:PlayerLeftMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceivePlayerReadyChanged">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerReadyChangedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveLobbyMessage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:LobbyChatMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveMatchStarting">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:MatchStartingMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveLobbyInvitation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:LobbyInvitationMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

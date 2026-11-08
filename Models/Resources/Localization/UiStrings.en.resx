@@ -511,9 +511,6 @@ on the train</value>
   <data name="EnglishLanguageCodeLabel" xml:space="preserve">
     <value>EN</value>
   </data>
-  <data name="RoomCodePlaceholder" xml:space="preserve">
-    <value>XXXXXX</value>
-  </data>
   <data name="DoubleSixOptionLabel" xml:space="preserve">
     <value>6</value>
   </data>
@@ -648,6 +645,9 @@ on the train</value>
   </data>
   <data name="ChatBlockedMessage" xml:space="preserve">
     <value>Your chat is temporarily blocked for using offensive language.</value>
+  </data>
+  <data name="PlayerBannedMessage" xml:space="preserve">
+    <value>You cannot play because you have an active sanction for offensive language.</value>
   </data>
   <data name="ChatWarningMessage" xml:space="preserve">
     <value>Watch your language: if you keep using offensive words, your chat will be blocked.</value>

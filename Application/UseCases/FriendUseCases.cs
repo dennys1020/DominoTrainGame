@@ -10,8 +10,6 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class FriendUseCases : IFriendUseCases
 {
-    private const int MaximumUsernameLength = 45;
-
     private static readonly ITraceLog _logger;
 
     private readonly IFriendshipRepository _friendshipRepository;
@@ -53,7 +51,7 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public IReadOnlyList<FriendSummary> SearchPlayers(int playerId, string usernameFragment)
     {
-        string normalizedFragment = NormalizeUsername(usernameFragment);
+        string normalizedFragment = PlayerInputValidator.NormalizeUsername(usernameFragment);
         IReadOnlyList<FriendSummary> players = _friendshipRepository.SearchRegisteredPlayers(
             playerId,
             normalizedFragment);
@@ -63,8 +61,8 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public SendFriendRequestStatus SendFriendRequest(int requesterPlayerId, string addresseeUsername)
     {
-        string normalizedUsername = NormalizeUsername(addresseeUsername);
-        bool isFound = _friendshipRepository.TryFindFriendship(normalizedUsername, out int addresseePlayerId);
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(addresseeUsername);
+        bool isFound = _friendshipRepository.TryFindPlayerId(normalizedUsername, out int addresseePlayerId);
         SendFriendRequestStatus status = isFound
             ? EvaluateFriendRequest(requesterPlayerId, addresseePlayerId)
             : SendFriendRequestStatus.PlayerNotFound;
@@ -75,10 +73,9 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public bool AcceptFriendRequest(int playerId, int requestId)
     {
-        bool isRequesterFound = TryFindRequester(playerId, requestId, out int requesterPlayerId);
-        bool isAccepted = _friendshipRepository.AcceptRequest(requestId, playerId);
+        bool isAccepted = _friendshipRepository.TryAcceptRequest(requestId, playerId, out int requesterPlayerId);
 
-        if (isAccepted && isRequesterFound)
+        if (isAccepted)
         {
             _socialNotifier.NotifyFriendsChanged(requesterPlayerId);
         }
@@ -97,30 +94,14 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public RemoveFriendStatus RemoveFriend(int playerId, string friendUsername)
     {
-        string normalizedUsername = NormalizeUsername(friendUsername);
-        bool isFound = _friendshipRepository.TryFindFriendship(normalizedUsername, out int friendPlayerId);
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
+        bool isFound = _friendshipRepository.TryFindPlayerId(normalizedUsername, out int friendPlayerId);
         RemoveFriendStatus status = isFound
             ? RemoveExistingFriend(playerId, friendPlayerId)
             : RemoveFriendStatus.PlayerNotFound;
 
         LogFriendRemoval(playerId, status);
         return status;
-    }
-
-    private static string NormalizeUsername(string username)
-    {
-        string normalizedUsername = username?.Trim() ?? string.Empty;
-        bool isUsernameValid = !string.IsNullOrWhiteSpace(normalizedUsername)
-            && normalizedUsername.Length <= MaximumUsernameLength;
-
-        if (!isUsernameValid)
-        {
-            throw new ArgumentException(
-                "The username is empty or exceeds the maximum allowed length.",
-                nameof(username));
-        }
-
-        return normalizedUsername;
     }
 
     private static SendFriendRequestStatus ToRequestStatus(FriendshipState state)
@@ -225,15 +206,5 @@ public sealed class FriendUseCases : IFriendUseCases
         }
 
         return status;
-    }
-
-    private bool TryFindRequester(int playerId, int requestId, out int requesterPlayerId)
-    {
-        FriendRequestSummary request = _friendshipRepository.GetPendingRequests(playerId)
-            .FirstOrDefault(pendingRequest => pendingRequest.RequestId == requestId);
-        requesterPlayerId = default;
-        bool isFound = request != null
-            && _friendshipRepository.TryFindFriendship(request.RequesterUsername, out requesterPlayerId);
-        return isFound;
     }
 }

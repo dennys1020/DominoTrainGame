@@ -66,5 +66,8 @@ public enum GameServiceFaultCode
     ChatWarning,
 
     [EnumMember]
-    ChatBlocked
+    ChatBlocked,
+
+    [EnumMember]
+    PlayerBanned
 }

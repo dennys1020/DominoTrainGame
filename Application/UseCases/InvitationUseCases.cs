@@ -9,8 +9,6 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class InvitationUseCases : IInvitationUseCases
 {
-    private const int MaximumUsernameLength = 45;
-
     private static readonly ITraceLog _logger;
 
     private readonly LobbyRegistry _lobbyRegistry;
@@ -33,15 +31,14 @@ public sealed class InvitationUseCases : IInvitationUseCases
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
     }
 
-    public InviteFriendStatus InviteFriend(LobbyMember inviter, string friendUsername)
+    public InviteFriendStatus InviteFriend(PlayerIdentity inviter, string friendUsername)
     {
         if (inviter == null)
         {
             throw new ArgumentNullException(nameof(inviter));
         }
 
-        string normalizedUsername = friendUsername?.Trim() ?? string.Empty;
-        ValidateUsername(normalizedUsername);
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
 
         bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(inviter.PlayerId, out LobbyState lobby);
         InviteFriendStatus status = isInLobby
@@ -52,7 +49,7 @@ public sealed class InvitationUseCases : IInvitationUseCases
         return status;
     }
 
-    private InviteFriendStatus InviteToLobby(LobbyMember inviter, string friendUsername, LobbyState lobby)
+    private InviteFriendStatus InviteToLobby(PlayerIdentity inviter, string friendUsername, LobbyState lobby)
     {
         InviteFriendStatus status = InviteFriendStatus.LobbyFull;
 
@@ -64,10 +61,10 @@ public sealed class InvitationUseCases : IInvitationUseCases
         return status;
     }
 
-    private InviteFriendStatus InviteRegisteredPlayer(LobbyMember inviter, string friendUsername, string code)
+    private InviteFriendStatus InviteRegisteredPlayer(PlayerIdentity inviter, string friendUsername, string code)
     {
         InviteFriendStatus status = InviteFriendStatus.PlayerNotFound;
-        bool isRegistered = _friendshipRepository.TryFindFriendship(friendUsername, out int friendPlayerId);
+        bool isRegistered = _friendshipRepository.TryFindPlayerId(friendUsername, out int friendPlayerId);
 
         if (isRegistered)
         {
@@ -77,7 +74,7 @@ public sealed class InvitationUseCases : IInvitationUseCases
         return status;
     }
 
-    private InviteFriendStatus InviteFriendPlayer(LobbyMember inviter, int friendPlayerId, string code)
+    private InviteFriendStatus InviteFriendPlayer(PlayerIdentity inviter, int friendPlayerId, string code)
     {
         InviteFriendStatus status = InviteFriendStatus.NotFriends;
         FriendshipState friendshipState = _friendshipRepository.GetFriendshipState(inviter.PlayerId, friendPlayerId);
@@ -90,19 +87,6 @@ public sealed class InvitationUseCases : IInvitationUseCases
         }
 
         return status;
-    }
-
-    private static void ValidateUsername(string username)
-    {
-        bool isEmpty = string.IsNullOrEmpty(username);
-        bool isTooLong = username.Length > MaximumUsernameLength;
-
-        if (isEmpty || isTooLong)
-        {
-            throw new ArgumentException(
-                "The invited username is empty or longer than the allowed length.",
-                nameof(username));
-        }
     }
 
     private static void LogInvitation(int inviterPlayerId, InviteFriendStatus status)

@@ -18,7 +18,6 @@ public sealed class RoomPlayerViewModel : ObservableViewModel
 
         PlayerId = player.PlayerId;
         Username = player.Username;
-        _isHost = player.IsHost;
         _isReady = player.IsReady;
         IsCurrentPlayer = player.PlayerId == currentPlayerId;
     }

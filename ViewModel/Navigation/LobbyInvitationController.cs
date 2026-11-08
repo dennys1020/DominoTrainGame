@@ -20,7 +20,7 @@ public sealed class LobbyInvitationController
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
-        _gameServices.LobbyInvitationReceived += HandleLobbyInvitationReceived;
+        _gameServices.LobbyEvents.LobbyInvitationReceived += HandleLobbyInvitationReceived;
     }
 
     public void Attach(IWindowService windowService)
@@ -36,7 +36,8 @@ public sealed class LobbyInvitationController
 
         if (hasWindow && !isInLobby)
         {
-            AsyncRelayCommand answerCommand = new AsyncRelayCommand(() => AnswerInvitationAsync(windowService, eventArgs));
+            AsyncRelayCommand answerCommand = new AsyncRelayCommand(
+                () => AnswerInvitationAsync(windowService, eventArgs));
             answerCommand.Execute(null);
         }
     }

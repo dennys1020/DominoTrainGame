@@ -1,15 +1,12 @@
 using System;
 using DominoTrainGame.Server.Application.Domain;
-using DominoTrainGame.Server.Service.Contracts;
 
 namespace DominoTrainGame.Server.Service.Sessions;
 
-public sealed class ConnectedPlayer
+public sealed class PlayerSession<TCallback>
+    where TCallback : class
 {
-    public ConnectedPlayer(
-        string sessionId,
-        AuthenticatedPlayer player,
-        IGameClientCallback callback)
+    public PlayerSession(string sessionId, PlayerIdentity player, TCallback callback)
     {
         SessionId = sessionId ?? throw new ArgumentNullException(nameof(sessionId));
         Player = player ?? throw new ArgumentNullException(nameof(player));
@@ -18,7 +15,7 @@ public sealed class ConnectedPlayer
 
     public string SessionId { get; }
 
-    public AuthenticatedPlayer Player { get; }
+    public PlayerIdentity Player { get; }
 
-    public IGameClientCallback Callback { get; }
+    public TCallback Callback { get; }
 }

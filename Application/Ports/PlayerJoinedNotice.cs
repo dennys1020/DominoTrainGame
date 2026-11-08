@@ -6,7 +6,7 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public sealed class PlayerJoinedNotice
 {
-    public PlayerJoinedNotice(IReadOnlyList<int> recipientPlayerIds, LobbyMember member, long version)
+    public PlayerJoinedNotice(IReadOnlyList<int> recipientPlayerIds, PlayerIdentity member, long version)
     {
         RecipientPlayerIds = recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds));
         Member = member ?? throw new ArgumentNullException(nameof(member));
@@ -15,7 +15,7 @@ public sealed class PlayerJoinedNotice
 
     public IReadOnlyList<int> RecipientPlayerIds { get; }
 
-    public LobbyMember Member { get; }
+    public PlayerIdentity Member { get; }
 
     public long Version { get; }
 }

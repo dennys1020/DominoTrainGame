@@ -5,5 +5,5 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface IInvitationUseCases
 {
-    InviteFriendStatus InviteFriend(LobbyMember inviter, string friendUsername);
+    InviteFriendStatus InviteFriend(PlayerIdentity inviter, string friendUsername);
 }

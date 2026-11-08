@@ -19,6 +19,7 @@ public static class LobbyResultMessageKeys
     private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
     private const string ChatWarningMessageKey = "ChatWarningMessage";
     private const string ChatBlockedMessageKey = "ChatBlockedMessage";
+    private const string PlayerBannedMessageKey = "PlayerBannedMessage";
 
     public static string GetMessageKey(LobbyResultStatus status)
     {
@@ -95,6 +96,9 @@ public static class LobbyResultMessageKeys
                 break;
             case LobbyResultStatus.ChatBlocked:
                 messageKey = ChatBlockedMessageKey;
+                break;
+            case LobbyResultStatus.PlayerBanned:
+                messageKey = PlayerBannedMessageKey;
                 break;
             default:
                 messageKey = LobbyServerErrorMessageKey;

@@ -24,7 +24,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
     }
 
-    public bool TryFindFriendship(string username, out int playerId)
+    public bool TryFindPlayerId(string username, out int playerId)
     {
         string normalizedUsername = username ?? string.Empty;
         List<int> playerIds = _databaseExecutor.Execute(
@@ -75,18 +75,21 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return isCreated;
     }
 
-    public bool AcceptRequest(int requestId, int addresseePlayerId)
+    public bool TryAcceptRequest(int requestId, int addresseePlayerId, out int requesterPlayerId)
     {
-        bool isAccepted = _databaseExecutor.Execute(
+        List<int> requesterPlayerIds = _databaseExecutor.Execute(
             context => ChangePendingStatus(context, IsRequestFor(requestId, addresseePlayerId), AcceptedStatusId));
+        bool isAccepted = requesterPlayerIds.Any();
 
+        requesterPlayerId = requesterPlayerIds.FirstOrDefault();
         return isAccepted;
     }
 
     public bool RejectRequest(int requestId, int addresseePlayerId)
     {
-        bool isRejected = _databaseExecutor.Execute(
+        List<int> requesterPlayerIds = _databaseExecutor.Execute(
             context => ChangePendingStatus(context, IsRequestFor(requestId, addresseePlayerId), RejectedStatusId));
+        bool isRejected = requesterPlayerIds.Any();
 
         return isRejected;
     }
@@ -256,7 +259,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return predicate;
     }
 
-    private static bool ChangePendingStatus(
+    private static List<int> ChangePendingStatus(
         DominoGameDBEntities context,
         Expression<Func<FriendshipRequest, bool>> requestFilter,
         int newStatusId)
@@ -265,15 +268,18 @@ public sealed class FriendshipRepository : IFriendshipRepository
             .Where(requestFilter)
             .Where(request => request.IdStatus == PendingStatusId)
             .ToList();
-        bool isFound = pendingRequests.Any();
 
-        if (isFound)
+        foreach (FriendshipRequest pendingRequest in pendingRequests)
         {
-            pendingRequests.First().IdStatus = newStatusId;
-            context.SaveChanges();
+            pendingRequest.IdStatus = newStatusId;
         }
 
-        return isFound;
+        context.SaveChanges();
+
+        List<int> requesterPlayerIds = pendingRequests
+            .Select(request => request.RequesterPlayerId)
+            .ToList();
+        return requesterPlayerIds;
     }
 
     private static bool DeleteAcceptedFriendship(DominoGameDBEntities context, int playerId, int friendPlayerId)

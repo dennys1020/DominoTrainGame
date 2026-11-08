@@ -127,7 +127,7 @@
             <Setter Property="Foreground" Value="{StaticResource NightOnAccent}" />
         </Style>
     </Window.Resources>
-    <Grid Background="{StaticResource NightBackground}">
+    <Grid IsEnabled="{Binding IsIdle}" Background="{StaticResource NightBackground}">
         <Rectangle Fill="{StaticResource NightGrid}" Opacity="0.6" IsHitTestVisible="False" />
         <Viewbox Style="{StaticResource ScreenViewboxStyle}">
             <Grid Width="1200" Height="820" Margin="0" TextOptions.TextFormattingMode="Display">

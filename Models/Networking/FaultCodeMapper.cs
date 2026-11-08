@@ -156,6 +156,9 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.ChatBlocked:
                 resultStatus = LobbyResultStatus.ChatBlocked;
                 break;
+            case GameServiceFaultCode.PlayerBanned:
+                resultStatus = LobbyResultStatus.PlayerBanned;
+                break;
             default:
                 resultStatus = LobbyResultStatus.ServerError;
                 break;

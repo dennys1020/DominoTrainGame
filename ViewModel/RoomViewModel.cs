@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,9 +12,8 @@ using DominoTrainGame.Client.ViewModel.Validation;
 
 namespace DominoTrainGame.Client.ViewModel;
 
-public sealed class RoomViewModel : ScreenViewModel
+public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
-    private const long NextVersionOffset = 1;
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayers = 2;
@@ -25,6 +23,7 @@ public sealed class RoomViewModel : ScreenViewModel
     private const string ChatMessageTooLongMessageKey = "ChatMessageTooLongMessage";
 
     private readonly IRemoteGameServices _gameServices;
+    private readonly ILobbyEvents _lobbyEvents;
     private readonly LocalizationViewModel _localization;
     private readonly Screen _previousScreen;
     private bool _canStartMatch;
@@ -34,7 +33,6 @@ public sealed class RoomViewModel : ScreenViewModel
     private int _maximumPlayers;
     private string _messageText = string.Empty;
     private string _chatNotice = string.Empty;
-    private long _version;
 
     public RoomViewModel(IWindowService windowService, RoomDependencies dependencies) : base(windowService)
     {
@@ -44,6 +42,7 @@ public sealed class RoomViewModel : ScreenViewModel
         }
 
         _gameServices = dependencies.GameServices;
+        _lobbyEvents = _gameServices.LobbyEvents;
         _localization = dependencies.Localization;
         InviteFriends = new InviteFriendsViewModel(windowService, dependencies);
 
@@ -55,12 +54,12 @@ public sealed class RoomViewModel : ScreenViewModel
         TryApplyCurrentLobby();
         _previousScreen = IsHost ? Screen.NewGame : Screen.JoinGame;
 
-        _gameServices.PlayerJoined += HandlePlayerJoined;
-        _gameServices.PlayerLeft += HandlePlayerLeft;
-        _gameServices.ConnectionStateChanged += HandleConnectionStateChanged;
-        _gameServices.PlayerReadyChanged += HandlePlayerReadyChanged;
-        _gameServices.LobbyMessageReceived += HandleLobbyMessageReceived;
-        _gameServices.MatchStarting += HandleMatchStarting;
+        _lobbyEvents.PlayerJoined += HandleRosterChanged;
+        _lobbyEvents.PlayerLeft += HandleRosterChanged;
+        _lobbyEvents.PlayerReadyChanged += HandleRosterChanged;
+        _lobbyEvents.ConnectionStateChanged += HandleConnectionStateChanged;
+        _lobbyEvents.LobbyMessageReceived += HandleLobbyMessageReceived;
+        _lobbyEvents.MatchStarting += HandleMatchStarting;
     }
 
     public bool IsReconnecting
@@ -174,6 +173,16 @@ public sealed class RoomViewModel : ScreenViewModel
 
     private RoomRole CurrentRole => IsHost ? RoomRole.Host : RoomRole.Guest;
 
+    public void Unsubscribe()
+    {
+        _lobbyEvents.PlayerJoined -= HandleRosterChanged;
+        _lobbyEvents.PlayerLeft -= HandleRosterChanged;
+        _lobbyEvents.PlayerReadyChanged -= HandleRosterChanged;
+        _lobbyEvents.ConnectionStateChanged -= HandleConnectionStateChanged;
+        _lobbyEvents.LobbyMessageReceived -= HandleLobbyMessageReceived;
+        _lobbyEvents.MatchStarting -= HandleMatchStarting;
+    }
+
     private bool TryApplyCurrentLobby()
     {
         LobbyResult currentLobby = _gameServices.CurrentLobby;
@@ -204,23 +213,12 @@ public sealed class RoomViewModel : ScreenViewModel
         LobbyCode = lobby.Code;
         MaximumPlayers = lobby.MaximumPlayers;
         IsHost = lobby.HostPlayerId == _gameServices.CurrentPlayerId;
-        _version = lobby.Version;
         RefreshStartAvailability();
     }
 
-    private void HandlePlayerJoined(object sender, PlayerJoinedEventArgs eventArgs)
+    private void HandleRosterChanged(object sender, EventArgs eventArgs)
     {
-        ApplyRosterChange(eventArgs.Version, () => AddPlayer(eventArgs.Player));
-    }
-
-    private void HandlePlayerLeft(object sender, PlayerLeftEventArgs eventArgs)
-    {
-        ApplyRosterChange(eventArgs.Version, () => RemovePlayer(eventArgs));
-    }
-
-    private void HandlePlayerReadyChanged(object sender, PlayerReadyChangedEventArgs eventArgs)
-    {
-        ApplyRosterChange(eventArgs.Version, () => UpdateReadyState(eventArgs));
+        TryApplyCurrentLobby();
     }
 
     private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs eventArgs)
@@ -241,7 +239,6 @@ public sealed class RoomViewModel : ScreenViewModel
 
         if (isCurrentLobby)
         {
-            UnsubscribeFromGameServices();
             WindowService.Navigate(Screen.Match, CurrentRole);
         }
     }
@@ -251,63 +248,6 @@ public sealed class RoomViewModel : ScreenViewModel
         bool hasMinimumPlayers = Players.Count >= MinimumPlayers;
         bool areAllPlayersReady = Players.All(player => player.IsReady);
         CanStartMatch = IsHost && hasMinimumPlayers && areAllPlayersReady;
-    }
-
-    private void ApplyRosterChange(long version, Action applyChange)
-    {
-        bool isNewerVersion = version > _version;
-        bool isNextVersion = version == _version + NextVersionOffset;
-
-        if (isNewerVersion && isNextVersion)
-        {
-            applyChange();
-            _version = version;
-            RefreshStartAvailability();
-        }
-        else if (isNewerVersion)
-        {
-            TryApplyCurrentLobby();
-        }
-    }
-
-    private void AddPlayer(LobbyPlayerResult player)
-    {
-        bool isAlreadyPresent = Players.Any(existingPlayer => existingPlayer.PlayerId == player.PlayerId);
-
-        if (!isAlreadyPresent)
-        {
-            Players.Add(new RoomPlayerViewModel(player, _gameServices.CurrentPlayerId));
-        }
-    }
-
-    private void RemovePlayer(PlayerLeftEventArgs departure)
-    {
-        List<RoomPlayerViewModel> departingPlayers = Players
-            .Where(player => player.PlayerId == departure.PlayerId)
-            .ToList();
-
-        foreach (RoomPlayerViewModel departingPlayer in departingPlayers)
-        {
-            Players.Remove(departingPlayer);
-        }
-
-        foreach (RoomPlayerViewModel player in Players)
-        {
-            player.IsHost = player.PlayerId == departure.HostPlayerId;
-        }
-
-        IsHost = departure.HostPlayerId == _gameServices.CurrentPlayerId;
-    }
-
-    private void UpdateReadyState(PlayerReadyChangedEventArgs change)
-    {
-        foreach (RoomPlayerViewModel player in Players)
-        {
-            if (player.PlayerId == change.PlayerId)
-            {
-                player.IsReady = change.IsReady;
-            }
-        }
     }
 
     private void HandleConnectionStateChanged(object sender, ConnectionStateChangedEventArgs eventArgs)
@@ -343,19 +283,8 @@ public sealed class RoomViewModel : ScreenViewModel
 
     private void ExitRoom(Screen destination, string messageKey)
     {
-        UnsubscribeFromGameServices();
         WindowService.ShowMessage(_localization[messageKey]);
         WindowService.Navigate(destination);
-    }
-
-    private void UnsubscribeFromGameServices()
-    {
-        _gameServices.PlayerJoined -= HandlePlayerJoined;
-        _gameServices.PlayerLeft -= HandlePlayerLeft;
-        _gameServices.ConnectionStateChanged -= HandleConnectionStateChanged;
-        _gameServices.PlayerReadyChanged -= HandlePlayerReadyChanged;
-        _gameServices.LobbyMessageReceived -= HandleLobbyMessageReceived;
-        _gameServices.MatchStarting -= HandleMatchStarting;
     }
 
     private async Task LeaveRoomAsync()
@@ -364,7 +293,6 @@ public sealed class RoomViewModel : ScreenViewModel
 
         if (result == LobbyResultStatus.Success)
         {
-            UnsubscribeFromGameServices();
             WindowService.Navigate(_previousScreen);
         }
     }
@@ -422,18 +350,7 @@ public sealed class RoomViewModel : ScreenViewModel
 
     private async Task<LobbyResultStatus> RunLobbyCommandAsync(Func<Task<LobbyResultStatus>> command)
     {
-        LobbyResultStatus result;
-        IsBusy = true;
-
-        try
-        {
-            result = await command();
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-
+        LobbyResultStatus result = await RunWhileBusyAsync(command);
         bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
 
         if (result != LobbyResultStatus.Success && !isChatSanction)

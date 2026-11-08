@@ -33,10 +33,4 @@ public sealed class PresenceUseCases : IPresenceUseCases
 
         return status;
     }
-
-    public bool TryFindLobby(int playerId, out LobbyState lobby)
-    {
-        bool wasFound = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out lobby);
-        return wasFound;
-    }
 }

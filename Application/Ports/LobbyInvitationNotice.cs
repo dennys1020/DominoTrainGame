@@ -5,7 +5,7 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public sealed class LobbyInvitationNotice
 {
-    public LobbyInvitationNotice(int recipientPlayerId, LobbyMember inviter, string code)
+    public LobbyInvitationNotice(int recipientPlayerId, PlayerIdentity inviter, string code)
     {
         RecipientPlayerId = recipientPlayerId;
         Inviter = inviter ?? throw new ArgumentNullException(nameof(inviter));
@@ -14,7 +14,7 @@ public sealed class LobbyInvitationNotice
 
     public int RecipientPlayerId { get; }
 
-    public LobbyMember Inviter { get; }
+    public PlayerIdentity Inviter { get; }
 
     public string Code { get; }
 }

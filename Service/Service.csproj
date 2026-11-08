@@ -55,6 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sessions\PlayerSession.cs" />
+    <Compile Include="Sessions\PlayerSessionEventArgs.cs" />
+    <Compile Include="Sessions\PlayerSessionManager.cs" />
+    <Compile Include="Sessions\PlayerSessionRegistry.cs" />
     <Compile Include="Contracts\IAuthenticationService.cs" />
     <Compile Include="Contracts\IConnectionService.cs" />
     <Compile Include="Contracts\IFriendService.cs" />
@@ -95,13 +99,7 @@
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
     <Compile Include="GameServices\FriendService.cs" />
     <Compile Include="GameServices\LobbyService.cs" />
-    <Compile Include="Sessions\ConnectedPlayer.cs" />
-    <Compile Include="Sessions\ConnectedPlayerRegistry.cs" />
-    <Compile Include="Sessions\SessionManager.cs" />
     <Compile Include="Sessions\SessionTokenRegistry.cs" />
-    <Compile Include="Sessions\SocialSession.cs" />
-    <Compile Include="Sessions\SocialSessionManager.cs" />
-    <Compile Include="Sessions\SocialSessionRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
