@@ -6,26 +6,6 @@ namespace DominoTrainGame.Client.Models.Networking;
 
 internal static class FriendResultMapper
 {
-    private static readonly IReadOnlyDictionary<GameServiceFaultCode, FriendResultStatus> _statusesByFaultCode;
-
-    static FriendResultMapper()
-    {
-        _statusesByFaultCode = new Dictionary<GameServiceFaultCode, FriendResultStatus>
-        {
-            [GameServiceFaultCode.InvalidInput] = FriendResultStatus.InvalidInput,
-            [GameServiceFaultCode.DatabaseUnavailable] = FriendResultStatus.DatabaseUnavailable,
-            [GameServiceFaultCode.SessionNotFound] = FriendResultStatus.SessionNotFound,
-            [GameServiceFaultCode.InvalidSessionToken] = FriendResultStatus.SessionNotFound,
-            [GameServiceFaultCode.PlayerNotFound] = FriendResultStatus.PlayerNotFound,
-            [GameServiceFaultCode.CannotTargetSelf] = FriendResultStatus.CannotTargetSelf,
-            [GameServiceFaultCode.AlreadyFriends] = FriendResultStatus.AlreadyFriends,
-            [GameServiceFaultCode.FriendRequestAlreadyExists] = FriendResultStatus.RequestAlreadyExists,
-            [GameServiceFaultCode.PlayerBlocked] = FriendResultStatus.PlayerBlocked,
-            [GameServiceFaultCode.FriendRequestNotFound] = FriendResultStatus.RequestNotFound,
-            [GameServiceFaultCode.NotFriends] = FriendResultStatus.NotFriends
-        };
-    }
-
     public static FriendResult ToFriendResult(FriendResponse response)
     {
         FriendStatus status = FriendStatusCodes.ToFriendStatus(response.Status);
@@ -56,14 +36,66 @@ internal static class FriendResultMapper
 
     public static PlayerSearchResult CreateFailedPlayerSearch(FriendResultStatus status)
     {
-        PlayerSearchResult result = new PlayerSearchResult(status, new List<FoundPlayerResult>());
+        PlayerSearchResult result = new PlayerSearchResult(status, new List<PlayerSummary>());
         return result;
     }
 
     public static FriendResultStatus MapFault(GameServiceFaultCode faultCode)
     {
-        bool isKnownFault = _statusesByFaultCode.TryGetValue(faultCode, out FriendResultStatus knownStatus);
-        FriendResultStatus status = isKnownFault ? knownStatus : FriendResultStatus.ServerError;
+        FriendResultStatus status;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.InvalidInput:
+                status = FriendResultStatus.InvalidInput;
+                break;
+            case GameServiceFaultCode.DatabaseUnavailable:
+                status = FriendResultStatus.DatabaseUnavailable;
+                break;
+            case GameServiceFaultCode.SessionNotFound:
+            case GameServiceFaultCode.InvalidSessionToken:
+                status = FriendResultStatus.SessionNotFound;
+                break;
+            case GameServiceFaultCode.PlayerNotFound:
+                status = FriendResultStatus.PlayerNotFound;
+                break;
+            default:
+                status = MapFriendshipFault(faultCode);
+                break;
+        }
+
+        return status;
+    }
+
+    private static FriendResultStatus MapFriendshipFault(GameServiceFaultCode faultCode)
+    {
+        FriendResultStatus status;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.CannotTargetSelf:
+                status = FriendResultStatus.CannotTargetSelf;
+                break;
+            case GameServiceFaultCode.AlreadyFriends:
+                status = FriendResultStatus.AlreadyFriends;
+                break;
+            case GameServiceFaultCode.FriendRequestAlreadyExists:
+                status = FriendResultStatus.RequestAlreadyExists;
+                break;
+            case GameServiceFaultCode.PlayerBlocked:
+                status = FriendResultStatus.PlayerBlocked;
+                break;
+            case GameServiceFaultCode.FriendRequestNotFound:
+                status = FriendResultStatus.RequestNotFound;
+                break;
+            case GameServiceFaultCode.NotFriends:
+                status = FriendResultStatus.NotFriends;
+                break;
+            default:
+                status = FriendResultStatus.ServerError;
+                break;
+        }
+
         return status;
     }
 }

@@ -22,27 +22,37 @@ public sealed partial class App : Application
         base.OnStartup(eventArgs);
 
         GameChannelCloser channelCloser = new GameChannelCloser();
-        IRemoteGameServices gameServices = CreateGameServices(channelCloser);
-        ISocialConnectionFactory socialConnectionFactory = new SocialConnectionFactory();
+        IGameConnectionFactory connectionFactory = new GameConnectionFactory();
+        IRemoteGameServices gameServices = CreateGameServices(connectionFactory, channelCloser);
+        SocialClientCallback socialCallback = new SocialClientCallback();
         IRemoteSocialServices socialServices = new RemoteSocialServices(
-            socialConnectionFactory,
+            connectionFactory,
             channelCloser,
-            gameServices);
+            gameServices,
+            socialCallback);
         LocalizationViewModel localization = LocalizationViewModel.Instance;
         WindowFactory windowFactory = new WindowFactory(gameServices, socialServices, localization);
 
         ShowLoginWindow(windowFactory);
     }
 
-    private static IRemoteGameServices CreateGameServices(GameChannelCloser channelCloser)
+    private static IRemoteGameServices CreateGameServices(
+        IGameConnectionFactory connectionFactory,
+        GameChannelCloser channelCloser)
     {
-        IGameConnectionFactory connectionFactory = new GameConnectionFactory();
         ClientSession clientSession = new ClientSession();
         GameClientCallback lobbyCallback = new GameClientCallback(clientSession);
-        LobbySessionContext sessionContext = new LobbySessionContext(clientSession, lobbyCallback);
-        AccountRequests accountRequests = new AccountRequests(connectionFactory, channelCloser);
-        LobbyChannel lobbyChannel = new LobbyChannel(connectionFactory, channelCloser, sessionContext);
-        IRemoteGameServices gameServices = new RemoteGameServices(accountRequests, lobbyChannel, sessionContext);
+        LobbyChannel lobbyChannel = new LobbyChannel(connectionFactory, channelCloser, clientSession, lobbyCallback);
+        AccountRequests accountRequests = new AccountRequests(
+            connectionFactory,
+            channelCloser,
+            clientSession,
+            lobbyChannel);
+        IRemoteGameServices gameServices = new RemoteGameServices(
+            accountRequests,
+            lobbyChannel,
+            clientSession,
+            lobbyCallback);
         return gameServices;
     }
 

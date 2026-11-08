@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DominoTrainGame.Client.Models.Contracts;
 
 namespace DominoTrainGame.Client.ViewModel.Localization;
@@ -18,30 +17,64 @@ public static class FriendResultMessageKeys
     private const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     private const string ServerErrorMessageKey = "FriendServerErrorMessage";
 
-    private static readonly IReadOnlyDictionary<FriendResultStatus, string> _messageKeysByStatus;
-
-    static FriendResultMessageKeys()
-    {
-        _messageKeysByStatus = new Dictionary<FriendResultStatus, string>
-        {
-            [FriendResultStatus.InvalidInput] = InvalidInputMessageKey,
-            [FriendResultStatus.PlayerNotFound] = PlayerNotFoundMessageKey,
-            [FriendResultStatus.CannotTargetSelf] = CannotTargetSelfMessageKey,
-            [FriendResultStatus.AlreadyFriends] = AlreadyFriendsMessageKey,
-            [FriendResultStatus.RequestAlreadyExists] = RequestAlreadyExistsMessageKey,
-            [FriendResultStatus.PlayerBlocked] = PlayerBlockedMessageKey,
-            [FriendResultStatus.RequestNotFound] = RequestNotFoundMessageKey,
-            [FriendResultStatus.NotFriends] = NotFriendsMessageKey,
-            [FriendResultStatus.SessionNotFound] = SessionExpiredMessageKey,
-            [FriendResultStatus.DatabaseUnavailable] = DatabaseErrorMessageKey,
-            [FriendResultStatus.ServerUnavailable] = ServerUnavailableMessageKey
-        };
-    }
-
     public static string GetMessageKey(FriendResultStatus status)
     {
-        bool hasMessageKey = _messageKeysByStatus.TryGetValue(status, out string knownMessageKey);
-        string messageKey = hasMessageKey ? knownMessageKey : ServerErrorMessageKey;
+        string messageKey;
+
+        switch (status)
+        {
+            case FriendResultStatus.InvalidInput:
+                messageKey = InvalidInputMessageKey;
+                break;
+            case FriendResultStatus.SessionNotFound:
+                messageKey = SessionExpiredMessageKey;
+                break;
+            case FriendResultStatus.DatabaseUnavailable:
+                messageKey = DatabaseErrorMessageKey;
+                break;
+            case FriendResultStatus.ServerUnavailable:
+                messageKey = ServerUnavailableMessageKey;
+                break;
+            default:
+                messageKey = GetFriendshipMessageKey(status);
+                break;
+        }
+
+        return messageKey;
+    }
+
+    private static string GetFriendshipMessageKey(FriendResultStatus status)
+    {
+        string messageKey;
+
+        switch (status)
+        {
+            case FriendResultStatus.PlayerNotFound:
+                messageKey = PlayerNotFoundMessageKey;
+                break;
+            case FriendResultStatus.CannotTargetSelf:
+                messageKey = CannotTargetSelfMessageKey;
+                break;
+            case FriendResultStatus.AlreadyFriends:
+                messageKey = AlreadyFriendsMessageKey;
+                break;
+            case FriendResultStatus.RequestAlreadyExists:
+                messageKey = RequestAlreadyExistsMessageKey;
+                break;
+            case FriendResultStatus.PlayerBlocked:
+                messageKey = PlayerBlockedMessageKey;
+                break;
+            case FriendResultStatus.RequestNotFound:
+                messageKey = RequestNotFoundMessageKey;
+                break;
+            case FriendResultStatus.NotFriends:
+                messageKey = NotFriendsMessageKey;
+                break;
+            default:
+                messageKey = ServerErrorMessageKey;
+                break;
+        }
+
         return messageKey;
     }
 }

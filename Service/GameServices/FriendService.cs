@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
-using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
@@ -18,22 +16,18 @@ namespace DominoTrainGame.Server.Service.Implementation;
 [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 public sealed class FriendService : IFriendService
 {
-    private static readonly ITraceLog _logger;
-
     private readonly IFriendUseCases _friendUseCases;
     private readonly PlayerSessionManager<ISocialClientCallback> _socialSessionManager;
-
-    static FriendService()
-    {
-        _logger = TraceLogManager.GetLogger(typeof(FriendService));
-    }
+    private readonly ServiceFaultTranslator _faultTranslator;
 
     public FriendService(
         IFriendUseCases friendUseCases,
-        PlayerSessionManager<ISocialClientCallback> socialSessionManager)
+        PlayerSessionManager<ISocialClientCallback> socialSessionManager,
+        ServiceFaultTranslator faultTranslator)
     {
         _friendUseCases = friendUseCases ?? throw new ArgumentNullException(nameof(friendUseCases));
         _socialSessionManager = socialSessionManager ?? throw new ArgumentNullException(nameof(socialSessionManager));
+        _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
     public void ConnectFriends(ConnectRequest request)
@@ -62,7 +56,7 @@ public sealed class FriendService : IFriendService
     public List<PlayerSearchResponse> SearchPlayers(PlayerSearchRequest request)
     {
         string usernameFragment = request?.UsernameFragment ?? string.Empty;
-        IReadOnlyList<FriendSummary> players = ExecuteForCaller(
+        IReadOnlyList<PlayerIdentity> players = ExecuteForCaller(
             playerId => _friendUseCases.SearchPlayers(playerId, usernameFragment));
         List<PlayerSearchResponse> response = players.Select(ToPlayerSearchResponse).ToList();
 
@@ -139,7 +133,7 @@ public sealed class FriendService : IFriendService
         return response;
     }
 
-    private static PlayerSearchResponse ToPlayerSearchResponse(FriendSummary player)
+    private static PlayerSearchResponse ToPlayerSearchResponse(PlayerIdentity player)
     {
         PlayerSearchResponse response = new PlayerSearchResponse
         {
@@ -202,23 +196,7 @@ public sealed class FriendService : IFriendService
     private TResult ExecuteForCaller<TResult>(Func<int, TResult> operation)
     {
         int playerId = _socialSessionManager.ResolveCaller().PlayerId;
-        TResult result;
-
-        try
-        {
-            result = operation(playerId);
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn("A friends request was rejected because its input is invalid.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            _logger.Error("A friends request failed because the database is unavailable.", exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
-        }
-
+        TResult result = _faultTranslator.Execute(() => operation(playerId), GameServiceFaultCode.InvalidInput);
         return result;
     }
 }

@@ -4,13 +4,13 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class LobbyPlayerResult
 {
-    public LobbyPlayerResult(LobbyMember member, bool isReady)
+    public LobbyPlayerResult(PlayerSummary member, bool isReady)
     {
         Member = member ?? throw new ArgumentNullException(nameof(member));
         IsReady = isReady;
     }
 
-    public LobbyMember Member { get; }
+    public PlayerSummary Member { get; }
 
     public int PlayerId => Member.PlayerId;
 

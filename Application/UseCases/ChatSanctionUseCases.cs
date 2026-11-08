@@ -52,7 +52,7 @@ public sealed class ChatSanctionUseCases : IChatSanctionUseCases
     public ChatInfractionStatus RegisterInfraction(int playerId)
     {
         int infractionCount = _infractionRegistry.Add(playerId);
-        ChatInfractionStatus status = ChatInfractionStatus.Counted;
+        ChatInfractionStatus status = ChatInfractionStatus.Success;
 
         if (infractionCount >= SanctionThreshold)
         {

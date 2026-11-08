@@ -15,20 +15,16 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
     private readonly IWindowService _windowService;
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteSocialServices _socialServices;
-    private readonly LocalizationViewModel _localization;
     private bool _isOpen;
 
-    public InviteFriendsViewModel(IWindowService windowService, RoomDependencies dependencies)
+    public InviteFriendsViewModel(
+        IWindowService windowService,
+        IRemoteGameServices gameServices,
+        IRemoteSocialServices socialServices)
     {
-        if (dependencies == null)
-        {
-            throw new ArgumentNullException(nameof(dependencies));
-        }
-
         _windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
-        _gameServices = dependencies.GameServices;
-        _socialServices = dependencies.SocialServices;
-        _localization = dependencies.Localization;
+        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
         OpenCommand = new AsyncRelayCommand(OpenAsync);
     }
@@ -61,7 +57,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
         }
         else
         {
-            ShowMessage(FriendResultMessageKeys.GetMessageKey(friendsResult.Status));
+            _windowService.ShowMessage(FriendResultMessageKeys.GetMessageKey(friendsResult.Status));
         }
     }
 
@@ -86,12 +82,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
         else
         {
             IsOpen = false;
-            ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
+            _windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
         }
-    }
-
-    private void ShowMessage(string messageKey)
-    {
-        _windowService.ShowMessage(_localization[messageKey]);
     }
 }

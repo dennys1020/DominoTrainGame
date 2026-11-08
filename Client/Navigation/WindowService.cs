@@ -27,12 +27,6 @@ internal sealed class WindowService : IWindowService
         ReplaceCurrentWindow(nextWindow);
     }
 
-    public void Navigate(Screen screen, RoomRole roomRole)
-    {
-        Window nextWindow = _windowFactory.Create(screen, roomRole);
-        ReplaceCurrentWindow(nextWindow);
-    }
-
     public void ShowDialog(Screen screen)
     {
         Window dialog = _windowFactory.CreateDialog(screen);
@@ -43,9 +37,10 @@ internal sealed class WindowService : IWindowService
         dialog.ShowDialog();
     }
 
-    public void ShowMessage(string message)
+    public void ShowMessage(string messageKey)
     {
         string title = _localization[MessageTitleKey];
+        string message = _localization[messageKey];
         MessageBox.Show(_window, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
     }
 

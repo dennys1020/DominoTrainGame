@@ -12,16 +12,13 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class JoinGameViewModel : ScreenViewModel
 {
     private readonly IRemoteGameServices _gameServices;
-    private readonly LocalizationViewModel _localization;
     private string _lobbyCode;
 
     public JoinGameViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices,
-        LocalizationViewModel localization) : base(windowService)
+        IRemoteGameServices gameServices) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
-        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _lobbyCode = string.Empty;
         BackCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
         RoomCommand = new AsyncRelayCommand(JoinLobbyAsync);
@@ -53,7 +50,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result.Status)]);
+            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result.Status));
         }
     }
 }

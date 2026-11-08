@@ -33,7 +33,7 @@ public sealed class LobbyRegistry
 
         lock (_lobbiesLock)
         {
-            if (!ContainsPlayer(host.PlayerId))
+            if (!TryFindLobby(host.PlayerId, out LobbyState _))
             {
                 lobbyState = AddLobby(host);
                 wasCreated = true;
@@ -140,7 +140,7 @@ public sealed class LobbyRegistry
         JoinLobbyStatus status = JoinLobbyStatus.Success;
         bool wasFound = _lobbiesByCode.TryGetValue(code, out LobbyState currentLobby);
 
-        if (ContainsPlayer(member.PlayerId))
+        if (TryFindLobby(member.PlayerId, out LobbyState _))
         {
             status = JoinLobbyStatus.AlreadyInLobby;
         }
@@ -185,26 +185,12 @@ public sealed class LobbyRegistry
         return code;
     }
 
-    private bool ContainsPlayer(int playerId)
-    {
-        bool isPresent = _lobbiesByCode.Values.Any(lobby => lobby.Roster.Contains(playerId));
-        return isPresent;
-    }
-
     private bool TryFindLobby(int playerId, out LobbyState lobby)
     {
-        lobby = LobbyState.Empty;
-        bool wasFound = false;
+        LobbyState foundLobby = _lobbiesByCode.Values.FirstOrDefault(candidate => candidate.Roster.Contains(playerId));
+        bool wasFound = foundLobby != null;
 
-        foreach (LobbyState candidate in _lobbiesByCode.Values)
-        {
-            if (!wasFound && candidate.Roster.Contains(playerId))
-            {
-                lobby = candidate;
-                wasFound = true;
-            }
-        }
-
+        lobby = foundLobby ?? LobbyState.Empty;
         return wasFound;
     }
 }

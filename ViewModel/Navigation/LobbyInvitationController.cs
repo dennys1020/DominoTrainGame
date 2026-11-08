@@ -66,7 +66,7 @@ public sealed class LobbyInvitationController
         }
         else
         {
-            windowService.ShowMessage(_localization[LobbyResultMessageKeys.GetMessageKey(result.Status)]);
+            windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result.Status));
         }
     }
 }

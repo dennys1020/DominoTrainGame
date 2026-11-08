@@ -7,7 +7,7 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class PlayerSearchItemViewModel
 {
-    public PlayerSearchItemViewModel(FoundPlayerResult player, Func<FoundPlayerResult, Task> sendRequest)
+    public PlayerSearchItemViewModel(PlayerSummary player, Func<PlayerSummary, Task> sendRequest)
     {
         if (player == null)
         {

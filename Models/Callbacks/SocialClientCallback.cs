@@ -8,7 +8,7 @@ using DominoTrainGame.Client.Models.Networking;
 namespace DominoTrainGame.Client.Models.Callbacks;
 
 [CallbackBehavior(UseSynchronizationContext = true, ConcurrencyMode = ConcurrencyMode.Multiple)]
-public sealed class SocialClientCallback : IFriendServiceCallback
+public sealed class SocialClientCallback : IFriendServiceCallback, IFriendEvents
 {
     private static readonly ITraceLog _logger;
 

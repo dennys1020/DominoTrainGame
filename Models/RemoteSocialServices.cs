@@ -15,7 +15,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
 {
     private static readonly ITraceLog _logger;
 
-    private readonly ISocialConnectionFactory _connectionFactory;
+    private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
     private readonly IRemoteGameServices _gameServices;
     private readonly object _clientSyncRoot;
@@ -29,21 +29,20 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     }
 
     public RemoteSocialServices(
-        ISocialConnectionFactory connectionFactory,
+        IGameConnectionFactory connectionFactory,
         GameChannelCloser channelCloser,
-        IRemoteGameServices gameServices)
+        IRemoteGameServices gameServices,
+        SocialClientCallback callback)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _clientSyncRoot = new object();
         _connectedSessionToken = string.Empty;
-        _callback = CreateCallback();
+        _callback = callback ?? throw new ArgumentNullException(nameof(callback));
     }
 
-    public event EventHandler<FriendStatusChangedEventArgs> FriendStatusChanged;
-
-    public event EventHandler<EventArgs> FriendsChanged;
+    public IFriendEvents FriendEvents => _callback;
 
     public async Task<FriendResultStatus> ConnectAsync()
     {
@@ -163,8 +162,8 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     {
         IEnumerable<PlayerSearchResponse> responses =
             await friendClient.SearchPlayersAsync(request).ConfigureAwait(false);
-        List<FoundPlayerResult> players = (responses ?? Enumerable.Empty<PlayerSearchResponse>())
-            .Select(response => new FoundPlayerResult(response.PlayerId, response.Username))
+        List<PlayerSummary> players = (responses ?? Enumerable.Empty<PlayerSearchResponse>())
+            .Select(response => new PlayerSummary(response.PlayerId, response.Username))
             .ToList();
         PlayerSearchResult result = new PlayerSearchResult(FriendResultStatus.Success, players);
 
@@ -337,33 +336,5 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
             _logger.Warn("The friends channel ended. It will be opened again on the next friends request.");
             _channelCloser.Close(endedClient);
         }
-    }
-
-    private SocialClientCallback CreateCallback()
-    {
-        SocialClientCallback callback = new SocialClientCallback();
-        callback.FriendStatusChanged += HandleFriendStatusChanged;
-        callback.FriendsChanged += HandleFriendsChanged;
-        return callback;
-    }
-
-    private void HandleFriendStatusChanged(object sender, FriendStatusChangedEventArgs eventArgs)
-    {
-        OnFriendStatusChanged(eventArgs);
-    }
-
-    private void HandleFriendsChanged(object sender, EventArgs eventArgs)
-    {
-        OnFriendsChanged(eventArgs);
-    }
-
-    private void OnFriendStatusChanged(FriendStatusChangedEventArgs eventArgs)
-    {
-        FriendStatusChanged?.Invoke(this, eventArgs);
-    }
-
-    private void OnFriendsChanged(EventArgs eventArgs)
-    {
-        FriendsChanged?.Invoke(this, eventArgs);
     }
 }

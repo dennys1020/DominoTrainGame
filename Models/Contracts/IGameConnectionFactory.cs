@@ -10,4 +10,6 @@ public interface IGameConnectionFactory
     AuthenticationServiceClient CreateAuthenticationClient();
 
     LobbyServiceClient CreateLobbyClient(GameClientCallback callback);
+
+    FriendServiceClient CreateFriendClient(SocialClientCallback callback);
 }

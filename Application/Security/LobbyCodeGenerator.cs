@@ -33,7 +33,7 @@ public sealed class LobbyCodeGenerator : ILobbyCodeGenerator
     public bool IsValid(string code)
     {
         bool isValidCode = true;
-        string normalizedCode = code?.Trim().ToUpperInvariant() ?? string.Empty;
+        string normalizedCode = code ?? string.Empty;
         bool hasValidLength = normalizedCode.Length == CodeLength;
 
         if (!hasValidLength)

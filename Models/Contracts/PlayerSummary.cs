@@ -1,8 +1,8 @@
 namespace DominoTrainGame.Client.Models.Contracts;
 
-public sealed class FoundPlayerResult
+public sealed class PlayerSummary
 {
-    public FoundPlayerResult(int playerId, string username)
+    public PlayerSummary(int playerId, string username)
     {
         PlayerId = playerId;
         Username = username ?? string.Empty;

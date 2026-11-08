@@ -2,7 +2,7 @@ namespace DominoTrainGame.Server.Application.Results;
 
 public enum ChatInfractionStatus
 {
-    Counted,
+    Success,
     Warned,
     ChatBlocked,
     GameBanned

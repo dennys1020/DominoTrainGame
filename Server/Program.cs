@@ -108,7 +108,8 @@ internal static class Program
     {
         using (ManualResetEventSlim stopSignal = new ManualResetEventSlim())
         {
-            ConsoleCancelEventHandler cancelKeyPressHandler = (sender, eventArgs) => RequestStop(eventArgs, stopSignal);
+            ConsoleCancelEventHandler cancelKeyPressHandler =
+                (sender, eventArgs) => RequestStop(eventArgs, stopSignal);
 
             Console.CancelKeyPress += cancelKeyPressHandler;
             _logger.Info("Domino Train server is running. Press Ctrl+C to stop it.");

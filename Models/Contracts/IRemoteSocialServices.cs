@@ -1,13 +1,10 @@
-using System;
 using System.Threading.Tasks;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
 public interface IRemoteSocialServices
 {
-    event EventHandler<FriendStatusChangedEventArgs> FriendStatusChanged;
-
-    event EventHandler<EventArgs> FriendsChanged;
+    IFriendEvents FriendEvents { get; }
 
     Task<FriendResultStatus> ConnectAsync();
 

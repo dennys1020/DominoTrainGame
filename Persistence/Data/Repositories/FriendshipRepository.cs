@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Persistence.Data.Repositories;
@@ -35,9 +36,9 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return isFound;
     }
 
-    public IReadOnlyList<FriendSummary> GetFriends(int playerId)
+    public IReadOnlyList<PlayerIdentity> GetFriends(int playerId)
     {
-        List<FriendSummary> friends = _databaseExecutor.Execute(
+        List<PlayerIdentity> friends = _databaseExecutor.Execute(
             context => FindFriends(context, playerId));
         return friends;
     }
@@ -49,10 +50,10 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return friendRequests;
     }
 
-    public IReadOnlyList<FriendSummary> SearchRegisteredPlayers(int playerId, string usernameFragment)
+    public IReadOnlyList<PlayerIdentity> SearchRegisteredPlayers(int playerId, string usernameFragment)
     {
         string normalizedFragment = usernameFragment ?? string.Empty;
-        List<FriendSummary> players = _databaseExecutor.Execute(
+        List<PlayerIdentity> players = _databaseExecutor.Execute(
             context => FindPlayersByUsername(context, playerId, normalizedFragment));
         return players;
     }
@@ -112,12 +113,12 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return playerIds;
     }
 
-    private static List<FriendSummary> FindPlayersByUsername(
+    private static List<PlayerIdentity> FindPlayersByUsername(
         DominoGameDBEntities context,
         int playerId,
         string usernameFragment)
     {
-        List<FriendSummary> players = context.Players
+        List<PlayerIdentity> players = context.Players
             .AsNoTracking()
             .Where(player => player.IsGuest == RegisteredPlayerFlag && player.PlayerId != playerId)
             .Where(player => player.Username.Contains(usernameFragment))
@@ -125,12 +126,12 @@ public sealed class FriendshipRepository : IFriendshipRepository
             .Take(MaximumSearchResults)
             .Select(player => new { player.PlayerId, player.Username })
             .AsEnumerable()
-            .Select(row => new FriendSummary(row.PlayerId, row.Username))
+            .Select(row => new PlayerIdentity(row.PlayerId, row.Username))
             .ToList();
         return players;
     }
 
-    private static List<FriendSummary> FindFriends(DominoGameDBEntities context, int playerId)
+    private static List<PlayerIdentity> FindFriends(DominoGameDBEntities context, int playerId)
     {
         IQueryable<FriendshipRequest> acceptedRequests = context.FriendshipRequests
             .AsNoTracking()
@@ -143,12 +144,12 @@ public sealed class FriendshipRepository : IFriendshipRepository
             .Where(request => request.AddresseePlayerId == playerId)
             .Select(request => request.Player1);
 
-        List<FriendSummary> friends = friendsAddedByPlayer
+        List<PlayerIdentity> friends = friendsAddedByPlayer
             .Concat(friendsWhoAddedPlayer)
             .OrderBy(friend => friend.Username)
             .Select(friend => new { friend.PlayerId, friend.Username })
             .AsEnumerable()
-            .Select(row => new FriendSummary(row.PlayerId, row.Username))
+            .Select(row => new PlayerIdentity(row.PlayerId, row.Username))
             .ToList();
         return friends;
     }

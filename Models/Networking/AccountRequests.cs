@@ -1,5 +1,6 @@
 using System;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models.Contracts;
@@ -20,6 +21,8 @@ public sealed class AccountRequests
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
+    private readonly ClientSession _session;
+    private readonly LobbyChannel _lobbyChannel;
 
     static AccountRequests()
     {
@@ -38,10 +41,16 @@ public sealed class AccountRequests
             SignUpResult.ServerUnavailable);
     }
 
-    public AccountRequests(IGameConnectionFactory connectionFactory, GameChannelCloser channelCloser)
+    public AccountRequests(
+        IGameConnectionFactory connectionFactory,
+        GameChannelCloser channelCloser,
+        ClientSession session,
+        LobbyChannel lobbyChannel)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _channelCloser = channelCloser ?? throw new ArgumentNullException(nameof(channelCloser));
+        _session = session ?? throw new ArgumentNullException(nameof(session));
+        _lobbyChannel = lobbyChannel ?? throw new ArgumentNullException(nameof(lobbyChannel));
     }
 
     public async Task<ConnectionCheckResult> CheckConnectionAsync()
@@ -62,38 +71,20 @@ public sealed class AccountRequests
         return signUpResult;
     }
 
-    public Task<LoginResult> RunLogInAsync(Func<Task<LoginResult>> logIn)
+    public async Task<LoginResult> LogInAsync(string identifier, string password)
     {
-        if (logIn == null)
+        SynchronizationContext callerContext = SynchronizationContext.Current;
+        LoginResult loginResult = await SendServiceRequestAsync(
+            () => AuthenticateAsync(identifier, password, callerContext),
+            _loginFailures,
+            LoginOperationName);
+
+        if (loginResult != LoginResult.Success)
         {
-            throw new ArgumentNullException(nameof(logIn));
+            _session.Forget();
         }
 
-        Task<LoginResult> loginTask = SendServiceRequestAsync(logIn, _loginFailures, LoginOperationName);
-        return loginTask;
-    }
-
-    public async Task<LoginResponse> SendLogInAsync(string identifier, string password)
-    {
-        AuthenticationServiceClient authenticationClient = _connectionFactory.CreateAuthenticationClient();
-        LoginResponse response;
-
-        try
-        {
-            LoginRequest request = new LoginRequest
-            {
-                Identifier = identifier,
-                Password = password
-            };
-
-            response = await authenticationClient.LogInAsync(request).ConfigureAwait(false);
-        }
-        finally
-        {
-            _channelCloser.Close(authenticationClient);
-        }
-
-        return response;
+        return loginResult;
     }
 
     private static async Task<TResult> SendServiceRequestAsync<TResult>(
@@ -137,6 +128,48 @@ public sealed class AccountRequests
         }
 
         return result;
+    }
+
+    private async Task<LoginResult> AuthenticateAsync(
+        string identifier,
+        string password,
+        SynchronizationContext callerContext)
+    {
+        LoginResult loginResult = LoginResult.InvalidCredentials;
+        LoginResponse response = await SendLogInAsync(identifier, password);
+        bool isAuthenticated = response?.IsAuthenticated ?? false;
+
+        if (isAuthenticated)
+        {
+            _session.Store(response.PlayerId, response.SessionToken, callerContext);
+            await _lobbyChannel.OpenAsync(response.SessionToken);
+            loginResult = LoginResult.Success;
+        }
+
+        return loginResult;
+    }
+
+    private async Task<LoginResponse> SendLogInAsync(string identifier, string password)
+    {
+        AuthenticationServiceClient authenticationClient = _connectionFactory.CreateAuthenticationClient();
+        LoginResponse response;
+
+        try
+        {
+            LoginRequest request = new LoginRequest
+            {
+                Identifier = identifier,
+                Password = password
+            };
+
+            response = await authenticationClient.LogInAsync(request).ConfigureAwait(false);
+        }
+        finally
+        {
+            _channelCloser.Close(authenticationClient);
+        }
+
+        return response;
     }
 
     private async Task<ConnectionCheckResult> SendCheckConnectionAsync()

@@ -27,6 +27,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
+    private readonly AsyncRelayCommand _searchCommand;
     private bool _isFriendsSelected;
     private bool _isRequestsSelected;
     private string _friendUsername;
@@ -50,9 +51,9 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
         AddFriendCommand = new AsyncRelayCommand(SendFriendRequestAsync);
         RefreshCommand = new AsyncRelayCommand(RefreshAsync);
-        SearchCommand = new AsyncRelayCommand(SearchPlayersAsync);
-        _socialServices.FriendStatusChanged += HandleFriendStatusChanged;
-        _socialServices.FriendsChanged += HandleFriendsChanged;
+        _searchCommand = new AsyncRelayCommand(SearchPlayersAsync);
+        _socialServices.FriendEvents.FriendStatusChanged += HandleFriendStatusChanged;
+        _socialServices.FriendEvents.FriendsChanged += HandleFriendsChanged;
         RefreshCommand.Execute(null);
     }
 
@@ -122,12 +123,10 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     public AsyncRelayCommand RefreshCommand { get; }
 
-    public AsyncRelayCommand SearchCommand { get; }
-
     public void Unsubscribe()
     {
-        _socialServices.FriendStatusChanged -= HandleFriendStatusChanged;
-        _socialServices.FriendsChanged -= HandleFriendsChanged;
+        _socialServices.FriendEvents.FriendStatusChanged -= HandleFriendStatusChanged;
+        _socialServices.FriendEvents.FriendsChanged -= HandleFriendsChanged;
         _searchCancellation.Cancel();
     }
 
@@ -206,12 +205,13 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         if (inputStatus == FriendUsernameInputStatus.Valid)
         {
             string username = FriendUsernameInputValidator.Normalize(FriendUsername);
-            FriendResultStatus status = await RunWhileBusyAsync(() => _socialServices.SendFriendRequestAsync(username));
+            FriendResultStatus status = await RunWhileBusyAsync(
+                () => _socialServices.SendFriendRequestAsync(username));
             ShowSendResult(status);
         }
         else
         {
-            WindowService.ShowMessage(_localization[FriendUsernameInputMessageKeys.GetMessageKey(inputStatus)]);
+            WindowService.ShowMessage(FriendUsernameInputMessageKeys.GetMessageKey(inputStatus));
         }
     }
 
@@ -220,7 +220,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         _searchCancellation.Cancel();
         _searchCancellation.Dispose();
         _searchCancellation = new CancellationTokenSource();
-        SearchCommand.Execute(null);
+        _searchCommand.Execute(null);
     }
 
     private async Task SearchPlayersAsync()
@@ -251,7 +251,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         {
             SearchResults.Clear();
 
-            foreach (FoundPlayerResult player in searchResult.Players)
+            foreach (PlayerSummary player in searchResult.Players)
             {
                 SearchResults.Add(new PlayerSearchItemViewModel(player, SendRequestToPlayerAsync));
             }
@@ -266,7 +266,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         OnPropertyChanged(nameof(HasSearchResults));
     }
 
-    private async Task SendRequestToPlayerAsync(FoundPlayerResult player)
+    private async Task SendRequestToPlayerAsync(PlayerSummary player)
     {
         FriendResultStatus status = await RunWhileBusyAsync(
             () => _socialServices.SendFriendRequestAsync(player.Username));
@@ -278,7 +278,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         if (status == FriendResultStatus.Success)
         {
             FriendUsername = string.Empty;
-            WindowService.ShowMessage(_localization[FriendRequestSentMessageKey]);
+            WindowService.ShowMessage(FriendRequestSentMessageKey);
         }
         else
         {
@@ -310,7 +310,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
     {
         if (status == FriendResultStatus.Success)
         {
-            WindowService.ShowMessage(_localization[successMessageKey]);
+            WindowService.ShowMessage(successMessageKey);
         }
         else
         {
@@ -322,6 +322,6 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ShowFailure(FriendResultStatus status)
     {
-        WindowService.ShowMessage(_localization[FriendResultMessageKeys.GetMessageKey(status)]);
+        WindowService.ShowMessage(FriendResultMessageKeys.GetMessageKey(status));
     }
 }
