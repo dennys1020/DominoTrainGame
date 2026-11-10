@@ -661,4 +661,70 @@ on the train</value>
   <data name="ViewResultsButtonLabel" xml:space="preserve">
     <value>View results</value>
   </data>
+  <data name="MatchBoneyardLabel" xml:space="preserve">
+    <value>Boneyard</value>
+  </data>
+  <data name="MatchEngineLabel" xml:space="preserve">
+    <value>Engine</value>
+  </data>
+  <data name="MatchMexicanTrainLabel" xml:space="preserve">
+    <value>Mexican Train</value>
+  </data>
+  <data name="MatchOpenTrainLabel" xml:space="preserve">
+    <value>Open to everyone</value>
+  </data>
+  <data name="MatchPlayHereButtonLabel" xml:space="preserve">
+    <value>Play here</value>
+  </data>
+  <data name="MatchYourTurnLabel" xml:space="preserve">
+    <value>Your turn!</value>
+  </data>
+  <data name="MatchTurnOfLabel" xml:space="preserve">
+    <value>Turn of:</value>
+  </data>
+  <data name="MatchTilesLabel" xml:space="preserve">
+    <value>Tiles:</value>
+  </data>
+  <data name="MatchHandLabel" xml:space="preserve">
+    <value>Your hand</value>
+  </data>
+  <data name="MatchDrawButtonLabel" xml:space="preserve">
+    <value>Draw tile</value>
+  </data>
+  <data name="MatchPassButtonLabel" xml:space="preserve">
+    <value>Pass</value>
+  </data>
+  <data name="MatchLeaveButtonLabel" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="MatchTileNotSelectedMessage" xml:space="preserve">
+    <value>Select a tile from your hand first.</value>
+  </data>
+  <data name="MatchBoneyardEmptyMessage" xml:space="preserve">
+    <value>The boneyard is empty. Pass your turn.</value>
+  </data>
+  <data name="MatchNotFoundMessage" xml:space="preserve">
+    <value>The match is no longer available.</value>
+  </data>
+  <data name="MatchNotYourTurnMessage" xml:space="preserve">
+    <value>Wait for your turn.</value>
+  </data>
+  <data name="MatchTileNotInHandMessage" xml:space="preserve">
+    <value>That tile is not in your hand.</value>
+  </data>
+  <data name="MatchTileDoesNotMatchMessage" xml:space="preserve">
+    <value>The tile does not match the end of the train.</value>
+  </data>
+  <data name="MatchTrainNotAvailableMessage" xml:space="preserve">
+    <value>That train is not available to you.</value>
+  </data>
+  <data name="MatchAlreadyDrawnMessage" xml:space="preserve">
+    <value>You already drew a tile this turn.</value>
+  </data>
+  <data name="MatchMustDrawFirstMessage" xml:space="preserve">
+    <value>Draw a tile before passing.</value>
+  </data>
+  <data name="MatchServerErrorMessage" xml:space="preserve">
+    <value>Something went wrong in the match. Try again.</value>
+  </data>
 </root>

@@ -71,7 +71,7 @@ internal sealed class WindowFactory
                 _gameServices,
                 new InviteFriendsViewModel(windowService, _gameServices, _socialServices),
                 _localization),
-            [Screen.Match] = windowService => new MatchViewModel(windowService),
+            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices),
             [Screen.MatchResults] = windowService => new MatchResultsViewModel(windowService, _gameServices),
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization)
         };

@@ -52,13 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Commands\AsyncParameterRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Common\ObservableViewModel.cs" />
     <Compile Include="Common\ScreenViewModel.cs" />
     <Compile Include="Contracts\IWindowService.cs" />
+    <Compile Include="Localization\MatchResultMessageKeys.cs" />
+    <Compile Include="MatchPlayerViewModel.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
+    <Compile Include="TrainViewModel.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />
     <Compile Include="Validation\LoginInputValidator.cs" />
     <Compile Include="Validation\LobbyMessageInputStatus.cs" />
