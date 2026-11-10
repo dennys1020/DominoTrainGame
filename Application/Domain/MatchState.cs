@@ -11,6 +11,8 @@ public sealed class MatchState
     private const int MinimumPlayers = 2;
     private const int MaximumPlayers = 4;
     private const int EngineTileCount = 1;
+    private const int FirstPlayerIndex = 0;
+    private const int TurnStep = 1;
 
     private readonly List<int> _playerIds;
     private readonly Dictionary<int, List<Tile>> _handsByPlayerId;
@@ -78,7 +80,7 @@ public sealed class MatchState
 
     public void AdvanceTurn()
     {
-        _currentTurnIndex = (_currentTurnIndex + 1) % _playerIds.Count;
+        _currentTurnIndex = (_currentTurnIndex + TurnStep) % _playerIds.Count;
     }
 
     private static bool IsEngineTile(Tile tile)
@@ -89,7 +91,7 @@ public sealed class MatchState
 
     private void DealHands(List<Tile> tiles)
     {
-        for (int playerIndex = 0; playerIndex < _playerIds.Count; playerIndex++)
+        for (int playerIndex = FirstPlayerIndex; playerIndex < _playerIds.Count; playerIndex++)
         {
             List<Tile> hand = tiles.GetRange(playerIndex * HandSize, HandSize);
             _handsByPlayerId.Add(_playerIds[playerIndex], hand);
