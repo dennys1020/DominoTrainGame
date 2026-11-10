@@ -1,54 +1,246 @@
 <Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:DominoTrainGame.Client.View.Behaviors"
     x:Class="DominoTrainGame.Client.View.Views.MatchWindow"
     Title="{Binding [MatchTitle], Source={StaticResource Localization}}"
     Style="{StaticResource MatchWindowStyle}"
     WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoardVisibility" />
+        <DataTemplate x:Key="TrainTileTemplate">
+            <Border Style="{StaticResource TrainTileBorderStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding LeftPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
+                    <TextBlock Grid.Column="2" Text="{Binding RightPips}" Style="{StaticResource DominoPipTextStyle}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="HandTileTemplate">
+            <Border
+                Style="{StaticResource HandTileBorderStyle}"
+                behaviors:TileDragDropBehavior.IsTileSource="True">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="2" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding LeftPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <Rectangle Grid.Row="1" Fill="{StaticResource Ink}" />
+                    <TextBlock Grid.Row="2" Text="{Binding RightPips}" Style="{StaticResource DominoPipTextStyle}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="TrainRowTemplate">
+            <Border
+                Style="{StaticResource TrainRowStyle}"
+                behaviors:TileDragDropBehavior.DropTileCommand="{Binding DropTileCommand}"
+                behaviors:TileDragDropBehavior.IsDropAllowed="{Binding IsAvailable}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="170" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,12,0">
+                        <TextBlock Text="{Binding OwnerUsername}" Style="{StaticResource TrainLabelStyle}" />
+                        <TextBlock
+                            Text="{Binding [MatchMexicanTrainLabel], Source={StaticResource Localization}}"
+                            Style="{StaticResource TrainLabelStyle}"
+                            Visibility="{Binding IsMexicanTrain,
+                                Converter={StaticResource BoardVisibility},
+                                FallbackValue=Collapsed}" />
+                        <TextBlock
+                            Text="{Binding [MatchOpenTrainLabel], Source={StaticResource Localization}}"
+                            Style="{StaticResource TrainBadgeStyle}"
+                            Visibility="{Binding IsOpen,
+                                Converter={StaticResource BoardVisibility},
+                                FallbackValue=Collapsed}" />
+                    </StackPanel>
+                    <ScrollViewer
+                        Grid.Column="1"
+                        HorizontalScrollBarVisibility="Auto"
+                        VerticalScrollBarVisibility="Disabled"
+                        VerticalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding Tiles}" ItemTemplate="{StaticResource TrainTileTemplate}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="MatchPlayerTemplate">
+            <Border Style="{StaticResource MatchPlayerCardStyle}">
+                <StackPanel>
+                    <TextBlock Text="{Binding Username}" Style="{StaticResource TrainLabelStyle}" />
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <TextBlock
+                            Text="{Binding [MatchTilesLabel], Source={StaticResource Localization}}"
+                            Style="{StaticResource MatchStatTextStyle}" />
+                        <TextBlock Text="{Binding HandCount}" Style="{StaticResource MatchStatTextStyle}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
         <Viewbox Style="{StaticResource ScreenViewboxStyle}">
             <Grid Width="1200" Height="800">
-                <Grid Margin="40,24">
+                <Grid Margin="32,20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="64" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="190" />
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Rectangle
-                            Width="24"
-                            Height="42"
-                            Margin="0,0,16,0"
-                            Fill="{StaticResource MatchDominoBrush}"
-                            Style="{StaticResource PixelArtStyle}" />
-                        <TextBlock
-                            Text="{Binding [GameTitle], Source={StaticResource Localization}}"
-                            Style="{StaticResource PixelTextStyle}"
-                            FontSize="16"
+                    <DockPanel>
+                        <Button
+                            DockPanel.Dock="Right"
+                            Content="{Binding [MatchLeaveButtonLabel], Source={StaticResource Localization}}"
+                            Command="{Binding LeaveMatchCommand}"
+                            Style="{StaticResource MatchSmallButtonStyle}"
+                            Background="{StaticResource Frost}"
                             VerticalAlignment="Center" />
-                    </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Rectangle
+                                Width="24"
+                                Height="42"
+                                Margin="0,0,16,0"
+                                Fill="{StaticResource MatchDominoBrush}"
+                                Style="{StaticResource PixelArtStyle}" />
+                            <TextBlock
+                                Text="{Binding [GameTitle], Source={StaticResource Localization}}"
+                                Style="{StaticResource PixelTextStyle}"
+                                FontSize="16"
+                                VerticalAlignment="Center" />
+                            <TextBlock
+                                Text="{Binding [MatchBoneyardLabel], Source={StaticResource Localization}}"
+                                Style="{StaticResource MatchHeaderStatStyle}"
+                                Margin="40,0,8,0" />
+                            <TextBlock Text="{Binding BoneyardCount}" Style="{StaticResource MatchHeaderStatStyle}" />
+                        </StackPanel>
+                    </DockPanel>
                     <Grid Grid.Row="1" Margin="0,8,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="280" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Margin="0,0,16,0">
+                            <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                            <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8" Padding="20">
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,16">
+                                        <TextBlock
+                                            Text="{Binding [MatchEngineLabel], Source={StaticResource Localization}}"
+                                            Style="{StaticResource MatchSectionStyle}"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,16,0" />
+                                        <Border Style="{StaticResource EngineTileBorderStyle}">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="2" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    Text="{Binding EnginePips}"
+                                                    Style="{StaticResource DominoPipTextStyle}" />
+                                                <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
+                                                <TextBlock
+                                                    Grid.Column="2"
+                                                    Text="{Binding EnginePips}"
+                                                    Style="{StaticResource DominoPipTextStyle}" />
+                                            </Grid>
+                                        </Border>
+                                    </StackPanel>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl
+                                            ItemsSource="{Binding Trains}"
+                                            ItemTemplate="{StaticResource TrainRowTemplate}" />
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                            <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8" Padding="16">
+                                <DockPanel>
+                                    <Border DockPanel.Dock="Top" Style="{StaticResource TurnBannerStyle}">
+                                        <Grid>
+                                            <TextBlock
+                                                Text="{Binding [MatchYourTurnLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource TrainLabelStyle}"
+                                                Visibility="{Binding IsMyTurn,
+                                                    Converter={StaticResource BoardVisibility},
+                                                    FallbackValue=Collapsed}" />
+                                            <StackPanel Style="{StaticResource WaitingTurnPanelStyle}">
+                                                <TextBlock
+                                                    Text="{Binding [MatchTurnOfLabel],
+                                                        Source={StaticResource Localization}}"
+                                                    Style="{StaticResource MatchStatTextStyle}" />
+                                                <TextBlock
+                                                    Text="{Binding TurnUsername}"
+                                                    Style="{StaticResource TrainLabelStyle}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
+                                        <ItemsControl
+                                            ItemsSource="{Binding Players}"
+                                            ItemTemplate="{StaticResource MatchPlayerTemplate}" />
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2">
                         <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
-                        <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8">
-                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8" Padding="16">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Right" Width="220" VerticalAlignment="Center">
+                                    <Button
+                                        Content="{Binding [MatchDrawButtonLabel], Source={StaticResource Localization}}"
+                                        Command="{Binding DrawTileCommand}"
+                                        IsEnabled="{Binding IsMyTurn}"
+                                        Style="{StaticResource MatchButtonStyle}"
+                                        Background="{StaticResource Aqua}" />
+                                    <Button
+                                        Content="{Binding [MatchPassButtonLabel], Source={StaticResource Localization}}"
+                                        Command="{Binding PassTurnCommand}"
+                                        IsEnabled="{Binding IsMyTurn}"
+                                        Style="{StaticResource MatchButtonStyle}"
+                                        Background="{StaticResource Frost}"
+                                        Margin="0,12,0,0" />
+                                </StackPanel>
                                 <TextBlock
-                                    Text="{Binding [MatchTitle], Source={StaticResource Localization}}"
-                                    Style="{StaticResource MatchHeadingStyle}"
-                                    TextAlignment="Center" />
-                                <TextBlock
-                                    Text="{Binding [MatchPlaceholderDescription],
-                                        Source={StaticResource Localization}}"
-                                    Style="{StaticResource MatchBodyStyle}"
-                                    Margin="0,16,0,32"
-                                    TextAlignment="Center" />
-                                <Button
-                                    Content="{Binding [ViewResultsButtonLabel], Source={StaticResource Localization}}"
-                                    Style="{StaticResource MatchButtonStyle}"
-                                    Command="{Binding ResultsCommand}"
-                                    Background="{StaticResource Aqua}"
-                                    HorizontalAlignment="Center"
-                                    MinWidth="300" />
-                            </StackPanel>
+                                    DockPanel.Dock="Top"
+                                    Text="{Binding [MatchHandLabel], Source={StaticResource Localization}}"
+                                    Style="{StaticResource MatchSectionStyle}" />
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="Auto"
+                                    VerticalScrollBarVisibility="Disabled">
+                                    <ItemsControl
+                                        ItemsSource="{Binding Hand}"
+                                        ItemTemplate="{StaticResource HandTileTemplate}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </DockPanel>
                         </Border>
                     </Grid>
                 </Grid>

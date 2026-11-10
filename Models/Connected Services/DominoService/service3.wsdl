@@ -15,13 +15,13 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IFriendService_ConnectFriends_InputMessage">
-    <wsdl:part name="parameters" element="tns:ConnectFriends" />
+  <wsdl:message name="IFriendService_Connect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Connect" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_ConnectFriends_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ConnectFriendsResponse" />
+  <wsdl:message name="IFriendService_Connect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ConnectResponse" />
   </wsdl:message>
-  <wsdl:message name="IFriendService_ConnectFriends_GameServiceFaultFault_FaultMessage">
+  <wsdl:message name="IFriendService_Connect_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q1="http://dominotraingame/services" name="detail" element="q1:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="IFriendService_GetFriends_InputMessage">
@@ -94,10 +94,10 @@
     <wsdl:part name="parameters" element="tns:ReceiveFriendsChanged" />
   </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="IFriendService">
-    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ConnectFriends">
-      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/ConnectFriends" message="tns:IFriendService_ConnectFriends_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/ConnectFriendsResponse" message="tns:IFriendService_ConnectFriends_OutputMessage" />
-      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/ConnectFriendsGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_ConnectFriends_GameServiceFaultFault_FaultMessage" />
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Connect">
+      <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/Connect" message="tns:IFriendService_Connect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IFriendService/ConnectResponse" message="tns:IFriendService_Connect_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IFriendService/ConnectGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IFriendService_Connect_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="GetFriends">
       <wsdl:input wsaw:Action="http://tempuri.org/IFriendService/GetFriends" message="tns:IFriendService_GetFriends_InputMessage" />
@@ -144,8 +144,8 @@
   <wsdl:binding name="FriendService" type="tns:IFriendService">
     <wsp:PolicyReference URI="#FriendService_policy" />
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="ConnectFriends">
-      <soap12:operation soapAction="http://tempuri.org/IFriendService/ConnectFriends" style="document" />
+    <wsdl:operation name="Connect">
+      <soap12:operation soapAction="http://tempuri.org/IFriendService/Connect" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
