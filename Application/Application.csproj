@@ -113,6 +113,7 @@
     <Compile Include="Results\RemoveFriendStatus.cs" />
     <Compile Include="Results\SendFriendRequestStatus.cs" />
     <Compile Include="Results\StartMatchStatus.cs" />
+    <Compile Include="Results\PlayTileStatus.cs" />
     <Compile Include="Results\InviteFriendStatus.cs" />
     <Compile Include="Ports\LobbyInvitationNotice.cs" />
     <Compile Include="UseCases\IInvitationUseCases.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DominoTrainGame.Server.Application.Results;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
@@ -11,8 +12,9 @@ public sealed class MatchState
     private const int MinimumPlayers = 2;
     private const int MaximumPlayers = 4;
     private const int EngineTileCount = 1;
-    private const int FirstPlayerIndex = 0;
+    private const int FirstIndex = 0;
     private const int TurnStep = 1;
+    private const int TileNotFoundIndex = -1;
 
     private readonly List<int> _playerIds;
     private readonly Dictionary<int, List<Tile>> _handsByPlayerId;
@@ -78,6 +80,44 @@ public sealed class MatchState
         return wasFound;
     }
 
+    public PlayTileStatus PlayTile(int playerId, Tile tile, int trainOwnerId)
+    {
+        if (tile == null)
+        {
+            throw new ArgumentNullException(nameof(tile));
+        }
+
+        List<Tile> currentHand = _handsByPlayerId[CurrentPlayerId];
+        bool isPlayerTurn = playerId == CurrentPlayerId;
+        bool hasTile = TryFindTileIndex(currentHand, tile, out int tileIndex);
+        bool canUseTrain = TryGetTrain(trainOwnerId, out Train train) && train.CanBePlayedBy(playerId);
+        PlayTileStatus status = PlayTileStatus.Success;
+
+        if (!isPlayerTurn)
+        {
+            status = PlayTileStatus.NotYourTurn;
+        }
+        else if (!hasTile)
+        {
+            status = PlayTileStatus.TileNotInHand;
+        }
+        else if (!canUseTrain)
+        {
+            status = PlayTileStatus.TrainNotAvailable;
+        }
+        else if (!train.CanAccept(currentHand[tileIndex]))
+        {
+            status = PlayTileStatus.TileDoesNotMatch;
+        }
+
+        if (status == PlayTileStatus.Success)
+        {
+            ApplyPlay(currentHand, tileIndex, train);
+        }
+
+        return status;
+    }
+
     public void AdvanceTurn()
     {
         _currentTurnIndex = (_currentTurnIndex + TurnStep) % _playerIds.Count;
@@ -91,7 +131,7 @@ public sealed class MatchState
 
     private void DealHands(List<Tile> tiles)
     {
-        for (int playerIndex = FirstPlayerIndex; playerIndex < _playerIds.Count; playerIndex++)
+        for (int playerIndex = FirstIndex; playerIndex < _playerIds.Count; playerIndex++)
         {
             List<Tile> hand = tiles.GetRange(playerIndex * HandSize, HandSize);
             _handsByPlayerId.Add(_playerIds[playerIndex], hand);
@@ -106,5 +146,37 @@ public sealed class MatchState
         }
 
         _trainsByOwnerId.Add(Train.MexicanTrainOwnerId, new Train(Train.MexicanTrainOwnerId, EnginePips));
+    }
+
+    private static bool TryFindTileIndex(List<Tile> hand, Tile tile, out int tileIndex)
+    {
+        tileIndex = TileNotFoundIndex;
+
+        for (int handIndex = FirstIndex; handIndex < hand.Count && tileIndex == TileNotFoundIndex; handIndex++)
+        {
+            if (hand[handIndex].IsSameTile(tile))
+            {
+                tileIndex = handIndex;
+            }
+        }
+
+        bool wasFound = tileIndex != TileNotFoundIndex;
+        return wasFound;
+    }
+
+    private void ApplyPlay(List<Tile> hand, int tileIndex, Train train)
+    {
+        Tile playedTile = hand[tileIndex];
+        bool isOwnTrain = train.OwnerId == CurrentPlayerId;
+
+        train.AddTile(playedTile);
+        hand.RemoveAt(tileIndex);
+
+        if (isOwnTrain)
+        {
+            train.Close();
+        }
+
+        AdvanceTurn();
     }
 }

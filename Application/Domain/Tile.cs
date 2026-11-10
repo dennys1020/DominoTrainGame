@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DominoTrainGame.Server.Application.Domain;
@@ -52,5 +53,18 @@ public sealed class Tile
     {
         int oppositePips = LeftPips == pips ? RightPips : LeftPips;
         return oppositePips;
+    }
+
+    public bool IsSameTile(Tile otherTile)
+    {
+        if (otherTile == null)
+        {
+            throw new ArgumentNullException(nameof(otherTile));
+        }
+
+        bool hasSameOrientation = LeftPips == otherTile.LeftPips && RightPips == otherTile.RightPips;
+        bool hasInvertedOrientation = LeftPips == otherTile.RightPips && RightPips == otherTile.LeftPips;
+        bool isSameTile = hasSameOrientation || hasInvertedOrientation;
+        return isSameTile;
     }
 }
