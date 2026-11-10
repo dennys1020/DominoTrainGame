@@ -79,6 +79,7 @@
     <Compile Include="Domain\Tile.cs" />
     <Compile Include="Domain\Train.cs" />
     <Compile Include="Domain\Boneyard.cs" />
+    <Compile Include="Domain\MatchState.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
@@ -91,9 +92,11 @@
     <Compile Include="Ports\PlayerCredentials.cs" />
     <Compile Include="Ports\PlayerRegistration.cs" />
     <Compile Include="Ports\ILobbyCodeGenerator.cs" />
+    <Compile Include="Ports\ITileShuffler.cs" />
     <Compile Include="Results\JoinLobbyStatus.cs" />
     <Compile Include="Results\SendMessageStatus.cs" />
     <Compile Include="Security\LobbyCodeGenerator.cs" />
+    <Compile Include="Security\TileShuffler.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
