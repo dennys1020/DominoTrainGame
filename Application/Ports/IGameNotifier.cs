@@ -12,5 +12,9 @@ public interface IGameNotifier
 
     void NotifyMatchStarting(MatchStartingNotice notice);
 
+    void NotifyMatchUpdated(MatchUpdatedNotice notice);
+
+    void NotifyHandUpdated(HandUpdatedNotice notice);
+
     bool TryNotifyLobbyInvitation(LobbyInvitationNotice notice);
 }
