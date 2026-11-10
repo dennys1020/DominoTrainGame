@@ -85,6 +85,9 @@
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
     <Compile Include="Ports\LobbyMessageNotice.cs" />
     <Compile Include="Ports\MatchStartingNotice.cs" />
+    <Compile Include="Ports\TrainSnapshot.cs" />
+    <Compile Include="Ports\MatchUpdatedNotice.cs" />
+    <Compile Include="Ports\HandUpdatedNotice.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />
