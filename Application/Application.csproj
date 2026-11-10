@@ -77,6 +77,8 @@
     <Compile Include="Domain\LobbyRoster.cs" />
     <Compile Include="Domain\LobbyState.cs" />
     <Compile Include="Domain\Tile.cs" />
+    <Compile Include="Domain\Train.cs" />
+    <Compile Include="Domain\Boneyard.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
