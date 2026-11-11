@@ -49,6 +49,9 @@ internal static class GameServiceFactory
         ISocialNotifier socialNotifier = new CallbackSocialNotifier(socialSessions);
         IPresenceUseCases presenceUseCases = new PresenceUseCases(socialSessions, lobbyRegistry);
         IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
+        MatchRegistry matchRegistry = new MatchRegistry();
+        ITileShuffler tileShuffler = new TileShuffler();
+        IMatchUseCases matchUseCases = new MatchUseCases(matchRegistry, tileShuffler, gameNotifier);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(
             lobbyRegistry,
             gameNotifier,
@@ -85,6 +88,7 @@ internal static class GameServiceFactory
             lobbySessionManager,
             faultTranslator);
         FriendService friendService = new FriendService(friendUseCases, socialSessionManager, faultTranslator);
+        MatchService matchService = new MatchService(matchUseCases, sessionTokens, faultTranslator);
 
         IErrorHandler errorHandler = new GameErrorHandler();
         List<ServiceHost> serviceHosts = new List<ServiceHost>
@@ -92,7 +96,8 @@ internal static class GameServiceFactory
             new GameServiceHost(connectionService, errorHandler),
             new GameServiceHost(authenticationService, errorHandler),
             new GameServiceHost(lobbyService, errorHandler),
-            new GameServiceHost(friendService, errorHandler)
+            new GameServiceHost(friendService, errorHandler),
+            new GameServiceHost(matchService, errorHandler)
         };
 
         return serviceHosts;
