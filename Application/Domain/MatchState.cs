@@ -20,6 +20,7 @@ public sealed class MatchState
     private readonly Dictionary<int, List<Tile>> _handsByPlayerId;
     private readonly Dictionary<int, Train> _trainsByOwnerId;
     private int _currentTurnIndex;
+    private bool _hasDrawnThisTurn;
 
     public MatchState(IReadOnlyList<int> playerIds, IReadOnlyList<Tile> shuffledTiles)
     {
@@ -118,9 +119,62 @@ public sealed class MatchState
         return status;
     }
 
+    public DrawTileStatus DrawTile(int playerId)
+    {
+        bool isPlayerTurn = playerId == CurrentPlayerId;
+        DrawTileStatus status = DrawTileStatus.Success;
+
+        if (!isPlayerTurn)
+        {
+            status = DrawTileStatus.NotYourTurn;
+        }
+        else if (_hasDrawnThisTurn)
+        {
+            status = DrawTileStatus.AlreadyDrewTile;
+        }
+        else if (!Boneyard.HasTiles)
+        {
+            status = DrawTileStatus.BoneyardEmpty;
+        }
+
+        if (status == DrawTileStatus.Success)
+        {
+            Boneyard.TryDraw(out Tile drawnTile);
+            _handsByPlayerId[CurrentPlayerId].Add(drawnTile);
+            _hasDrawnThisTurn = true;
+        }
+
+        return status;
+    }
+
+    public PassTurnStatus PassTurn(int playerId)
+    {
+        bool isPlayerTurn = playerId == CurrentPlayerId;
+        bool canPass = _hasDrawnThisTurn || !Boneyard.HasTiles;
+        PassTurnStatus status = PassTurnStatus.Success;
+
+        if (!isPlayerTurn)
+        {
+            status = PassTurnStatus.NotYourTurn;
+        }
+        else if (!canPass)
+        {
+            status = PassTurnStatus.MustDrawFirst;
+        }
+
+        if (status == PassTurnStatus.Success)
+        {
+            _trainsByOwnerId[CurrentPlayerId].Open();
+            AdvanceTurn();
+        }
+
+        return status;
+    }
+
     public void AdvanceTurn()
     {
         _currentTurnIndex = (_currentTurnIndex + TurnStep) % _playerIds.Count;
+        _hasDrawnThisTurn = false;
     }
 
     private static bool IsEngineTile(Tile tile)
