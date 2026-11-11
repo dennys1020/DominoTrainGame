@@ -57,7 +57,8 @@ internal static class GameServiceFactory
             gameNotifier,
             chatMessageFilter,
             chatSanctionUseCases,
-            friendUseCases);
+            friendUseCases,
+            matchUseCases);
         IInvitationUseCases invitationUseCases = new InvitationUseCases(
             lobbyRegistry,
             friendshipRepository,
