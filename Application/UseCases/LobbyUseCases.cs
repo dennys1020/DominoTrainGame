@@ -19,6 +19,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private readonly IChatMessageFilter _chatMessageFilter;
     private readonly IChatSanctionUseCases _chatSanctionUseCases;
     private readonly IFriendUseCases _friendUseCases;
+    private readonly IMatchUseCases _matchUseCases;
 
     static LobbyUseCases()
     {
@@ -30,7 +31,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
         IGameNotifier gameNotifier,
         IChatMessageFilter chatMessageFilter,
         IChatSanctionUseCases chatSanctionUseCases,
-        IFriendUseCases friendUseCases)
+        IFriendUseCases friendUseCases,
+        IMatchUseCases matchUseCases)
     {
         _lobbyRegistry = lobbyRegistry ?? throw new ArgumentNullException(nameof(lobbyRegistry));
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
@@ -38,6 +40,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
         _chatSanctionUseCases = chatSanctionUseCases
             ?? throw new ArgumentNullException(nameof(chatSanctionUseCases));
         _friendUseCases = friendUseCases ?? throw new ArgumentNullException(nameof(friendUseCases));
+        _matchUseCases = matchUseCases ?? throw new ArgumentNullException(nameof(matchUseCases));
     }
 
     public CreateLobbyStatus CreateLobby(PlayerIdentity host, out LobbyState lobby)
@@ -158,6 +161,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
         if (status == StartMatchStatus.Success)
         {
+            //TODO agregar la validacion por si un jugador hace doble click al querer iniciar una partida
+            _matchUseCases.StartMatch(lobby.Code, lobby.Roster.GetPlayerIds());
             NotifyMatchStarting(lobby);
         }
         else
