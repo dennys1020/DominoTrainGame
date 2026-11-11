@@ -9,8 +9,6 @@ namespace DominoTrainGame.Server.Application.State;
 
 public sealed class LobbyRegistry
 {
-    private const int MaximumPlayers = 4;
-
     private readonly ILobbyCodeGenerator _codeGenerator;
     private readonly Dictionary<string, LobbyState> _lobbiesByCode =
         new Dictionary<string, LobbyState>(StringComparer.Ordinal);
@@ -128,7 +126,7 @@ public sealed class LobbyRegistry
     private LobbyState AddLobby(PlayerIdentity host)
     {
         string code = GenerateUniqueCode();
-        LobbyState createdLobby = LobbyState.CreateWithHost(code, MaximumPlayers, host);
+        LobbyState createdLobby = LobbyState.CreateWithHost(code, LobbyState.MaximumPlayerCount, host);
 
         _lobbiesByCode.Add(code, createdLobby);
         return createdLobby;

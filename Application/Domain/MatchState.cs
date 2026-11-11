@@ -9,8 +9,6 @@ public sealed class MatchState
 {
     private const int EnginePips = Tile.MaximumPips;
     private const int HandSize = 15;
-    private const int MinimumPlayers = 2;
-    private const int MaximumPlayers = 4;
     private const int EngineTileCount = 1;
     private const int FirstIndex = 0;
     private const int TurnStep = 1;
@@ -21,6 +19,11 @@ public sealed class MatchState
     private readonly Dictionary<int, Train> _trainsByOwnerId;
     private int _currentTurnIndex;
     private bool _hasDrawnThisTurn;
+
+    static MatchState()
+    {
+        Empty = new MatchState();
+    }
 
     public MatchState(IReadOnlyList<int> playerIds, IReadOnlyList<Tile> shuffledTiles)
     {
@@ -34,14 +37,16 @@ public sealed class MatchState
             throw new ArgumentNullException(nameof(shuffledTiles));
         }
 
-        bool hasValidPlayerCount = playerIds.Count >= MinimumPlayers && playerIds.Count <= MaximumPlayers;
+        bool hasValidPlayerCount = playerIds.Count >= LobbyState.MinimumPlayerCount
+            && playerIds.Count <= LobbyState.MaximumPlayerCount;
 
         if (!hasValidPlayerCount)
         {
             throw new ArgumentOutOfRangeException(nameof(playerIds));
         }
 
-        List<Tile> remainingTiles = shuffledTiles.Where(tile => !IsEngineTile(tile)).ToList();
+        EngineTile = new Tile(EnginePips, EnginePips);
+        List<Tile> remainingTiles = GetTilesWithoutEngine(shuffledTiles);
         bool hasSingleEngineTile = shuffledTiles.Count - remainingTiles.Count == EngineTileCount;
 
         if (!hasSingleEngineTile)
@@ -54,16 +59,34 @@ public sealed class MatchState
         _playerIds = new List<int>(playerIds);
         _handsByPlayerId = new Dictionary<int, List<Tile>>();
         _trainsByOwnerId = new Dictionary<int, Train>();
-        EngineTile = new Tile(EnginePips, EnginePips);
+        SyncRoot = new object();
 
         DealHands(remainingTiles);
         Boneyard = new Boneyard(remainingTiles.Skip(_playerIds.Count * HandSize));
         CreateTrains();
     }
 
+    private MatchState()
+    {
+        _playerIds = new List<int>();
+        _handsByPlayerId = new Dictionary<int, List<Tile>>();
+        _trainsByOwnerId = new Dictionary<int, Train>();
+        EngineTile = Tile.Empty;
+        Boneyard = new Boneyard(new List<Tile>());
+        SyncRoot = new object();
+    }
+
+    public static MatchState Empty { get; }
+
     public Tile EngineTile { get; }
 
     public Boneyard Boneyard { get; }
+
+    public object SyncRoot { get; }
+
+    public IReadOnlyList<int> PlayerIds => _playerIds;
+
+    public IReadOnlyCollection<Train> Trains => _trainsByOwnerId.Values;
 
     public int CurrentPlayerId => _playerIds[_currentTurnIndex];
 
@@ -177,10 +200,19 @@ public sealed class MatchState
         _hasDrawnThisTurn = false;
     }
 
-    private static bool IsEngineTile(Tile tile)
+    private List<Tile> GetTilesWithoutEngine(IReadOnlyList<Tile> tiles)
     {
-        bool isEngineTile = tile.IsDouble && tile.LeftPips == EnginePips;
-        return isEngineTile;
+        List<Tile> remainingTiles = new List<Tile>();
+
+        foreach (Tile tile in tiles)
+        {
+            if (!tile.IsSameTile(EngineTile))
+            {
+                remainingTiles.Add(tile);
+            }
+        }
+
+        return remainingTiles;
     }
 
     private void DealHands(List<Tile> tiles)

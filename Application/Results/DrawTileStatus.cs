@@ -5,5 +5,6 @@ public enum DrawTileStatus
     Success,
     NotYourTurn,
     AlreadyDrewTile,
-    BoneyardEmpty
+    BoneyardEmpty,
+    MatchNotFound
 }

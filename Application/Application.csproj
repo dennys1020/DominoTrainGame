@@ -72,9 +72,12 @@
     <Compile Include="UseCases\ConnectionUseCases.cs" />
     <Compile Include="UseCases\IConnectionUseCases.cs" />
     <Compile Include="State\LobbyRegistry.cs" />
+    <Compile Include="State\MatchRegistry.cs" />
     <Compile Include="UseCases\LobbyUseCases.cs" />
     <Compile Include="Ports\IGameNotifier.cs" />
     <Compile Include="UseCases\ILobbyUseCases.cs" />
+    <Compile Include="UseCases\IMatchUseCases.cs" />
+    <Compile Include="UseCases\MatchUseCases.cs" />
     <Compile Include="Domain\LobbyPlayerState.cs" />
     <Compile Include="Domain\LobbyRoster.cs" />
     <Compile Include="Domain\LobbyState.cs" />
