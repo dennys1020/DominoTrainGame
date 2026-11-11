@@ -37,7 +37,7 @@ public sealed class MatchUseCases : IMatchUseCases
         if (wasStarted)
         {
             _logger.InfoFormat("A match started. MatchCode: {0}.", code);
-            NotifyUpdates(match, match.PlayerIds);
+            NotifyUpdates(match, match.PlayerIds, match.PlayerIds);
         }
         else
         {
@@ -69,7 +69,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
         if (status == PlayTileStatus.Success)
         {
-            NotifyUpdates(match, new List<int> { playerId });
+            NotifyUpdates(match, match.PlayerIds, new List<int> { playerId });
         }
         else
         {
@@ -94,7 +94,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
         if (status == DrawTileStatus.Success)
         {
-            NotifyUpdates(match, new List<int> { playerId });
+            NotifyUpdates(match, match.PlayerIds, new List<int> { playerId });
         }
         else
         {
@@ -119,7 +119,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
         if (status == PassTurnStatus.Success)
         {
-            NotifyUpdates(match, new List<int>());
+            NotifyUpdates(match, match.PlayerIds, new List<int>());
         }
         else
         {
@@ -129,10 +129,29 @@ public sealed class MatchUseCases : IMatchUseCases
         return status;
     }
 
-    private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match)
+    public bool SendMatchState(int playerId)
+    {
+        bool isInMatch = _matchRegistry.TryFindByPlayer(playerId, out MatchState match);
+
+        if (isInMatch)
+        {
+            List<int> requesterIds = new List<int> { playerId };
+            NotifyUpdates(match, requesterIds, requesterIds);
+        }
+        else
+        {
+            _logger.InfoFormat(
+                "A match state request was rejected because the player is not in a match. PlayerId: {0}.",
+                playerId);
+        }
+
+        return isInMatch;
+    }
+
+    private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match, IReadOnlyList<int> recipientPlayerIds)
     {
         MatchUpdatedNotice notice = new MatchUpdatedNotice(
-            match.PlayerIds,
+            recipientPlayerIds,
             match.CurrentPlayerId,
             match.Boneyard.Count,
             match.EngineTile,
@@ -173,14 +192,17 @@ public sealed class MatchUseCases : IMatchUseCases
         return notice;
     }
 
-    private void NotifyUpdates(MatchState match, IReadOnlyList<int> handOwnerIds)
+    private void NotifyUpdates(
+        MatchState match,
+        IReadOnlyList<int> boardRecipientIds,
+        IReadOnlyList<int> handOwnerIds)
     {
         MatchUpdatedNotice matchNotice;
         List<HandUpdatedNotice> handNotices = new List<HandUpdatedNotice>();
 
         lock (match.SyncRoot)
         {
-            matchNotice = CreateMatchUpdatedNotice(match);
+            matchNotice = CreateMatchUpdatedNotice(match, boardRecipientIds);
 
             foreach (int handOwnerId in handOwnerIds)
             {

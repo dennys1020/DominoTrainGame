@@ -13,4 +13,6 @@ public interface IMatchUseCases
     DrawTileStatus DrawTile(int playerId);
 
     PassTurnStatus PassTurn(int playerId);
+
+    bool SendMatchState(int playerId);
 }
