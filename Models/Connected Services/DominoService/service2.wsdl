@@ -105,6 +105,12 @@
   <wsdl:message name="ILobbyService_ReceiveLobbyInvitation_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveLobbyInvitation" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveMatchUpdate_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMatchUpdate" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveHand_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveHand" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILobbyService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Connect">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/Connect" message="tns:ILobbyService_Connect_InputMessage" />
@@ -163,6 +169,12 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLobbyInvitation">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyInvitation" message="tns:ILobbyService_ReceiveLobbyInvitation_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveMatchUpdate">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveMatchUpdate" message="tns:ILobbyService_ReceiveMatchUpdate_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveHand">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveHand" message="tns:ILobbyService_ReceiveHand_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LobbyService" type="tns:ILobbyService">
@@ -296,6 +308,18 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveLobbyInvitation">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveLobbyInvitation" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMatchUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveMatchUpdate" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveHand">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveHand" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

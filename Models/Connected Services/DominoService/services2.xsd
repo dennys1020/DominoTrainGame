@@ -36,6 +36,14 @@
       <xs:enumeration value="ChatWarning" />
       <xs:enumeration value="ChatBlocked" />
       <xs:enumeration value="PlayerBanned" />
+      <xs:enumeration value="MatchNotFound" />
+      <xs:enumeration value="NotYourTurn" />
+      <xs:enumeration value="TileNotInHand" />
+      <xs:enumeration value="TileDoesNotMatch" />
+      <xs:enumeration value="TrainNotAvailable" />
+      <xs:enumeration value="BoneyardEmpty" />
+      <xs:enumeration value="AlreadyDrawn" />
+      <xs:enumeration value="MustDrawFirst" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -131,4 +139,60 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LobbyInvitationMessage" nillable="true" type="tns:LobbyInvitationMessage" />
+  <xs:complexType name="MatchSnapshotMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BoneyardCount" type="xs:int" />
+      <xs:element minOccurs="0" name="CurrentPlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="EngineTile" nillable="true" type="tns:TileData" />
+      <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfMatchPlayerData" />
+      <xs:element minOccurs="0" name="Trains" nillable="true" type="tns:ArrayOfTrainData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MatchSnapshotMessage" nillable="true" type="tns:MatchSnapshotMessage" />
+  <xs:complexType name="TileData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LeftPips" type="xs:int" />
+      <xs:element minOccurs="0" name="RightPips" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TileData" nillable="true" type="tns:TileData" />
+  <xs:complexType name="ArrayOfMatchPlayerData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MatchPlayerData" nillable="true" type="tns:MatchPlayerData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMatchPlayerData" nillable="true" type="tns:ArrayOfMatchPlayerData" />
+  <xs:complexType name="MatchPlayerData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="TileCount" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MatchPlayerData" nillable="true" type="tns:MatchPlayerData" />
+  <xs:complexType name="ArrayOfTrainData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TrainData" nillable="true" type="tns:TrainData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTrainData" nillable="true" type="tns:ArrayOfTrainData" />
+  <xs:complexType name="TrainData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IsOpen" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OwnerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Tiles" nillable="true" type="tns:ArrayOfTileData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TrainData" nillable="true" type="tns:TrainData" />
+  <xs:complexType name="ArrayOfTileData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TileData" nillable="true" type="tns:TileData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTileData" nillable="true" type="tns:ArrayOfTileData" />
+  <xs:complexType name="HandMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Tiles" nillable="true" type="tns:ArrayOfTileData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="HandMessage" nillable="true" type="tns:HandMessage" />
 </xs:schema>
