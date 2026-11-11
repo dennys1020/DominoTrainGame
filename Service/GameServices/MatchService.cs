@@ -29,9 +29,14 @@ public sealed class MatchService : IMatchService
 
     public void PlayTile(PlayTileRequest request)
     {
+        if (request == null)
+        {
+            throw new ArgumentNullException(nameof(request));
+        }
+
         PlayTileStatus status = ExecuteForCaller(
-            request?.SessionToken, caller => _matchUseCases.PlayTile(caller.PlayerId,
-            ToTile(request.Tile), request.TrainOwnerId));
+            request.SessionToken,
+            caller => _matchUseCases.PlayTile(caller.PlayerId, ToTile(request.Tile), request.TrainOwnerId));
 
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
@@ -147,8 +152,7 @@ public sealed class MatchService : IMatchService
     private TResult ExecuteForCaller<TResult>(string sessionToken, Func<PlayerIdentity, TResult> operation)
     {
         PlayerIdentity caller = ResolveCaller(sessionToken);
-        TResult result = _faultTranslator.Execute(() =>
-        operation(caller), GameServiceFaultCode.InvalidInput);
+        TResult result = _faultTranslator.Execute(() => operation(caller), GameServiceFaultCode.InvalidInput);
 
         return result;
     }
