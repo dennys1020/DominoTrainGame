@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IMatchService.cs" />
+    <Compile Include="GameServices\MatchService.cs" />
     <Compile Include="Sessions\PlayerSession.cs" />
     <Compile Include="Sessions\PlayerSessionEventArgs.cs" />
     <Compile Include="Sessions\PlayerSessionManager.cs" />
