@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Results\CreateLobbyStatus.cs" />
+    <Compile Include="Results\DrawTileStatus.cs" />
+    <Compile Include="Results\PassTurnStatus.cs" />
     <Compile Include="UseCases\PlayerInputValidator.cs" />
     <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />
