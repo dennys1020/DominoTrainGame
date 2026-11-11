@@ -6,14 +6,13 @@ namespace DominoTrainGame.Server.Application.Domain;
 public sealed class Train
 {
     public const int MexicanTrainOwnerId = 0;
-    private const int EmptyOwnerId = -1;
-    private const int EmptyEndPips = -1;
+    private const int EmptyValue = -1;
 
     private readonly List<Tile> _tiles;
 
     static Train()
     {
-        Empty = new Train(EmptyOwnerId, EmptyEndPips);
+        Empty = new Train(EmptyValue, EmptyValue);
     }
 
     public Train(int ownerId, int enginePips)

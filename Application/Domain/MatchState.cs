@@ -9,9 +9,8 @@ public sealed class MatchState
 {
     private const int EnginePips = Tile.MaximumPips;
     private const int HandSize = 15;
-    private const int EngineTileCount = 1;
-    private const int FirstIndex = 0;
     private const int TurnStep = 1;
+    private const int FirstIndex = 0;
     private const int TileNotFoundIndex = -1;
 
     private readonly List<int> _playerIds;
@@ -47,7 +46,7 @@ public sealed class MatchState
 
         EngineTile = new Tile(EnginePips, EnginePips);
         List<Tile> remainingTiles = GetTilesWithoutEngine(shuffledTiles);
-        bool hasSingleEngineTile = shuffledTiles.Count - remainingTiles.Count == EngineTileCount;
+        bool hasSingleEngineTile = HasSingleEngineTile(shuffledTiles);
 
         if (!hasSingleEngineTile)
         {
@@ -198,6 +197,15 @@ public sealed class MatchState
     {
         _currentTurnIndex = (_currentTurnIndex + TurnStep) % _playerIds.Count;
         _hasDrawnThisTurn = false;
+    }
+
+    private bool HasSingleEngineTile(IReadOnlyList<Tile> tiles)
+    {
+        List<Tile> allTiles = new List<Tile>(tiles);
+        int firstEngineIndex = allTiles.FindIndex(tile => tile.IsSameTile(EngineTile));
+        int lastEngineIndex = allTiles.FindLastIndex(tile => tile.IsSameTile(EngineTile));
+        bool hasSingleEngineTile = firstEngineIndex != TileNotFoundIndex && firstEngineIndex == lastEngineIndex;
+        return hasSingleEngineTile;
     }
 
     private List<Tile> GetTilesWithoutEngine(IReadOnlyList<Tile> tiles)
