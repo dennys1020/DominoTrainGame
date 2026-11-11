@@ -69,5 +69,29 @@ public enum GameServiceFaultCode
     ChatBlocked,
 
     [EnumMember]
-    PlayerBanned
+    PlayerBanned,
+
+    [EnumMember]
+    MatchNotFound,
+
+    [EnumMember]
+    NotYourTurn,
+
+    [EnumMember]
+    TileNotInHand,
+
+    [EnumMember]
+    TileDoesNotMatch,
+
+    [EnumMember]
+    TrainNotAvailable,
+
+    [EnumMember]
+    BoneyardEmpty,
+
+    [EnumMember]
+    AlreadyDrawn,
+
+    [EnumMember]
+    MustDrawFirst
 }

@@ -37,4 +37,14 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceiveLobbyInvitation",
         IsOneWay = true)]
     void ReceiveLobbyInvitation(LobbyInvitationMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveMatchUpdate",
+        IsOneWay = true)]
+    void ReceiveMatchUpdate(MatchSnapshotMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveHand",
+        IsOneWay = true)]
+    void ReceiveHand(HandMessage message);
 }
