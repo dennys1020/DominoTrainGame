@@ -94,6 +94,13 @@
     <Compile Include="DataContracts\LobbyChatMessage.cs" />
     <Compile Include="DataContracts\LobbyInvitationMessage.cs" />
     <Compile Include="DataContracts\MatchStartingMessage.cs" />
+    <Compile Include="DataContracts\MatchPlayerData.cs" />
+    <Compile Include="DataContracts\MatchSnapshotMessage.cs" />
+    <Compile Include="DataContracts\PlayTileRequest.cs" />
+    <Compile Include="DataContracts\TileData.cs" />
+    <Compile Include="DataContracts\TrainData.cs" />
+    <Compile Include="DataContracts\HandMessage.cs" />
+    <Compile Include="DataContracts\MatchTurnRequest.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
     <Compile Include="GameServices\AuthenticationService.cs" />
     <Compile Include="GameServices\ConnectionService.cs" />
