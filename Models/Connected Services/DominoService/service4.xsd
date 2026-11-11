@@ -137,4 +137,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReceiveMatchUpdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q14="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q14:MatchSnapshotMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveHand">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q15="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q15:HandMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

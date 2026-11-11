@@ -30,6 +30,14 @@
       <xs:enumeration value="ChatWarning" />
       <xs:enumeration value="ChatBlocked" />
       <xs:enumeration value="PlayerBanned" />
+      <xs:enumeration value="MatchNotFound" />
+      <xs:enumeration value="NotYourTurn" />
+      <xs:enumeration value="TileNotInHand" />
+      <xs:enumeration value="TileDoesNotMatch" />
+      <xs:enumeration value="TrainNotAvailable" />
+      <xs:enumeration value="BoneyardEmpty" />
+      <xs:enumeration value="AlreadyDrawn" />
+      <xs:enumeration value="MustDrawFirst" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
