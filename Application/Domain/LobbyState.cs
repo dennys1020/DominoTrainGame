@@ -4,9 +4,10 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class LobbyState
 {
+    public const int MinimumPlayerCount = 2;
+    public const int MaximumPlayerCount = 4;
     private const int EmptyMaximumPlayers = 0;
     private const int NoPlayers = 0;
-    private const int MinimumPlayers = 2;
 
     static LobbyState()
     {
@@ -32,7 +33,7 @@ public sealed class LobbyState
 
     public bool IsEmpty => Roster.Count == NoPlayers;
 
-    public bool HasMinimumPlayers => Roster.Count >= MinimumPlayers;
+    public bool HasMinimumPlayers => Roster.Count >= MinimumPlayerCount;
 
     public static LobbyState CreateWithHost(string code, int maximumPlayers, PlayerIdentity host)
     {

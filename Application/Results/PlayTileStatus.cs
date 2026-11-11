@@ -6,5 +6,6 @@ public enum PlayTileStatus
     NotYourTurn,
     TileNotInHand,
     TrainNotAvailable,
-    TileDoesNotMatch
+    TileDoesNotMatch,
+    MatchNotFound
 }
