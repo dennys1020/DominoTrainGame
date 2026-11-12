@@ -18,10 +18,14 @@ public sealed class Boneyard
 
     public bool HasTiles => Count > NoTiles;
 
-    public bool TryDraw(out Tile tile)
+    public Tile Draw()
     {
-        bool hasTiles = HasTiles;
-        tile = hasTiles ? _tiles.Dequeue() : Tile.Empty;
-        return hasTiles;
+        if (!HasTiles)
+        {
+            throw new InvalidOperationException("The boneyard is empty.");
+        }
+
+        Tile tile = _tiles.Dequeue();
+        return tile;
     }
 }
