@@ -16,7 +16,7 @@ internal sealed class WindowFactory
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
 
     private readonly IRemoteGameServices _gameServices;
-    private readonly IRemoteMatchServices _matchService;
+    private readonly IRemoteMatchServices _matchServices;
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;
@@ -47,12 +47,17 @@ internal sealed class WindowFactory
     }
 
     public WindowFactory(
-        IRemoteGameServices gameServices,
-        IRemoteSocialServices socialServices,
+        RemoteServices remoteServices,
         LocalizationViewModel localization)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
-        _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
+        if (remoteServices == null)
+        {
+            throw new ArgumentNullException(nameof(remoteServices));
+        }
+
+        _gameServices = remoteServices.GameServices;
+        _socialServices = remoteServices.SocialServices;
+        _matchServices = remoteServices.MatchServices;
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _invitationController = new LobbyInvitationController(_gameServices, _localization);
 
@@ -72,7 +77,7 @@ internal sealed class WindowFactory
                 _gameServices,
                 new InviteFriendsViewModel(windowService, _gameServices, _socialServices),
                 _localization),
-            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchService),
+            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchServices),
             [Screen.MatchResults] = windowService => new MatchResultsViewModel(windowService, _gameServices),
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization)
         };

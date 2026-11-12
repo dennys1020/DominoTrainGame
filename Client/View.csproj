@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Navigation\RemoteServices.cs" />
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
