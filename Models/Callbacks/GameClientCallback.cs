@@ -9,7 +9,7 @@ using DominoTrainGame.Client.Models.Networking;
 namespace DominoTrainGame.Client.Models.Callbacks;
 
 [CallbackBehavior(UseSynchronizationContext = true)]
-public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
+public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IMatchEvents
 {
     private static readonly ITraceLog _logger;
 
@@ -34,6 +34,10 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
     public event EventHandler<LobbyInvitationReceivedEventArgs> LobbyInvitationReceived;
 
     public event EventHandler<ConnectionStateChangedEventArgs> ConnectionStateChanged;
+
+    public event EventHandler<EventArgs> MatchChanged;
+
+    public event EventHandler<EventArgs> HandChanged;
 
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
@@ -113,6 +117,36 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
         }
     }
 
+    public void ReceiveMatchUpdate(MatchSnapshotMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A match update notice without content was ignored.");
+        }
+        else
+        {
+            MatchSnapshot snapshot = MatchSnapshotMapper.ToMatchSnapshot(message, _session.CurrentLobby);
+
+            _session.StoreMatch(snapshot);
+            OnMatchChanged(EventArgs.Empty);
+        }
+    }
+
+    public void ReceiveHand(HandMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A hand notice without context was ignored");
+        }
+        else
+        {
+            PlayerHand hand = MatchSnapshotMapper.ToPlayerHand(message);
+
+            _session.StoreHand(hand);
+            OnHandChanged(EventArgs.Empty);
+        }
+    }
+
     public void ReportConnectionState(ConnectionState connectionState)
     {
         OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
@@ -151,5 +185,15 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents
     private void OnConnectionStateChanged(ConnectionStateChangedEventArgs eventArgs)
     {
         ConnectionStateChanged?.Invoke(this, eventArgs);
+    }
+
+    private void OnMatchChanged(EventArgs eventArgs)
+    {
+        MatchChanged?.Invoke(this, eventArgs);
+    }
+
+    private void OnHandChanged(EventArgs eventArgs)
+    {
+        HandChanged?.Invoke(this, eventArgs);
     }
 }
