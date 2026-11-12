@@ -20,31 +20,32 @@ public sealed class ServiceFaultTranslator
         _logger = TraceLogManager.GetLogger(typeof(ServiceFaultTranslator));
     }
 
-    public TResult Execute<TResult>(Func<TResult> request, GameServiceFaultCode invalidInputFaultCode)
+    public FaultException<GameServiceFault> TranslateInvalidInput(
+        ArgumentException exception,
+        GameServiceFaultCode invalidInputFaultCode)
     {
-        if (request == null)
+        if (exception == null)
         {
-            throw new ArgumentNullException(nameof(request));
+            throw new ArgumentNullException(nameof(exception));
         }
 
-        TResult result;
+        _logger.Warn(CreateLogMessage(InvalidInputMessageFormat), exception);
+        FaultException<GameServiceFault> fault = GameFaultFactory.Create(invalidInputFaultCode);
 
-        try
+        return fault;
+    }
+
+    public FaultException<GameServiceFault> TranslateDatabaseUnavailable(DatabaseUnavailableException exception)
+    {
+        if (exception == null)
         {
-            result = request();
-        }
-        catch (ArgumentException exception)
-        {
-            _logger.Warn(CreateLogMessage(InvalidInputMessageFormat), exception);
-            throw GameFaultFactory.Create(invalidInputFaultCode);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            _logger.Error(CreateLogMessage(DatabaseUnavailableMessageFormat), exception);
-            throw GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+            throw new ArgumentNullException(nameof(exception));
         }
 
-        return result;
+        _logger.Error(CreateLogMessage(DatabaseUnavailableMessageFormat), exception);
+        FaultException<GameServiceFault> fault = GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+
+        return fault;
     }
 
     private static string CreateLogMessage(string messageFormat)

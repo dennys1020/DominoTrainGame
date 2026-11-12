@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
@@ -38,7 +39,22 @@ public sealed class FriendService : IFriendService
 
     public List<FriendResponse> GetFriends()
     {
-        IReadOnlyList<FriendPresence> friends = ExecuteForCaller(playerId => _friendUseCases.GetFriends(playerId));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        IReadOnlyList<FriendPresence> friends;
+
+        try
+        {
+            friends = _friendUseCases.GetFriends(playerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
         List<FriendResponse> response = friends.Select(ToFriendResponse).ToList();
 
         return response;
@@ -46,8 +62,22 @@ public sealed class FriendService : IFriendService
 
     public List<PendingFriendRequestResponse> GetPendingRequests()
     {
-        IReadOnlyList<FriendRequestSummary> pendingRequests = ExecuteForCaller(
-            playerId => _friendUseCases.GetPendingRequests(playerId));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        IReadOnlyList<FriendRequestSummary> pendingRequests;
+
+        try
+        {
+            pendingRequests = _friendUseCases.GetPendingRequests(playerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
         List<PendingFriendRequestResponse> response = pendingRequests.Select(ToPendingRequestResponse).ToList();
 
         return response;
@@ -56,8 +86,22 @@ public sealed class FriendService : IFriendService
     public List<PlayerSearchResponse> SearchPlayers(PlayerSearchRequest request)
     {
         string usernameFragment = request?.UsernameFragment ?? string.Empty;
-        IReadOnlyList<PlayerIdentity> players = ExecuteForCaller(
-            playerId => _friendUseCases.SearchPlayers(playerId, usernameFragment));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        IReadOnlyList<PlayerIdentity> players;
+
+        try
+        {
+            players = _friendUseCases.SearchPlayers(playerId, usernameFragment);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
         List<PlayerSearchResponse> response = players.Select(ToPlayerSearchResponse).ToList();
 
         return response;
@@ -66,8 +110,21 @@ public sealed class FriendService : IFriendService
     public void SendFriendRequest(FriendUsernameRequest request)
     {
         string addresseeUsername = request?.Username ?? string.Empty;
-        SendFriendRequestStatus status = ExecuteForCaller(
-            playerId => _friendUseCases.SendFriendRequest(playerId, addresseeUsername));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        SendFriendRequestStatus status;
+
+        try
+        {
+            status = _friendUseCases.SendFriendRequest(playerId, addresseeUsername);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(status, SendFriendRequestStatus.Success, MapSendFaultCode);
     }
@@ -75,7 +132,21 @@ public sealed class FriendService : IFriendService
     public void AcceptFriendRequest(FriendshipDecisionRequest request)
     {
         int requestId = request?.RequestId ?? default;
-        bool isAccepted = ExecuteForCaller(playerId => _friendUseCases.AcceptFriendRequest(playerId, requestId));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        bool isAccepted;
+
+        try
+        {
+            isAccepted = _friendUseCases.AcceptFriendRequest(playerId, requestId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(isAccepted, GameServiceFaultCode.FriendRequestNotFound);
     }
@@ -83,7 +154,21 @@ public sealed class FriendService : IFriendService
     public void RejectFriendRequest(FriendshipDecisionRequest request)
     {
         int requestId = request?.RequestId ?? default;
-        bool isRejected = ExecuteForCaller(playerId => _friendUseCases.RejectFriendRequest(playerId, requestId));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        bool isRejected;
+
+        try
+        {
+            isRejected = _friendUseCases.RejectFriendRequest(playerId, requestId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(isRejected, GameServiceFaultCode.FriendRequestNotFound);
     }
@@ -91,8 +176,21 @@ public sealed class FriendService : IFriendService
     public void RemoveFriend(FriendUsernameRequest request)
     {
         string friendUsername = request?.Username ?? string.Empty;
-        RemoveFriendStatus status = ExecuteForCaller(
-            playerId => _friendUseCases.RemoveFriend(playerId, friendUsername));
+        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        RemoveFriendStatus status;
+
+        try
+        {
+            status = _friendUseCases.RemoveFriend(playerId, friendUsername);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(status, RemoveFriendStatus.Success, MapRemoveFaultCode);
     }
@@ -179,12 +277,5 @@ public sealed class FriendService : IFriendService
         }
 
         return faultCode;
-    }
-
-    private TResult ExecuteForCaller<TResult>(Func<int, TResult> operation)
-    {
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
-        TResult result = _faultTranslator.Execute(() => operation(playerId), GameServiceFaultCode.InvalidInput);
-        return result;
     }
 }

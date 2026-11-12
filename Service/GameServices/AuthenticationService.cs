@@ -1,6 +1,7 @@
 using System;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -31,10 +32,22 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public LoginResponse LogIn(LoginRequest request)
     {
-        PlayerIdentity player = PlayerIdentity.Empty;
-        bool isAuthenticated = _faultTranslator.Execute(
-            () => _loginUseCases.LogIn(request?.Identifier, request?.Password, out player),
-            GameServiceFaultCode.InvalidInput);
+        PlayerIdentity player;
+        bool isAuthenticated;
+
+        try
+        {
+            isAuthenticated = _loginUseCases.LogIn(request?.Identifier, request?.Password, out player);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
         LoginResponse response = isAuthenticated
             ? CreateLoginResponse(player)
             : CreateRejectedLoginResponse();
@@ -44,9 +57,21 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public bool SignUp(SignUpRequest request)
     {
-        bool isRegistered = _faultTranslator.Execute(
-            () => _signUpUseCases.SignUp(request?.Username, request?.Email, request?.Password),
-            GameServiceFaultCode.InvalidInput);
+        bool isRegistered;
+
+        try
+        {
+            isRegistered = _signUpUseCases.SignUp(request?.Username, request?.Email, request?.Password);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
         return isRegistered;
     }
 
