@@ -19,5 +19,6 @@ public enum LobbyResultStatus
     PlayerOffline,
     ChatWarning,
     ChatBlocked,
-    PlayerBanned
+    PlayerBanned,
+    MatchAlreadyStarted
 }

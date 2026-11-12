@@ -38,6 +38,7 @@
       <xs:enumeration value="BoneyardEmpty" />
       <xs:enumeration value="AlreadyDrawn" />
       <xs:enumeration value="MustDrawFirst" />
+      <xs:enumeration value="MatchAlreadyStarted" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />

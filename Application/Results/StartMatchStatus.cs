@@ -5,5 +5,6 @@ public enum StartMatchStatus
     Success,
     LobbyNotFound,
     NotLobbyHost,
-    PlayersNotReady
+    PlayersNotReady,
+    MatchAlreadyStarted
 }

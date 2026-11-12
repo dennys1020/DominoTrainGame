@@ -92,6 +92,9 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.PlayersNotReady:
                 resultStatus = LobbyResultStatus.PlayersNotReady;
                 break;
+            case GameServiceFaultCode.MatchAlreadyStarted:
+                resultStatus = LobbyResultStatus.MatchAlreadyStarted;
+                break;
             default:
                 resultStatus = MapInvitationFault(faultCode);
                 break;

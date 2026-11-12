@@ -601,6 +601,9 @@ en el tren</value>
   <data name="PlayersNotReadyMessage" xml:space="preserve">
     <value>Para iniciar se necesitan al menos dos jugadores y que todos estén listos.</value>
   </data>
+  <data name="MatchAlreadyStartedMessage" xml:space="preserve">
+    <value>La partida ya fue iniciada.</value>
+  </data>
   <data name="CancelReadyButtonLabel" xml:space="preserve">
     <value>Cancelar listo</value>
   </data>
