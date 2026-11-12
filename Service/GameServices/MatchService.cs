@@ -1,6 +1,7 @@
 using System;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
@@ -34,27 +35,63 @@ public sealed class MatchService : IMatchService
             throw new ArgumentNullException(nameof(request));
         }
 
-        PlayTileStatus status = ExecuteForCaller(
-            request.SessionToken,
-            caller => _matchUseCases.PlayTile(caller.PlayerId, ToTile(request.Tile), request.TrainOwnerId));
+        PlayerIdentity caller = ResolveCaller(request.SessionToken);
+        PlayTileStatus status;
+
+        try
+        {
+            status = _matchUseCases.PlayTile(caller.PlayerId, ToTile(request.Tile), request.TrainOwnerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
 
     public void DrawTile(MatchTurnRequest request)
     {
-        DrawTileStatus status = ExecuteForCaller(
-            request?.SessionToken,
-            caller => _matchUseCases.DrawTile(caller.PlayerId));
+        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
+        DrawTileStatus status;
+
+        try
+        {
+            status = _matchUseCases.DrawTile(caller.PlayerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(status, DrawTileStatus.Success, MapDrawTileFaultCode);
     }
 
     public void PassTurn(MatchTurnRequest request)
     {
-        PassTurnStatus status = ExecuteForCaller(
-            request?.SessionToken,
-            caller => _matchUseCases.PassTurn(caller.PlayerId));
+        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
+        PassTurnStatus status;
+
+        try
+        {
+            status = _matchUseCases.PassTurn(caller.PlayerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
 
         GameFaultFactory.ThrowIfRejected(status, PassTurnStatus.Success, MapPassTurnFaultCode);
     }
@@ -149,13 +186,6 @@ public sealed class MatchService : IMatchService
         return faultCode;
     }
 
-    private TResult ExecuteForCaller<TResult>(string sessionToken, Func<PlayerIdentity, TResult> operation)
-    {
-        PlayerIdentity caller = ResolveCaller(sessionToken);
-        TResult result = _faultTranslator.Execute(() => operation(caller), GameServiceFaultCode.InvalidInput);
-
-        return result;
-    }
 
     private PlayerIdentity ResolveCaller(string sessionToken)
     {
