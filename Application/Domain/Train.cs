@@ -60,8 +60,9 @@ public sealed class Train
             throw new InvalidOperationException("The tile does not match the end of the train.");
         }
 
-        EndPips = tile.GetOppositePips(EndPips);
-        _tiles.Add(tile);
+        Tile orientedTile = new Tile(EndPips, tile.GetOppositePips(EndPips));
+        EndPips = orientedTile.RightPips;
+        _tiles.Add(orientedTile);
     }
 
     public void Open()
