@@ -12,6 +12,7 @@ public static class LobbyResultMessageKeys
     private const string LobbyServerErrorMessageKey = "LobbyServerErrorMessage";
     private const string NotLobbyHostMessageKey = "NotLobbyHostMessage";
     private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
+    private const string MatchAlreadyStartedMessageKey = "MatchAlreadyStartedMessage";
     private const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
     private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
@@ -46,11 +47,28 @@ public static class LobbyResultMessageKeys
             case LobbyResultStatus.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
+            default:
+                messageKey = GetMatchStartMessageKey(status);
+                break;
+        }
+
+        return messageKey;
+    }
+
+    private static string GetMatchStartMessageKey(LobbyResultStatus status)
+    {
+        string messageKey;
+
+        switch (status)
+        {
             case LobbyResultStatus.NotLobbyHost:
                 messageKey = NotLobbyHostMessageKey;
                 break;
             case LobbyResultStatus.PlayersNotReady:
                 messageKey = PlayersNotReadyMessageKey;
+                break;
+            case LobbyResultStatus.MatchAlreadyStarted:
+                messageKey = MatchAlreadyStartedMessageKey;
                 break;
             default:
                 messageKey = GetInvitationMessageKey(status);

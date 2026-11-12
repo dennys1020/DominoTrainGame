@@ -601,6 +601,9 @@ on the train</value>
   <data name="PlayersNotReadyMessage" xml:space="preserve">
     <value>At least two players are needed and every player must be ready to start.</value>
   </data>
+  <data name="MatchAlreadyStartedMessage" xml:space="preserve">
+    <value>The match has already started.</value>
+  </data>
   <data name="CancelReadyButtonLabel" xml:space="preserve">
     <value>Cancel ready</value>
   </data>

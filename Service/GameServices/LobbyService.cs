@@ -315,6 +315,9 @@ public sealed class LobbyService : ILobbyService
             case StartMatchStatus.PlayersNotReady:
                 faultCode = GameServiceFaultCode.PlayersNotReady;
                 break;
+            case StartMatchStatus.MatchAlreadyStarted:
+                faultCode = GameServiceFaultCode.MatchAlreadyStarted;
+                break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;
                 break;

@@ -161,8 +161,12 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
         if (status == StartMatchStatus.Success)
         {
-            //TODO agregar la validacion por si un jugador hace doble click al querer iniciar una partida
-            _matchUseCases.StartMatch(lobby.Code, lobby.Roster.GetPlayerIds());
+            bool wasStarted = _matchUseCases.StartMatch(lobby.Code, lobby.Roster.GetPlayerIds());
+            status = wasStarted ? StartMatchStatus.Success : StartMatchStatus.MatchAlreadyStarted;
+        }
+
+        if (status == StartMatchStatus.Success)
+        {
             NotifyMatchStarting(lobby);
         }
         else
