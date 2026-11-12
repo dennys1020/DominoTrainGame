@@ -166,8 +166,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
         foreach (int playerId in match.PlayerIds)
         {
-            match.TryGetHand(playerId, out IReadOnlyList<Tile> hand);
-            tileCountsByPlayerId.Add(playerId, hand.Count);
+            tileCountsByPlayerId.Add(playerId, match.GetHand(playerId).Count);
         }
 
         return tileCountsByPlayerId;
@@ -187,8 +186,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
     private static HandUpdatedNotice CreateHandUpdatedNotice(MatchState match, int playerId)
     {
-        match.TryGetHand(playerId, out IReadOnlyList<Tile> hand);
-        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, hand);
+        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.GetHand(playerId));
         return notice;
     }
 

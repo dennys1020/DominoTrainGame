@@ -89,11 +89,10 @@ public sealed class MatchState
 
     public int CurrentPlayerId => _playerIds[_currentTurnIndex];
 
-    public bool TryGetHand(int playerId, out IReadOnlyList<Tile> hand)
+    public IReadOnlyList<Tile> GetHand(int playerId)
     {
-        bool wasFound = _handsByPlayerId.TryGetValue(playerId, out List<Tile> foundHand);
-        hand = wasFound ? foundHand : new List<Tile>();
-        return wasFound;
+        IReadOnlyList<Tile> hand = _handsByPlayerId[playerId];
+        return hand;
     }
 
     public bool TryGetTrain(int ownerId, out Train train)
@@ -161,7 +160,7 @@ public sealed class MatchState
 
         if (status == DrawTileStatus.Success)
         {
-            Boneyard.TryDraw(out Tile drawnTile);
+            Tile drawnTile = Boneyard.Draw();
             _handsByPlayerId[CurrentPlayerId].Add(drawnTile);
             _hasDrawnThisTurn = true;
         }
@@ -193,7 +192,7 @@ public sealed class MatchState
         return status;
     }
 
-    public void AdvanceTurn()
+    private void AdvanceTurn()
     {
         _currentTurnIndex = (_currentTurnIndex + TurnStep) % _playerIds.Count;
         _hasDrawnThisTurn = false;
@@ -201,10 +200,19 @@ public sealed class MatchState
 
     private bool HasSingleEngineTile(IReadOnlyList<Tile> tiles)
     {
-        List<Tile> allTiles = new List<Tile>(tiles);
-        int firstEngineIndex = allTiles.FindIndex(tile => tile.IsSameTile(EngineTile));
-        int lastEngineIndex = allTiles.FindLastIndex(tile => tile.IsSameTile(EngineTile));
-        bool hasSingleEngineTile = firstEngineIndex != TileNotFoundIndex && firstEngineIndex == lastEngineIndex;
+        bool hasEngineTile = false;
+        bool hasRepeatedEngineTile = false;
+
+        foreach (Tile tile in tiles)
+        {
+            if (tile.IsSameTile(EngineTile))
+            {
+                hasRepeatedEngineTile = hasEngineTile;
+                hasEngineTile = true;
+            }
+        }
+
+        bool hasSingleEngineTile = hasEngineTile && !hasRepeatedEngineTile;
         return hasSingleEngineTile;
     }
 
