@@ -23,16 +23,12 @@ internal static class MatchSnapshotMapper
             throw new ArgumentNullException(nameof(lobby));
         }
 
-        MatchTurnSummary turn = new
-        MatchTurnSummary(MatchSnapshot.Empty.Version,
-            message.CurrentPlayerId);
-        MatchTableSummary table = new
-            MatchTableSummary(GetEnginePips(message.EngineTile),
+        MatchTurnSummary turn = new MatchTurnSummary(MatchSnapshot.Empty.Version, message.CurrentPlayerId);
+        MatchTableSummary table = new MatchTableSummary(
+            GetEnginePips(message.EngineTile),
             message.BoneyardCount,
             MapTrains(message.Trains, lobby));
-        MatchSnapshot snapshot = new
-            MatchSnapshot(turn, table,
-            MapPlayers(message.Players, lobby));
+        MatchSnapshot snapshot = new MatchSnapshot(turn, table, MapPlayers(message.Players, lobby));
 
         return snapshot;
     }

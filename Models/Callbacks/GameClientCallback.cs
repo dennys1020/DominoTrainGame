@@ -136,7 +136,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
     {
         if (message == null)
         {
-            _logger.Warn("A hand notice without context was ignored");
+            _logger.Warn("A hand notice without content was ignored.");
         }
         else
         {

@@ -16,7 +16,7 @@ internal sealed class WindowFactory
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
 
     private readonly IRemoteGameServices _gameServices;
-    private readonly IRemoteMatchService _matchService;
+    private readonly IRemoteMatchServices _matchService;
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;

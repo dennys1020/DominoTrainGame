@@ -203,7 +203,7 @@
     <Compile Include="Networking\LobbyChannel.cs" />
     <Compile Include="Networking\LobbyResultMapper.cs" />
     <Compile Include="Networking\LobbyRosterUpdates.cs" />
-    <Compile Include="Networking\MatchSnapshotMapper.cs "/>
+    <Compile Include="Networking\MatchSnapshotMapper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
