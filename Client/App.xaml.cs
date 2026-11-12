@@ -23,20 +23,14 @@ public sealed partial class App : Application
 
         GameChannelCloser channelCloser = new GameChannelCloser();
         IGameConnectionFactory connectionFactory = new GameConnectionFactory();
-        IRemoteGameServices gameServices = CreateGameServices(connectionFactory, channelCloser);
-        SocialClientCallback socialCallback = new SocialClientCallback();
-        IRemoteSocialServices socialServices = new RemoteSocialServices(
-            connectionFactory,
-            channelCloser,
-            gameServices,
-            socialCallback);
+        RemoteServices remoteServices = CreateRemoteServices(connectionFactory, channelCloser);
         LocalizationViewModel localization = LocalizationViewModel.Instance;
-        WindowFactory windowFactory = new WindowFactory(gameServices, socialServices, localization);
+        WindowFactory windowFactory = new WindowFactory(remoteServices, localization);
 
         ShowLoginWindow(windowFactory);
     }
 
-    private static IRemoteGameServices CreateGameServices(
+    private static RemoteServices CreateRemoteServices(
         IGameConnectionFactory connectionFactory,
         GameChannelCloser channelCloser)
     {
@@ -53,7 +47,16 @@ public sealed partial class App : Application
             lobbyChannel,
             clientSession,
             lobbyCallback);
-        return gameServices;
+        SocialClientCallback socialCallback = new SocialClientCallback();
+        IRemoteSocialServices socialServices = new RemoteSocialServices(
+            connectionFactory,
+            channelCloser,
+            gameServices,
+            socialCallback);
+        MatchRequests matchRequests = new MatchRequests(connectionFactory, channelCloser, clientSession);
+        IRemoteMatchServices matchServices = new RemoteMatchServices(matchRequests, clientSession, lobbyCallback);
+        RemoteServices remoteServices = new RemoteServices(gameServices, socialServices, matchServices);
+        return remoteServices;
     }
 
     private static void ConfigureLogging()
