@@ -100,6 +100,35 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
+    public static MatchResultStatus MapMatchFault(GameServiceFaultCode faultCode)
+    {
+        MatchResultStatus resultStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.NotYourTurn:
+                resultStatus = MatchResultStatus.NotYourTurn;
+                break;
+            case GameServiceFaultCode.TileDoesNotMatch:
+                resultStatus = MatchResultStatus.TileDoesNotMatch;
+                break;
+            case GameServiceFaultCode.MatchNotFound:
+                resultStatus = MatchResultStatus.MatchNotFound;
+                break;
+            case GameServiceFaultCode.TileNotInHand:
+                resultStatus = MatchResultStatus.TileNotInHand;
+                break;
+            case GameServiceFaultCode.TrainNotAvailable:
+                resultStatus = MatchResultStatus.TrainNotAvailable;
+                break;
+            default:
+                resultStatus = MapTurnFault(faultCode);
+                break;
+        }
+
+        return resultStatus;
+    }
+
     private static LobbyResultStatus MapInvitationFault(GameServiceFaultCode faultCode)
     {
         LobbyResultStatus resultStatus;
@@ -161,6 +190,33 @@ internal static class FaultCodeMapper
                 break;
             default:
                 resultStatus = LobbyResultStatus.ServerError;
+                break;
+        }
+
+        return resultStatus;
+    }
+
+    private static MatchResultStatus MapTurnFault(GameServiceFaultCode faultCode)
+    {
+        MatchResultStatus resultStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.BoneyardEmpty:
+                resultStatus = MatchResultStatus.BoneyardEmpty;
+                break;
+            case GameServiceFaultCode.AlreadyDrawn:
+                resultStatus = MatchResultStatus.AlreadyDrawn;
+                break;
+            case GameServiceFaultCode.MustDrawFirst:
+                resultStatus = MatchResultStatus.MustDrawFirst;
+                break;
+            case GameServiceFaultCode.SessionNotFound:
+            case GameServiceFaultCode.InvalidSessionToken:
+                resultStatus = MatchResultStatus.SessionNotFound;
+                break;
+            default:
+                resultStatus = MatchResultStatus.ServerError;
                 break;
         }
 

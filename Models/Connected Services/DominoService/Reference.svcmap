@@ -23,6 +23,7 @@
     <MetadataSource Address="http://localhost:8080/AuthenticationService/mex" Protocol="mex" SourceId="2" />
     <MetadataSource Address="http://localhost:8080/LobbyService/mex" Protocol="mex" SourceId="3" />
     <MetadataSource Address="http://localhost:8080/FriendService/mex" Protocol="mex" SourceId="4" />
+    <MetadataSource Address="http://localhost:8080/MatchService/mex" Protocol="mex" SourceId="5" />
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="70929501-a74b-4450-937c-e66df86e8533" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />
@@ -41,6 +42,10 @@
     <MetadataFile FileName="service6.xsd" MetadataType="Schema" ID="9d01fce7-c8e7-4c58-a338-5d98bb1b2261" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
     <MetadataFile FileName="service7.xsd" MetadataType="Schema" ID="d20aba31-c0cd-4bc8-91e8-655382f1dec9" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
     <MetadataFile FileName="services3.xsd" MetadataType="Schema" ID="978e7e13-1c69-4444-9a72-9fdb5a18b5e9" SourceId="4" SourceUrl="http://localhost:8080/FriendService/mex" />
+    <MetadataFile FileName="service4.wsdl" MetadataType="Wsdl" ID="9b35f358-860e-4950-befe-d416f9bd7e76" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
+    <MetadataFile FileName="service8.xsd" MetadataType="Schema" ID="5436febe-f3b1-4a99-b637-4c36f8d39010" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
+    <MetadataFile FileName="service81.xsd" MetadataType="Schema" ID="978bdaca-8ff0-486a-baa6-79334ecc7641" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
+    <MetadataFile FileName="services4.xsd" MetadataType="Schema" ID="245b3de9-6286-4cad-b181-f83a46d3b8e1" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

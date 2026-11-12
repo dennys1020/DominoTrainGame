@@ -12,4 +12,6 @@ public interface IGameConnectionFactory
     LobbyServiceClient CreateLobbyClient(GameClientCallback callback);
 
     FriendServiceClient CreateFriendClient(SocialClientCallback callback);
+
+    MatchServiceClient CreateMatchClient();
 }

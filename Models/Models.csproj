@@ -138,6 +138,7 @@
     <None Include="Connected Services\DominoService\service3.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\DominoService\service4.wsdl" />
     <None Include="Connected Services\DominoService\service4.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -150,6 +151,12 @@
     <None Include="Connected Services\DominoService\service7.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\DominoService\service8.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service81.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\DominoService\services.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -160,6 +167,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\DominoService\services3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services4.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
