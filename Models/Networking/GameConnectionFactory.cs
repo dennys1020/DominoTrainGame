@@ -12,6 +12,7 @@ public sealed class GameConnectionFactory : IGameConnectionFactory
     private const string AuthenticationEndpointName = "NetTcpBinding_IAuthenticationService";
     private const string LobbyEndpointName = "NetTcpBinding_ILobbyService";
     private const string FriendEndpointName = "NetTcpBinding_IFriendService";
+    private const string MatchEndpointName = "NetTcpBinding_IMatchService";
 
     public ConnectionServiceClient CreateConnectionClient()
     {
@@ -47,5 +48,12 @@ public sealed class GameConnectionFactory : IGameConnectionFactory
         InstanceContext callbackContext = new InstanceContext(callback);
         FriendServiceClient friendClient = new FriendServiceClient(callbackContext, FriendEndpointName);
         return friendClient;
+    }
+
+    public MatchServiceClient CreateMatchClient()
+    {
+
+        MatchServiceClient matchClient = new MatchServiceClient(MatchEndpointName);
+        return matchClient;
     }
 }

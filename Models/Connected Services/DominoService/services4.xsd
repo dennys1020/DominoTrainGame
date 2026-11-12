@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://dominotraingame/services" elementFormDefault="qualified" targetNamespace="http://dominotraingame/services" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="PlayTileRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Tile" nillable="true" type="tns:TileData" />
+      <xs:element minOccurs="0" name="TrainOwnerId" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayTileRequest" nillable="true" type="tns:PlayTileRequest" />
+  <xs:complexType name="TileData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LeftPips" type="xs:int" />
+      <xs:element minOccurs="0" name="RightPips" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TileData" nillable="true" type="tns:TileData" />
+  <xs:complexType name="GameServiceFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Code" type="tns:GameServiceFaultCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="GameServiceFault" nillable="true" type="tns:GameServiceFault" />
+  <xs:simpleType name="GameServiceFaultCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InvalidInput" />
+      <xs:enumeration value="DatabaseUnavailable" />
+      <xs:enumeration value="SessionNotFound" />
+      <xs:enumeration value="LobbyNotFound" />
+      <xs:enumeration value="LobbyFull" />
+      <xs:enumeration value="LobbyConflict" />
+      <xs:enumeration value="AlreadyConnected" />
+      <xs:enumeration value="InvalidLobbyRequest" />
+      <xs:enumeration value="InvalidSessionToken" />
+      <xs:enumeration value="NotLobbyHost" />
+      <xs:enumeration value="PlayersNotReady" />
+      <xs:enumeration value="PlayerNotFound" />
+      <xs:enumeration value="CannotTargetSelf" />
+      <xs:enumeration value="AlreadyFriends" />
+      <xs:enumeration value="FriendRequestAlreadyExists" />
+      <xs:enumeration value="PlayerBlocked" />
+      <xs:enumeration value="FriendRequestNotFound" />
+      <xs:enumeration value="NotFriends" />
+      <xs:enumeration value="PlayerOffline" />
+      <xs:enumeration value="ChatWarning" />
+      <xs:enumeration value="ChatBlocked" />
+      <xs:enumeration value="PlayerBanned" />
+      <xs:enumeration value="MatchNotFound" />
+      <xs:enumeration value="NotYourTurn" />
+      <xs:enumeration value="TileNotInHand" />
+      <xs:enumeration value="TileDoesNotMatch" />
+      <xs:enumeration value="TrainNotAvailable" />
+      <xs:enumeration value="BoneyardEmpty" />
+      <xs:enumeration value="AlreadyDrawn" />
+      <xs:enumeration value="MustDrawFirst" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
+  <xs:complexType name="MatchTurnRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MatchTurnRequest" nillable="true" type="tns:MatchTurnRequest" />
+</xs:schema>
