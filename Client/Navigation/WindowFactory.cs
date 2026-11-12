@@ -16,6 +16,7 @@ internal sealed class WindowFactory
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
 
     private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteMatchService _matchService;
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;
@@ -71,7 +72,7 @@ internal sealed class WindowFactory
                 _gameServices,
                 new InviteFriendsViewModel(windowService, _gameServices, _socialServices),
                 _localization),
-            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices),
+            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchService),
             [Screen.MatchResults] = windowService => new MatchResultsViewModel(windowService, _gameServices),
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization)
         };

@@ -16,6 +16,8 @@ public sealed class ClientSession
     private int _currentPlayerId;
     private string _sessionToken = string.Empty;
     private SynchronizationContext _callerContext = new SynchronizationContext();
+    private MatchSnapshot _matchSnapshot = MatchSnapshot.Empty;
+    private PlayerHand _playerHand = PlayerHand.Empty;
 
     public LobbyResult CurrentLobby
     {
@@ -29,6 +31,36 @@ public sealed class ClientSession
             }
 
             return currentLobby;
+        }
+    }
+
+    public MatchSnapshot CurrentMatch
+    {
+        get
+        {
+            MatchSnapshot match;
+
+            lock (_sessionSyncRoot)
+            {
+                match = _matchSnapshot;
+            }
+
+            return match;
+        }
+    }
+
+    public PlayerHand CurrentHand
+    {
+        get
+        {
+            PlayerHand playerHand;
+
+            lock (_sessionSyncRoot)
+            {
+                playerHand = _playerHand;
+            }
+
+            return playerHand;
         }
     }
 
@@ -121,11 +153,39 @@ public sealed class ClientSession
         return currentLobby;
     }
 
+    public void StoreMatch(MatchSnapshot matchSnapshot)
+    {
+        if (matchSnapshot == null)
+        {
+            throw new ArgumentNullException(nameof(matchSnapshot));
+        }
+
+        lock (_sessionSyncRoot)
+        {
+            _matchSnapshot = matchSnapshot;
+        }
+    }
+
+    public void StoreHand(PlayerHand hand)
+    {
+        if (hand == null)
+        {
+            throw new ArgumentNullException(nameof(hand));
+        }
+
+        lock (_sessionSyncRoot)
+        {
+            _playerHand = hand;
+        }
+    }
+
     public void ClearLobby()
     {
         lock (_sessionSyncRoot)
         {
             _currentLobby = LobbyResult.Empty;
+            _matchSnapshot = MatchSnapshot.Empty;
+            _playerHand = PlayerHand.Empty;
             _pendingLobbyUpdates.Clear();
         }
     }
