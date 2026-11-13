@@ -85,6 +85,7 @@
     <Compile Include="Domain\Train.cs" />
     <Compile Include="Domain\Boneyard.cs" />
     <Compile Include="Domain\MatchState.cs" />
+    <Compile Include="Domain\RoundState.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />

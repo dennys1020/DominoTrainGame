@@ -63,7 +63,7 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             lock (match.SyncRoot)
             {
-                status = match.PlayTile(playerId, tile, trainOwnerId);
+                status = match.CurrentRound.PlayTile(playerId, tile, trainOwnerId);
             }
         }
 
@@ -88,7 +88,7 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             lock (match.SyncRoot)
             {
-                status = match.DrawTile(playerId);
+                status = match.CurrentRound.DrawTile(playerId);
             }
         }
 
@@ -113,7 +113,7 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             lock (match.SyncRoot)
             {
-                status = match.PassTurn(playerId);
+                status = match.CurrentRound.PassTurn(playerId);
             }
         }
 
@@ -151,13 +151,14 @@ public sealed class MatchUseCases : IMatchUseCases
 
     private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match, IReadOnlyList<int> recipientPlayerIds)
     {
+        RoundState round = match.CurrentRound;
         MatchUpdatedNotice notice = new MatchUpdatedNotice(
             recipientPlayerIds,
-            match.CurrentPlayerId,
-            match.Boneyard.Count,
-            match.EngineTile,
+            round.CurrentPlayerId,
+            round.Boneyard.Count,
+            round.EngineTile,
             CountTilesByPlayer(match),
-            CreateTrainSnapshots(match));
+            CreateTrainSnapshots(round));
         return notice;
     }
 
@@ -167,17 +168,17 @@ public sealed class MatchUseCases : IMatchUseCases
 
         foreach (int playerId in match.PlayerIds)
         {
-            tileCountsByPlayerId.Add(playerId, match.GetHand(playerId).Count);
+            tileCountsByPlayerId.Add(playerId, match.CurrentRound.GetHand(playerId).Count);
         }
 
         return tileCountsByPlayerId;
     }
 
-    private static List<TrainSnapshot> CreateTrainSnapshots(MatchState match)
+    private static List<TrainSnapshot> CreateTrainSnapshots(RoundState round)
     {
         List<TrainSnapshot> trains = new List<TrainSnapshot>();
 
-        foreach (Train train in match.Trains)
+        foreach (Train train in round.Trains)
         {
             trains.Add(new TrainSnapshot(train.OwnerId, train.IsOpen, train.Tiles));
         }
@@ -187,7 +188,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
     private static HandUpdatedNotice CreateHandUpdatedNotice(MatchState match, int playerId)
     {
-        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.GetHand(playerId));
+        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.CurrentRound.GetHand(playerId));
         return notice;
     }
 
