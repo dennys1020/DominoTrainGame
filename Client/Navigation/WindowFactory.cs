@@ -101,11 +101,9 @@ internal sealed class WindowFactory
 
     private ScreenViewModel CreateViewModel(Screen screen, IWindowService windowService)
     {
-        bool hasViewModel = _viewModelsByScreen.TryGetValue(
-            screen,
-            out Func<IWindowService, ScreenViewModel> createViewModel);
+        bool hasViewModel = _viewModelsByScreen.ContainsKey(screen);
         ScreenViewModel viewModel = hasViewModel
-            ? createViewModel(windowService)
+            ? _viewModelsByScreen[screen](windowService)
             : new DialogViewModel(windowService);
 
         return viewModel;
@@ -121,13 +119,12 @@ internal sealed class WindowFactory
 
     private static Window CreateWindow(Screen screen)
     {
-        bool hasWindow = _windowsByScreen.TryGetValue(screen, out Func<Window> createWindow);
-
-        if (!hasWindow)
+        if (!_windowsByScreen.ContainsKey(screen))
         {
             throw new ArgumentOutOfRangeException(nameof(screen));
         }
 
+        Func<Window> createWindow = _windowsByScreen[screen];
         Window window = createWindow();
         return window;
     }

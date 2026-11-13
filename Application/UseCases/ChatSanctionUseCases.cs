@@ -40,11 +40,8 @@ public sealed class ChatSanctionUseCases : IChatSanctionUseCases
 
     public bool CanChat(int playerId)
     {
-        bool isSanctioned = _sanctionRepository.TryFindActiveSanction(
-            playerId,
-            _clock.UtcNow,
-            out PlayerSanction _);
-        bool canChat = !isSanctioned;
+        PlayerSanction sanction = _sanctionRepository.FindActiveSanction(playerId, _clock.UtcNow);
+        bool canChat = sanction.IsEmpty;
 
         return canChat;
     }
@@ -73,11 +70,8 @@ public sealed class ChatSanctionUseCases : IChatSanctionUseCases
 
     public bool IsBannedFromPlaying(int playerId)
     {
-        bool isSanctioned = _sanctionRepository.TryFindActiveSanction(
-            playerId,
-            _clock.UtcNow,
-            out PlayerSanction sanction);
-        bool isBanned = isSanctioned && sanction.Type == SanctionType.GameBan;
+        PlayerSanction sanction = _sanctionRepository.FindActiveSanction(playerId, _clock.UtcNow);
+        bool isBanned = !sanction.IsEmpty && sanction.Type == SanctionType.GameBan;
         return isBanned;
     }
 

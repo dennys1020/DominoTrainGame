@@ -64,9 +64,9 @@ public sealed class PlayerSessionManager<TCallback>
     public PlayerIdentity ResolveCaller()
     {
         string sessionId = OperationContext.Current.SessionId;
-        bool isConnected = _sessions.TryGetPlayer(sessionId, out PlayerIdentity player);
+        PlayerIdentity player = _sessions.FindPlayer(sessionId);
 
-        if (!isConnected)
+        if (player.IsEmpty)
         {
             throw GameFaultFactory.Create(GameServiceFaultCode.SessionNotFound);
         }
@@ -76,9 +76,9 @@ public sealed class PlayerSessionManager<TCallback>
 
     private PlayerIdentity ResolveToken(string sessionToken)
     {
-        bool isValid = _sessionTokens.TryResolve(sessionToken, out PlayerIdentity player);
+        PlayerIdentity player = _sessionTokens.Resolve(sessionToken);
 
-        if (!isValid)
+        if (player.IsEmpty)
         {
             _logger.WarnFormat(
                 "A connection was rejected because the session token is invalid or expired. Channel: {0}.",

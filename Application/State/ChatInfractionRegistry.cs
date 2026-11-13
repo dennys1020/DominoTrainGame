@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace DominoTrainGame.Server.Application.State;
 
@@ -24,6 +25,7 @@ public sealed class ChatInfractionRegistry
 
     public void Reset(int playerId)
     {
-        _infractionsByPlayerId.TryRemove(playerId, out int _);
+        IDictionary<int, int> infractionsByPlayerId = _infractionsByPlayerId;
+        infractionsByPlayerId.Remove(playerId);
     }
 }

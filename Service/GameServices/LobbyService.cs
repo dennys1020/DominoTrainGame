@@ -41,12 +41,11 @@ public sealed class LobbyService : ILobbyService
     public LobbyResponse CreateLobby()
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyState lobby;
-        CreateLobbyStatus status;
+        LobbyOutcome<CreateLobbyStatus> outcome;
 
         try
         {
-            status = _lobbyUseCases.CreateLobby(caller, out lobby);
+            outcome = _lobbyUseCases.CreateLobby(caller);
         }
         catch (ArgumentException exception)
         {
@@ -57,20 +56,19 @@ public sealed class LobbyService : ILobbyService
             throw _faultTranslator.TranslateDatabaseUnavailable(exception);
         }
 
-        GameFaultFactory.ThrowIfRejected(status, CreateLobbyStatus.Success, MapCreateFaultCode);
-        LobbyResponse response = ToLobbyResponse(lobby);
+        GameFaultFactory.ThrowIfRejected(outcome.Status, CreateLobbyStatus.Success, MapCreateFaultCode);
+        LobbyResponse response = ToLobbyResponse(outcome.Lobby);
         return response;
     }
 
     public LobbyResponse JoinLobby(JoinLobbyRequest request)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyState lobby;
-        JoinLobbyStatus status;
+        LobbyOutcome<JoinLobbyStatus> outcome;
 
         try
         {
-            status = _lobbyUseCases.JoinLobby(caller, request?.Code, out lobby);
+            outcome = _lobbyUseCases.JoinLobby(caller, request?.Code);
         }
         catch (ArgumentException exception)
         {
@@ -81,8 +79,8 @@ public sealed class LobbyService : ILobbyService
             throw _faultTranslator.TranslateDatabaseUnavailable(exception);
         }
 
-        GameFaultFactory.ThrowIfRejected(status, JoinLobbyStatus.Success, MapJoinFaultCode);
-        LobbyResponse response = ToLobbyResponse(lobby);
+        GameFaultFactory.ThrowIfRejected(outcome.Status, JoinLobbyStatus.Success, MapJoinFaultCode);
+        LobbyResponse response = ToLobbyResponse(outcome.Lobby);
         return response;
     }
 

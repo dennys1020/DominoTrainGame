@@ -2,7 +2,7 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public interface IPlayerRepository
 {
-    bool TryFindCredentials(string identifier, out PlayerCredentials credentials);
+    PlayerCredentials FindCredentials(string identifier);
 
     bool CreatePlayer(PlayerRegistration registration);
 }

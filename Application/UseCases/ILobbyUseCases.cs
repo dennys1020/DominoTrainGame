@@ -5,9 +5,9 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface ILobbyUseCases
 {
-    CreateLobbyStatus CreateLobby(PlayerIdentity host, out LobbyState lobby);
+    LobbyOutcome<CreateLobbyStatus> CreateLobby(PlayerIdentity host);
 
-    JoinLobbyStatus JoinLobby(PlayerIdentity member, string code, out LobbyState lobby);
+    LobbyOutcome<JoinLobbyStatus> JoinLobby(PlayerIdentity member, string code);
 
     void LeaveLobby(int playerId);
 

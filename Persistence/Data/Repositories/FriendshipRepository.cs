@@ -25,15 +25,16 @@ public sealed class FriendshipRepository : IFriendshipRepository
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
     }
 
-    public bool TryFindPlayerId(string username, out int playerId)
+    public PlayerIdentity FindRegisteredPlayer(string username)
     {
         string normalizedUsername = username ?? string.Empty;
         List<int> playerIds = _databaseExecutor.Execute(
             context => FindRegisteredPlayerIds(context, normalizedUsername));
-        bool isFound = playerIds.Any();
-        playerId = playerIds.FirstOrDefault();
+        PlayerIdentity player = playerIds.Any()
+            ? new PlayerIdentity(playerIds.First(), normalizedUsername)
+            : PlayerIdentity.Empty;
 
-        return isFound;
+        return player;
     }
 
     public IReadOnlyList<PlayerIdentity> GetFriends(int playerId)
@@ -75,14 +76,12 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return isCreated;
     }
 
-    public bool TryAcceptRequest(int requestId, int addresseePlayerId, out int requesterPlayerId)
+    public IReadOnlyList<int> AcceptRequest(int requestId, int addresseePlayerId)
     {
         List<int> requesterPlayerIds = _databaseExecutor.Execute(
             context => ChangePendingStatus(context, IsRequestFor(requestId, addresseePlayerId), AcceptedStatusId));
-        bool isAccepted = requesterPlayerIds.Any();
 
-        requesterPlayerId = requesterPlayerIds.FirstOrDefault();
-        return isAccepted;
+        return requesterPlayerIds;
     }
 
     public bool RejectRequest(int requestId, int addresseePlayerId)

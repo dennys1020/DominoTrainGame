@@ -19,29 +19,27 @@ public sealed class LobbyRegistry
         _codeGenerator = codeGenerator ?? throw new ArgumentNullException(nameof(codeGenerator));
     }
 
-    public bool TryCreate(PlayerIdentity host, out LobbyState lobbyState)
+    public LobbyState Create(PlayerIdentity host)
     {
         if (host == null)
         {
             throw new ArgumentNullException(nameof(host));
         }
 
-        lobbyState = LobbyState.Empty;
-        bool wasCreated = false;
+        LobbyState createdLobby = LobbyState.Empty;
 
         lock (_lobbiesLock)
         {
-            if (!TryFindLobby(host.PlayerId, out LobbyState _))
+            if (FindLobby(host.PlayerId).IsEmpty)
             {
-                lobbyState = AddLobby(host);
-                wasCreated = true;
+                createdLobby = AddLobby(host);
             }
         }
 
-        return wasCreated;
+        return createdLobby;
     }
 
-    public JoinLobbyStatus TryJoin(PlayerIdentity member, string code, out LobbyState lobbyState)
+    public LobbyOutcome<JoinLobbyStatus> Join(PlayerIdentity member, string code)
     {
         if (member == null)
         {
@@ -49,14 +47,14 @@ public sealed class LobbyRegistry
         }
 
         string lobbyCode = code ?? string.Empty;
-        JoinLobbyStatus status;
+        LobbyOutcome<JoinLobbyStatus> outcome;
 
         lock (_lobbiesLock)
         {
-            status = AddPlayer(member, lobbyCode, out lobbyState);
+            outcome = AddPlayer(member, lobbyCode);
         }
 
-        return status;
+        return outcome;
     }
 
     public string NormalizeCode(string code)
@@ -71,56 +69,46 @@ public sealed class LobbyRegistry
         return normalizedCode;
     }
 
-    public bool Remove(int playerId, out LobbyState remainingLobby)
+    public LobbyState RemovePlayer(int playerId)
     {
-        bool wasRemoved = TryUpdateLobbyOfPlayer(
-            playerId,
-            lobby => lobby.WithoutPlayer(playerId),
-            out remainingLobby);
-        return wasRemoved;
+        LobbyState remainingLobby = UpdateLobbyOfPlayer(playerId, lobby => lobby.WithoutPlayer(playerId));
+        return remainingLobby;
     }
 
-    public bool TrySetReady(int playerId, bool isReady, out LobbyState lobbyState)
+    public LobbyState SetReady(int playerId, bool isReady)
     {
-        bool wasUpdated = TryUpdateLobbyOfPlayer(
-            playerId,
-            lobby => lobby.WithReadyState(playerId, isReady),
-            out lobbyState);
-        return wasUpdated;
+        LobbyState updatedLobby = UpdateLobbyOfPlayer(playerId, lobby => lobby.WithReadyState(playerId, isReady));
+        return updatedLobby;
     }
 
-    public bool TryFindLobbyOfPlayer(int playerId, out LobbyState lobbyState)
+    public LobbyState FindLobbyOfPlayer(int playerId)
     {
-        bool wasFound;
+        LobbyState lobby;
 
         lock (_lobbiesLock)
         {
-            wasFound = TryFindLobby(playerId, out lobbyState);
+            lobby = FindLobby(playerId);
         }
 
-        return wasFound;
+        return lobby;
     }
 
-    private bool TryUpdateLobbyOfPlayer(
-        int playerId,
-        Func<LobbyState, LobbyState> update,
-        out LobbyState lobbyState)
+    private LobbyState UpdateLobbyOfPlayer(int playerId, Func<LobbyState, LobbyState> update)
     {
-        lobbyState = LobbyState.Empty;
-        bool wasFound;
+        LobbyState updatedLobby = LobbyState.Empty;
 
         lock (_lobbiesLock)
         {
-            wasFound = TryFindLobby(playerId, out LobbyState currentLobby);
+            LobbyState currentLobby = FindLobby(playerId);
 
-            if (wasFound)
+            if (!currentLobby.IsEmpty)
             {
-                lobbyState = update(currentLobby);
-                StoreLobby(lobbyState);
+                updatedLobby = update(currentLobby);
+                StoreLobby(updatedLobby);
             }
         }
 
-        return wasFound;
+        return updatedLobby;
     }
 
     private LobbyState AddLobby(PlayerIdentity host)
@@ -132,17 +120,17 @@ public sealed class LobbyRegistry
         return createdLobby;
     }
 
-    private JoinLobbyStatus AddPlayer(PlayerIdentity member, string code, out LobbyState lobbyState)
+    private LobbyOutcome<JoinLobbyStatus> AddPlayer(PlayerIdentity member, string code)
     {
-        lobbyState = LobbyState.Empty;
+        LobbyState currentLobby = FindLobbyByCode(code);
+        LobbyState joinedLobby = LobbyState.Empty;
         JoinLobbyStatus status = JoinLobbyStatus.Success;
-        bool wasFound = _lobbiesByCode.TryGetValue(code, out LobbyState currentLobby);
 
-        if (TryFindLobby(member.PlayerId, out LobbyState _))
+        if (!FindLobby(member.PlayerId).IsEmpty)
         {
             status = JoinLobbyStatus.AlreadyInLobby;
         }
-        else if (!wasFound)
+        else if (currentLobby.IsEmpty)
         {
             status = JoinLobbyStatus.LobbyNotFound;
         }
@@ -152,22 +140,23 @@ public sealed class LobbyRegistry
         }
         else
         {
-            lobbyState = currentLobby.WithPlayer(member);
-            _lobbiesByCode[code] = lobbyState;
+            joinedLobby = currentLobby.WithPlayer(member);
+            _lobbiesByCode[code] = joinedLobby;
         }
 
-        return status;
+        LobbyOutcome<JoinLobbyStatus> outcome = new LobbyOutcome<JoinLobbyStatus>(status, joinedLobby);
+        return outcome;
     }
 
     private void StoreLobby(LobbyState lobby)
     {
-        if (lobby.IsEmpty)
+        if (lobby.HasPlayers)
         {
-            _lobbiesByCode.Remove(lobby.Code);
+            _lobbiesByCode[lobby.Code] = lobby;
         }
         else
         {
-            _lobbiesByCode[lobby.Code] = lobby;
+            _lobbiesByCode.Remove(lobby.Code);
         }
     }
 
@@ -183,12 +172,16 @@ public sealed class LobbyRegistry
         return code;
     }
 
-    private bool TryFindLobby(int playerId, out LobbyState lobby)
+    private LobbyState FindLobbyByCode(string code)
     {
-        LobbyState foundLobby = _lobbiesByCode.Values.FirstOrDefault(candidate => candidate.Roster.Contains(playerId));
-        bool wasFound = foundLobby != null;
+        LobbyState lobby = _lobbiesByCode.ContainsKey(code) ? _lobbiesByCode[code] : LobbyState.Empty;
+        return lobby;
+    }
 
-        lobby = foundLobby ?? LobbyState.Empty;
-        return wasFound;
+    private LobbyState FindLobby(int playerId)
+    {
+        LobbyState lobby = _lobbiesByCode.Values.FirstOrDefault(candidate => candidate.Roster.Contains(playerId))
+            ?? LobbyState.Empty;
+        return lobby;
     }
 }

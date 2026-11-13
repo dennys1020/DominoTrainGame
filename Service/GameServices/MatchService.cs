@@ -189,9 +189,9 @@ public sealed class MatchService : IMatchService
 
     private PlayerIdentity ResolveCaller(string sessionToken)
     {
-        bool isValid = _sessionToken.TryResolve(sessionToken, out PlayerIdentity caller);
+        PlayerIdentity caller = _sessionToken.Resolve(sessionToken);
 
-        if (!isValid)
+        if (caller.IsEmpty)
         {
             throw GameFaultFactory.Create(GameServiceFaultCode.SessionNotFound);
         }

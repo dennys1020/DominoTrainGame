@@ -24,8 +24,9 @@ public static class FriendStatusLabelKeys
 
     public static string GetLabelKey(FriendStatus status)
     {
-        bool hasLabelKey = _labelKeysByStatus.TryGetValue(status, out string knownLabelKey);
-        string labelKey = hasLabelKey ? knownLabelKey : OfflineLabelKey;
+        string labelKey = _labelKeysByStatus.ContainsKey(status)
+            ? _labelKeysByStatus[status]
+            : OfflineLabelKey;
         return labelKey;
     }
 }

@@ -77,6 +77,8 @@ public sealed class MatchState
 
     public static MatchState Empty { get; }
 
+    public bool IsEmpty => ReferenceEquals(this, Empty);
+
     public Tile EngineTile { get; }
 
     public Boneyard Boneyard { get; }
@@ -95,11 +97,10 @@ public sealed class MatchState
         return hand;
     }
 
-    public bool TryGetTrain(int ownerId, out Train train)
+    public Train FindTrain(int ownerId)
     {
-        bool wasFound = _trainsByOwnerId.TryGetValue(ownerId, out Train foundTrain);
-        train = wasFound ? foundTrain : Train.Empty;
-        return wasFound;
+        Train train = _trainsByOwnerId.ContainsKey(ownerId) ? _trainsByOwnerId[ownerId] : Train.Empty;
+        return train;
     }
 
     public PlayTileStatus PlayTile(int playerId, Tile tile, int trainOwnerId)
@@ -111,8 +112,10 @@ public sealed class MatchState
 
         List<Tile> currentHand = _handsByPlayerId[CurrentPlayerId];
         bool isPlayerTurn = playerId == CurrentPlayerId;
-        bool hasTile = TryFindTileIndex(currentHand, tile, out int tileIndex);
-        bool canUseTrain = TryGetTrain(trainOwnerId, out Train train) && train.CanBePlayedBy(playerId);
+        int tileIndex = FindTileIndex(currentHand, tile);
+        bool hasTile = tileIndex != TileNotFoundIndex;
+        Train train = FindTrain(trainOwnerId);
+        bool canUseTrain = train.CanBePlayedBy(playerId);
         PlayTileStatus status = PlayTileStatus.Success;
 
         if (!isPlayerTurn)
@@ -250,9 +253,9 @@ public sealed class MatchState
         _trainsByOwnerId.Add(Train.MexicanTrainOwnerId, new Train(Train.MexicanTrainOwnerId, EnginePips));
     }
 
-    private static bool TryFindTileIndex(List<Tile> hand, Tile tile, out int tileIndex)
+    private static int FindTileIndex(List<Tile> hand, Tile tile)
     {
-        tileIndex = TileNotFoundIndex;
+        int tileIndex = TileNotFoundIndex;
 
         for (int handIndex = FirstIndex; handIndex < hand.Count && tileIndex == TileNotFoundIndex; handIndex++)
         {
@@ -262,8 +265,7 @@ public sealed class MatchState
             }
         }
 
-        bool wasFound = tileIndex != TileNotFoundIndex;
-        return wasFound;
+        return tileIndex;
     }
 
     private void ApplyPlay(List<Tile> hand, int tileIndex, Train train)

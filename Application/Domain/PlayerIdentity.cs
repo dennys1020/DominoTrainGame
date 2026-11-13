@@ -20,4 +20,6 @@ public sealed class PlayerIdentity
     public int PlayerId { get; }
 
     public string Username { get; }
+
+    public bool IsEmpty => ReferenceEquals(this, Empty);
 }

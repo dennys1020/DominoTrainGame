@@ -63,10 +63,10 @@ public sealed class FriendUseCases : IFriendUseCases
     public SendFriendRequestStatus SendFriendRequest(int requesterPlayerId, string addresseeUsername)
     {
         string normalizedUsername = PlayerInputValidator.NormalizeUsername(addresseeUsername);
-        bool isFound = _friendshipRepository.TryFindPlayerId(normalizedUsername, out int addresseePlayerId);
-        SendFriendRequestStatus status = isFound
-            ? EvaluateFriendRequest(requesterPlayerId, addresseePlayerId)
-            : SendFriendRequestStatus.PlayerNotFound;
+        PlayerIdentity addressee = _friendshipRepository.FindRegisteredPlayer(normalizedUsername);
+        SendFriendRequestStatus status = addressee.IsEmpty
+            ? SendFriendRequestStatus.PlayerNotFound
+            : EvaluateFriendRequest(requesterPlayerId, addressee.PlayerId);
 
         LogFriendRequest(requesterPlayerId, status);
         return status;
@@ -74,9 +74,10 @@ public sealed class FriendUseCases : IFriendUseCases
 
     public bool AcceptFriendRequest(int playerId, int requestId)
     {
-        bool isAccepted = _friendshipRepository.TryAcceptRequest(requestId, playerId, out int requesterPlayerId);
+        IReadOnlyList<int> requesterPlayerIds = _friendshipRepository.AcceptRequest(requestId, playerId);
+        bool isAccepted = requesterPlayerIds.Any();
 
-        if (isAccepted)
+        foreach (int requesterPlayerId in requesterPlayerIds)
         {
             _socialNotifier.NotifyFriendsChanged(requesterPlayerId);
         }
@@ -96,10 +97,10 @@ public sealed class FriendUseCases : IFriendUseCases
     public RemoveFriendStatus RemoveFriend(int playerId, string friendUsername)
     {
         string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
-        bool isFound = _friendshipRepository.TryFindPlayerId(normalizedUsername, out int friendPlayerId);
-        RemoveFriendStatus status = isFound
-            ? RemoveExistingFriend(playerId, friendPlayerId)
-            : RemoveFriendStatus.PlayerNotFound;
+        PlayerIdentity friend = _friendshipRepository.FindRegisteredPlayer(normalizedUsername);
+        RemoveFriendStatus status = friend.IsEmpty
+            ? RemoveFriendStatus.PlayerNotFound
+            : RemoveExistingFriend(playerId, friend.PlayerId);
 
         LogFriendRemoval(playerId, status);
         return status;

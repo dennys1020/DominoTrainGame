@@ -4,5 +4,5 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface ILoginUseCases
 {
-    bool LogIn(string identifier, string password, out PlayerIdentity player);
+    PlayerIdentity LogIn(string identifier, string password);
 }

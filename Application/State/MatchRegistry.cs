@@ -37,18 +37,16 @@ public sealed class MatchRegistry
         return wasAdded;
     }
 
-    public bool TryFindByPlayer(int playerId, out MatchState match)
+    public MatchState FindByPlayer(int playerId)
     {
-        bool wasFound;
-        MatchState foundMatch;
+        MatchState match;
 
         lock (_matchesLock)
         {
-            wasFound = _matchesByPlayerId.TryGetValue(playerId, out foundMatch);
+            match = _matchesByPlayerId.ContainsKey(playerId) ? _matchesByPlayerId[playerId] : MatchState.Empty;
         }
 
-        match = wasFound ? foundMatch : MatchState.Empty;
-        return wasFound;
+        return match;
     }
 
     private bool CanAdd(string code, MatchState match)

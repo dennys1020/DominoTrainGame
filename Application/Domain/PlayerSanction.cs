@@ -20,4 +20,6 @@ public sealed class PlayerSanction
     public SanctionType Type { get; }
 
     public DateTime ExpiresAt { get; }
+
+    public bool IsEmpty => ReferenceEquals(this, Empty);
 }

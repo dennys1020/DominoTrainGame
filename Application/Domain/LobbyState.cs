@@ -31,7 +31,9 @@ public sealed class LobbyState
 
     public bool IsFull => Roster.Count >= MaximumPlayers;
 
-    public bool IsEmpty => Roster.Count == NoPlayers;
+    public bool IsEmpty => ReferenceEquals(this, Empty);
+
+    public bool HasPlayers => Roster.Count > NoPlayers;
 
     public bool HasMinimumPlayers => Roster.Count >= MinimumPlayerCount;
 

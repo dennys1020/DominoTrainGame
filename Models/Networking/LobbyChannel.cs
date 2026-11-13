@@ -163,12 +163,12 @@ public sealed class LobbyChannel
 
     private void HandleLobbyClientEnded(object sender, EventArgs eventArgs)
     {
-        bool canReconnect = _session.TryPrepareReconnection(out string lobbyCode);
+        ReconnectionPlan reconnectionPlan = _session.PrepareReconnection();
 
-        if (canReconnect)
+        if (reconnectionPlan.CanReconnect)
         {
             _logger.Warn("The lobby channel ended. Trying to reconnect with the session token.");
-            ScheduleReconnection(lobbyCode);
+            ScheduleReconnection(reconnectionPlan.LobbyCode);
         }
         else
         {

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
@@ -13,8 +13,9 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
 {
     private static readonly ITraceLog _logger;
 
-    private readonly ConcurrentDictionary<int, PlayerSession<TCallback>> _sessionsByPlayerId;
-    private readonly ConcurrentDictionary<string, int> _playerIdsBySessionId;
+    private readonly Dictionary<int, PlayerSession<TCallback>> _sessionsByPlayerId;
+    private readonly Dictionary<string, int> _playerIdsBySessionId;
+    private readonly object _sessionsLock;
 
     static PlayerSessionRegistry()
     {
@@ -23,8 +24,9 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
 
     public PlayerSessionRegistry()
     {
-        _sessionsByPlayerId = new ConcurrentDictionary<int, PlayerSession<TCallback>>();
-        _playerIdsBySessionId = new ConcurrentDictionary<string, int>(StringComparer.Ordinal);
+        _sessionsByPlayerId = new Dictionary<int, PlayerSession<TCallback>>();
+        _playerIdsBySessionId = new Dictionary<string, int>(StringComparer.Ordinal);
+        _sessionsLock = new object();
     }
 
     public bool TryAdd(PlayerSession<TCallback> session)
@@ -34,11 +36,17 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             throw new ArgumentNullException(nameof(session));
         }
 
-        bool wasAdded = _sessionsByPlayerId.TryAdd(session.Player.PlayerId, session);
+        bool wasAdded;
 
-        if (wasAdded)
+        lock (_sessionsLock)
         {
-            _playerIdsBySessionId[session.SessionId] = session.Player.PlayerId;
+            wasAdded = !_sessionsByPlayerId.ContainsKey(session.Player.PlayerId);
+
+            if (wasAdded)
+            {
+                _sessionsByPlayerId.Add(session.Player.PlayerId, session);
+                _playerIdsBySessionId[session.SessionId] = session.Player.PlayerId;
+            }
         }
 
         return wasAdded;
@@ -46,25 +54,34 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
 
     public bool IsOnline(int playerId)
     {
-        bool isOnline = _sessionsByPlayerId.ContainsKey(playerId);
+        bool isOnline;
+
+        lock (_sessionsLock)
+        {
+            isOnline = _sessionsByPlayerId.ContainsKey(playerId);
+        }
+
         return isOnline;
     }
 
-    public bool TryGetPlayer(string sessionId, out PlayerIdentity player)
+    public PlayerIdentity FindPlayer(string sessionId)
     {
         if (sessionId == null)
         {
             throw new ArgumentNullException(nameof(sessionId));
         }
 
-        bool isKnownSession = _playerIdsBySessionId.TryGetValue(sessionId, out int playerId);
-        bool hasSession = _sessionsByPlayerId.TryGetValue(playerId, out PlayerSession<TCallback> session);
-        bool wasFound = isKnownSession
-            && hasSession
-            && string.Equals(session.SessionId, sessionId, StringComparison.Ordinal);
+        PlayerIdentity player = PlayerIdentity.Empty;
 
-        player = wasFound ? session.Player : PlayerIdentity.Empty;
-        return wasFound;
+        lock (_sessionsLock)
+        {
+            if (IsCurrentSession(sessionId))
+            {
+                player = _sessionsByPlayerId[_playerIdsBySessionId[sessionId]].Player;
+            }
+        }
+
+        return player;
     }
 
     public bool TrySend(int playerId, Action<TCallback> send)
@@ -74,26 +91,38 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             throw new ArgumentNullException(nameof(send));
         }
 
-        bool isConnected = _sessionsByPlayerId.TryGetValue(playerId, out PlayerSession<TCallback> session);
+        List<TCallback> callbacks = FindCallbacks(playerId);
 
-        if (isConnected)
+        foreach (TCallback callback in callbacks)
         {
-            SendSafely(session.Callback, send);
+            SendSafely(callback, send);
         }
 
+        bool isConnected = callbacks.Any();
         return isConnected;
     }
 
     public bool TryDisconnect(int playerId)
     {
-        bool wasRemoved = _sessionsByPlayerId.TryRemove(playerId, out PlayerSession<TCallback> removedSession);
+        List<PlayerSession<TCallback>> removedSessions = new List<PlayerSession<TCallback>>();
 
-        if (wasRemoved)
+        lock (_sessionsLock)
         {
-            ForgetSessionId(removedSession);
+            if (_sessionsByPlayerId.ContainsKey(playerId))
+            {
+                PlayerSession<TCallback> removedSession = _sessionsByPlayerId[playerId];
+                _sessionsByPlayerId.Remove(playerId);
+                ForgetSessionId(removedSession);
+                removedSessions.Add(removedSession);
+            }
+        }
+
+        foreach (PlayerSession<TCallback> removedSession in removedSessions)
+        {
             AbortChannel(removedSession.Callback);
         }
 
+        bool wasRemoved = removedSessions.Any();
         return wasRemoved;
     }
 
@@ -104,26 +133,20 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             throw new ArgumentNullException(nameof(session));
         }
 
-        ICollection<KeyValuePair<int, PlayerSession<TCallback>>> entries = _sessionsByPlayerId;
-        KeyValuePair<int, PlayerSession<TCallback>> entry = new KeyValuePair<int, PlayerSession<TCallback>>(
-            session.Player.PlayerId,
-            session);
-        bool wasRemoved = entries.Remove(entry);
+        bool wasRemoved;
 
-        if (wasRemoved)
+        lock (_sessionsLock)
         {
-            ForgetSessionId(session);
+            wasRemoved = IsStoredSession(session);
+
+            if (wasRemoved)
+            {
+                _sessionsByPlayerId.Remove(session.Player.PlayerId);
+                ForgetSessionId(session);
+            }
         }
 
         return wasRemoved;
-    }
-
-    private void ForgetSessionId(PlayerSession<TCallback> session)
-    {
-        ICollection<KeyValuePair<string, int>> entries = _playerIdsBySessionId;
-        KeyValuePair<string, int> entry = new KeyValuePair<string, int>(session.SessionId, session.Player.PlayerId);
-
-        entries.Remove(entry);
     }
 
     private static void SendSafely(TCallback callback, Action<TCallback> send)
@@ -158,6 +181,54 @@ public sealed class PlayerSessionRegistry<TCallback> : IPresenceTracker
             {
                 _logger.Warn("A stale channel could not be aborted cleanly.", exception);
             }
+        }
+    }
+
+    private List<TCallback> FindCallbacks(int playerId)
+    {
+        List<TCallback> callbacks = new List<TCallback>();
+
+        lock (_sessionsLock)
+        {
+            if (_sessionsByPlayerId.ContainsKey(playerId))
+            {
+                callbacks.Add(_sessionsByPlayerId[playerId].Callback);
+            }
+        }
+
+        return callbacks;
+    }
+
+    private bool IsCurrentSession(string sessionId)
+    {
+        bool isCurrentSession = false;
+
+        if (_playerIdsBySessionId.ContainsKey(sessionId))
+        {
+            int playerId = _playerIdsBySessionId[sessionId];
+            isCurrentSession = _sessionsByPlayerId.ContainsKey(playerId)
+                && string.Equals(_sessionsByPlayerId[playerId].SessionId, sessionId, StringComparison.Ordinal);
+        }
+
+        return isCurrentSession;
+    }
+
+    private bool IsStoredSession(PlayerSession<TCallback> session)
+    {
+        int playerId = session.Player.PlayerId;
+        bool isStoredSession = _sessionsByPlayerId.ContainsKey(playerId)
+            && ReferenceEquals(_sessionsByPlayerId[playerId], session);
+        return isStoredSession;
+    }
+
+    private void ForgetSessionId(PlayerSession<TCallback> session)
+    {
+        bool isMappedToPlayer = _playerIdsBySessionId.ContainsKey(session.SessionId)
+            && _playerIdsBySessionId[session.SessionId] == session.Player.PlayerId;
+
+        if (isMappedToPlayer)
+        {
+            _playerIdsBySessionId.Remove(session.SessionId);
         }
     }
 }

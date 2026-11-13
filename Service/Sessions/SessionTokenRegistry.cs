@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 using DominoTrainGame.Server.Application.Domain;
 
@@ -10,11 +10,13 @@ public sealed class SessionTokenRegistry
     private const int TokenByteLength = 32;
     private const int TokenLifetimeMinutes = 30;
 
-    private readonly ConcurrentDictionary<string, IssuedSession> _sessionsByToken;
+    private readonly Dictionary<string, IssuedSession> _sessionsByToken;
+    private readonly object _sessionsLock;
 
     public SessionTokenRegistry()
     {
-        _sessionsByToken = new ConcurrentDictionary<string, IssuedSession>(StringComparer.Ordinal);
+        _sessionsByToken = new Dictionary<string, IssuedSession>(StringComparer.Ordinal);
+        _sessionsLock = new object();
     }
 
     public string Issue(PlayerIdentity player)
@@ -29,26 +31,20 @@ public sealed class SessionTokenRegistry
         return token;
     }
 
-    public bool TryResolve(string token, out PlayerIdentity player)
+    public PlayerIdentity Resolve(string token)
     {
-        bool isValid = false;
+        string normalizedToken = token ?? string.Empty;
+        PlayerIdentity player = PlayerIdentity.Empty;
 
-        player = PlayerIdentity.Empty;
-
-        if (!string.IsNullOrEmpty(token) && _sessionsByToken.TryGetValue(token, out IssuedSession session))
+        lock (_sessionsLock)
         {
-            if (session.ExpiresAtUtc > DateTime.UtcNow)
+            if (_sessionsByToken.ContainsKey(normalizedToken))
             {
-                player = session.Player;
-                isValid = true;
-            }
-            else
-            {
-                _sessionsByToken.TryRemove(token, out IssuedSession expiredSession);
+                player = ResolveStoredSession(normalizedToken);
             }
         }
 
-        return isValid;
+        return player;
     }
 
     public void Renew(string token, PlayerIdentity player)
@@ -64,12 +60,6 @@ public sealed class SessionTokenRegistry
         }
     }
 
-    private void Store(string token, PlayerIdentity player)
-    {
-        DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
-        _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
-    }
-
     private static string GenerateToken()
     {
         byte[] bytes = new byte[TokenByteLength];
@@ -82,6 +72,30 @@ public sealed class SessionTokenRegistry
         string token = Convert.ToBase64String(bytes);
 
         return token;
+    }
+
+    private PlayerIdentity ResolveStoredSession(string token)
+    {
+        IssuedSession session = _sessionsByToken[token];
+        bool isExpired = session.ExpiresAtUtc <= DateTime.UtcNow;
+        PlayerIdentity player = isExpired ? PlayerIdentity.Empty : session.Player;
+
+        if (isExpired)
+        {
+            _sessionsByToken.Remove(token);
+        }
+
+        return player;
+    }
+
+    private void Store(string token, PlayerIdentity player)
+    {
+        DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
+
+        lock (_sessionsLock)
+        {
+            _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
+        }
     }
 
     private sealed class IssuedSession
