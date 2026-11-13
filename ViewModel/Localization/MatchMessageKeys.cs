@@ -2,7 +2,7 @@ using DominoTrainGame.Client.Models.Contracts;
 
 namespace DominoTrainGame.Client.ViewModel.Localization;
 
-public static class MatchResultMessageKeys
+public static class MatchMessageKeys
 {
     private const string MatchNotFoundMessageKey = "MatchNotFoundMessage";
     private const string NotYourTurnMessageKey = "MatchNotYourTurnMessage";
@@ -14,25 +14,25 @@ public static class MatchResultMessageKeys
     private const string MustDrawFirstMessageKey = "MatchMustDrawFirstMessage";
     private const string MatchServerErrorMessageKey = "MatchServerErrorMessage";
 
-    public static string GetMessageKey(MatchResultStatus status)
+    public static string GetMessageKey(MatchMoveResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case MatchResultStatus.MatchNotFound:
+            case MatchMoveResult.MatchNotFound:
                 messageKey = MatchNotFoundMessageKey;
                 break;
-            case MatchResultStatus.NotYourTurn:
+            case MatchMoveResult.NotYourTurn:
                 messageKey = NotYourTurnMessageKey;
                 break;
-            case MatchResultStatus.TileNotInHand:
+            case MatchMoveResult.TileNotInHand:
                 messageKey = TileNotInHandMessageKey;
                 break;
-            case MatchResultStatus.TileDoesNotMatch:
+            case MatchMoveResult.TileDoesNotMatch:
                 messageKey = TileDoesNotMatchMessageKey;
                 break;
-            case MatchResultStatus.TrainNotAvailable:
+            case MatchMoveResult.TrainNotAvailable:
                 messageKey = TrainNotAvailableMessageKey;
                 break;
             default:
@@ -43,19 +43,19 @@ public static class MatchResultMessageKeys
         return messageKey;
     }
 
-    private static string GetDrawMessageKey(MatchResultStatus status)
+    private static string GetDrawMessageKey(MatchMoveResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case MatchResultStatus.BoneyardEmpty:
+            case MatchMoveResult.BoneyardEmpty:
                 messageKey = BoneyardEmptyMessageKey;
                 break;
-            case MatchResultStatus.AlreadyDrawn:
+            case MatchMoveResult.AlreadyDrawn:
                 messageKey = AlreadyDrawnMessageKey;
                 break;
-            case MatchResultStatus.MustDrawFirst:
+            case MatchMoveResult.MustDrawFirst:
                 messageKey = MustDrawFirstMessageKey;
                 break;
             default:
@@ -66,16 +66,16 @@ public static class MatchResultMessageKeys
         return messageKey;
     }
 
-    private static string GetConnectionMessageKey(MatchResultStatus status)
+    private static string GetConnectionMessageKey(MatchMoveResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case MatchResultStatus.SessionNotFound:
+            case MatchMoveResult.SessionNotFound:
                 messageKey = CommonMessageKeys.SessionExpiredMessageKey;
                 break;
-            case MatchResultStatus.ServerUnavailable:
+            case MatchMoveResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
             default:

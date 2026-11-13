@@ -107,27 +107,27 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return joining;
     }
 
-    public async Task<LobbyResultStatus> LeaveLobbyAsync()
+    public async Task<LobbyActionResult> LeaveLobbyAsync()
     {
-        LobbyResultStatus resultStatus = await _lobbyChannel.SendCommandAsync(SendLeaveLobbyAsync)
+        LobbyActionResult resultStatus = await _lobbyChannel.SendCommandAsync(SendLeaveLobbyAsync)
             .ConfigureAwait(false);
 
         _session.ClearLobby();
         return resultStatus;
     }
 
-    public Task<LobbyResultStatus> SetReadyAsync(bool isReady)
+    public Task<LobbyActionResult> SetReadyAsync(bool isReady)
     {
         SetReadyRequest request = new SetReadyRequest
         {
             IsReady = isReady
         };
         LobbyCommand<SetReadyRequest> readyCommand = new LobbyCommand<SetReadyRequest>(request, SendReadyStateAsync);
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(readyCommand.SendAsync);
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(readyCommand.SendAsync);
         return command;
     }
 
-    public Task<LobbyResultStatus> SendLobbyMessageAsync(string text)
+    public Task<LobbyActionResult> SendLobbyMessageAsync(string text)
     {
         SendLobbyMessageRequest request = new SendLobbyMessageRequest
         {
@@ -136,17 +136,17 @@ public sealed class RemoteGameServices : IRemoteGameServices
         LobbyCommand<SendLobbyMessageRequest> messageCommand = new LobbyCommand<SendLobbyMessageRequest>(
             request,
             SendMessageRequestAsync);
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(messageCommand.SendAsync);
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(messageCommand.SendAsync);
         return command;
     }
 
-    public Task<LobbyResultStatus> StartMatchAsync()
+    public Task<LobbyActionResult> StartMatchAsync()
     {
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(SendStartMatchAsync);
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(SendStartMatchAsync);
         return command;
     }
 
-    public Task<LobbyResultStatus> InviteFriendAsync(string username)
+    public Task<LobbyActionResult> InviteFriendAsync(string username)
     {
         FriendUsernameRequest request = new FriendUsernameRequest
         {
@@ -155,7 +155,7 @@ public sealed class RemoteGameServices : IRemoteGameServices
         LobbyCommand<FriendUsernameRequest> invitationCommand = new LobbyCommand<FriendUsernameRequest>(
             request,
             SendInvitationAsync);
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(invitationCommand.SendAsync);
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(invitationCommand.SendAsync);
         return command;
     }
 

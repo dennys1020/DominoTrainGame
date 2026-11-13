@@ -18,7 +18,7 @@ public sealed class LobbyChannel
 
     private static readonly ITraceLog _logger;
     private static readonly TimeSpan _reconnectDelay;
-    private static readonly ServiceFailureMapping<LobbyResultStatus> _lobbyFailures;
+    private static readonly ServiceFailureMapping<LobbyActionResult> _lobbyFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly ClientSession _session;
@@ -32,11 +32,11 @@ public sealed class LobbyChannel
     {
         _logger = TraceLogManager.GetLogger(typeof(LobbyChannel));
         _reconnectDelay = TimeSpan.FromSeconds(ReconnectDelaySeconds);
-        _lobbyFailures = new ServiceFailureMapping<LobbyResultStatus>(
+        _lobbyFailures = new ServiceFailureMapping<LobbyActionResult>(
             LobbyOperationName,
             FaultCodeMapper.MapLobbyFault,
-            LobbyResultStatus.ServerError,
-            LobbyResultStatus.ServerUnavailable);
+            LobbyActionResult.ServerError,
+            LobbyActionResult.ServerUnavailable);
     }
 
     public LobbyChannel(
@@ -81,16 +81,16 @@ public sealed class LobbyChannel
         return joining;
     }
 
-    public Task<LobbyResultStatus> SendCommandAsync(Func<LobbyServiceClient, Task> command)
+    public Task<LobbyActionResult> SendCommandAsync(Func<LobbyServiceClient, Task> command)
     {
         if (command == null)
         {
             throw new ArgumentNullException(nameof(command));
         }
 
-        Task<LobbyResultStatus> commandTask = InvokeAsync(
-            lobbyClient => RemoteCallGuard.CompleteCommandAsync(command(lobbyClient), LobbyResultStatus.Success),
-            RemoteCallGuard.KeepStatus<LobbyResultStatus>);
+        Task<LobbyActionResult> commandTask = InvokeAsync(
+            lobbyClient => RemoteCallGuard.CompleteCommandAsync(command(lobbyClient), LobbyActionResult.Success),
+            RemoteCallGuard.KeepStatus<LobbyActionResult>);
         return commandTask;
     }
 
@@ -101,7 +101,7 @@ public sealed class LobbyChannel
 
     private async Task<TResult> InvokeAsync<TResult>(
         Func<LobbyServiceClient, Task<TResult>> call,
-        Func<LobbyResultStatus, TResult> createFailure)
+        Func<LobbyActionResult, TResult> createFailure)
     {
         Task reconnection;
 
@@ -117,7 +117,7 @@ public sealed class LobbyChannel
 
     private Task<TResult> CallCurrentLobbyClientAsync<TResult>(
         Func<LobbyServiceClient, Task<TResult>> call,
-        Func<LobbyResultStatus, TResult> createFailure)
+        Func<LobbyActionResult, TResult> createFailure)
     {
         Task<TResult> callTask = _callGuard.ExecuteAsync(
             () => CallOpenedLobbyClientAsync(call, createFailure),
@@ -128,9 +128,9 @@ public sealed class LobbyChannel
 
     private Task<TResult> CallOpenedLobbyClientAsync<TResult>(
         Func<LobbyServiceClient, Task<TResult>> call,
-        Func<LobbyResultStatus, TResult> createFailure)
+        Func<LobbyActionResult, TResult> createFailure)
     {
-        TResult sessionNotFound = createFailure(LobbyResultStatus.SessionNotFound);
+        TResult sessionNotFound = createFailure(LobbyActionResult.SessionNotFound);
         Task<TResult> callTask = _lobbyClientSlot.CallAsync(
             _session.SessionToken,
             call,
@@ -153,7 +153,7 @@ public sealed class LobbyChannel
         LobbyResponse response = await responseTask.ConfigureAwait(false);
         LobbyResult result = LobbyResultMapper.MapLobbyResponse(response);
 
-        if (result.Status == LobbyResultStatus.Success)
+        if (result.Status == LobbyActionResult.Success)
         {
             result = _session.StoreLobby(result);
         }

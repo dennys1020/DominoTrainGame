@@ -57,7 +57,7 @@
     <Compile Include="Common\ObservableViewModel.cs" />
     <Compile Include="Common\ScreenViewModel.cs" />
     <Compile Include="Contracts\IWindowService.cs" />
-    <Compile Include="Localization\MatchResultMessageKeys.cs" />
+    <Compile Include="Localization\MatchMessageKeys.cs" />
     <Compile Include="MatchPlayerViewModel.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
@@ -108,7 +108,7 @@
     <Compile Include="Contracts\ISubscribingViewModel.cs" />
     <Compile Include="Localization\FriendStatusLabelKeys.cs" />
     <Compile Include="PlayerSearchItemViewModel.cs" />
-    <Compile Include="Localization\FriendResultMessageKeys.cs" />
+    <Compile Include="Localization\FriendMessageKeys.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

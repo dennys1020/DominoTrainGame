@@ -9,10 +9,10 @@ public sealed class LobbyResult
 
     static LobbyResult()
     {
-        Empty = CreateFailure(LobbyResultStatus.LobbyNotFound);
+        Empty = CreateFailure(LobbyActionResult.LobbyNotFound);
     }
 
-    public LobbyResult(LobbyResultStatus status, string code, int maximumPlayers, LobbyRoster roster)
+    public LobbyResult(LobbyActionResult status, string code, int maximumPlayers, LobbyRoster roster)
     {
         Status = status;
         Code = code ?? string.Empty;
@@ -22,7 +22,7 @@ public sealed class LobbyResult
 
     public static LobbyResult Empty { get; }
 
-    public LobbyResultStatus Status { get; }
+    public LobbyActionResult Status { get; }
 
     public string Code { get; }
 
@@ -36,7 +36,7 @@ public sealed class LobbyResult
 
     public IReadOnlyList<LobbyPlayerResult> Players => Roster.Players;
 
-    public static LobbyResult CreateFailure(LobbyResultStatus status)
+    public static LobbyResult CreateFailure(LobbyActionResult status)
     {
         LobbyResult failure = new LobbyResult(status, string.Empty, EmptyMaximumPlayers, LobbyRoster.Empty);
         return failure;

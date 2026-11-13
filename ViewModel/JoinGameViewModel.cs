@@ -44,7 +44,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
     {
         LobbyResult result = await RunWhileBusyAsync(() => _gameServices.JoinLobbyAsync(LobbyCode.Trim()));
 
-        if (result.Status == LobbyResultStatus.Success)
+        if (result.Status == LobbyActionResult.Success)
         {
             WindowService.Navigate(Screen.Room);
         }

@@ -178,7 +178,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private bool TryApplyCurrentLobby()
     {
         LobbyResult currentLobby = _gameServices.CurrentLobby;
-        bool hasLobby = currentLobby.Status == LobbyResultStatus.Success;
+        bool hasLobby = currentLobby.Status == LobbyActionResult.Success;
 
         if (hasLobby)
         {
@@ -281,9 +281,9 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private async Task LeaveRoomAsync()
     {
-        LobbyResultStatus result = await _gameServices.LeaveLobbyAsync();
+        LobbyActionResult result = await _gameServices.LeaveLobbyAsync();
 
-        if (result == LobbyResultStatus.Success)
+        if (result == LobbyActionResult.Success)
         {
             WindowService.Navigate(_previousScreen);
         }
@@ -318,10 +318,10 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private async Task SubmitMessageAsync()
     {
         string normalizedText = LobbyMessageInputValidator.Normalize(MessageText);
-        LobbyResultStatus result = await RunLobbyCommandAsync(
+        LobbyActionResult result = await RunLobbyCommandAsync(
             () => _gameServices.SendLobbyMessageAsync(normalizedText));
 
-        bool wasDelivered = result == LobbyResultStatus.Success || result == LobbyResultStatus.ChatWarning;
+        bool wasDelivered = result == LobbyActionResult.Success || result == LobbyActionResult.ChatWarning;
 
         if (wasDelivered)
         {
@@ -331,7 +331,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         ChatNotice = GetChatNotice(result);
     }
 
-    private string GetChatNotice(LobbyResultStatus result)
+    private string GetChatNotice(LobbyActionResult result)
     {
         string chatNotice = IsChatSanction(result)
             ? _localization[LobbyResultMessageKeys.GetMessageKey(result)]
@@ -339,10 +339,10 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         return chatNotice;
     }
 
-    private async Task<LobbyResultStatus> RunLobbyCommandAsync(Func<Task<LobbyResultStatus>> command)
+    private async Task<LobbyActionResult> RunLobbyCommandAsync(Func<Task<LobbyActionResult>> command)
     {
-        LobbyResultStatus result = await RunWhileBusyAsync(command);
-        bool isFailure = result != LobbyResultStatus.Success && !IsChatSanction(result);
+        LobbyActionResult result = await RunWhileBusyAsync(command);
+        bool isFailure = result != LobbyActionResult.Success && !IsChatSanction(result);
 
         if (isFailure)
         {
@@ -352,9 +352,9 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         return result;
     }
 
-    private static bool IsChatSanction(LobbyResultStatus result)
+    private static bool IsChatSanction(LobbyActionResult result)
     {
-        bool isChatSanction = result == LobbyResultStatus.ChatWarning || result == LobbyResultStatus.ChatBlocked;
+        bool isChatSanction = result == LobbyActionResult.ChatWarning || result == LobbyActionResult.ChatBlocked;
         return isChatSanction;
     }
 

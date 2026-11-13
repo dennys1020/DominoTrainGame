@@ -10,12 +10,12 @@ internal static class LobbyResultMapper
 {
     public static LobbyResult MapLobbyResponse(LobbyResponse response)
     {
-        LobbyResult result = LobbyResult.CreateFailure(LobbyResultStatus.ServerError);
+        LobbyResult result = LobbyResult.CreateFailure(LobbyActionResult.ServerError);
 
         if (response != null)
         {
             result = new LobbyResult(
-                LobbyResultStatus.Success,
+                LobbyActionResult.Success,
                 response.Code,
                 response.MaximumPlayers,
                 MapLobbyRoster(response));

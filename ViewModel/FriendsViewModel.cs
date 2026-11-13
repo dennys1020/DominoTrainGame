@@ -322,6 +322,6 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ShowFailure(FriendResultStatus status)
     {
-        WindowService.ShowMessage(FriendResultMessageKeys.GetMessageKey(status));
+        WindowService.ShowMessage(FriendMessageKeys.GetMessageKey(status));
     }
 }
