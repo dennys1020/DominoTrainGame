@@ -131,7 +131,7 @@ internal static class ChatTextNormalizer
 
     private static char ReplaceLookAlike(char character)
     {
-        char replacement = _lookAlikeCharacters.TryGetValue(character, out char letter) ? letter : character;
+        char replacement = _lookAlikeCharacters.ContainsKey(character) ? _lookAlikeCharacters[character] : character;
         return replacement;
     }
 }

@@ -33,11 +33,10 @@ public sealed class AuthenticationService : IAuthenticationService
     public LoginResponse LogIn(LoginRequest request)
     {
         PlayerIdentity player;
-        bool isAuthenticated;
 
         try
         {
-            isAuthenticated = _loginUseCases.LogIn(request?.Identifier, request?.Password, out player);
+            player = _loginUseCases.LogIn(request?.Identifier, request?.Password);
         }
         catch (ArgumentException exception)
         {
@@ -48,9 +47,9 @@ public sealed class AuthenticationService : IAuthenticationService
             throw _faultTranslator.TranslateDatabaseUnavailable(exception);
         }
 
-        LoginResponse response = isAuthenticated
-            ? CreateLoginResponse(player)
-            : CreateRejectedLoginResponse();
+        LoginResponse response = player.IsEmpty
+            ? CreateRejectedLoginResponse()
+            : CreateLoginResponse(player);
 
         return response;
     }

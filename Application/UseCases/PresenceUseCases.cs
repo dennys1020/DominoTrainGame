@@ -18,7 +18,7 @@ public sealed class PresenceUseCases : IPresenceUseCases
 
     public PlayerStatus GetStatus(int playerId)
     {
-        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState _);
+        bool isInLobby = !_lobbyRegistry.FindLobbyOfPlayer(playerId).IsEmpty;
         bool isOnline = _presenceTracker.IsOnline(playerId);
         PlayerStatus status = PlayerStatus.Offline;
 

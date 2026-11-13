@@ -21,8 +21,9 @@ internal static class PlayerStatusCodes
 
     public static PlayerStatusCode FromStatus(PlayerStatus status)
     {
-        bool isKnownStatus = _statusCodesByStatus.TryGetValue(status, out PlayerStatusCode knownStatusCode);
-        PlayerStatusCode statusCode = isKnownStatus ? knownStatusCode : PlayerStatusCode.Offline;
+        PlayerStatusCode statusCode = _statusCodesByStatus.ContainsKey(status)
+            ? _statusCodesByStatus[status]
+            : PlayerStatusCode.Offline;
         return statusCode;
     }
 }

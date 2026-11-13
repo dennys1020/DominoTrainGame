@@ -27,6 +27,8 @@ public sealed class LobbyPlayerState
 
     public bool IsReady { get; }
 
+    public bool IsEmpty => ReferenceEquals(this, Empty);
+
     public LobbyPlayerState WithReadyState(bool isReady)
     {
         LobbyPlayerState player = new LobbyPlayerState(Member, isReady);

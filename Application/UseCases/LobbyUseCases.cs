@@ -43,21 +43,21 @@ public sealed class LobbyUseCases : ILobbyUseCases
         _matchUseCases = matchUseCases ?? throw new ArgumentNullException(nameof(matchUseCases));
     }
 
-    public CreateLobbyStatus CreateLobby(PlayerIdentity host, out LobbyState lobby)
+    public LobbyOutcome<CreateLobbyStatus> CreateLobby(PlayerIdentity host)
     {
         if (host == null)
         {
             throw new ArgumentNullException(nameof(host));
         }
 
-        lobby = LobbyState.Empty;
+        LobbyState lobby = LobbyState.Empty;
         CreateLobbyStatus status = CreateLobbyStatus.PlayerBanned;
         bool isBanned = _chatSanctionUseCases.IsBannedFromPlaying(host.PlayerId);
 
         if (!isBanned)
         {
-            bool wasCreated = _lobbyRegistry.TryCreate(host, out lobby);
-            status = wasCreated ? CreateLobbyStatus.Success : CreateLobbyStatus.AlreadyInLobby;
+            lobby = _lobbyRegistry.Create(host);
+            status = lobby.IsEmpty ? CreateLobbyStatus.AlreadyInLobby : CreateLobbyStatus.Success;
         }
 
         if (status == CreateLobbyStatus.Success)
@@ -70,10 +70,11 @@ public sealed class LobbyUseCases : ILobbyUseCases
             _logger.InfoFormat("A lobby creation was rejected. PlayerId: {0}. Status: {1}.", host.PlayerId, status);
         }
 
-        return status;
+        LobbyOutcome<CreateLobbyStatus> outcome = new LobbyOutcome<CreateLobbyStatus>(status, lobby);
+        return outcome;
     }
 
-    public JoinLobbyStatus JoinLobby(PlayerIdentity member, string code, out LobbyState lobby)
+    public LobbyOutcome<JoinLobbyStatus> JoinLobby(PlayerIdentity member, string code)
     {
         if (member == null)
         {
@@ -81,33 +82,37 @@ public sealed class LobbyUseCases : ILobbyUseCases
         }
 
         string normalizedCode = _lobbyRegistry.NormalizeCode(code);
-        lobby = LobbyState.Empty;
-        JoinLobbyStatus status = JoinLobbyStatus.PlayerBanned;
+        LobbyOutcome<JoinLobbyStatus> outcome = new LobbyOutcome<JoinLobbyStatus>(
+            JoinLobbyStatus.PlayerBanned,
+            LobbyState.Empty);
         bool isBanned = _chatSanctionUseCases.IsBannedFromPlaying(member.PlayerId);
 
         if (!isBanned)
         {
-            status = _lobbyRegistry.TryJoin(member, normalizedCode, out lobby);
+            outcome = _lobbyRegistry.Join(member, normalizedCode);
         }
 
-        if (status == JoinLobbyStatus.Success)
+        if (outcome.Status == JoinLobbyStatus.Success)
         {
-            NotifyPlayerJoined(member, lobby);
+            NotifyPlayerJoined(member, outcome.Lobby);
             _friendUseCases.PublishStatus(member.PlayerId);
         }
         else
         {
-            _logger.InfoFormat("A join request was rejected. PlayerId: {0}. Status: {1}.", member.PlayerId, status);
+            _logger.InfoFormat(
+                "A join request was rejected. PlayerId: {0}. Status: {1}.",
+                member.PlayerId,
+                outcome.Status);
         }
 
-        return status;
+        return outcome;
     }
 
     public void LeaveLobby(int playerId)
     {
-        bool wasInLobby = _lobbyRegistry.Remove(playerId, out LobbyState remainingLobby);
+        LobbyState remainingLobby = _lobbyRegistry.RemovePlayer(playerId);
 
-        if (wasInLobby)
+        if (!remainingLobby.IsEmpty)
         {
             NotifyPlayerLeft(playerId, remainingLobby);
             _friendUseCases.PublishStatus(playerId);
@@ -116,7 +121,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
     public bool TrySetReady(int playerId, bool isReady)
     {
-        bool wasUpdated = _lobbyRegistry.TrySetReady(playerId, isReady, out LobbyState lobby);
+        LobbyState lobby = _lobbyRegistry.SetReady(playerId, isReady);
+        bool wasUpdated = !lobby.IsEmpty;
 
         if (wasUpdated)
         {
@@ -137,7 +143,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
         string normalizedText = text?.Trim() ?? string.Empty;
         ValidateMessageText(normalizedText);
 
-        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
+        LobbyState lobby = _lobbyRegistry.FindLobbyOfPlayer(playerId);
+        bool isInLobby = !lobby.IsEmpty;
         SendMessageStatus status = SendMessageStatus.NotInLobby;
 
         if (isInLobby)
@@ -156,8 +163,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
     public StartMatchStatus StartMatch(int playerId)
     {
-        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(playerId, out LobbyState lobby);
-        StartMatchStatus status = isInLobby ? GetStartStatus(playerId, lobby) : StartMatchStatus.LobbyNotFound;
+        LobbyState lobby = _lobbyRegistry.FindLobbyOfPlayer(playerId);
+        StartMatchStatus status = lobby.IsEmpty ? StartMatchStatus.LobbyNotFound : GetStartStatus(playerId, lobby);
 
         if (status == StartMatchStatus.Success)
         {
@@ -251,9 +258,9 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private void NotifyPlayerReadyChanged(int playerId, LobbyState lobby)
     {
         LobbyRoster roster = lobby.Roster;
-        bool wasFound = roster.TryFindPlayer(playerId, out LobbyPlayerState player);
+        LobbyPlayerState player = roster.FindPlayer(playerId);
 
-        if (wasFound)
+        if (!player.IsEmpty)
         {
             PlayerReadyChangedNotice notice = new PlayerReadyChangedNotice(
                 roster.GetPlayerIds(),
@@ -271,9 +278,9 @@ public sealed class LobbyUseCases : ILobbyUseCases
     private void NotifyLobbyMessage(int playerId, string text, LobbyState lobby)
     {
         LobbyRoster roster = lobby.Roster;
-        bool wasFound = roster.TryFindPlayer(playerId, out LobbyPlayerState sender);
+        LobbyPlayerState sender = roster.FindPlayer(playerId);
 
-        if (wasFound)
+        if (!sender.IsEmpty)
         {
             LobbyMessageNotice notice = new LobbyMessageNotice(roster.GetPlayerIds(), sender.Member, text);
 

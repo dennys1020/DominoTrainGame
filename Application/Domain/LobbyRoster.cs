@@ -90,13 +90,11 @@ public sealed class LobbyRoster
         return roster;
     }
 
-    public bool TryFindPlayer(int playerId, out LobbyPlayerState player)
+    public LobbyPlayerState FindPlayer(int playerId)
     {
-        LobbyPlayerState foundPlayer = Players.FirstOrDefault(candidate => candidate.PlayerId == playerId);
-        bool wasFound = foundPlayer != null;
-
-        player = foundPlayer ?? LobbyPlayerState.Empty;
-        return wasFound;
+        LobbyPlayerState player = Players.FirstOrDefault(candidate => candidate.PlayerId == playerId)
+            ?? LobbyPlayerState.Empty;
+        return player;
     }
 
     public List<int> GetPlayerIds()

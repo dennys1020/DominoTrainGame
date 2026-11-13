@@ -23,4 +23,6 @@ public sealed class PlayerCredentials
     public string Username { get; }
 
     public string PasswordHash { get; }
+
+    public bool IsEmpty => ReferenceEquals(this, Empty);
 }

@@ -26,15 +26,15 @@ public sealed class LoginUseCases : ILoginUseCases
         _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
-    public bool LogIn(string identifier, string password, out PlayerIdentity player)
+    public PlayerIdentity LogIn(string identifier, string password)
     {
         string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
 
         ValidateIdentifier(normalizedIdentifier);
         PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
 
-        bool isAuthenticated = VerifyCredentials(normalizedIdentifier, password, out player);
-        return isAuthenticated;
+        PlayerIdentity player = VerifyCredentials(normalizedIdentifier, password);
+        return player;
     }
 
     private static void ValidateIdentifier(string identifier)
@@ -50,17 +50,17 @@ public sealed class LoginUseCases : ILoginUseCases
         }
     }
 
-    private bool VerifyCredentials(string identifier, string password, out PlayerIdentity player)
+    private PlayerIdentity VerifyCredentials(string identifier, string password)
     {
-        bool isRegistered = _playerRepository.TryFindCredentials(identifier, out PlayerCredentials credentials);
-        bool isAuthenticated = isRegistered && _passwordHasher.Verify(credentials.PasswordHash, password);
+        PlayerCredentials credentials = _playerRepository.FindCredentials(identifier);
+        bool isAuthenticated = !credentials.IsEmpty && _passwordHasher.Verify(credentials.PasswordHash, password);
 
         LogLoginAttempt(isAuthenticated, credentials);
 
-        player = isAuthenticated
+        PlayerIdentity player = isAuthenticated
             ? new PlayerIdentity(credentials.PlayerId, credentials.Username)
             : PlayerIdentity.Empty;
-        return isAuthenticated;
+        return player;
     }
 
     private static void LogLoginAttempt(bool isAuthenticated, PlayerCredentials credentials)

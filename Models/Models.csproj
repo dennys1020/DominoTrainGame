@@ -209,6 +209,7 @@
     <Compile Include="RemoteSocialServices.cs" />
     <Compile Include="Networking\AccountRequests.cs" />
     <Compile Include="Networking\ClientSession.cs" />
+    <Compile Include="Networking\ReconnectionPlan.cs" />
     <Compile Include="Networking\FaultCodeMapper.cs" />
     <Compile Include="Networking\FriendResultMapper.cs" />
     <Compile Include="Networking\LobbyChannel.cs" />

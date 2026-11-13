@@ -21,8 +21,9 @@ internal static class FriendStatusCodes
 
     public static FriendStatus ToFriendStatus(PlayerStatusCode statusCode)
     {
-        bool isKnownStatus = _friendStatusesByCode.TryGetValue(statusCode, out FriendStatus knownStatus);
-        FriendStatus status = isKnownStatus ? knownStatus : FriendStatus.Offline;
+        FriendStatus status = _friendStatusesByCode.ContainsKey(statusCode)
+            ? _friendStatusesByCode[statusCode]
+            : FriendStatus.Offline;
         return status;
     }
 }

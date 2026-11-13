@@ -40,10 +40,10 @@ public sealed class InvitationUseCases : IInvitationUseCases
 
         string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
 
-        bool isInLobby = _lobbyRegistry.TryFindLobbyOfPlayer(inviter.PlayerId, out LobbyState lobby);
-        InviteFriendStatus status = isInLobby
-            ? InviteToLobby(inviter, normalizedUsername, lobby)
-            : InviteFriendStatus.LobbyNotFound;
+        LobbyState lobby = _lobbyRegistry.FindLobbyOfPlayer(inviter.PlayerId);
+        InviteFriendStatus status = lobby.IsEmpty
+            ? InviteFriendStatus.LobbyNotFound
+            : InviteToLobby(inviter, normalizedUsername, lobby);
 
         LogInvitation(inviter.PlayerId, status);
         return status;
@@ -63,13 +63,10 @@ public sealed class InvitationUseCases : IInvitationUseCases
 
     private InviteFriendStatus InviteRegisteredPlayer(PlayerIdentity inviter, string friendUsername, string code)
     {
-        InviteFriendStatus status = InviteFriendStatus.PlayerNotFound;
-        bool isRegistered = _friendshipRepository.TryFindPlayerId(friendUsername, out int friendPlayerId);
-
-        if (isRegistered)
-        {
-            status = InviteFriendPlayer(inviter, friendPlayerId, code);
-        }
+        PlayerIdentity friend = _friendshipRepository.FindRegisteredPlayer(friendUsername);
+        InviteFriendStatus status = friend.IsEmpty
+            ? InviteFriendStatus.PlayerNotFound
+            : InviteFriendPlayer(inviter, friend.PlayerId, code);
 
         return status;
     }

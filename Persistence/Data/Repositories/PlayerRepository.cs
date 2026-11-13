@@ -20,14 +20,14 @@ public sealed class PlayerRepository : IPlayerRepository
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
     }
 
-    public bool TryFindCredentials(string identifier, out PlayerCredentials credentials)
+    public PlayerCredentials FindCredentials(string identifier)
     {
         List<PlayerCredentials> matches = _databaseExecutor.Execute(
-            context => FindCredentials(context, identifier));
+            context => QueryCredentials(context, identifier));
         bool isFound = matches.Count == MaximumMatches;
+        PlayerCredentials credentials = isFound ? matches[FirstMatchIndex] : PlayerCredentials.Empty;
 
-        credentials = isFound ? matches[FirstMatchIndex] : PlayerCredentials.Empty;
-        return isFound;
+        return credentials;
     }
 
     public bool CreatePlayer(PlayerRegistration registration)
@@ -42,7 +42,7 @@ public sealed class PlayerRepository : IPlayerRepository
         return isRegistered;
     }
 
-    private static List<PlayerCredentials> FindCredentials(DominoGameDBEntities context, string identifier)
+    private static List<PlayerCredentials> QueryCredentials(DominoGameDBEntities context, string identifier)
     {
         List<PlayerCredentials> matches = context.Players
             .AsNoTracking()

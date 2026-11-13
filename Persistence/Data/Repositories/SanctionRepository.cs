@@ -20,13 +20,12 @@ public sealed class SanctionRepository : ISanctionRepository
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
     }
 
-    public bool TryFindActiveSanction(int playerId, DateTime now, out PlayerSanction sanction)
+    public PlayerSanction FindActiveSanction(int playerId, DateTime now)
     {
         List<Ban> activeBans = _databaseExecutor.Execute(context => FindActiveBans(context, playerId, now));
-        bool isSanctioned = activeBans.Any();
+        PlayerSanction sanction = activeBans.Any() ? ToSanction(activeBans) : PlayerSanction.Empty;
 
-        sanction = isSanctioned ? ToSanction(activeBans) : PlayerSanction.Empty;
-        return isSanctioned;
+        return sanction;
     }
 
     public int CountSanctions(int playerId)

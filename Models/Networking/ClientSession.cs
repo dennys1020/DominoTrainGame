@@ -217,14 +217,15 @@ public sealed class ClientSession
         return wasApplied;
     }
 
-    public bool TryPrepareReconnection(out string lobbyCode)
+    public ReconnectionPlan PrepareReconnection()
     {
-        bool canReconnect;
+        ReconnectionPlan reconnectionPlan;
 
         lock (_sessionSyncRoot)
         {
-            canReconnect = !string.IsNullOrEmpty(_sessionToken);
-            lobbyCode = canReconnect ? _currentLobby.Code : string.Empty;
+            bool canReconnect = !string.IsNullOrEmpty(_sessionToken);
+            string lobbyCode = canReconnect ? _currentLobby.Code : string.Empty;
+            reconnectionPlan = new ReconnectionPlan(canReconnect, lobbyCode);
             _currentLobby = LobbyResult.Empty;
             _pendingLobbyUpdates.Clear();
 
@@ -234,6 +235,6 @@ public sealed class ClientSession
             }
         }
 
-        return canReconnect;
+        return reconnectionPlan;
     }
 }

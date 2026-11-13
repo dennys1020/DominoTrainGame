@@ -5,7 +5,7 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public interface ISanctionRepository
 {
-    bool TryFindActiveSanction(int playerId, DateTime now, out PlayerSanction sanction);
+    PlayerSanction FindActiveSanction(int playerId, DateTime now);
 
     int CountSanctions(int playerId);
 

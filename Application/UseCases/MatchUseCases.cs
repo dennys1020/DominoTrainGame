@@ -57,9 +57,9 @@ public sealed class MatchUseCases : IMatchUseCases
         }
 
         PlayTileStatus status = PlayTileStatus.MatchNotFound;
-        bool isInMatch = _matchRegistry.TryFindByPlayer(playerId, out MatchState match);
+        MatchState match = _matchRegistry.FindByPlayer(playerId);
 
-        if (isInMatch)
+        if (!match.IsEmpty)
         {
             lock (match.SyncRoot)
             {
@@ -82,9 +82,9 @@ public sealed class MatchUseCases : IMatchUseCases
     public DrawTileStatus DrawTile(int playerId)
     {
         DrawTileStatus status = DrawTileStatus.MatchNotFound;
-        bool isInMatch = _matchRegistry.TryFindByPlayer(playerId, out MatchState match);
+        MatchState match = _matchRegistry.FindByPlayer(playerId);
 
-        if (isInMatch)
+        if (!match.IsEmpty)
         {
             lock (match.SyncRoot)
             {
@@ -107,9 +107,9 @@ public sealed class MatchUseCases : IMatchUseCases
     public PassTurnStatus PassTurn(int playerId)
     {
         PassTurnStatus status = PassTurnStatus.MatchNotFound;
-        bool isInMatch = _matchRegistry.TryFindByPlayer(playerId, out MatchState match);
+        MatchState match = _matchRegistry.FindByPlayer(playerId);
 
-        if (isInMatch)
+        if (!match.IsEmpty)
         {
             lock (match.SyncRoot)
             {
@@ -131,7 +131,8 @@ public sealed class MatchUseCases : IMatchUseCases
 
     public bool SendMatchState(int playerId)
     {
-        bool isInMatch = _matchRegistry.TryFindByPlayer(playerId, out MatchState match);
+        MatchState match = _matchRegistry.FindByPlayer(playerId);
+        bool isInMatch = !match.IsEmpty;
 
         if (isInMatch)
         {
