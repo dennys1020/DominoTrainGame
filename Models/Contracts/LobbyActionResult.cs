@@ -1,6 +1,6 @@
 namespace DominoTrainGame.Client.Models.Contracts;
 
-public enum LobbyResultStatus
+public enum LobbyActionResult
 {
     Success,
     InvalidCode,

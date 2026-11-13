@@ -1,6 +1,6 @@
 namespace DominoTrainGame.Client.Models.Contracts;
 
-public enum MatchResultStatus
+public enum MatchMoveResult
 {
     Success,
     MatchNotFound,

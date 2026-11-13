@@ -2,7 +2,7 @@ using DominoTrainGame.Client.Models.Contracts;
 
 namespace DominoTrainGame.Client.ViewModel.Localization;
 
-public static class FriendResultMessageKeys
+public static class FriendMessageKeys
 {
     private const string InvalidInputMessageKey = "FriendInvalidInputMessage";
     private const string PlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";

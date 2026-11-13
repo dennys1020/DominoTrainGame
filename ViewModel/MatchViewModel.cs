@@ -142,15 +142,15 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         ApplyCurrentHand();
     }
 
-    private void ApplySnapshot(MatchSnapshot snapshot)
+    private void ApplySnapshot(MatchSnapshot matchSnapshot)
     {
-        EnginePips = snapshot.EnginePips;
-        BoneyardCount = snapshot.BoneyardCount;
-        IsMyTurn = snapshot.CurrentPlayerId == _gameServices.CurrentPlayerId;
-        TurnUsername = FindUsername(snapshot.Players, snapshot.CurrentPlayerId);
+        EnginePips = matchSnapshot.EnginePips;
+        BoneyardCount = matchSnapshot.BoneyardCount;
+        IsMyTurn = matchSnapshot.CurrentPlayerId == _gameServices.CurrentPlayerId;
+        TurnUsername = FindUsername(matchSnapshot.Players, matchSnapshot.CurrentPlayerId);
 
-        ReplaceTrains(snapshot.Trains);
-        ReplacePlayers(snapshot.Players, snapshot.CurrentPlayerId);
+        ReplaceTrains(matchSnapshot.Trains);
+        ReplacePlayers(matchSnapshot.Players, matchSnapshot.CurrentPlayerId);
     }
 
     private void ReplaceHand(IReadOnlyList<TileSummary> tiles)
@@ -217,13 +217,13 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         return passing;
     }
 
-    private async Task RunMoveAsync(Func<Task<MatchResultStatus>> move)
+    private async Task RunMoveAsync(Func<Task<MatchMoveResult>> sendMove)
     {
-        MatchResultStatus status = await RunWhileBusyAsync(move);
+        MatchMoveResult matchResult = await RunWhileBusyAsync(sendMove);
 
-        if (status != MatchResultStatus.Success)
+        if (matchResult != MatchMoveResult.Success)
         {
-            WindowService.ShowMessage(MatchResultMessageKeys.GetMessageKey(status));
+            WindowService.ShowMessage(MatchMessageKeys.GetMessageKey(matchResult));
         }
     }
 

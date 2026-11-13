@@ -65,51 +65,51 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return joining;
     }
 
-    public async Task<LobbyResultStatus> LeaveLobbyAsync()
+    public async Task<LobbyActionResult> LeaveLobbyAsync()
     {
-        LobbyResultStatus resultStatus = await _lobbyChannel.SendCommandAsync(
+        LobbyActionResult resultStatus = await _lobbyChannel.SendCommandAsync(
             lobbyClient => lobbyClient.LeaveLobbyAsync()).ConfigureAwait(false);
 
         _session.ClearLobby();
         return resultStatus;
     }
 
-    public Task<LobbyResultStatus> SetReadyAsync(bool isReady)
+    public Task<LobbyActionResult> SetReadyAsync(bool isReady)
     {
         SetReadyRequest request = new SetReadyRequest
         {
             IsReady = isReady
         };
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(
             lobbyClient => lobbyClient.SetReadyAsync(request));
         return command;
     }
 
-    public Task<LobbyResultStatus> SendLobbyMessageAsync(string text)
+    public Task<LobbyActionResult> SendLobbyMessageAsync(string text)
     {
         SendLobbyMessageRequest request = new SendLobbyMessageRequest
         {
             Text = text
         };
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(
             lobbyClient => lobbyClient.SendLobbyMessageAsync(request));
         return command;
     }
 
-    public Task<LobbyResultStatus> StartMatchAsync()
+    public Task<LobbyActionResult> StartMatchAsync()
     {
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(
             lobbyClient => lobbyClient.StartMatchAsync());
         return command;
     }
 
-    public Task<LobbyResultStatus> InviteFriendAsync(string username)
+    public Task<LobbyActionResult> InviteFriendAsync(string username)
     {
         FriendUsernameRequest request = new FriendUsernameRequest
         {
             Username = username
         };
-        Task<LobbyResultStatus> command = _lobbyChannel.SendCommandAsync(
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(
             lobbyClient => lobbyClient.InviteFriendAsync(request));
         return command;
     }

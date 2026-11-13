@@ -65,35 +65,35 @@ internal static class FaultCodeMapper
         return signUpResult;
     }
 
-    public static LobbyResultStatus MapLobbyFault(GameServiceFaultCode faultCode)
+    public static LobbyActionResult MapLobbyFault(GameServiceFaultCode faultCode)
     {
-        LobbyResultStatus resultStatus;
+        LobbyActionResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.InvalidLobbyRequest:
-                resultStatus = LobbyResultStatus.InvalidCode;
+                resultStatus = LobbyActionResult.InvalidCode;
                 break;
             case GameServiceFaultCode.InvalidInput:
-                resultStatus = LobbyResultStatus.InvalidInput;
+                resultStatus = LobbyActionResult.InvalidInput;
                 break;
             case GameServiceFaultCode.LobbyNotFound:
-                resultStatus = LobbyResultStatus.LobbyNotFound;
+                resultStatus = LobbyActionResult.LobbyNotFound;
                 break;
             case GameServiceFaultCode.LobbyFull:
-                resultStatus = LobbyResultStatus.LobbyFull;
+                resultStatus = LobbyActionResult.LobbyFull;
                 break;
             case GameServiceFaultCode.LobbyConflict:
-                resultStatus = LobbyResultStatus.AlreadyInLobby;
+                resultStatus = LobbyActionResult.AlreadyInLobby;
                 break;
             case GameServiceFaultCode.NotLobbyHost:
-                resultStatus = LobbyResultStatus.NotLobbyHost;
+                resultStatus = LobbyActionResult.NotLobbyHost;
                 break;
             case GameServiceFaultCode.PlayersNotReady:
-                resultStatus = LobbyResultStatus.PlayersNotReady;
+                resultStatus = LobbyActionResult.PlayersNotReady;
                 break;
             case GameServiceFaultCode.MatchAlreadyStarted:
-                resultStatus = LobbyResultStatus.MatchAlreadyStarted;
+                resultStatus = LobbyActionResult.MatchAlreadyStarted;
                 break;
             default:
                 resultStatus = MapInvitationFault(faultCode);
@@ -103,26 +103,26 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
-    public static MatchResultStatus MapMatchFault(GameServiceFaultCode faultCode)
+    public static MatchMoveResult MapMatchFault(GameServiceFaultCode faultCode)
     {
-        MatchResultStatus resultStatus;
+        MatchMoveResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.NotYourTurn:
-                resultStatus = MatchResultStatus.NotYourTurn;
+                resultStatus = MatchMoveResult.NotYourTurn;
                 break;
             case GameServiceFaultCode.TileDoesNotMatch:
-                resultStatus = MatchResultStatus.TileDoesNotMatch;
+                resultStatus = MatchMoveResult.TileDoesNotMatch;
                 break;
             case GameServiceFaultCode.MatchNotFound:
-                resultStatus = MatchResultStatus.MatchNotFound;
+                resultStatus = MatchMoveResult.MatchNotFound;
                 break;
             case GameServiceFaultCode.TileNotInHand:
-                resultStatus = MatchResultStatus.TileNotInHand;
+                resultStatus = MatchMoveResult.TileNotInHand;
                 break;
             case GameServiceFaultCode.TrainNotAvailable:
-                resultStatus = MatchResultStatus.TrainNotAvailable;
+                resultStatus = MatchMoveResult.TrainNotAvailable;
                 break;
             default:
                 resultStatus = MapTurnFault(faultCode);
@@ -132,20 +132,20 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
-    private static LobbyResultStatus MapInvitationFault(GameServiceFaultCode faultCode)
+    private static LobbyActionResult MapInvitationFault(GameServiceFaultCode faultCode)
     {
-        LobbyResultStatus resultStatus;
+        LobbyActionResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.PlayerNotFound:
-                resultStatus = LobbyResultStatus.PlayerNotFound;
+                resultStatus = LobbyActionResult.PlayerNotFound;
                 break;
             case GameServiceFaultCode.NotFriends:
-                resultStatus = LobbyResultStatus.NotFriends;
+                resultStatus = LobbyActionResult.NotFriends;
                 break;
             case GameServiceFaultCode.PlayerOffline:
-                resultStatus = LobbyResultStatus.PlayerOffline;
+                resultStatus = LobbyActionResult.PlayerOffline;
                 break;
             default:
                 resultStatus = MapSessionFault(faultCode);
@@ -155,18 +155,18 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
-    private static LobbyResultStatus MapSessionFault(GameServiceFaultCode faultCode)
+    private static LobbyActionResult MapSessionFault(GameServiceFaultCode faultCode)
     {
-        LobbyResultStatus resultStatus;
+        LobbyActionResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.SessionNotFound:
             case GameServiceFaultCode.InvalidSessionToken:
-                resultStatus = LobbyResultStatus.SessionNotFound;
+                resultStatus = LobbyActionResult.SessionNotFound;
                 break;
             case GameServiceFaultCode.AlreadyConnected:
-                resultStatus = LobbyResultStatus.AlreadyConnected;
+                resultStatus = LobbyActionResult.AlreadyConnected;
                 break;
             default:
                 resultStatus = MapChatFault(faultCode);
@@ -176,50 +176,50 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
-    private static LobbyResultStatus MapChatFault(GameServiceFaultCode faultCode)
+    private static LobbyActionResult MapChatFault(GameServiceFaultCode faultCode)
     {
-        LobbyResultStatus resultStatus;
+        LobbyActionResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.ChatWarning:
-                resultStatus = LobbyResultStatus.ChatWarning;
+                resultStatus = LobbyActionResult.ChatWarning;
                 break;
             case GameServiceFaultCode.ChatBlocked:
-                resultStatus = LobbyResultStatus.ChatBlocked;
+                resultStatus = LobbyActionResult.ChatBlocked;
                 break;
             case GameServiceFaultCode.PlayerBanned:
-                resultStatus = LobbyResultStatus.PlayerBanned;
+                resultStatus = LobbyActionResult.PlayerBanned;
                 break;
             default:
-                resultStatus = LobbyResultStatus.ServerError;
+                resultStatus = LobbyActionResult.ServerError;
                 break;
         }
 
         return resultStatus;
     }
 
-    private static MatchResultStatus MapTurnFault(GameServiceFaultCode faultCode)
+    private static MatchMoveResult MapTurnFault(GameServiceFaultCode faultCode)
     {
-        MatchResultStatus resultStatus;
+        MatchMoveResult resultStatus;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.BoneyardEmpty:
-                resultStatus = MatchResultStatus.BoneyardEmpty;
+                resultStatus = MatchMoveResult.BoneyardEmpty;
                 break;
             case GameServiceFaultCode.AlreadyDrawn:
-                resultStatus = MatchResultStatus.AlreadyDrawn;
+                resultStatus = MatchMoveResult.AlreadyDrawn;
                 break;
             case GameServiceFaultCode.MustDrawFirst:
-                resultStatus = MatchResultStatus.MustDrawFirst;
+                resultStatus = MatchMoveResult.MustDrawFirst;
                 break;
             case GameServiceFaultCode.SessionNotFound:
             case GameServiceFaultCode.InvalidSessionToken:
-                resultStatus = MatchResultStatus.SessionNotFound;
+                resultStatus = MatchMoveResult.SessionNotFound;
                 break;
             default:
-                resultStatus = MatchResultStatus.ServerError;
+                resultStatus = MatchMoveResult.ServerError;
                 break;
         }
 

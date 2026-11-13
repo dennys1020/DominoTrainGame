@@ -32,7 +32,7 @@ public sealed class LobbyInvitationController
     {
         IWindowService windowService = _windowService;
         bool hasWindow = windowService != null;
-        bool isInLobby = _gameServices.CurrentLobby.Status == LobbyResultStatus.Success;
+        bool isInLobby = _gameServices.CurrentLobby.Status == LobbyActionResult.Success;
 
         if (hasWindow && !isInLobby)
         {
@@ -60,7 +60,7 @@ public sealed class LobbyInvitationController
     {
         LobbyResult result = await _gameServices.JoinLobbyAsync(code);
 
-        if (result.Status == LobbyResultStatus.Success)
+        if (result.Status == LobbyActionResult.Success)
         {
             windowService.Navigate(Screen.Room);
         }

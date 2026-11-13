@@ -65,7 +65,7 @@
     <Compile Include="Contracts\IMatchEvents.cs" />
     <Compile Include="Contracts\IRemoteMatchServices.cs" />
     <Compile Include="Contracts\MatchPlayerSummary.cs" />
-    <Compile Include="Contracts\MatchResultStatus.cs" />
+    <Compile Include="Contracts\MatchMoveResult.cs" />
     <Compile Include="Contracts\MatchSnapshot.cs" />
     <Compile Include="Contracts\MatchTableSummary.cs" />
     <Compile Include="Contracts\MatchTurnSummary.cs" />
@@ -79,7 +79,7 @@
     <Compile Include="Resources\Localization\UiStrings.Designer.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
-    <Compile Include="Contracts\LobbyResultStatus.cs" />
+    <Compile Include="Contracts\LobbyActionResult.cs" />
     <Compile Include="Contracts\PlayerSummary.cs" />
     <Compile Include="Contracts\LobbyPlayerResult.cs" />
     <Compile Include="Contracts\LobbyResult.cs" />

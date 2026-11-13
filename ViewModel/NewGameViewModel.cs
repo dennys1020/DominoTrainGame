@@ -33,7 +33,7 @@ public sealed class NewGameViewModel : ScreenViewModel
     {
         LobbyResult result = await RunWhileBusyAsync(() => _gameServices.CreateLobbyAsync());
 
-        if (result.Status == LobbyResultStatus.Success)
+        if (result.Status == LobbyActionResult.Success)
         {
             WindowService.Navigate(Screen.Room);
         }

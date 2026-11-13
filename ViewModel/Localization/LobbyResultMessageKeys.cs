@@ -20,31 +20,31 @@ public static class LobbyResultMessageKeys
     private const string ChatBlockedMessageKey = "ChatBlockedMessage";
     private const string PlayerBannedMessageKey = "PlayerBannedMessage";
 
-    public static string GetMessageKey(LobbyResultStatus status)
+    public static string GetMessageKey(LobbyActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case LobbyResultStatus.InvalidCode:
+            case LobbyActionResult.InvalidCode:
                 messageKey = InvalidLobbyCodeMessageKey;
                 break;
-            case LobbyResultStatus.InvalidInput:
+            case LobbyActionResult.InvalidInput:
                 messageKey = InvalidLobbyInputMessageKey;
                 break;
-            case LobbyResultStatus.LobbyNotFound:
+            case LobbyActionResult.LobbyNotFound:
                 messageKey = LobbyNotFoundMessageKey;
                 break;
-            case LobbyResultStatus.LobbyFull:
+            case LobbyActionResult.LobbyFull:
                 messageKey = LobbyFullMessageKey;
                 break;
-            case LobbyResultStatus.AlreadyInLobby:
+            case LobbyActionResult.AlreadyInLobby:
                 messageKey = LobbyConflictMessageKey;
                 break;
-            case LobbyResultStatus.SessionNotFound:
+            case LobbyActionResult.SessionNotFound:
                 messageKey = CommonMessageKeys.SessionExpiredMessageKey;
                 break;
-            case LobbyResultStatus.ServerUnavailable:
+            case LobbyActionResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
             default:
@@ -55,19 +55,19 @@ public static class LobbyResultMessageKeys
         return messageKey;
     }
 
-    private static string GetMatchStartMessageKey(LobbyResultStatus status)
+    private static string GetMatchStartMessageKey(LobbyActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case LobbyResultStatus.NotLobbyHost:
+            case LobbyActionResult.NotLobbyHost:
                 messageKey = NotLobbyHostMessageKey;
                 break;
-            case LobbyResultStatus.PlayersNotReady:
+            case LobbyActionResult.PlayersNotReady:
                 messageKey = PlayersNotReadyMessageKey;
                 break;
-            case LobbyResultStatus.MatchAlreadyStarted:
+            case LobbyActionResult.MatchAlreadyStarted:
                 messageKey = MatchAlreadyStartedMessageKey;
                 break;
             default:
@@ -78,19 +78,19 @@ public static class LobbyResultMessageKeys
         return messageKey;
     }
 
-    private static string GetInvitationMessageKey(LobbyResultStatus status)
+    private static string GetInvitationMessageKey(LobbyActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case LobbyResultStatus.PlayerNotFound:
+            case LobbyActionResult.PlayerNotFound:
                 messageKey = FriendPlayerNotFoundMessageKey;
                 break;
-            case LobbyResultStatus.NotFriends:
+            case LobbyActionResult.NotFriends:
                 messageKey = NotFriendsMessageKey;
                 break;
-            case LobbyResultStatus.PlayerOffline:
+            case LobbyActionResult.PlayerOffline:
                 messageKey = PlayerOfflineMessageKey;
                 break;
             default:
@@ -101,19 +101,19 @@ public static class LobbyResultMessageKeys
         return messageKey;
     }
 
-    private static string GetChatMessageKey(LobbyResultStatus status)
+    private static string GetChatMessageKey(LobbyActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case LobbyResultStatus.ChatWarning:
+            case LobbyActionResult.ChatWarning:
                 messageKey = ChatWarningMessageKey;
                 break;
-            case LobbyResultStatus.ChatBlocked:
+            case LobbyActionResult.ChatBlocked:
                 messageKey = ChatBlockedMessageKey;
                 break;
-            case LobbyResultStatus.PlayerBanned:
+            case LobbyActionResult.PlayerBanned:
                 messageKey = PlayerBannedMessageKey;
                 break;
             default:
