@@ -11,7 +11,7 @@ public interface ILobbyService
 {
     [OperationContract(IsInitiating = true)]
     [FaultContract(typeof(GameServiceFault))]
-    void Connect(ConnectRequest request);
+    void Connect(SessionTokenRequest request);
 
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]

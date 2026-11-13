@@ -54,7 +54,7 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
 
-    public void DrawTile(MatchTurnRequest request)
+    public void DrawTile(SessionTokenRequest request)
     {
         PlayerIdentity caller = ResolveCaller(request?.SessionToken);
         DrawTileStatus status;
@@ -75,7 +75,7 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(status, DrawTileStatus.Success, MapDrawTileFaultCode);
     }
 
-    public void PassTurn(MatchTurnRequest request)
+    public void PassTurn(SessionTokenRequest request)
     {
         PlayerIdentity caller = ResolveCaller(request?.SessionToken);
         PassTurnStatus status;
