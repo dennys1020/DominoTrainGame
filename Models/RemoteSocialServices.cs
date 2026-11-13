@@ -196,7 +196,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         Func<FriendServiceClient, Task<TResult>> call)
     {
         FriendServiceClient friendClient = _connectionFactory.CreateFriendClient(_callback);
-        ConnectRequest request = new ConnectRequest
+        SessionTokenRequest request = new SessionTokenRequest
         {
             SessionToken = sessionToken
         };

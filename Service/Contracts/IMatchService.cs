@@ -13,9 +13,9 @@ public interface IMatchService
 
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
-    void DrawTile(MatchTurnRequest request);
+    void DrawTile(SessionTokenRequest request);
 
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
-    void PassTurn(MatchTurnRequest request);
+    void PassTurn(SessionTokenRequest request);
 }

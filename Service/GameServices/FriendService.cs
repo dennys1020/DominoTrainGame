@@ -31,7 +31,7 @@ public sealed class FriendService : IFriendService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void Connect(ConnectRequest request)
+    public void Connect(SessionTokenRequest request)
     {
         string sessionToken = request?.SessionToken ?? string.Empty;
         _socialSessionManager.Connect(sessionToken);

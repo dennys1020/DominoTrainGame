@@ -66,7 +66,7 @@
     <Compile Include="Contracts\IFriendService.cs" />
     <Compile Include="Contracts\IGameClientCallback.cs" />
     <Compile Include="Contracts\ILobbyService.cs" />
-    <Compile Include="DataContracts\ConnectRequest.cs" />
+    <Compile Include="DataContracts\SessionTokenRequest.cs" />
     <Compile Include="DataContracts\FriendResponse.cs" />
     <Compile Include="DataContracts\FriendshipDecisionRequest.cs" />
     <Compile Include="DataContracts\FriendUsernameRequest.cs" />
@@ -102,7 +102,6 @@
     <Compile Include="DataContracts\TileData.cs" />
     <Compile Include="DataContracts\TrainData.cs" />
     <Compile Include="DataContracts\HandMessage.cs" />
-    <Compile Include="DataContracts\MatchTurnRequest.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
     <Compile Include="GameServices\AuthenticationService.cs" />
     <Compile Include="GameServices\ConnectionService.cs" />

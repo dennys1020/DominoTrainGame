@@ -110,7 +110,7 @@ public sealed class MatchRequests
 
         try
         {
-            await matchClient.DrawTileAsync(CreateTurnRequest()).ConfigureAwait(false);
+            await matchClient.DrawTileAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
             resultStatus = MatchResultStatus.Success;
         }
         finally
@@ -128,7 +128,7 @@ public sealed class MatchRequests
 
         try
         {
-            await matchClient.PassTurnAsync(CreateTurnRequest()).ConfigureAwait(false);
+            await matchClient.PassTurnAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
             resultStatus = MatchResultStatus.Success;
         }
         finally
@@ -139,9 +139,9 @@ public sealed class MatchRequests
         return resultStatus;
     }
 
-    private MatchTurnRequest CreateTurnRequest()
+    private SessionTokenRequest CreateSessionTokenRequest()
     {
-        MatchTurnRequest request = new MatchTurnRequest
+        SessionTokenRequest request = new SessionTokenRequest
         {
             SessionToken = _session.SessionToken
         };

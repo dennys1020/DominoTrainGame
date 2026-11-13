@@ -32,7 +32,7 @@ public sealed class LobbyService : ILobbyService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void Connect(ConnectRequest request)
+    public void Connect(SessionTokenRequest request)
     {
         string sessionToken = request?.SessionToken ?? string.Empty;
         _lobbySessionManager.Connect(sessionToken);

@@ -56,7 +56,7 @@ public sealed class LobbyChannel
     public Task OpenAsync(string sessionToken)
     {
         LobbyServiceClient lobbyClient = _connectionFactory.CreateLobbyClient(_callback);
-        ConnectRequest request = new ConnectRequest
+        SessionTokenRequest request = new SessionTokenRequest
         {
             SessionToken = sessionToken
         };
