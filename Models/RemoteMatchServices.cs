@@ -15,9 +15,9 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
     private const string DrawTileOperationName = "draw tile";
     private const string PassTurnOperationName = "pass turn";
 
-    private static readonly ServiceFailureMapping<MatchResultStatus> _playTileFailures;
-    private static readonly ServiceFailureMapping<MatchResultStatus> _drawTileFailures;
-    private static readonly ServiceFailureMapping<MatchResultStatus> _passTurnFailures;
+    private static readonly ServiceFailureMapping<MatchMoveResult> _playTileFailures;
+    private static readonly ServiceFailureMapping<MatchMoveResult> _drawTileFailures;
+    private static readonly ServiceFailureMapping<MatchMoveResult> _passTurnFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -51,10 +51,10 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
 
     public PlayerHand CurrentHand => _session.CurrentHand;
 
-    public Task<MatchResultStatus> PlayTileAsync(int tileId, int trainId)
+    public Task<MatchMoveResult> PlayTileAsync(int tileId, int trainId)
     {
         List<TileSummary> matchingTiles = FindHandTiles(tileId);
-        Task<MatchResultStatus> playing = Task.FromResult(MatchResultStatus.TileNotInHand);
+        Task<MatchMoveResult> playing = Task.FromResult(MatchMoveResult.TileNotInHand);
 
         if (matchingTiles.Any())
         {
@@ -65,25 +65,25 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return playing;
     }
 
-    public Task<MatchResultStatus> DrawTileAsync()
+    public Task<MatchMoveResult> DrawTileAsync()
     {
-        Task<MatchResultStatus> drawing = _callGuard.ExecuteAsync(SendDrawTileAsync, _drawTileFailures);
+        Task<MatchMoveResult> drawing = _callGuard.ExecuteAsync(SendDrawTileAsync, _drawTileFailures);
         return drawing;
     }
 
-    public Task<MatchResultStatus> PassTurnAsync()
+    public Task<MatchMoveResult> PassTurnAsync()
     {
-        Task<MatchResultStatus> passing = _callGuard.ExecuteAsync(SendPassTurnAsync, _passTurnFailures);
+        Task<MatchMoveResult> passing = _callGuard.ExecuteAsync(SendPassTurnAsync, _passTurnFailures);
         return passing;
     }
 
-    private static ServiceFailureMapping<MatchResultStatus> CreateFailures(string operationName)
+    private static ServiceFailureMapping<MatchMoveResult> CreateFailures(string operationName)
     {
-        ServiceFailureMapping<MatchResultStatus> failures = new ServiceFailureMapping<MatchResultStatus>(
+        ServiceFailureMapping<MatchMoveResult> failures = new ServiceFailureMapping<MatchMoveResult>(
             operationName,
             FaultCodeMapper.MapMatchFault,
-            MatchResultStatus.ServerError,
-            MatchResultStatus.ServerUnavailable);
+            MatchMoveResult.ServerError,
+            MatchMoveResult.ServerUnavailable);
         return failures;
     }
 
@@ -102,10 +102,10 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return matchingTiles;
     }
 
-    private async Task<MatchResultStatus> SendPlayTileAsync(TileSummary tile, int trainId)
+    private async Task<MatchMoveResult> SendPlayTileAsync(TileSummary tile, int trainId)
     {
         MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchResultStatus resultStatus;
+        MatchMoveResult resultStatus;
 
         try
         {
@@ -121,7 +121,7 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
             };
 
             await matchClient.PlayTileAsync(request).ConfigureAwait(false);
-            resultStatus = MatchResultStatus.Success;
+            resultStatus = MatchMoveResult.Success;
         }
         finally
         {
@@ -131,15 +131,15 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return resultStatus;
     }
 
-    private async Task<MatchResultStatus> SendDrawTileAsync()
+    private async Task<MatchMoveResult> SendDrawTileAsync()
     {
         MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchResultStatus resultStatus;
+        MatchMoveResult resultStatus;
 
         try
         {
             await matchClient.DrawTileAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
-            resultStatus = MatchResultStatus.Success;
+            resultStatus = MatchMoveResult.Success;
         }
         finally
         {
@@ -149,15 +149,15 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return resultStatus;
     }
 
-    private async Task<MatchResultStatus> SendPassTurnAsync()
+    private async Task<MatchMoveResult> SendPassTurnAsync()
     {
         MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchResultStatus resultStatus;
+        MatchMoveResult resultStatus;
 
         try
         {
             await matchClient.PassTurnAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
-            resultStatus = MatchResultStatus.Success;
+            resultStatus = MatchMoveResult.Success;
         }
         finally
         {
@@ -189,9 +189,9 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
             _trainId = trainId;
         }
 
-        public Task<MatchResultStatus> SendAsync()
+        public Task<MatchMoveResult> SendAsync()
         {
-            Task<MatchResultStatus> sending = _matchServices.SendPlayTileAsync(_tile, _trainId);
+            Task<MatchMoveResult> sending = _matchServices.SendPlayTileAsync(_tile, _trainId);
             return sending;
         }
     }

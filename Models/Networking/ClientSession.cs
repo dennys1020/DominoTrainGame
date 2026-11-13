@@ -201,7 +201,7 @@ public sealed class ClientSession
 
         lock (_sessionSyncRoot)
         {
-            bool hasLobby = _currentLobby.Status == LobbyResultStatus.Success;
+            bool hasLobby = _currentLobby.Status == LobbyActionResult.Success;
             wasApplied = hasLobby && version > _currentLobby.Version;
 
             if (!hasLobby)

@@ -22,15 +22,15 @@ public interface IRemoteGameServices
 
     Task<LobbyResult> JoinLobbyAsync(string code);
 
-    Task<LobbyResultStatus> LeaveLobbyAsync();
+    Task<LobbyActionResult> LeaveLobbyAsync();
 
-    Task<LobbyResultStatus> SetReadyAsync(bool isReady);
+    Task<LobbyActionResult> SetReadyAsync(bool isReady);
 
-    Task<LobbyResultStatus> SendLobbyMessageAsync(string text);
+    Task<LobbyActionResult> SendLobbyMessageAsync(string text);
 
-    Task<LobbyResultStatus> StartMatchAsync();
+    Task<LobbyActionResult> StartMatchAsync();
 
-    Task<LobbyResultStatus> InviteFriendAsync(string username);
+    Task<LobbyActionResult> InviteFriendAsync(string username);
 
     Task<SignUpResult> SignUpAsync(string username, string email, string password);
 }

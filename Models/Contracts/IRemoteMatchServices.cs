@@ -10,9 +10,9 @@ public interface IRemoteMatchServices
 
     PlayerHand CurrentHand { get; }
 
-    Task<MatchResultStatus> PlayTileAsync(int tileId, int trainId);
+    Task<MatchMoveResult> PlayTileAsync(int tileId, int trainId);
 
-    Task<MatchResultStatus> DrawTileAsync();
+    Task<MatchMoveResult> DrawTileAsync();
 
-    Task<MatchResultStatus> PassTurnAsync();
+    Task<MatchMoveResult> PassTurnAsync();
 }
