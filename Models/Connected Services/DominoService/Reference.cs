@@ -373,9 +373,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ConnectRequest", Namespace="http://dominotraingame/services")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SessionTokenRequest", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
-    public partial class ConnectRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class SessionTokenRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -1993,51 +1993,6 @@ namespace DominoTrainGame.Client.Models.DominoService {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="MatchTurnRequest", Namespace="http://dominotraingame/services")]
-    [System.SerializableAttribute()]
-    public partial class MatchTurnRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string SessionTokenField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string SessionToken {
-            get {
-                return this.SessionTokenField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
-                    this.SessionTokenField = value;
-                    this.RaisePropertyChanged("SessionToken");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoService.IConnectionService")]
     public interface IConnectionService {
@@ -2155,10 +2110,10 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/Connect", ReplyAction="http://tempuri.org/ILobbyService/ConnectResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/ILobbyService/ConnectGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
-        void Connect(DominoTrainGame.Client.Models.DominoService.ConnectRequest request);
+        void Connect(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ILobbyService/Connect", ReplyAction="http://tempuri.org/ILobbyService/ConnectResponse")]
-        System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.ConnectRequest request);
+        System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/CreateLobby", ReplyAction="http://tempuri.org/ILobbyService/CreateLobbyResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/ILobbyService/CreateLobbyGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
@@ -2266,11 +2221,11 @@ namespace DominoTrainGame.Client.Models.DominoService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void Connect(DominoTrainGame.Client.Models.DominoService.ConnectRequest request) {
+        public void Connect(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             base.Channel.Connect(request);
         }
         
-        public System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.ConnectRequest request) {
+        public System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.ConnectAsync(request);
         }
         
@@ -2337,10 +2292,10 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/Connect", ReplyAction="http://tempuri.org/IFriendService/ConnectResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IFriendService/ConnectGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
-        void Connect(DominoTrainGame.Client.Models.DominoService.ConnectRequest request);
+        void Connect(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IFriendService/Connect", ReplyAction="http://tempuri.org/IFriendService/ConnectResponse")]
-        System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.ConnectRequest request);
+        System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/IFriendService/GetFriends", ReplyAction="http://tempuri.org/IFriendService/GetFriendsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IFriendService/GetFriendsGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
@@ -2430,11 +2385,11 @@ namespace DominoTrainGame.Client.Models.DominoService {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public void Connect(DominoTrainGame.Client.Models.DominoService.ConnectRequest request) {
+        public void Connect(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             base.Channel.Connect(request);
         }
         
-        public System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.ConnectRequest request) {
+        public System.Threading.Tasks.Task ConnectAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.ConnectAsync(request);
         }
         
@@ -2508,17 +2463,17 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/DrawTile", ReplyAction="http://tempuri.org/IMatchService/DrawTileResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IMatchService/DrawTileGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
-        void DrawTile(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request);
+        void DrawTile(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/DrawTile", ReplyAction="http://tempuri.org/IMatchService/DrawTileResponse")]
-        System.Threading.Tasks.Task DrawTileAsync(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request);
+        System.Threading.Tasks.Task DrawTileAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/PassTurn", ReplyAction="http://tempuri.org/IMatchService/PassTurnResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IMatchService/PassTurnGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
-        void PassTurn(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request);
+        void PassTurn(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/PassTurn", ReplyAction="http://tempuri.org/IMatchService/PassTurnResponse")]
-        System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request);
+        System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2556,19 +2511,19 @@ namespace DominoTrainGame.Client.Models.DominoService {
             return base.Channel.PlayTileAsync(request);
         }
         
-        public void DrawTile(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request) {
+        public void DrawTile(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             base.Channel.DrawTile(request);
         }
         
-        public System.Threading.Tasks.Task DrawTileAsync(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request) {
+        public System.Threading.Tasks.Task DrawTileAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.DrawTileAsync(request);
         }
         
-        public void PassTurn(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request) {
+        public void PassTurn(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             base.Channel.PassTurn(request);
         }
         
-        public System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.MatchTurnRequest request) {
+        public System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.PassTurnAsync(request);
         }
     }

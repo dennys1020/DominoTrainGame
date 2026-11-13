@@ -53,8 +53,11 @@ public sealed partial class App : Application
             channelCloser,
             gameServices,
             socialCallback);
-        MatchRequests matchRequests = new MatchRequests(connectionFactory, channelCloser, clientSession);
-        IRemoteMatchServices matchServices = new RemoteMatchServices(matchRequests, clientSession, lobbyCallback);
+        IRemoteMatchServices matchServices = new RemoteMatchServices(
+            connectionFactory,
+            channelCloser,
+            clientSession,
+            lobbyCallback);
         RemoteServices remoteServices = new RemoteServices(gameServices, socialServices, matchServices);
         return remoteServices;
     }
