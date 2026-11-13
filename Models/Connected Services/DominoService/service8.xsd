@@ -16,7 +16,7 @@
   <xs:element name="DrawTile">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q2:MatchTurnRequest" />
+        <xs:element xmlns:q2="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q2:SessionTokenRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -28,7 +28,7 @@
   <xs:element name="PassTurn">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q3:MatchTurnRequest" />
+        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q3:SessionTokenRequest" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
