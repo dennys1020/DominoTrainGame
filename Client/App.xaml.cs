@@ -37,13 +37,9 @@ public sealed partial class App : Application
         ClientSession clientSession = new ClientSession();
         GameClientCallback lobbyCallback = new GameClientCallback(clientSession);
         LobbyChannel lobbyChannel = new LobbyChannel(connectionFactory, channelCloser, clientSession, lobbyCallback);
-        AccountRequests accountRequests = new AccountRequests(
+        IRemoteGameServices gameServices = new RemoteGameServices(
             connectionFactory,
             channelCloser,
-            clientSession,
-            lobbyChannel);
-        IRemoteGameServices gameServices = new RemoteGameServices(
-            accountRequests,
             lobbyChannel,
             clientSession,
             lobbyCallback);

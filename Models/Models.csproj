@@ -207,7 +207,6 @@
     <Compile Include="Contracts\IFriendEvents.cs" />
     <Compile Include="Contracts\PlayerSearchResult.cs" />
     <Compile Include="RemoteSocialServices.cs" />
-    <Compile Include="Networking\AccountRequests.cs" />
     <Compile Include="Networking\ClientSession.cs" />
     <Compile Include="Networking\ReconnectionPlan.cs" />
     <Compile Include="Networking\FaultCodeMapper.cs" />
