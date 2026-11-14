@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="clr-namespace:DominoTrainGame.Client.View.Behaviors"
+    xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     x:Class="DominoTrainGame.Client.View.Views.MatchWindow"
     Title="{Binding [MatchTitle], Source={StaticResource Localization}}"
     Style="{StaticResource MatchWindowStyle}"
@@ -92,6 +93,29 @@
                 </StackPanel>
             </Border>
         </DataTemplate>
+        <DataTemplate x:Key="ScoreboardRowTemplate">
+            <Border Style="{StaticResource ScoreboardRowStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Text="{Binding Username}"
+                        Style="{StaticResource TrainLabelStyle}"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Text="{Binding Score}"
+                        Style="{StaticResource ScoreboardScoreTextStyle}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <CollectionViewSource x:Key="ScoreboardPlayers" Source="{Binding Players}">
+            <CollectionViewSource.SortDescriptions>
+                <componentModel:SortDescription PropertyName="Score" Direction="Ascending" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.22" IsHitTestVisible="False" />
@@ -194,6 +218,17 @@
                                                     Style="{StaticResource TrainLabelStyle}" />
                                             </StackPanel>
                                         </Grid>
+                                    </Border>
+                                    <Border DockPanel.Dock="Bottom" Style="{StaticResource ScoreboardPanelStyle}">
+                                        <StackPanel>
+                                            <TextBlock
+                                                Text="{Binding [MatchScoreboardLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource MatchSectionStyle}" />
+                                            <ItemsControl
+                                                ItemsSource="{Binding Source={StaticResource ScoreboardPlayers}}"
+                                                ItemTemplate="{StaticResource ScoreboardRowTemplate}" />
+                                        </StackPanel>
                                     </Border>
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
                                         <ItemsControl

@@ -166,6 +166,7 @@
   <xs:complexType name="MatchPlayerData">
     <xs:sequence>
       <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
       <xs:element minOccurs="0" name="TileCount" type="xs:int" />
     </xs:sequence>
   </xs:complexType>

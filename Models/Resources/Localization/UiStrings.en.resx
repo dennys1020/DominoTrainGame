@@ -730,4 +730,7 @@ on the train</value>
   <data name="MatchServerErrorMessage" xml:space="preserve">
     <value>Something went wrong in the match. Try again.</value>
   </data>
+  <data name="MatchScoreboardLabel" xml:space="preserve">
+    <value>Scoreboard</value>
+  </data>
 </root>
