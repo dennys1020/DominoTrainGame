@@ -33,7 +33,7 @@
   <xs:element name="GetPendingRequestsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q3:ArrayOfPendingFriendRequestResponse" />
+        <xs:element xmlns:q3="http://dominotraingame/services" minOccurs="0" name="GetPendingRequestsResult" nillable="true" type="q3:ArrayOfPendingFriendshipResponse" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -117,7 +117,7 @@
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LoginResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse.datasource">
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PendingFriendshipResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PlayerSearchResponse.datasource">

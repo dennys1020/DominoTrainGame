@@ -71,20 +71,20 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="PlayerStatusCode" nillable="true" type="tns:PlayerStatusCode" />
-  <xs:complexType name="ArrayOfPendingFriendRequestResponse">
+  <xs:complexType name="ArrayOfPendingFriendshipResponse">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PendingFriendshipResponse" nillable="true" type="tns:PendingFriendshipResponse" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfPendingFriendRequestResponse" nillable="true" type="tns:ArrayOfPendingFriendRequestResponse" />
-  <xs:complexType name="PendingFriendRequestResponse">
+  <xs:element name="ArrayOfPendingFriendshipResponse" nillable="true" type="tns:ArrayOfPendingFriendshipResponse" />
+  <xs:complexType name="PendingFriendshipResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="RequestId" type="xs:int" />
       <xs:element minOccurs="0" name="RequestedAt" type="xs:dateTime" />
       <xs:element minOccurs="0" name="RequesterUsername" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="PendingFriendRequestResponse" nillable="true" type="tns:PendingFriendRequestResponse" />
+  <xs:element name="PendingFriendshipResponse" nillable="true" type="tns:PendingFriendshipResponse" />
   <xs:complexType name="PlayerSearchRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="UsernameFragment" nillable="true" type="xs:string" />
