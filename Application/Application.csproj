@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Ports\IVerificationCodeGenerator.cs" />
     <Compile Include="Results\CreateLobbyStatus.cs" />
     <Compile Include="Results\DrawTileStatus.cs" />
     <Compile Include="Results\PassTurnStatus.cs" />
@@ -59,6 +60,9 @@
     <Compile Include="Domain\PlayerSanction.cs" />
     <Compile Include="Domain\SanctionType.cs" />
     <Compile Include="Ports\IClock.cs" />
+    <Compile Include="Security\VerificationCodeGenerator.cs" />
+    <Compile Include="Ports\IEmailSender.cs" />
+    <Compile Include="Errors\EmailUnavailableException.cs" />
     <Compile Include="Ports\ISanctionRepository.cs" />
     <Compile Include="Ports\SanctionRecord.cs" />
     <Compile Include="Results\ChatInfractionStatus.cs" />
