@@ -10,4 +10,6 @@ public sealed class MatchPlayerData
     public int PlayerId { get; set; }
     [DataMember]
     public int TileCount { get; set; }
+    [DataMember]
+    public int Score { get; set; }
 }

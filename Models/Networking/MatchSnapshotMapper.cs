@@ -130,7 +130,7 @@ internal static class MatchSnapshotMapper
     private static MatchPlayerSummary MapPlayer(MatchPlayerData player, LobbyResult lobby)
     {
         PlayerSummary playerSummary = new PlayerSummary(player.PlayerId, FindUsername(lobby, player.PlayerId));
-        MatchPlayerSummary matchPlayerSummary = new MatchPlayerSummary(playerSummary, player.TileCount);
+        MatchPlayerSummary matchPlayerSummary = new MatchPlayerSummary(playerSummary, player.TileCount, player.Score);
 
         return matchPlayerSummary;
     }

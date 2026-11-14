@@ -14,12 +14,15 @@ public sealed class MatchPlayerViewModel
 
         Username = player.Player.Username;
         HandCount = player.HandCount;
+        Score = player.Score;
         HasTurn = player.Player.PlayerId == turnPlayerId;
     }
 
     public string Username { get; }
 
     public int HandCount { get; }
+
+    public int Score { get; }
 
     public bool HasTurn { get; }
 }

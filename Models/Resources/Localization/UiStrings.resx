@@ -664,34 +664,48 @@ en el tren</value>
   <data name="ViewResultsButtonLabel" xml:space="preserve">
     <value>Ver resultados</value>
   </data>
-    <data name="MatchBoneyardLabel" xml:space="preserve">
-        <value>Pozo</value></data>
-    <data name="MatchEngineLabel" xml:space="preserve">
-        <value>Doble inicial</value></data>
-    <data name="MatchMexicanTrainLabel" xml:space="preserve">
-        <value>Tren mexicano</value></data>
-    <data name="MatchOpenTrainLabel" xml:space="preserve">
-        <value>Abierto a todos</value></data>
-    <data name="MatchPlayHereButtonLabel" xml:space="preserve">
-        <value>Jugar aquí</value></data>
-    <data name="MatchYourTurnLabel" xml:space="preserve">
-        <value>¡Tu turno!</value></data>
-    <data name="MatchTurnOfLabel" xml:space="preserve">
-        <value>Turno de:</value></data>
-    <data name="MatchTilesLabel" xml:space="preserve">
-        <value>Fichas:</value></data>
-    <data name="MatchHandLabel" xml:space="preserve">
-        <value>Tu mano</value></data>
-    <data name="MatchDrawButtonLabel" xml:space="preserve">
-        <value>Robar ficha</value></data>
-    <data name="MatchPassButtonLabel" xml:space="preserve">
-        <value>Pasar</value></data>
-    <data name="MatchLeaveButtonLabel" xml:space="preserve">
-        <value>Salir</value></data>
-    <data name="MatchTileNotSelectedMessage" xml:space="preserve">
-        <value>Selecciona primero una ficha de tu mano.</value></data>
-    <data name="MatchBoneyardEmptyMessage" xml:space="preserve">
-        <value>El pozo está vacío. Pasa tu turno.</value></data>
+  <data name="MatchBoneyardLabel" xml:space="preserve">
+    <value>Pozo</value>
+  </data>
+  <data name="MatchEngineLabel" xml:space="preserve">
+    <value>Doble inicial</value>
+  </data>
+  <data name="MatchMexicanTrainLabel" xml:space="preserve">
+    <value>Tren mexicano</value>
+  </data>
+  <data name="MatchOpenTrainLabel" xml:space="preserve">
+    <value>Abierto a todos</value>
+  </data>
+  <data name="MatchPlayHereButtonLabel" xml:space="preserve">
+    <value>Jugar aquí</value>
+  </data>
+  <data name="MatchYourTurnLabel" xml:space="preserve">
+    <value>¡Tu turno!</value>
+  </data>
+  <data name="MatchTurnOfLabel" xml:space="preserve">
+    <value>Turno de:</value>
+  </data>
+  <data name="MatchTilesLabel" xml:space="preserve">
+    <value>Fichas:</value>
+  </data>
+  <data name="MatchHandLabel" xml:space="preserve">
+    <value>Tu mano</value>
+  </data>
+  <data name="MatchDrawButtonLabel" xml:space="preserve">
+    <value>Robar ficha</value>
+  </data>
+  <data name="MatchPassButtonLabel" xml:space="preserve">
+    <value>Pasar</value>
+  </data>
+  <data name="MatchLeaveButtonLabel" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="MatchTileNotSelectedMessage" xml:space="preserve">
+    <value>Selecciona primero una ficha de tu mano.</value>
+  </data>
+  <data name="MatchBoneyardEmptyMessage" xml:space="preserve">
+    <value>El pozo está vacío. Pasa tu turno.</value>
+  </data>
   <data name="MatchNotFoundMessage" xml:space="preserve">
     <value>La partida ya no está disponible.</value>
   </data>
@@ -715,5 +729,8 @@ en el tren</value>
   </data>
   <data name="MatchServerErrorMessage" xml:space="preserve">
     <value>Ocurrió un error en la partida. Intenta de nuevo.</value>
+  </data>
+  <data name="MatchScoreboardLabel" xml:space="preserve">
+    <value>Puntaje</value>
   </data>
 </root>

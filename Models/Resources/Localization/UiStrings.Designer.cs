@@ -1201,6 +1201,14 @@ public class UiStrings
         }
     }
 
+    public static string MatchScoreboardLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("MatchScoreboardLabel", _resourceCulture);
+        }
+    }
+
     public static string MatchPlaceholderDescription
     {
         get
