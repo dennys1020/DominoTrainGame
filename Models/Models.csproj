@@ -195,10 +195,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\FriendListResult.cs" />
-    <Compile Include="Contracts\FriendRequestListResult.cs" />
-    <Compile Include="Contracts\FriendRequestResult.cs" />
+    <Compile Include="Contracts\PendingFriendshipListResult.cs" />
+    <Compile Include="Contracts\PendingFriendshipResult.cs" />
     <Compile Include="Contracts\FriendResult.cs" />
-    <Compile Include="Contracts\FriendResultStatus.cs" />
+    <Compile Include="Contracts\FriendActionResult.cs" />
     <Compile Include="Callbacks\SocialClientCallback.cs" />
     <Compile Include="Contracts\FriendStatus.cs" />
     <Compile Include="Contracts\FriendStatusChangedEventArgs.cs" />

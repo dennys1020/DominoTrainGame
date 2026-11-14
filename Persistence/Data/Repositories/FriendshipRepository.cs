@@ -44,9 +44,9 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return friends;
     }
 
-    public IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId)
+    public IReadOnlyList<PendingFriendshipSummary> GetPendingRequests(int playerId)
     {
-        List<FriendRequestSummary> friendRequests = _databaseExecutor.Execute(
+        List<PendingFriendshipSummary> friendRequests = _databaseExecutor.Execute(
             context => FindPendingRequests(context, playerId));
         return friendRequests;
     }
@@ -152,15 +152,15 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return friends;
     }
 
-    private static List<FriendRequestSummary> FindPendingRequests(DominoGameDBEntities context, int playerId)
+    private static List<PendingFriendshipSummary> FindPendingRequests(DominoGameDBEntities context, int playerId)
     {
-        List<FriendRequestSummary> requests = context.FriendshipRequests
+        List<PendingFriendshipSummary> requests = context.FriendshipRequests
             .AsNoTracking()
             .Where(request => request.AddresseePlayerId == playerId && request.IdStatus == PendingStatusId)
             .OrderBy(request => request.RequestedAt)
             .Select(request => new { request.FriendshipRequestsID, request.Player1.Username, request.RequestedAt })
             .AsEnumerable()
-            .Select(row => new FriendRequestSummary(row.FriendshipRequestsID, row.Username, row.RequestedAt))
+            .Select(row => new PendingFriendshipSummary(row.FriendshipRequestsID, row.Username, row.RequestedAt))
             .ToList();
         return requests;
     }

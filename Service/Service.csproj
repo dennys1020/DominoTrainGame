@@ -85,7 +85,7 @@
     <Compile Include="DataContracts\LobbyResponse.cs" />
     <Compile Include="DataContracts\LoginRequest.cs" />
     <Compile Include="DataContracts\LoginResponse.cs" />
-    <Compile Include="DataContracts\PendingFriendRequestResponse.cs" />
+    <Compile Include="DataContracts\PendingFriendshipResponse.cs" />
     <Compile Include="DataContracts\PlayerSearchRequest.cs" />
     <Compile Include="DataContracts\PlayerSearchResponse.cs" />
     <Compile Include="DataContracts\PlayerJoinedMessage.cs" />

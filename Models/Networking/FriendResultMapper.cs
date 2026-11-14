@@ -13,51 +13,53 @@ internal static class FriendResultMapper
         return friend;
     }
 
-    public static FriendRequestResult ToFriendRequestResult(PendingFriendRequestResponse response)
+    public static PendingFriendshipResult ToPendingFriendshipResult(PendingFriendshipResponse response)
     {
-        FriendRequestResult request = new FriendRequestResult(
+        PendingFriendshipResult request = new PendingFriendshipResult(
             response.RequestId,
             response.RequesterUsername,
             response.RequestedAt);
         return request;
     }
 
-    public static FriendListResult CreateFailedFriendList(FriendResultStatus status)
+    public static FriendListResult CreateFailedFriendList(FriendActionResult status)
     {
         FriendListResult result = new FriendListResult(status, new List<FriendResult>());
         return result;
     }
 
-    public static FriendRequestListResult CreateFailedRequestList(FriendResultStatus status)
+    public static PendingFriendshipListResult CreateFailedRequestList(FriendActionResult status)
     {
-        FriendRequestListResult result = new FriendRequestListResult(status, new List<FriendRequestResult>());
+        PendingFriendshipListResult result = new PendingFriendshipListResult(
+            status,
+            new List<PendingFriendshipResult>());
         return result;
     }
 
-    public static PlayerSearchResult CreateFailedPlayerSearch(FriendResultStatus status)
+    public static PlayerSearchResult CreateFailedPlayerSearch(FriendActionResult status)
     {
         PlayerSearchResult result = new PlayerSearchResult(status, new List<PlayerSummary>());
         return result;
     }
 
-    public static FriendResultStatus MapFault(GameServiceFaultCode faultCode)
+    public static FriendActionResult MapFault(GameServiceFaultCode faultCode)
     {
-        FriendResultStatus status;
+        FriendActionResult status;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.InvalidInput:
-                status = FriendResultStatus.InvalidInput;
+                status = FriendActionResult.InvalidInput;
                 break;
             case GameServiceFaultCode.DatabaseUnavailable:
-                status = FriendResultStatus.DatabaseUnavailable;
+                status = FriendActionResult.DatabaseUnavailable;
                 break;
             case GameServiceFaultCode.SessionNotFound:
             case GameServiceFaultCode.InvalidSessionToken:
-                status = FriendResultStatus.SessionNotFound;
+                status = FriendActionResult.SessionNotFound;
                 break;
             case GameServiceFaultCode.PlayerNotFound:
-                status = FriendResultStatus.PlayerNotFound;
+                status = FriendActionResult.PlayerNotFound;
                 break;
             default:
                 status = MapFriendshipFault(faultCode);
@@ -67,32 +69,32 @@ internal static class FriendResultMapper
         return status;
     }
 
-    private static FriendResultStatus MapFriendshipFault(GameServiceFaultCode faultCode)
+    private static FriendActionResult MapFriendshipFault(GameServiceFaultCode faultCode)
     {
-        FriendResultStatus status;
+        FriendActionResult status;
 
         switch (faultCode)
         {
             case GameServiceFaultCode.CannotTargetSelf:
-                status = FriendResultStatus.CannotTargetSelf;
+                status = FriendActionResult.CannotTargetSelf;
                 break;
             case GameServiceFaultCode.AlreadyFriends:
-                status = FriendResultStatus.AlreadyFriends;
+                status = FriendActionResult.AlreadyFriends;
                 break;
             case GameServiceFaultCode.FriendRequestAlreadyExists:
-                status = FriendResultStatus.RequestAlreadyExists;
+                status = FriendActionResult.RequestAlreadyExists;
                 break;
             case GameServiceFaultCode.PlayerBlocked:
-                status = FriendResultStatus.PlayerBlocked;
+                status = FriendActionResult.PlayerBlocked;
                 break;
             case GameServiceFaultCode.FriendRequestNotFound:
-                status = FriendResultStatus.RequestNotFound;
+                status = FriendActionResult.RequestNotFound;
                 break;
             case GameServiceFaultCode.NotFriends:
-                status = FriendResultStatus.NotFriends;
+                status = FriendActionResult.NotFriends;
                 break;
             default:
-                status = FriendResultStatus.ServerError;
+                status = FriendActionResult.ServerError;
                 break;
         }
 

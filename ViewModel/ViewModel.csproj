@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FriendItemViewModel.cs" />
-    <Compile Include="FriendRequestItemViewModel.cs" />
+    <Compile Include="PendingFriendshipItemViewModel.cs" />
     <Compile Include="FriendsViewModel.cs" />
     <Compile Include="Validation\FriendUsernameInputStatus.cs" />
     <Compile Include="Validation\FriendUsernameInputValidator.cs" />

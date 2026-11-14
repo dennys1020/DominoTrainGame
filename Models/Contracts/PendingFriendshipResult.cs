@@ -2,9 +2,9 @@ using System;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
-public sealed class FriendRequestResult
+public sealed class PendingFriendshipResult
 {
-    public FriendRequestResult(int requestId, string requesterUsername, DateTime requestedAt)
+    public PendingFriendshipResult(int requestId, string requesterUsername, DateTime requestedAt)
     {
         RequestId = requestId;
         RequesterUsername = requesterUsername ?? string.Empty;

@@ -5,12 +5,12 @@ using DominoTrainGame.Client.ViewModel.Commands;
 
 namespace DominoTrainGame.Client.ViewModel;
 
-public sealed class FriendRequestItemViewModel
+public sealed class PendingFriendshipItemViewModel
 {
-    public FriendRequestItemViewModel(
-        FriendRequestResult request,
-        Func<FriendRequestResult, Task> acceptRequest,
-        Func<FriendRequestResult, Task> rejectRequest)
+    public PendingFriendshipItemViewModel(
+        PendingFriendshipResult request,
+        Func<PendingFriendshipResult, Task> acceptRequest,
+        Func<PendingFriendshipResult, Task> rejectRequest)
     {
         if (request == null)
         {

@@ -20,7 +20,7 @@ public interface IFriendService
 
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]
-    List<PendingFriendRequestResponse> GetPendingRequests();
+    List<PendingFriendshipResponse> GetPendingRequests();
 
     [OperationContract(IsInitiating = false)]
     [FaultContract(typeof(GameServiceFault))]

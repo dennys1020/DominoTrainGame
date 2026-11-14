@@ -14,22 +14,22 @@ public static class FriendMessageKeys
     private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string ServerErrorMessageKey = "FriendServerErrorMessage";
 
-    public static string GetMessageKey(FriendResultStatus status)
+    public static string GetMessageKey(FriendActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case FriendResultStatus.InvalidInput:
+            case FriendActionResult.InvalidInput:
                 messageKey = InvalidInputMessageKey;
                 break;
-            case FriendResultStatus.SessionNotFound:
+            case FriendActionResult.SessionNotFound:
                 messageKey = CommonMessageKeys.SessionExpiredMessageKey;
                 break;
-            case FriendResultStatus.DatabaseUnavailable:
+            case FriendActionResult.DatabaseUnavailable:
                 messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
                 break;
-            case FriendResultStatus.ServerUnavailable:
+            case FriendActionResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
             default:
@@ -40,31 +40,31 @@ public static class FriendMessageKeys
         return messageKey;
     }
 
-    private static string GetFriendshipMessageKey(FriendResultStatus status)
+    private static string GetFriendshipMessageKey(FriendActionResult status)
     {
         string messageKey;
 
         switch (status)
         {
-            case FriendResultStatus.PlayerNotFound:
+            case FriendActionResult.PlayerNotFound:
                 messageKey = PlayerNotFoundMessageKey;
                 break;
-            case FriendResultStatus.CannotTargetSelf:
+            case FriendActionResult.CannotTargetSelf:
                 messageKey = CannotTargetSelfMessageKey;
                 break;
-            case FriendResultStatus.AlreadyFriends:
+            case FriendActionResult.AlreadyFriends:
                 messageKey = AlreadyFriendsMessageKey;
                 break;
-            case FriendResultStatus.RequestAlreadyExists:
+            case FriendActionResult.RequestAlreadyExists:
                 messageKey = RequestAlreadyExistsMessageKey;
                 break;
-            case FriendResultStatus.PlayerBlocked:
+            case FriendActionResult.PlayerBlocked:
                 messageKey = PlayerBlockedMessageKey;
                 break;
-            case FriendResultStatus.RequestNotFound:
+            case FriendActionResult.RequestNotFound:
                 messageKey = RequestNotFoundMessageKey;
                 break;
-            case FriendResultStatus.NotFriends:
+            case FriendActionResult.NotFriends:
                 messageKey = NotFriendsMessageKey;
                 break;
             default:

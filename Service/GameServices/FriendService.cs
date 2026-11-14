@@ -60,10 +60,10 @@ public sealed class FriendService : IFriendService
         return response;
     }
 
-    public List<PendingFriendRequestResponse> GetPendingRequests()
+    public List<PendingFriendshipResponse> GetPendingRequests()
     {
         int playerId = _socialSessionManager.ResolveCaller().PlayerId;
-        IReadOnlyList<FriendRequestSummary> pendingRequests;
+        IReadOnlyList<PendingFriendshipSummary> pendingRequests;
 
         try
         {
@@ -78,7 +78,7 @@ public sealed class FriendService : IFriendService
             throw _faultTranslator.TranslateDatabaseUnavailable(exception);
         }
 
-        List<PendingFriendRequestResponse> response = pendingRequests.Select(ToPendingRequestResponse).ToList();
+        List<PendingFriendshipResponse> response = pendingRequests.Select(ToPendingFriendshipResponse).ToList();
 
         return response;
     }
@@ -207,9 +207,9 @@ public sealed class FriendService : IFriendService
         return response;
     }
 
-    private static PendingFriendRequestResponse ToPendingRequestResponse(FriendRequestSummary pendingRequest)
+    private static PendingFriendshipResponse ToPendingFriendshipResponse(PendingFriendshipSummary pendingRequest)
     {
-        PendingFriendRequestResponse response = new PendingFriendRequestResponse
+        PendingFriendshipResponse response = new PendingFriendshipResponse
         {
             RequestId = pendingRequest.RequestId,
             RequesterUsername = pendingRequest.RequesterUsername,

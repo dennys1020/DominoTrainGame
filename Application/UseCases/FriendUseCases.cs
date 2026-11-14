@@ -43,9 +43,9 @@ public sealed class FriendUseCases : IFriendUseCases
         return friendPresences;
     }
 
-    public IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId)
+    public IReadOnlyList<PendingFriendshipSummary> GetPendingRequests(int playerId)
     {
-        IReadOnlyList<FriendRequestSummary> pendingRequests = _friendshipRepository.GetPendingRequests(playerId);
+        IReadOnlyList<PendingFriendshipSummary> pendingRequests = _friendshipRepository.GetPendingRequests(playerId);
 
         return pendingRequests;
     }

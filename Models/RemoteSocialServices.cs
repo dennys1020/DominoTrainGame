@@ -15,7 +15,7 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     private const string FriendsOperationName = "friends";
 
     private static readonly ITraceLog _logger;
-    private static readonly ServiceFailureMapping<FriendResultStatus> _friendFailures;
+    private static readonly ServiceFailureMapping<FriendActionResult> _friendFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly IRemoteGameServices _gameServices;
@@ -26,11 +26,11 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     static RemoteSocialServices()
     {
         _logger = TraceLogManager.GetLogger(typeof(RemoteSocialServices));
-        _friendFailures = new ServiceFailureMapping<FriendResultStatus>(
+        _friendFailures = new ServiceFailureMapping<FriendActionResult>(
             FriendsOperationName,
             FriendResultMapper.MapFault,
-            FriendResultStatus.ServerError,
-            FriendResultStatus.ServerUnavailable);
+            FriendActionResult.ServerError,
+            FriendActionResult.ServerUnavailable);
     }
 
     public RemoteSocialServices(
@@ -49,11 +49,11 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
 
     public IFriendEvents FriendEvents => _callback;
 
-    public Task<FriendResultStatus> ConnectAsync()
+    public Task<FriendActionResult> ConnectAsync()
     {
-        Task<FriendResultStatus> connection = InvokeFriendServiceAsync(
-            friendClient => Task.FromResult(FriendResultStatus.Success),
-            RemoteCallGuard.KeepStatus<FriendResultStatus>);
+        Task<FriendActionResult> connection = InvokeFriendServiceAsync(
+            friendClient => Task.FromResult(FriendActionResult.Success),
+            RemoteCallGuard.KeepStatus<FriendActionResult>);
         return connection;
     }
 
@@ -65,9 +65,9 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         return request;
     }
 
-    public Task<FriendRequestListResult> GetPendingRequestsAsync()
+    public Task<PendingFriendshipListResult> GetPendingRequestsAsync()
     {
-        Task<FriendRequestListResult> request = InvokeFriendServiceAsync(
+        Task<PendingFriendshipListResult> request = InvokeFriendServiceAsync(
             RequestPendingRequestsAsync,
             FriendResultMapper.CreateFailedRequestList);
         return request;
@@ -85,46 +85,46 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         return search;
     }
 
-    public Task<FriendResultStatus> SendFriendRequestAsync(string username)
+    public Task<FriendActionResult> SendFriendRequestAsync(string username)
     {
         FriendUsernameRequest request = new FriendUsernameRequest
         {
             Username = username
         };
-        Task<FriendResultStatus> command = SendCommandAsync(
+        Task<FriendActionResult> command = SendCommandAsync(
             friendClient => friendClient.SendFriendRequestAsync(request));
         return command;
     }
 
-    public Task<FriendResultStatus> AcceptFriendRequestAsync(int requestId)
+    public Task<FriendActionResult> AcceptFriendRequestAsync(int requestId)
     {
         FriendshipDecisionRequest request = new FriendshipDecisionRequest
         {
             RequestId = requestId
         };
-        Task<FriendResultStatus> command = SendCommandAsync(
+        Task<FriendActionResult> command = SendCommandAsync(
             friendClient => friendClient.AcceptFriendRequestAsync(request));
         return command;
     }
 
-    public Task<FriendResultStatus> RejectFriendRequestAsync(int requestId)
+    public Task<FriendActionResult> RejectFriendRequestAsync(int requestId)
     {
         FriendshipDecisionRequest request = new FriendshipDecisionRequest
         {
             RequestId = requestId
         };
-        Task<FriendResultStatus> command = SendCommandAsync(
+        Task<FriendActionResult> command = SendCommandAsync(
             friendClient => friendClient.RejectFriendRequestAsync(request));
         return command;
     }
 
-    public Task<FriendResultStatus> RemoveFriendAsync(string username)
+    public Task<FriendActionResult> RemoveFriendAsync(string username)
     {
         FriendUsernameRequest request = new FriendUsernameRequest
         {
             Username = username
         };
-        Task<FriendResultStatus> command = SendCommandAsync(
+        Task<FriendActionResult> command = SendCommandAsync(
             friendClient => friendClient.RemoveFriendAsync(request));
         return command;
     }
@@ -140,19 +140,19 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         List<FriendResult> friends = (responses ?? Enumerable.Empty<FriendResponse>())
             .Select(FriendResultMapper.ToFriendResult)
             .ToList();
-        FriendListResult result = new FriendListResult(FriendResultStatus.Success, friends);
+        FriendListResult result = new FriendListResult(FriendActionResult.Success, friends);
 
         return result;
     }
 
-    private static async Task<FriendRequestListResult> RequestPendingRequestsAsync(FriendServiceClient friendClient)
+    private static async Task<PendingFriendshipListResult> RequestPendingRequestsAsync(FriendServiceClient friendClient)
     {
-        IEnumerable<PendingFriendRequestResponse> responses =
+        IEnumerable<PendingFriendshipResponse> responses =
             await friendClient.GetPendingRequestsAsync().ConfigureAwait(false);
-        List<FriendRequestResult> requests = (responses ?? Enumerable.Empty<PendingFriendRequestResponse>())
-            .Select(FriendResultMapper.ToFriendRequestResult)
+        List<PendingFriendshipResult> requests = (responses ?? Enumerable.Empty<PendingFriendshipResponse>())
+            .Select(FriendResultMapper.ToPendingFriendshipResult)
             .ToList();
-        FriendRequestListResult result = new FriendRequestListResult(FriendResultStatus.Success, requests);
+        PendingFriendshipListResult result = new PendingFriendshipListResult(FriendActionResult.Success, requests);
 
         return result;
     }
@@ -166,22 +166,22 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
         List<PlayerSummary> players = (responses ?? Enumerable.Empty<PlayerSearchResponse>())
             .Select(response => new PlayerSummary(response.PlayerId, response.Username))
             .ToList();
-        PlayerSearchResult result = new PlayerSearchResult(FriendResultStatus.Success, players);
+        PlayerSearchResult result = new PlayerSearchResult(FriendActionResult.Success, players);
 
         return result;
     }
 
-    private Task<FriendResultStatus> SendCommandAsync(Func<FriendServiceClient, Task> command)
+    private Task<FriendActionResult> SendCommandAsync(Func<FriendServiceClient, Task> command)
     {
-        Task<FriendResultStatus> commandTask = InvokeFriendServiceAsync(
-            friendClient => RemoteCallGuard.CompleteCommandAsync(command(friendClient), FriendResultStatus.Success),
-            RemoteCallGuard.KeepStatus<FriendResultStatus>);
+        Task<FriendActionResult> commandTask = InvokeFriendServiceAsync(
+            friendClient => RemoteCallGuard.CompleteCommandAsync(command(friendClient), FriendActionResult.Success),
+            RemoteCallGuard.KeepStatus<FriendActionResult>);
         return commandTask;
     }
 
     private Task<TResult> InvokeFriendServiceAsync<TResult>(
         Func<FriendServiceClient, Task<TResult>> call,
-        Func<FriendResultStatus, TResult> createFailure)
+        Func<FriendActionResult, TResult> createFailure)
     {
         string sessionToken = _gameServices.SessionToken;
         Task<TResult> invocation = _callGuard.ExecuteAsync(
@@ -208,10 +208,10 @@ public sealed class RemoteSocialServices : IRemoteSocialServices
     }
 
     private TResult ReleaseClientWhenUnavailable<TResult>(
-        FriendResultStatus status,
-        Func<FriendResultStatus, TResult> createFailure)
+        FriendActionResult status,
+        Func<FriendActionResult, TResult> createFailure)
     {
-        if (status == FriendResultStatus.ServerUnavailable)
+        if (status == FriendActionResult.ServerUnavailable)
         {
             _friendClientSlot.Close();
         }

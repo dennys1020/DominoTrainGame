@@ -50,7 +50,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
     {
         FriendListResult friendsResult = await RunWhileBusyAsync(() => _socialServices.GetFriendsAsync());
 
-        if (friendsResult.Status == FriendResultStatus.Success)
+        if (friendsResult.Status == FriendActionResult.Success)
         {
             ShowFriends(friendsResult.Friends);
             IsOpen = true;
