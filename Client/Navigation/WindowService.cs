@@ -57,6 +57,13 @@ internal sealed class WindowService : IWindowService
         return isConfirmed;
     }
 
+    public bool ConfirmMessage(string messageKey)
+    {
+        string message = _localization[messageKey];
+        bool isConfirmed = Confirm(message);
+        return isConfirmed;
+    }
+
     public void Close()
     {
         _window.Close();

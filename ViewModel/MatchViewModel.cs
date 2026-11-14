@@ -15,6 +15,8 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 {
+    private const string LeaveConfirmationMessageKey = "MatchLeaveConfirmationMessage";
+
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IMatchEvents _matchEvents;
@@ -229,8 +231,13 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
     private async Task LeaveMatchAsync()
     {
-        await RunWhileBusyAsync(() => _gameServices.LeaveLobbyAsync());
-        WindowService.Navigate(Screen.Main);
+        bool isLeaveConfirmed = WindowService.ConfirmMessage(LeaveConfirmationMessageKey);
+
+        if (isLeaveConfirmed)
+        {
+            await RunWhileBusyAsync(() => _gameServices.LeaveLobbyAsync());
+            WindowService.Navigate(Screen.Main);
+        }
     }
 
     private static string FindUsername(IReadOnlyList<MatchPlayerSummary> players, int playerId)

@@ -700,6 +700,9 @@ on the train</value>
   <data name="MatchLeaveButtonLabel" xml:space="preserve">
     <value>Leave</value>
   </data>
+    <data name="MatchLeaveConfirmationMessage" xml:space="preserve">
+        <value>Are you sure you want to leave the match?</value>
+    </data>
   <data name="MatchTileNotSelectedMessage" xml:space="preserve">
     <value>Select a tile from your hand first.</value>
   </data>

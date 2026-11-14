@@ -465,6 +465,14 @@ public class UiStrings
         }
     }
 
+    public static string MatchLeaveConfirmationMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("MatchLeaveConfirmationMessage", _resourceCulture);
+        }
+    }
+
     public static string MaximumDoubleDescription
     {
         get

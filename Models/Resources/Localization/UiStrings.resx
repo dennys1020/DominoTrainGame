@@ -700,6 +700,9 @@ en el tren</value>
   <data name="MatchLeaveButtonLabel" xml:space="preserve">
     <value>Salir</value>
   </data>
+  <data name="MatchLeaveConfirmationMessage" xml:space="preserve">
+    <value>¿Seguro que quieres salir de la partida?</value>
+  </data>
   <data name="MatchTileNotSelectedMessage" xml:space="preserve">
     <value>Selecciona primero una ficha de tu mano.</value>
   </data>
