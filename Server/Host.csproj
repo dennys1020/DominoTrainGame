@@ -125,7 +125,10 @@
     <None Include="packages\log4net.3.5.0\README.md" />
     <None Include="packages\log4net.Ext.Trace.2.0.5.3\.signature.p7s" />
     <None Include="packages\log4net.Ext.Trace.2.0.5.3\log4net.Ext.Trace.2.0.5.3.nupkg" />
-    <None Include="Secrets.config" />
+    <None Include="Secrets.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Secrets.config.example" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages\EntityFramework.6.5.2\build\Microsoft.Data.Entity.Build.Tasks.dll" />
