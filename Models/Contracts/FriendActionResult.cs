@@ -1,6 +1,6 @@
 namespace DominoTrainGame.Client.Models.Contracts;
 
-public enum FriendResultStatus
+public enum FriendActionResult
 {
     Success,
     InvalidInput,

@@ -6,21 +6,21 @@ public interface IRemoteSocialServices
 {
     IFriendEvents FriendEvents { get; }
 
-    Task<FriendResultStatus> ConnectAsync();
+    Task<FriendActionResult> ConnectAsync();
 
     Task<FriendListResult> GetFriendsAsync();
 
-    Task<FriendRequestListResult> GetPendingRequestsAsync();
+    Task<PendingFriendshipListResult> GetPendingRequestsAsync();
 
     Task<PlayerSearchResult> SearchPlayersAsync(string usernameFragment);
 
-    Task<FriendResultStatus> SendFriendRequestAsync(string username);
+    Task<FriendActionResult> SendFriendRequestAsync(string username);
 
-    Task<FriendResultStatus> AcceptFriendRequestAsync(int requestId);
+    Task<FriendActionResult> AcceptFriendRequestAsync(int requestId);
 
-    Task<FriendResultStatus> RejectFriendRequestAsync(int requestId);
+    Task<FriendActionResult> RejectFriendRequestAsync(int requestId);
 
-    Task<FriendResultStatus> RemoveFriendAsync(string username);
+    Task<FriendActionResult> RemoveFriendAsync(string username);
 
     void Disconnect();
 }

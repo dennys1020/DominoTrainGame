@@ -2,9 +2,9 @@ using System;
 
 namespace DominoTrainGame.Server.Application.Ports;
 
-public sealed class FriendRequestSummary
+public sealed class PendingFriendshipSummary
 {
-    public FriendRequestSummary(int requestId, string requesterUsername, DateTime requestedAt)
+    public PendingFriendshipSummary(int requestId, string requesterUsername, DateTime requestedAt)
     {
         RequestId = requestId;
         RequesterUsername = requesterUsername;

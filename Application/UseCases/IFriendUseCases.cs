@@ -9,7 +9,7 @@ public interface IFriendUseCases
 {
     IReadOnlyList<FriendPresence> GetFriends(int playerId);
 
-    IReadOnlyList<FriendRequestSummary> GetPendingRequests(int playerId);
+    IReadOnlyList<PendingFriendshipSummary> GetPendingRequests(int playerId);
 
     IReadOnlyList<PlayerIdentity> SearchPlayers(int playerId, string usernameFragment);
 

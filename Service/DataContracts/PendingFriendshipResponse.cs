@@ -3,8 +3,8 @@ using System.Runtime.Serialization;
 
 namespace DominoTrainGame.Server.Service.DataContracts;
 
-[DataContract(Name = "PendingFriendRequestResponse", Namespace = "http://dominotraingame/services")]
-public sealed class PendingFriendRequestResponse
+[DataContract(Name = "PendingFriendshipResponse", Namespace = "http://dominotraingame/services")]
+public sealed class PendingFriendshipResponse
 {
     [DataMember]
     public int RequestId { get; set; }
