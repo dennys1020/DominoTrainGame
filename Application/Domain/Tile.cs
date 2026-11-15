@@ -6,7 +6,7 @@ namespace DominoTrainGame.Server.Application.Domain;
 public sealed class Tile
 {
     public const int MaximumPips = 12;
-    private const int MinimumPips = 0;
+    public const int MinimumPips = 0;
     private const int EmptyPips = -1;
 
     static Tile()

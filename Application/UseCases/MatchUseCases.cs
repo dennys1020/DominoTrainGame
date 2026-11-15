@@ -30,8 +30,7 @@ public sealed class MatchUseCases : IMatchUseCases
 
     public bool StartMatch(string code, IReadOnlyList<int> playerIds)
     {
-        IReadOnlyList<Tile> shuffledTiles = _tileShuffler.Shuffle(Tile.CreateDoubleTwelveSet());
-        MatchState match = new MatchState(playerIds, shuffledTiles);
+        MatchState match = new MatchState(playerIds, ShuffleTiles());
         bool wasStarted = _matchRegistry.TryAdd(code, match);
 
         if (wasStarted)
@@ -58,18 +57,23 @@ public sealed class MatchUseCases : IMatchUseCases
 
         PlayTileStatus status = PlayTileStatus.MatchNotFound;
         MatchState match = _matchRegistry.FindByPlayer(playerId);
+        bool hasStartedNextRound = false;
 
         if (!match.IsEmpty)
         {
             lock (match.SyncRoot)
             {
-                status = match.CurrentRound.PlayTile(playerId, tile, trainOwnerId);
+                status = match.IsFinished
+                    ? PlayTileStatus.MatchNotFound
+                    : match.CurrentRound.PlayTile(playerId, tile, trainOwnerId);
+                hasStartedNextRound = status == PlayTileStatus.Success && CloseRoundIfFinished(match);
             }
         }
 
         if (status == PlayTileStatus.Success)
         {
-            NotifyUpdates(match, match.PlayerIds, new List<int> { playerId });
+            List<int> turnHandOwnerIds = new List<int> { playerId };
+            NotifyUpdates(match, match.PlayerIds, SelectHandOwners(match, turnHandOwnerIds, hasStartedNextRound));
         }
         else
         {
@@ -88,7 +92,9 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             lock (match.SyncRoot)
             {
-                status = match.CurrentRound.DrawTile(playerId);
+                status = match.IsFinished
+                    ? DrawTileStatus.MatchNotFound
+                    : match.CurrentRound.DrawTile(playerId);
             }
         }
 
@@ -108,18 +114,23 @@ public sealed class MatchUseCases : IMatchUseCases
     {
         PassTurnStatus status = PassTurnStatus.MatchNotFound;
         MatchState match = _matchRegistry.FindByPlayer(playerId);
+        bool hasStartedNextRound = false;
 
         if (!match.IsEmpty)
         {
             lock (match.SyncRoot)
             {
-                status = match.CurrentRound.PassTurn(playerId);
+                status = match.IsFinished
+                    ? PassTurnStatus.MatchNotFound
+                    : match.CurrentRound.PassTurn(playerId);
+                hasStartedNextRound = status == PassTurnStatus.Success && CloseRoundIfFinished(match);
             }
         }
 
         if (status == PassTurnStatus.Success)
         {
-            NotifyUpdates(match, match.PlayerIds, new List<int>());
+            List<int> turnHandOwnerIds = new List<int>();
+            NotifyUpdates(match, match.PlayerIds, SelectHandOwners(match, turnHandOwnerIds, hasStartedNextRound));
         }
         else
         {
@@ -179,6 +190,21 @@ public sealed class MatchUseCases : IMatchUseCases
     }
 
 
+    private static IReadOnlyList<int> SelectHandOwners(
+        MatchState match,
+        IReadOnlyList<int> turnHandOwnerIds,
+        bool hasStartedNextRound)
+    {
+        IReadOnlyList<int> handOwnerIds = turnHandOwnerIds;
+
+        if (hasStartedNextRound)
+        {
+            handOwnerIds = match.PlayerIds;
+        }
+
+        return handOwnerIds;
+    }
+
     private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match, IReadOnlyList<int> recipientPlayerIds)
     {
         RoundState round = match.CurrentRound;
@@ -220,6 +246,33 @@ public sealed class MatchUseCases : IMatchUseCases
     {
         HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.CurrentRound.GetHand(playerId));
         return notice;
+    }
+
+    private IReadOnlyList<Tile> ShuffleTiles()
+    {
+        IReadOnlyList<Tile> shuffledTiles = _tileShuffler.Shuffle(Tile.CreateDoubleTwelveSet());
+        return shuffledTiles;
+    }
+
+    private bool CloseRoundIfFinished(MatchState match)
+    {
+        bool hasStartedNextRound = false;
+
+        if (match.IsFinished)
+        {
+            _matchRegistry.RemoveMatch(match);
+            _logger.InfoFormat("A match ended. RoundEndReason: {0}.", match.CurrentRound.EndReason);
+        }
+        else if (match.CurrentRound.IsFinished)
+        {
+            _logger.InfoFormat(
+                "A round ended. EnginePips: {0}. RoundEndReason: {1}.",
+                match.CurrentRound.EngineTile.LeftPips,
+                match.CurrentRound.EndReason);
+            hasStartedNextRound = match.StartNextRound(ShuffleTiles());
+        }
+
+        return hasStartedNextRound;
     }
 
     private void CompleteLeave(MatchState matchState, int playerId, bool hasEnoughPlayers)
