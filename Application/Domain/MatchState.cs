@@ -7,8 +7,11 @@ public sealed class MatchState
 {
     private const int FirstRoundEnginePips = Tile.MaximumPips;
     private const int EnginePipsStep = 1;
+    private const int InitialScore = 0;
 
     private readonly List<int> _playerIds;
+    private readonly Dictionary<int, int> _scoresByPlayerId = new Dictionary<int, int>();
+    private RoundState _lastScoredRound = RoundState.Empty;
 
     static MatchState()
     {
@@ -33,6 +36,7 @@ public sealed class MatchState
         _playerIds = new List<int>(playerIds);
         SyncRoot = new object();
         CurrentRound = new RoundState(_playerIds, shuffledTiles, FirstRoundEnginePips);
+        AddInitialScores();
     }
 
     private MatchState()
@@ -51,6 +55,8 @@ public sealed class MatchState
     public IReadOnlyList<int> PlayerIds => _playerIds;
 
     public RoundState CurrentRound { get; private set; }
+
+    public IReadOnlyDictionary<int, int> ScoresByPlayerId => _scoresByPlayerId;
 
     public bool HasEnoughPlayers => _playerIds.Count >=
         LobbyState.MinimumPlayerCount;
@@ -87,5 +93,40 @@ public sealed class MatchState
         }
 
         return canStartNextRound;
+    }
+
+    public void ScoreFinishedRound()
+    {
+        bool canScoreRound = CurrentRound.IsFinished && !ReferenceEquals(CurrentRound, _lastScoredRound);
+
+        if (canScoreRound)
+        {
+            foreach (int playerId in _playerIds)
+            {
+                _scoresByPlayerId[playerId] += CountHandPips(CurrentRound.GetHand(playerId));
+            }
+
+            _lastScoredRound = CurrentRound;
+        }
+    }
+
+    private static int CountHandPips(IReadOnlyList<Tile> hand)
+    {
+        int handPips = InitialScore;
+
+        foreach (Tile tile in hand)
+        {
+            handPips += tile.PipCount;
+        }
+
+        return handPips;
+    }
+
+    private void AddInitialScores()
+    {
+        foreach (int playerId in _playerIds)
+        {
+            _scoresByPlayerId.Add(playerId, InitialScore);
+        }
     }
 }

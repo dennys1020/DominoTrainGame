@@ -12,6 +12,7 @@ public sealed class MatchUpdatedNotice
         int boneyardCount,
         Tile engineTile,
         IReadOnlyDictionary<int, int> tileCountsByPlayerId,
+        IReadOnlyDictionary<int, int> scoresByPlayerId,
         IReadOnlyList<TrainSnapshot> trains)
     {
         RecipientPlayerIds = recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds));
@@ -19,6 +20,7 @@ public sealed class MatchUpdatedNotice
         BoneyardCount = boneyardCount;
         EngineTile = engineTile ?? throw new ArgumentNullException(nameof(engineTile));
         TileCountsByPlayerId = tileCountsByPlayerId ?? throw new ArgumentNullException(nameof(tileCountsByPlayerId));
+        ScoresByPlayerId = scoresByPlayerId ?? throw new ArgumentNullException(nameof(scoresByPlayerId));
         Trains = trains ?? throw new ArgumentNullException(nameof(trains));
     }
 
@@ -31,6 +33,8 @@ public sealed class MatchUpdatedNotice
     public Tile EngineTile { get; }
 
     public IReadOnlyDictionary<int, int> TileCountsByPlayerId { get; }
+
+    public IReadOnlyDictionary<int, int> ScoresByPlayerId { get; }
 
     public IReadOnlyList<TrainSnapshot> Trains { get; }
 }

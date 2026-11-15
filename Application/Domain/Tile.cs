@@ -28,6 +28,8 @@ public sealed class Tile
 
     public bool IsDouble => LeftPips == RightPips;
 
+    public int PipCount => LeftPips + RightPips;
+
     public static IReadOnlyList<Tile> CreateDoubleTwelveSet()
     {
         List<Tile> tiles = new List<Tile>();
