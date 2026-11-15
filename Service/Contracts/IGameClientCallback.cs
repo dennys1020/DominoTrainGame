@@ -47,4 +47,14 @@ public interface IGameClientCallback
         Action = "http://tempuri.org/IGameClientCallback/ReceiveHand",
         IsOneWay = true)]
     void ReceiveHand(HandMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveRoundEnded",
+        IsOneWay = true)]
+    void ReceiveRoundEnded(RoundEndedMessage message);
+
+    [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveMatchEnded",
+        IsOneWay = true)]
+    void ReceiveMatchEnded(MatchEndedMessage message);
 }

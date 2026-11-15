@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
@@ -11,7 +12,7 @@ public sealed class MatchState
 
     private readonly List<int> _playerIds;
     private readonly Dictionary<int, int> _scoresByPlayerId = new Dictionary<int, int>();
-    private RoundState _lastScoredRound = RoundState.Empty;
+    private readonly Dictionary<int, int> _lastRoundScoresByPlayerId = new Dictionary<int, int>();
 
     static MatchState()
     {
@@ -58,6 +59,10 @@ public sealed class MatchState
 
     public IReadOnlyDictionary<int, int> ScoresByPlayerId => _scoresByPlayerId;
 
+    public RoundState LastScoredRound { get; private set; } = RoundState.Empty;
+
+    public IReadOnlyDictionary<int, int> LastRoundScoresByPlayerId => _lastRoundScoresByPlayerId;
+
     public bool HasEnoughPlayers => _playerIds.Count >=
         LobbyState.MinimumPlayerCount;
 
@@ -77,7 +82,7 @@ public sealed class MatchState
         return wasRemoved;
     }
 
-    public bool StartNextRound(IReadOnlyList<Tile> shuffledTiles)
+    public void StartNextRound(IReadOnlyList<Tile> shuffledTiles)
     {
         if (shuffledTiles == null)
         {
@@ -89,24 +94,26 @@ public sealed class MatchState
         if (canStartNextRound)
         {
             int nextEnginePips = CurrentRound.EngineTile.LeftPips - EnginePipsStep;
-            CurrentRound = new RoundState(_playerIds, shuffledTiles, nextEnginePips);
+            CurrentRound = new RoundState(OrderPlayersForRound(nextEnginePips), shuffledTiles, nextEnginePips);
         }
-
-        return canStartNextRound;
     }
 
     public void ScoreFinishedRound()
     {
-        bool canScoreRound = CurrentRound.IsFinished && !ReferenceEquals(CurrentRound, _lastScoredRound);
+        bool canScoreRound = CurrentRound.IsFinished && !ReferenceEquals(CurrentRound, LastScoredRound);
 
         if (canScoreRound)
         {
+            _lastRoundScoresByPlayerId.Clear();
+
             foreach (int playerId in _playerIds)
             {
-                _scoresByPlayerId[playerId] += CountHandPips(CurrentRound.GetHand(playerId));
+                int roundScore = CountHandPips(CurrentRound.GetHand(playerId));
+                _lastRoundScoresByPlayerId.Add(playerId, roundScore);
+                _scoresByPlayerId[playerId] += roundScore;
             }
 
-            _lastScoredRound = CurrentRound;
+            LastScoredRound = CurrentRound;
         }
     }
 
@@ -128,5 +135,15 @@ public sealed class MatchState
         {
             _scoresByPlayerId.Add(playerId, InitialScore);
         }
+    }
+
+    private IReadOnlyList<int> OrderPlayersForRound(int enginePips)
+    {
+        int startingPlayerIndex = (FirstRoundEnginePips - enginePips) % _playerIds.Count;
+        List<int> roundPlayerIds = _playerIds
+            .Skip(startingPlayerIndex)
+            .Concat(_playerIds.Take(startingPlayerIndex))
+            .ToList();
+        return roundPlayerIds;
     }
 }

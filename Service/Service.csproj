@@ -102,10 +102,17 @@
     <Compile Include="DataContracts\TileData.cs" />
     <Compile Include="DataContracts\TrainData.cs" />
     <Compile Include="DataContracts\HandMessage.cs" />
+    <Compile Include="DataContracts\RoundEndReasonCode.cs" />
+    <Compile Include="DataContracts\MatchEndReasonCode.cs" />
+    <Compile Include="DataContracts\PlayerScoreData.cs" />
+    <Compile Include="DataContracts\RoundEndedMessage.cs" />
+    <Compile Include="DataContracts\MatchEndedMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
     <Compile Include="GameServices\AuthenticationService.cs" />
     <Compile Include="GameServices\ConnectionService.cs" />
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
+    <Compile Include="Callbacks\RoundEndedSender.cs" />
+    <Compile Include="Callbacks\MatchEndedSender.cs" />
     <Compile Include="GameServices\FriendService.cs" />
     <Compile Include="GameServices\LobbyService.cs" />
     <Compile Include="Sessions\SessionTokenRegistry.cs" />

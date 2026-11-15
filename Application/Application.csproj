@@ -91,6 +91,7 @@
     <Compile Include="Domain\MatchState.cs" />
     <Compile Include="Domain\RoundState.cs" />
     <Compile Include="Domain\RoundEndReason.cs" />
+    <Compile Include="Domain\MatchEndReason.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
@@ -99,6 +100,8 @@
     <Compile Include="Ports\TrainSnapshot.cs" />
     <Compile Include="Ports\MatchUpdatedNotice.cs" />
     <Compile Include="Ports\HandUpdatedNotice.cs" />
+    <Compile Include="Ports\RoundEndedNotice.cs" />
+    <Compile Include="Ports\MatchEndedNotice.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />

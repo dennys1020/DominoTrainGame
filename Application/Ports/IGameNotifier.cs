@@ -16,5 +16,9 @@ public interface IGameNotifier
 
     void NotifyHandUpdated(HandUpdatedNotice notice);
 
+    void NotifyRoundEnded(RoundEndedNotice notice);
+
+    void NotifyMatchEnded(MatchEndedNotice notice);
+
     bool TryNotifyLobbyInvitation(LobbyInvitationNotice notice);
 }
