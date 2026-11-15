@@ -178,6 +178,38 @@ public sealed class RoundState
         return status;
     }
 
+    public void RemovePlayer(int playerId)
+    {
+        if (!_playerIds.Contains(playerId))
+        {
+            throw new ArgumentException("The player is not part of the round.", nameof(playerId));
+        }
+
+        int leavingIndex = _playerIds.IndexOf(playerId);
+        bool wasPlayerTurn = leavingIndex == _currentTurnIndex;
+
+        _playerIds.RemoveAt(leavingIndex);
+        _handsByPlayerId.Remove(playerId);
+        _trainsByOwnerId[playerId].Open();
+        AdjustTurnAfterRemoval(leavingIndex, wasPlayerTurn);
+    }
+
+    private  void AdjustTurnAfterRemoval(int leavingIndex, bool wasPlayerTurn)
+    {
+        bool hasPlayersLeft = _playerIds.Any();
+
+        if (leavingIndex < _currentTurnIndex)
+        {
+            _currentTurnIndex -= TurnStep;
+        }
+        else if (wasPlayerTurn && hasPlayersLeft)
+        {
+            _currentTurnIndex %= _playerIds.Count;
+            _hasDrawnThisTurn = false;
+        }
+
+    }
+
     private static int FindTileIndex(List<Tile> hand, Tile tile)
     {
         int tileIndex = TileNotFoundIndex;

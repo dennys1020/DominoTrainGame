@@ -50,4 +50,19 @@ public sealed class MatchState
     public IReadOnlyList<int> PlayerIds => _playerIds;
 
     public RoundState CurrentRound { get; }
+
+    public bool HasEnoughPlayers => _playerIds.Count >=
+        LobbyState.MinimumPlayerCount;
+
+    public bool RemovePlayer(int playerId)
+    {
+        bool wasRemoved = _playerIds.Remove(playerId);
+
+        if (wasRemoved)
+        {
+            CurrentRound.RemovePlayer(playerId);
+        }
+
+        return wasRemoved;
+    }
 }
