@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
@@ -32,6 +33,8 @@ public sealed class Train
     public bool IsOpen { get; private set; }
 
     public bool IsMexicanTrain => OwnerId == MexicanTrainOwnerId;
+
+    public bool HasOpenDouble => _tiles.Any() && _tiles.Last().IsDouble;
 
     public IReadOnlyList<Tile> Tiles => _tiles;
 

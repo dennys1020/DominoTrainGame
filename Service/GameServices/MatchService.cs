@@ -150,6 +150,9 @@ public sealed class MatchService : IMatchService
             case PlayTileStatus.TrainNotAvailable:
                 faultCode = GameServiceFaultCode.TrainNotAvailable;
                 break;
+            case PlayTileStatus.MustSatisfyDouble:
+                faultCode = GameServiceFaultCode.MustSatisfyDouble;
+                break;
             default:
                 faultCode = GameServiceFaultCode.InvalidInput;
                 break;

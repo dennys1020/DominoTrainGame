@@ -96,5 +96,8 @@ public enum GameServiceFaultCode
     MustDrawFirst,
 
     [EnumMember]
-    MatchAlreadyStarted
+    MatchAlreadyStarted,
+
+    [EnumMember]
+    MustSatisfyDouble
 }
