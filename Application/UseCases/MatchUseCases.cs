@@ -214,6 +214,7 @@ public sealed class MatchUseCases : IMatchUseCases
             round.Boneyard.Count,
             round.EngineTile,
             CountTilesByPlayer(match),
+            CollectScoresByPlayer(match),
             CreateTrainSnapshots(round));
         return notice;
     }
@@ -228,6 +229,18 @@ public sealed class MatchUseCases : IMatchUseCases
         }
 
         return tileCountsByPlayerId;
+    }
+
+    private static Dictionary<int, int> CollectScoresByPlayer(MatchState match)
+    {
+        Dictionary<int, int> scoresByPlayerId = new Dictionary<int, int>();
+
+        foreach (int playerId in match.PlayerIds)
+        {
+            scoresByPlayerId.Add(playerId, match.ScoresByPlayerId[playerId]);
+        }
+
+        return scoresByPlayerId;
     }
 
     private static List<TrainSnapshot> CreateTrainSnapshots(RoundState round)
@@ -257,6 +270,7 @@ public sealed class MatchUseCases : IMatchUseCases
     private bool CloseRoundIfFinished(MatchState match)
     {
         bool hasStartedNextRound = false;
+        match.ScoreFinishedRound();
 
         if (match.IsFinished)
         {

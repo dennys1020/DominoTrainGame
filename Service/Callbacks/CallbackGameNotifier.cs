@@ -135,7 +135,7 @@ public sealed class CallbackGameNotifier : IGameNotifier
             CurrentPlayerId = notice.CurrentPlayerId,
             BoneyardCount = notice.BoneyardCount,
             EngineTile = ToTileData(notice.EngineTile),
-            Players = ToPlayerData(notice.TileCountsByPlayerId),
+            Players = ToPlayerData(notice.TileCountsByPlayerId, notice.ScoresByPlayerId),
             Trains = ToTrainData(notice.Trains)
         };
 
@@ -170,7 +170,9 @@ public sealed class CallbackGameNotifier : IGameNotifier
         return tileData;
     }
 
-    private static List<MatchPlayerData> ToPlayerData(IReadOnlyDictionary<int, int> tileCountsByPlayerId)
+    private static List<MatchPlayerData> ToPlayerData(
+        IReadOnlyDictionary<int, int> tileCountsByPlayerId,
+        IReadOnlyDictionary<int, int> scoresByPlayerId)
     {
         List<MatchPlayerData> players = new List<MatchPlayerData>();
 
@@ -179,7 +181,8 @@ public sealed class CallbackGameNotifier : IGameNotifier
             MatchPlayerData player = new MatchPlayerData
             {
                 PlayerId = tileCount.Key,
-                TileCount = tileCount.Value
+                TileCount = tileCount.Value,
+                Score = scoresByPlayerId[tileCount.Key]
             };
 
             players.Add(player);
