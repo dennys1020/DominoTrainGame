@@ -15,4 +15,6 @@ public interface IMatchUseCases
     PassTurnStatus PassTurn(int playerId);
 
     bool SendMatchState(int playerId);
+
+    bool LeaveMatch(int playerId);
 }

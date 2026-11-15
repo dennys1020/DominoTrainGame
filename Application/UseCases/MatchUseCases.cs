@@ -149,6 +149,12 @@ public sealed class MatchUseCases : IMatchUseCases
         return isInMatch;
     }
 
+    public bool LeaveMatch(int playerId)
+    {
+
+    }
+
+
     private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match, IReadOnlyList<int> recipientPlayerIds)
     {
         RoundState round = match.CurrentRound;
