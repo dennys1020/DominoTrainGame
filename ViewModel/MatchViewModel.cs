@@ -235,7 +235,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (isLeaveConfirmed)
         {
-            await RunWhileBusyAsync(() => _gameServices.LeaveLobbyAsync());
+            await RunWhileBusyAsync(_matchServices.LeaveMatchAsync);
+            await RunWhileBusyAsync(_gameServices.LeaveLobbyAsync);
             WindowService.Navigate(Screen.Main);
         }
     }
