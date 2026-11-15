@@ -151,7 +151,31 @@ public sealed class MatchUseCases : IMatchUseCases
 
     public bool LeaveMatch(int playerId)
     {
+        MatchState matchState = _matchRegistry.FindByPlayer(playerId);
+        bool wasRemoved = false;
+        bool hasEnoughPlayers = false;
 
+        if (!matchState.IsEmpty)
+        {
+            lock (matchState.SyncRoot)
+            {
+                wasRemoved = matchState.RemovePlayer(playerId);
+                hasEnoughPlayers = matchState.HasEnoughPlayers;
+            }
+        }
+
+        if (wasRemoved)
+        {
+            _matchRegistry.RemovePlayer(playerId);
+            CompleteLeave(matchState, playerId, hasEnoughPlayers);
+        }
+        else
+        {
+            _logger.InfoFormat("A match leave was rejected because the player is not in a match. PlayerId: {0}.",
+                playerId);
+        }
+
+        return wasRemoved;
     }
 
 
@@ -196,6 +220,21 @@ public sealed class MatchUseCases : IMatchUseCases
     {
         HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.CurrentRound.GetHand(playerId));
         return notice;
+    }
+
+    private void CompleteLeave(MatchState matchState, int playerId, bool hasEnoughPlayers)
+    {
+        if (hasEnoughPlayers)
+        {
+            _logger.InfoFormat("A player left the match. PlayerId: {0}.", playerId);
+        }
+        else
+        {
+            _matchRegistry.RemoveMatch(matchState);
+            _logger.InfoFormat("A match was closed because too few players remain. PlayerId: {0}.", playerId);
+        }
+
+        NotifyUpdates(matchState, matchState.PlayerIds, new List<int>());
     }
 
     private void NotifyUpdates(
