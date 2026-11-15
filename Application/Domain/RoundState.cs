@@ -15,6 +15,7 @@ public sealed class RoundState
     private readonly List<int> _playerIds;
     private readonly Dictionary<int, List<Tile>> _handsByPlayerId;
     private readonly Dictionary<int, Train> _trainsByOwnerId;
+    private readonly HashSet<int> _consecutivePasserIds = new HashSet<int>();
     private int _currentTurnIndex;
     private bool _hasDrawnThisTurn;
 
@@ -73,6 +74,10 @@ public sealed class RoundState
     public IReadOnlyCollection<Train> Trains => _trainsByOwnerId.Values;
 
     public int CurrentPlayerId => _playerIds[_currentTurnIndex];
+
+    public RoundEndReason EndReason { get; private set; } = RoundEndReason.InProgress;
+
+    public bool IsFinished => EndReason != RoundEndReason.InProgress;
 
     public IReadOnlyList<Tile> GetHand(int playerId)
     {
@@ -172,6 +177,7 @@ public sealed class RoundState
         if (status == PassTurnStatus.Success)
         {
             _trainsByOwnerId[CurrentPlayerId].Open();
+            RegisterPass();
             AdvanceTurn();
         }
 
@@ -190,6 +196,7 @@ public sealed class RoundState
 
         _playerIds.RemoveAt(leavingIndex);
         _handsByPlayerId.Remove(playerId);
+        _consecutivePasserIds.Remove(playerId);
         _trainsByOwnerId[playerId].Open();
         AdjustTurnAfterRemoval(leavingIndex, wasPlayerTurn);
     }
@@ -292,12 +299,35 @@ public sealed class RoundState
 
         train.AddTile(playedTile);
         hand.RemoveAt(tileIndex);
+        _consecutivePasserIds.Clear();
 
         if (isOwnTrain)
         {
             train.Close();
         }
 
+        if (!hand.Any())
+        {
+            EndReason = RoundEndReason.EmptyHand;
+        }
+
         AdvanceTurn();
+    }
+
+    private void RegisterPass()
+    {
+        if (Boneyard.HasTiles)
+        {
+            _consecutivePasserIds.Clear();
+        }
+        else
+        {
+            _consecutivePasserIds.Add(CurrentPlayerId);
+        }
+
+        if (_consecutivePasserIds.Count == _playerIds.Count)
+        {
+            EndReason = RoundEndReason.Blocked;
+        }
     }
 }

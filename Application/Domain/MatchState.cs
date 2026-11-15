@@ -6,6 +6,7 @@ namespace DominoTrainGame.Server.Application.Domain;
 public sealed class MatchState
 {
     private const int FirstRoundEnginePips = Tile.MaximumPips;
+    private const int EnginePipsStep = 1;
 
     private readonly List<int> _playerIds;
 
@@ -49,10 +50,14 @@ public sealed class MatchState
 
     public IReadOnlyList<int> PlayerIds => _playerIds;
 
-    public RoundState CurrentRound { get; }
+    public RoundState CurrentRound { get; private set; }
 
     public bool HasEnoughPlayers => _playerIds.Count >=
         LobbyState.MinimumPlayerCount;
+
+    public bool HasNextRound => CurrentRound.EngineTile.LeftPips > Tile.MinimumPips;
+
+    public bool IsFinished => CurrentRound.IsFinished && !HasNextRound;
 
     public bool RemovePlayer(int playerId)
     {
@@ -64,5 +69,23 @@ public sealed class MatchState
         }
 
         return wasRemoved;
+    }
+
+    public bool StartNextRound(IReadOnlyList<Tile> shuffledTiles)
+    {
+        if (shuffledTiles == null)
+        {
+            throw new ArgumentNullException(nameof(shuffledTiles));
+        }
+
+        bool canStartNextRound = CurrentRound.IsFinished && HasNextRound;
+
+        if (canStartNextRound)
+        {
+            int nextEnginePips = CurrentRound.EngineTile.LeftPips - EnginePipsStep;
+            CurrentRound = new RoundState(_playerIds, shuffledTiles, nextEnginePips);
+        }
+
+        return canStartNextRound;
     }
 }
