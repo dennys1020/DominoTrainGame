@@ -96,6 +96,27 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(status, PassTurnStatus.Success, MapPassTurnFaultCode);
     }
 
+    public void LeaveMatch(SessionTokenRequest leaveMatchRequest)
+    {
+        PlayerIdentity caller = ResolveCaller(leaveMatchRequest?.SessionToken);
+        bool wasRemoved;
+
+        try
+        {
+            wasRemoved = _matchUseCases.LeaveMatch(caller.PlayerId);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
+        GameFaultFactory.ThrowIfRejected(wasRemoved, GameServiceFaultCode.MatchNotFound);
+    }
+
     private static Tile ToTile(TileData tileData)
     {
         if (tileData == null)

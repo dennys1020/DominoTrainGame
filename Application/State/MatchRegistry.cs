@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DominoTrainGame.Server.Application.Domain;
 
 namespace DominoTrainGame.Server.Application.State;
@@ -47,6 +48,37 @@ public sealed class MatchRegistry
         }
 
         return match;
+    }
+
+    public void RemovePlayer(int playerId)
+    {
+        lock (_matchesLock)
+        {
+            _matchesByPlayerId.Remove(playerId);
+        }
+    }
+
+    public void RemoveMatch(MatchState matchState)
+    {
+        if (matchState == null)
+        {
+            throw new ArgumentNullException(nameof(matchState));
+        }
+
+        lock (_matchesLock)
+        {
+            List<string> matchCodes = _matchesByCode
+                .Where(matchEntry => ReferenceEquals(matchEntry.Value, matchState))
+                .Select(matchEntry => matchEntry.Key)
+                .ToList();
+
+            matchCodes.ForEach(matchCode => _matchesByCode.Remove(matchCode));
+
+            foreach(int playerId in matchState.PlayerIds)
+            {
+                _matchesByPlayerId.Remove(playerId);
+            }
+        }
     }
 
     private bool CanAdd(string code, MatchState match)

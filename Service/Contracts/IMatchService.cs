@@ -18,4 +18,8 @@ public interface IMatchService
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
     void PassTurn(SessionTokenRequest request);
+
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
+    void LeaveMatch(SessionTokenRequest leaveMatchRequest);
 }
