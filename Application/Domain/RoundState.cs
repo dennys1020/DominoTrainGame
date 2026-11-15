@@ -79,6 +79,8 @@ public sealed class RoundState
 
     public bool IsFinished => EndReason != RoundEndReason.InProgress;
 
+    private List<Tile> CurrentHand => _handsByPlayerId[CurrentPlayerId];
+
     public IReadOnlyList<Tile> GetHand(int playerId)
     {
         IReadOnlyList<Tile> hand = _handsByPlayerId[playerId];
@@ -98,30 +100,10 @@ public sealed class RoundState
             throw new ArgumentNullException(nameof(tile));
         }
 
-        List<Tile> currentHand = _handsByPlayerId[CurrentPlayerId];
-        bool isPlayerTurn = playerId == CurrentPlayerId;
+        List<Tile> currentHand = CurrentHand;
         int tileIndex = FindTileIndex(currentHand, tile);
-        bool hasTile = tileIndex != TileNotFoundIndex;
         Train train = FindTrain(trainOwnerId);
-        bool canUseTrain = train.CanBePlayedBy(playerId);
-        PlayTileStatus status = PlayTileStatus.Success;
-
-        if (!isPlayerTurn)
-        {
-            status = PlayTileStatus.NotYourTurn;
-        }
-        else if (!hasTile)
-        {
-            status = PlayTileStatus.TileNotInHand;
-        }
-        else if (!canUseTrain)
-        {
-            status = PlayTileStatus.TrainNotAvailable;
-        }
-        else if (!train.CanAccept(currentHand[tileIndex]))
-        {
-            status = PlayTileStatus.TileDoesNotMatch;
-        }
+        PlayTileStatus status = ValidatePlay(playerId, tileIndex, train);
 
         if (status == PlayTileStatus.Success)
         {
@@ -152,7 +134,7 @@ public sealed class RoundState
         if (status == DrawTileStatus.Success)
         {
             Tile drawnTile = Boneyard.Draw();
-            _handsByPlayerId[CurrentPlayerId].Add(drawnTile);
+            CurrentHand.Add(drawnTile);
             _hasDrawnThisTurn = true;
         }
 
@@ -215,6 +197,54 @@ public sealed class RoundState
             _hasDrawnThisTurn = false;
         }
 
+    }
+
+    private PlayTileStatus ValidatePlay(int playerId, int tileIndex, Train train)
+    {
+        bool isPlayerTurn = playerId == CurrentPlayerId;
+        bool hasTile = tileIndex != TileNotFoundIndex;
+        bool isOpenDoubleTrain = train.HasOpenDouble;
+        bool mustSatisfyDouble = !isOpenDoubleTrain && HasAnyOpenDouble();
+        bool canUseTrain = isOpenDoubleTrain || train.CanBePlayedBy(playerId);
+        PlayTileStatus status = PlayTileStatus.Success;
+
+        if (!isPlayerTurn)
+        {
+            status = PlayTileStatus.NotYourTurn;
+        }
+        else if (!hasTile)
+        {
+            status = PlayTileStatus.TileNotInHand;
+        }
+        else if (mustSatisfyDouble)
+        {
+            status = PlayTileStatus.MustSatisfyDouble;
+        }
+        else if (!canUseTrain)
+        {
+            status = PlayTileStatus.TrainNotAvailable;
+        }
+        else if (!train.CanAccept(CurrentHand[tileIndex]))
+        {
+            status = PlayTileStatus.TileDoesNotMatch;
+        }
+
+        return status;
+    }
+
+    private bool HasAnyOpenDouble()
+    {
+        bool hasAnyOpenDouble = false;
+
+        foreach (Train train in _trainsByOwnerId.Values)
+        {
+            if (train.HasOpenDouble)
+            {
+                hasAnyOpenDouble = true;
+            }
+        }
+
+        return hasAnyOpenDouble;
     }
 
     private static int FindTileIndex(List<Tile> hand, Tile tile)
@@ -311,7 +341,14 @@ public sealed class RoundState
             EndReason = RoundEndReason.EmptyHand;
         }
 
-        AdvanceTurn();
+        if (playedTile.IsDouble)
+        {
+            _hasDrawnThisTurn = false;
+        }
+        else
+        {
+            AdvanceTurn();
+        }
     }
 
     private void RegisterPass()
