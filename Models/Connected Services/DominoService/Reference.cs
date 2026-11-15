@@ -2490,6 +2490,13 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/PassTurn", ReplyAction="http://tempuri.org/IMatchService/PassTurnResponse")]
         System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/LeaveMatch", ReplyAction="http://tempuri.org/IMatchService/LeaveMatchResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IMatchService/LeaveMatchGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void LeaveMatch(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/LeaveMatch", ReplyAction="http://tempuri.org/IMatchService/LeaveMatchResponse")]
+        System.Threading.Tasks.Task LeaveMatchAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2541,6 +2548,14 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.PassTurnAsync(request);
+        }
+        
+        public void LeaveMatch(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest) {
+            base.Channel.LeaveMatch(leaveMatchRequest);
+        }
+        
+        public System.Threading.Tasks.Task LeaveMatchAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest) {
+            return base.Channel.LeaveMatchAsync(leaveMatchRequest);
         }
     }
 }

@@ -14,10 +14,13 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
     private const string PlayTileOperationName = "play tile";
     private const string DrawTileOperationName = "draw tile";
     private const string PassTurnOperationName = "pass turn";
+    private const string LeaveMatchOperationName = "leave match";
 
     private static readonly ServiceFailureMapping<MatchMoveResult> _playTileFailures;
     private static readonly ServiceFailureMapping<MatchMoveResult> _drawTileFailures;
     private static readonly ServiceFailureMapping<MatchMoveResult> _passTurnFailures;
+
+    private static readonly ServiceFailureMapping<MatchMoveResult> _leaveMatchFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -30,6 +33,7 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         _playTileFailures = CreateFailures(PlayTileOperationName);
         _drawTileFailures = CreateFailures(DrawTileOperationName);
         _passTurnFailures = CreateFailures(PassTurnOperationName);
+        _leaveMatchFailures = CreateFailures(LeaveMatchOperationName);
     }
 
     public RemoteMatchServices(
@@ -75,6 +79,12 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
     {
         Task<MatchMoveResult> passing = _callGuard.ExecuteAsync(SendPassTurnAsync, _passTurnFailures);
         return passing;
+    }
+
+    public Task<MatchMoveResult> LeaveMatchAsync()
+    {
+        Task<MatchMoveResult> leaving = _callGuard.ExecuteAsync(SendLeaveMatchAsync, _leaveMatchFailures);
+        return leaving;
     }
 
     private static ServiceFailureMapping<MatchMoveResult> CreateFailures(string operationName)
@@ -165,6 +175,24 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         }
 
         return resultStatus;
+    }
+
+    private async Task<MatchMoveResult> SendLeaveMatchAsync()
+    {
+        MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
+        MatchMoveResult leaveMatchResult;
+
+        try
+        {
+            await matchClient.LeaveMatchAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
+            leaveMatchResult = MatchMoveResult.Success;
+        }
+        finally
+        {
+            _channelCloser.Close(matchClient);
+        }
+
+        return leaveMatchResult;
     }
 
     private SessionTokenRequest CreateSessionTokenRequest()
