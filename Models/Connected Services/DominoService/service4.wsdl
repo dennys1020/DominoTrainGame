@@ -42,6 +42,15 @@
   <wsdl:message name="IMatchService_PassTurn_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q3="http://dominotraingame/services" name="detail" element="q3:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_InputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveMatch" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LeaveMatchResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_LeaveMatch_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://dominotraingame/services" name="detail" element="q4:GameServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IMatchService">
     <wsdl:operation name="PlayTile">
       <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/PlayTile" message="tns:IMatchService_PlayTile_InputMessage" />
@@ -57,6 +66,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/PassTurn" message="tns:IMatchService_PassTurn_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/PassTurnResponse" message="tns:IMatchService_PassTurn_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/PassTurnGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IMatchService_PassTurn_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LeaveMatch">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/LeaveMatch" message="tns:IMatchService_LeaveMatch_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchResponse" message="tns:IMatchService_LeaveMatch_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IMatchService_LeaveMatch_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="MatchService" type="tns:IMatchService">
@@ -88,6 +102,18 @@
     </wsdl:operation>
     <wsdl:operation name="PassTurn">
       <soap12:operation soapAction="http://tempuri.org/IMatchService/PassTurn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LeaveMatch">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/LeaveMatch" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

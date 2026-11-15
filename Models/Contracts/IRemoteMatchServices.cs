@@ -15,4 +15,6 @@ public interface IRemoteMatchServices
     Task<MatchMoveResult> DrawTileAsync();
 
     Task<MatchMoveResult> PassTurnAsync();
+
+    Task<MatchMoveResult> LeaveMatchAsync();
 }

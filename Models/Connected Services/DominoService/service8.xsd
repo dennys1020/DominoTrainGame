@@ -37,4 +37,16 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="LeaveMatch">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://dominotraingame/services" minOccurs="0" name="leaveMatchRequest" nillable="true" type="q4:SessionTokenRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LeaveMatchResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

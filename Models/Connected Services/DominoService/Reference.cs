@@ -1645,9 +1645,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="PendingFriendRequestResponse", Namespace="http://dominotraingame/services")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PendingFriendshipResponse", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
-    public partial class PendingFriendRequestResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class PendingFriendshipResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -2322,10 +2322,10 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/IFriendService/GetPendingRequests", ReplyAction="http://tempuri.org/IFriendService/GetPendingRequestsResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IFriendService/GetPendingRequestsGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
-        DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse[] GetPendingRequests();
+        DominoTrainGame.Client.Models.DominoService.PendingFriendshipResponse[] GetPendingRequests();
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/IFriendService/GetPendingRequests", ReplyAction="http://tempuri.org/IFriendService/GetPendingRequestsResponse")]
-        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse[]> GetPendingRequestsAsync();
+        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.PendingFriendshipResponse[]> GetPendingRequestsAsync();
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/IFriendService/SearchPlayers", ReplyAction="http://tempuri.org/IFriendService/SearchPlayersResponse")]
         [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IFriendService/SearchPlayersGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
@@ -2417,11 +2417,11 @@ namespace DominoTrainGame.Client.Models.DominoService {
             return base.Channel.GetFriendsAsync();
         }
         
-        public DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse[] GetPendingRequests() {
+        public DominoTrainGame.Client.Models.DominoService.PendingFriendshipResponse[] GetPendingRequests() {
             return base.Channel.GetPendingRequests();
         }
         
-        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.PendingFriendRequestResponse[]> GetPendingRequestsAsync() {
+        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.PendingFriendshipResponse[]> GetPendingRequestsAsync() {
             return base.Channel.GetPendingRequestsAsync();
         }
         
@@ -2490,6 +2490,13 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/PassTurn", ReplyAction="http://tempuri.org/IMatchService/PassTurnResponse")]
         System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/LeaveMatch", ReplyAction="http://tempuri.org/IMatchService/LeaveMatchResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IMatchService/LeaveMatchGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void LeaveMatch(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMatchService/LeaveMatch", ReplyAction="http://tempuri.org/IMatchService/LeaveMatchResponse")]
+        System.Threading.Tasks.Task LeaveMatchAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2541,6 +2548,14 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task PassTurnAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest request) {
             return base.Channel.PassTurnAsync(request);
+        }
+        
+        public void LeaveMatch(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest) {
+            base.Channel.LeaveMatch(leaveMatchRequest);
+        }
+        
+        public System.Threading.Tasks.Task LeaveMatchAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaveMatchRequest) {
+            return base.Channel.LeaveMatchAsync(leaveMatchRequest);
         }
     }
 }
