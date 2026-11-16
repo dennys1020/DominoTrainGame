@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DominoTrainGame.Client.Models.Contracts;
@@ -17,4 +18,6 @@ public interface IRemoteMatchServices
     Task<MatchMoveResult> PassTurnAsync();
 
     Task<MatchMoveResult> LeaveMatchAsync();
+
+    IReadOnlyList<RoundSummary> RoundHistory { get; }
 }

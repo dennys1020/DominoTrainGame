@@ -55,6 +55,8 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
 
     public PlayerHand CurrentHand => _session.CurrentHand;
 
+    public IReadOnlyList<RoundSummary> RoundHistory => _session.RoundHistory;
+
     public Task<MatchMoveResult> PlayTileAsync(int tileId, int trainId)
     {
         List<TileSummary> matchingTiles = FindHandTiles(tileId);
