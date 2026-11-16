@@ -32,9 +32,9 @@ public sealed class LobbyService : ILobbyService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void Connect(SessionTokenRequest request)
+    public void Connect(SessionTokenRequest connectRequest)
     {
-        string sessionToken = request?.SessionToken ?? string.Empty;
+        string sessionToken = connectRequest?.SessionToken ?? string.Empty;
         _lobbySessionManager.Connect(sessionToken);
     }
 
@@ -61,14 +61,14 @@ public sealed class LobbyService : ILobbyService
         return response;
     }
 
-    public LobbyResponse JoinLobby(JoinLobbyRequest request)
+    public LobbyResponse JoinLobby(JoinLobbyRequest joinLobbyRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         LobbyOutcome<JoinLobbyStatus> outcome;
 
         try
         {
-            outcome = _lobbyUseCases.JoinLobby(caller, request?.Code);
+            outcome = _lobbyUseCases.JoinLobby(caller, joinLobbyRequest?.Code);
         }
         catch (ArgumentException exception)
         {
@@ -90,9 +90,9 @@ public sealed class LobbyService : ILobbyService
         _lobbyUseCases.LeaveLobby(caller.PlayerId);
     }
 
-    public void SetReady(SetReadyRequest request)
+    public void SetReady(SetReadyRequest setReadyRequest)
     {
-        bool isReady = request?.IsReady ?? false;
+        bool isReady = setReadyRequest?.IsReady ?? false;
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         bool wasUpdated;
 
@@ -112,14 +112,14 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(wasUpdated, GameServiceFaultCode.LobbyNotFound);
     }
 
-    public void SendLobbyMessage(SendLobbyMessageRequest request)
+    public void SendLobbyMessage(SendLobbyMessageRequest sendMessageRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         SendMessageStatus status;
 
         try
         {
-            status = _lobbyUseCases.SendMessage(caller.PlayerId, request?.Text);
+            status = _lobbyUseCases.SendMessage(caller.PlayerId, sendMessageRequest?.Text);
         }
         catch (ArgumentException exception)
         {
@@ -154,14 +154,14 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(status, StartMatchStatus.Success, MapStartFaultCode);
     }
 
-    public void InviteFriend(FriendUsernameRequest request)
+    public void InviteFriend(FriendUsernameRequest inviteFriendRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         InviteFriendStatus status;
 
         try
         {
-            status = _invitationUseCases.InviteFriend(caller, request?.Username);
+            status = _invitationUseCases.InviteFriend(caller, inviteFriendRequest?.Username);
         }
         catch (ArgumentException exception)
         {

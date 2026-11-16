@@ -9,6 +9,7 @@ public static class MatchMessageKeys
     private const string TileNotInHandMessageKey = "MatchTileNotInHandMessage";
     private const string TileDoesNotMatchMessageKey = "MatchTileDoesNotMatchMessage";
     private const string TrainNotAvailableMessageKey = "MatchTrainNotAvailableMessage";
+    private const string MustSatisfyDoubleMessageKey = "MatchMustSatisfyDoubleMessage";
     private const string BoneyardEmptyMessageKey = "MatchBoneyardEmptyMessage";
     private const string AlreadyDrawnMessageKey = "MatchAlreadyDrawnMessage";
     private const string MustDrawFirstMessageKey = "MatchMustDrawFirstMessage";
@@ -34,6 +35,9 @@ public static class MatchMessageKeys
                 break;
             case MatchMoveResult.TrainNotAvailable:
                 messageKey = TrainNotAvailableMessageKey;
+                break;
+            case MatchMoveResult.MustSatisfyDouble:
+                messageKey = MustSatisfyDoubleMessageKey;
                 break;
             default:
                 messageKey = GetDrawMessageKey(status);

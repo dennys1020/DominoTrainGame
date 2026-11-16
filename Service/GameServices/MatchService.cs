@@ -28,19 +28,22 @@ public sealed class MatchService : IMatchService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void PlayTile(PlayTileRequest request)
+    public void PlayTile(PlayTileRequest playTileRequest)
     {
-        if (request == null)
+        if (playTileRequest == null)
         {
-            throw new ArgumentNullException(nameof(request));
+            throw new ArgumentNullException(nameof(playTileRequest));
         }
 
-        PlayerIdentity caller = ResolveCaller(request.SessionToken);
+        PlayerIdentity caller = ResolveCaller(playTileRequest.SessionToken);
         PlayTileStatus status;
 
         try
         {
-            status = _matchUseCases.PlayTile(caller.PlayerId, ToTile(request.Tile), request.TrainOwnerId);
+            status = _matchUseCases.PlayTile(
+                caller.PlayerId,
+                ToTile(playTileRequest.Tile),
+                playTileRequest.TrainOwnerId);
         }
         catch (ArgumentException exception)
         {
@@ -54,9 +57,9 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
 
-    public void DrawTile(SessionTokenRequest request)
+    public void DrawTile(SessionTokenRequest drawTileRequest)
     {
-        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
+        PlayerIdentity caller = ResolveCaller(drawTileRequest?.SessionToken);
         DrawTileStatus status;
 
         try
@@ -75,9 +78,9 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(status, DrawTileStatus.Success, MapDrawTileFaultCode);
     }
 
-    public void PassTurn(SessionTokenRequest request)
+    public void PassTurn(SessionTokenRequest passTurnRequest)
     {
-        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
+        PlayerIdentity caller = ResolveCaller(passTurnRequest?.SessionToken);
         PassTurnStatus status;
 
         try

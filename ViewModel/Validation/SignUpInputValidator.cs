@@ -79,8 +79,8 @@ public static class SignUpInputValidator
 
         try
         {
-            MailAddress address = new MailAddress(email);
-            isWellFormed = string.Equals(address.Address, email, StringComparison.OrdinalIgnoreCase);
+            MailAddress mailAddress = new MailAddress(email);
+            isWellFormed = string.Equals(mailAddress.Address, email, StringComparison.OrdinalIgnoreCase);
         }
         catch (FormatException)
         {

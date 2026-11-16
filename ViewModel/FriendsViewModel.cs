@@ -50,7 +50,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         _searchCancellation = new CancellationTokenSource();
 
         AddFriendCommand = new AsyncRelayCommand(SendFriendRequestAsync);
-        RefreshCommand = new AsyncRelayCommand(RefreshAsync);
+        RefreshCommand = new AsyncRelayCommand(RefreshFriendsAsync);
         _searchCommand = new AsyncRelayCommand(SearchPlayersAsync);
         _socialServices.FriendEvents.FriendStatusChanged += HandleFriendStatusChanged;
         _socialServices.FriendEvents.FriendsChanged += HandleFriendsChanged;
@@ -130,7 +130,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         _searchCancellation.Cancel();
     }
 
-    private async Task RefreshAsync()
+    private async Task RefreshFriendsAsync()
     {
         FriendListResult friendsResult = await RunWhileBusyAsync(() => _socialServices.GetFriendsAsync());
         bool isFriendListLoaded = friendsResult.Status == FriendActionResult.Success;
@@ -206,9 +206,9 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         if (inputStatus == FriendUsernameInputStatus.Valid)
         {
             string username = FriendUsernameInputValidator.Normalize(FriendUsername);
-            FriendActionResult status = await RunWhileBusyAsync(
+            FriendActionResult actionResult = await RunWhileBusyAsync(
                 () => _socialServices.SendFriendRequestAsync(username));
-            ShowSendResult(status);
+            ShowSendResult(actionResult);
         }
         else
         {
@@ -229,9 +229,10 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         CancellationToken cancellationToken = _searchCancellation.Token;
         string usernameFragment = FriendUsernameInputValidator.Normalize(FriendUsername);
         bool isLongEnough = usernameFragment.Length >= MinimumSearchLength;
-        bool isValid = FriendUsernameInputValidator.Validate(usernameFragment) == FriendUsernameInputStatus.Valid;
+        FriendUsernameInputStatus inputStatus = FriendUsernameInputValidator.Validate(usernameFragment);
+        bool isValidUsername = inputStatus == FriendUsernameInputStatus.Valid;
 
-        if (isLongEnough && isValid)
+        if (isLongEnough && isValidUsername)
         {
             await Task.Delay(_searchDelay, cancellationToken);
             PlayerSearchResult searchResult = await _socialServices.SearchPlayersAsync(usernameFragment);
@@ -269,60 +270,61 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private async Task SendRequestToPlayerAsync(PlayerSummary player)
     {
-        FriendActionResult status = await RunWhileBusyAsync(
+        FriendActionResult actionResult = await RunWhileBusyAsync(
             () => _socialServices.SendFriendRequestAsync(player.Username));
-        ShowSendResult(status);
+        ShowSendResult(actionResult);
     }
 
-    private void ShowSendResult(FriendActionResult status)
+    private void ShowSendResult(FriendActionResult sendResult)
     {
-        if (status == FriendActionResult.Success)
+        if (sendResult == FriendActionResult.Success)
         {
             FriendUsername = string.Empty;
             WindowService.ShowMessage(FriendRequestSentMessageKey);
         }
         else
         {
-            ShowFailure(status);
+            ShowFailure(sendResult);
         }
     }
 
     private async Task RemoveFriendAsync(FriendResult friend)
     {
-        FriendActionResult status = await RunWhileBusyAsync(() => _socialServices.RemoveFriendAsync(friend.Username));
-        await ApplyCommandResultAsync(status, FriendRemovedMessageKey);
+        FriendActionResult actionResult = await RunWhileBusyAsync(
+            () => _socialServices.RemoveFriendAsync(friend.Username));
+        await ShowResultAndRefreshAsync(actionResult, FriendRemovedMessageKey);
     }
 
     private async Task AcceptRequestAsync(PendingFriendshipResult request)
     {
-        FriendActionResult status = await RunWhileBusyAsync(
+        FriendActionResult actionResult = await RunWhileBusyAsync(
             () => _socialServices.AcceptFriendRequestAsync(request.RequestId));
-        await ApplyCommandResultAsync(status, FriendRequestAcceptedMessageKey);
+        await ShowResultAndRefreshAsync(actionResult, FriendRequestAcceptedMessageKey);
     }
 
     private async Task RejectRequestAsync(PendingFriendshipResult request)
     {
-        FriendActionResult status = await RunWhileBusyAsync(
+        FriendActionResult actionResult = await RunWhileBusyAsync(
             () => _socialServices.RejectFriendRequestAsync(request.RequestId));
-        await ApplyCommandResultAsync(status, FriendRequestRejectedMessageKey);
+        await ShowResultAndRefreshAsync(actionResult, FriendRequestRejectedMessageKey);
     }
 
-    private async Task ApplyCommandResultAsync(FriendActionResult status, string successMessageKey)
+    private async Task ShowResultAndRefreshAsync(FriendActionResult actionResult, string successMessageKey)
     {
-        if (status == FriendActionResult.Success)
+        if (actionResult == FriendActionResult.Success)
         {
             WindowService.ShowMessage(successMessageKey);
         }
         else
         {
-            ShowFailure(status);
+            ShowFailure(actionResult);
         }
 
-        await RefreshAsync();
+        await RefreshFriendsAsync();
     }
 
-    private void ShowFailure(FriendActionResult status)
+    private void ShowFailure(FriendActionResult failedResult)
     {
-        WindowService.ShowMessage(FriendMessageKeys.GetMessageKey(status));
+        WindowService.ShowMessage(FriendMessageKeys.GetMessageKey(failedResult));
     }
 }

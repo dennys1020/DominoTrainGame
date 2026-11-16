@@ -30,13 +30,13 @@ public sealed class AuthenticationService : IAuthenticationService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public LoginResponse LogIn(LoginRequest request)
+    public LoginResponse LogIn(LoginRequest logInRequest)
     {
         PlayerIdentity player;
 
         try
         {
-            player = _loginUseCases.LogIn(request?.Identifier, request?.Password);
+            player = _loginUseCases.LogIn(logInRequest?.Identifier, logInRequest?.Password);
         }
         catch (ArgumentException exception)
         {
@@ -54,13 +54,16 @@ public sealed class AuthenticationService : IAuthenticationService
         return response;
     }
 
-    public bool SignUp(SignUpRequest request)
+    public bool SignUp(SignUpRequest signUpRequest)
     {
         bool isRegistered;
 
         try
         {
-            isRegistered = _signUpUseCases.SignUp(request?.Username, request?.Email, request?.Password);
+            isRegistered = _signUpUseCases.SignUp(
+                signUpRequest?.Username,
+                signUpRequest?.Email,
+                signUpRequest?.Password);
         }
         catch (ArgumentException exception)
         {

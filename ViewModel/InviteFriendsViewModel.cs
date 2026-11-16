@@ -73,16 +73,17 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
 
     private async Task InviteAsync(InvitableFriendViewModel friend)
     {
-        LobbyActionResult result = await RunWhileBusyAsync(() => _gameServices.InviteFriendAsync(friend.Username));
+        LobbyActionResult inviteResult = await RunWhileBusyAsync(
+            () => _gameServices.InviteFriendAsync(friend.Username));
 
-        if (result == LobbyActionResult.Success)
+        if (inviteResult == LobbyActionResult.Success)
         {
             friend.MarkInvited();
         }
         else
         {
             IsOpen = false;
-            _windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
+            _windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(inviteResult));
         }
     }
 }

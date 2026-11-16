@@ -30,13 +30,13 @@ public sealed class MatchUseCases : IMatchUseCases
 
     public bool StartMatch(string code, IReadOnlyList<int> playerIds)
     {
-        MatchState match = new MatchState(playerIds, ShuffleTiles());
-        bool wasStarted = _matchRegistry.TryAdd(code, match);
+        MatchState matchState = new MatchState(playerIds, ShuffleTiles());
+        bool wasStarted = _matchRegistry.TryAdd(code, matchState);
 
         if (wasStarted)
         {
             _logger.InfoFormat("A match started. MatchCode: {0}.", code);
-            NotifyUpdates(match, match.PlayerIds, match.PlayerIds);
+            NotifyUpdates(matchState, matchState.PlayerIds, matchState.PlayerIds);
         }
         else
         {
@@ -56,23 +56,23 @@ public sealed class MatchUseCases : IMatchUseCases
         }
 
         PlayTileStatus status = PlayTileStatus.MatchNotFound;
-        MatchState match = _matchRegistry.FindByPlayer(playerId);
+        MatchState matchState = _matchRegistry.FindByPlayer(playerId);
         bool hasEndedRound = false;
 
-        if (!match.IsEmpty)
+        if (!matchState.IsEmpty)
         {
-            lock (match.SyncRoot)
+            lock (matchState.SyncRoot)
             {
-                status = match.IsFinished
+                status = matchState.IsFinished
                     ? PlayTileStatus.MatchNotFound
-                    : match.CurrentRound.PlayTile(playerId, tile, trainOwnerId);
-                hasEndedRound = status == PlayTileStatus.Success && CloseRoundIfFinished(match);
+                    : matchState.CurrentRound.PlayTile(playerId, tile, trainOwnerId);
+                hasEndedRound = status == PlayTileStatus.Success && CloseRoundIfFinished(matchState);
             }
         }
 
         if (status == PlayTileStatus.Success)
         {
-            NotifyTurnResult(match, new List<int> { playerId }, hasEndedRound);
+            NotifyTurnResult(matchState, new List<int> { playerId }, hasEndedRound);
         }
         else
         {
@@ -85,21 +85,21 @@ public sealed class MatchUseCases : IMatchUseCases
     public DrawTileStatus DrawTile(int playerId)
     {
         DrawTileStatus status = DrawTileStatus.MatchNotFound;
-        MatchState match = _matchRegistry.FindByPlayer(playerId);
+        MatchState matchState = _matchRegistry.FindByPlayer(playerId);
 
-        if (!match.IsEmpty)
+        if (!matchState.IsEmpty)
         {
-            lock (match.SyncRoot)
+            lock (matchState.SyncRoot)
             {
-                status = match.IsFinished
+                status = matchState.IsFinished
                     ? DrawTileStatus.MatchNotFound
-                    : match.CurrentRound.DrawTile(playerId);
+                    : matchState.CurrentRound.DrawTile(playerId);
             }
         }
 
         if (status == DrawTileStatus.Success)
         {
-            NotifyUpdates(match, match.PlayerIds, new List<int> { playerId });
+            NotifyUpdates(matchState, matchState.PlayerIds, new List<int> { playerId });
         }
         else
         {
@@ -112,23 +112,23 @@ public sealed class MatchUseCases : IMatchUseCases
     public PassTurnStatus PassTurn(int playerId)
     {
         PassTurnStatus status = PassTurnStatus.MatchNotFound;
-        MatchState match = _matchRegistry.FindByPlayer(playerId);
+        MatchState matchState = _matchRegistry.FindByPlayer(playerId);
         bool hasEndedRound = false;
 
-        if (!match.IsEmpty)
+        if (!matchState.IsEmpty)
         {
-            lock (match.SyncRoot)
+            lock (matchState.SyncRoot)
             {
-                status = match.IsFinished
+                status = matchState.IsFinished
                     ? PassTurnStatus.MatchNotFound
-                    : match.CurrentRound.PassTurn(playerId);
-                hasEndedRound = status == PassTurnStatus.Success && CloseRoundIfFinished(match);
+                    : matchState.CurrentRound.PassTurn(playerId);
+                hasEndedRound = status == PassTurnStatus.Success && CloseRoundIfFinished(matchState);
             }
         }
 
         if (status == PassTurnStatus.Success)
         {
-            NotifyTurnResult(match, new List<int>(), hasEndedRound);
+            NotifyTurnResult(matchState, new List<int>(), hasEndedRound);
         }
         else
         {
@@ -140,13 +140,13 @@ public sealed class MatchUseCases : IMatchUseCases
 
     public bool SendMatchState(int playerId)
     {
-        MatchState match = _matchRegistry.FindByPlayer(playerId);
-        bool isInMatch = !match.IsEmpty;
+        MatchState matchState = _matchRegistry.FindByPlayer(playerId);
+        bool isInMatch = !matchState.IsEmpty;
 
         if (isInMatch)
         {
             List<int> requesterIds = new List<int> { playerId };
-            NotifyUpdates(match, requesterIds, requesterIds);
+            NotifyUpdates(matchState, requesterIds, requesterIds);
         }
         else
         {
@@ -187,27 +187,29 @@ public sealed class MatchUseCases : IMatchUseCases
         return wasRemoved;
     }
 
-    private static MatchUpdatedNotice CreateMatchUpdatedNotice(MatchState match, IReadOnlyList<int> recipientPlayerIds)
+    private static MatchUpdatedNotice CreateMatchUpdatedNotice(
+        MatchState matchState,
+        IReadOnlyList<int> recipientPlayerIds)
     {
-        RoundState round = match.CurrentRound;
+        RoundState round = matchState.CurrentRound;
         MatchUpdatedNotice notice = new MatchUpdatedNotice(
             recipientPlayerIds,
             round.CurrentPlayerId,
             round.Boneyard.Count,
             round.EngineTile,
-            CountTilesByPlayer(match),
-            CollectScoresByPlayer(match.PlayerIds, match.ScoresByPlayerId),
+            CountTilesByPlayer(matchState),
+            CollectScoresByPlayer(matchState.PlayerIds, matchState.ScoresByPlayerId),
             CreateTrainSnapshots(round));
         return notice;
     }
 
-    private static Dictionary<int, int> CountTilesByPlayer(MatchState match)
+    private static Dictionary<int, int> CountTilesByPlayer(MatchState matchState)
     {
         Dictionary<int, int> tileCountsByPlayerId = new Dictionary<int, int>();
 
-        foreach (int playerId in match.PlayerIds)
+        foreach (int playerId in matchState.PlayerIds)
         {
-            tileCountsByPlayerId.Add(playerId, match.CurrentRound.GetHand(playerId).Count);
+            tileCountsByPlayerId.Add(playerId, matchState.CurrentRound.GetHand(playerId).Count);
         }
 
         return tileCountsByPlayerId;
@@ -239,20 +241,20 @@ public sealed class MatchUseCases : IMatchUseCases
         return trains;
     }
 
-    private static RoundEndedNotice CreateRoundEndedNotice(MatchState match)
+    private static RoundEndedNotice CreateRoundEndedNotice(MatchState matchState)
     {
-        RoundState finishedRound = match.LastScoredRound;
+        RoundState finishedRound = matchState.LastScoredRound;
         RoundEndedNotice notice = new RoundEndedNotice(
-            new List<int>(match.PlayerIds),
+            new List<int>(matchState.PlayerIds),
             finishedRound.EngineTile.LeftPips,
             finishedRound.EndReason,
-            CollectScoresByPlayer(match.PlayerIds, match.LastRoundScoresByPlayerId));
+            CollectScoresByPlayer(matchState.PlayerIds, matchState.LastRoundScoresByPlayerId));
         return notice;
     }
 
-    private static HandUpdatedNotice CreateHandUpdatedNotice(MatchState match, int playerId)
+    private static HandUpdatedNotice CreateHandUpdatedNotice(MatchState matchState, int playerId)
     {
-        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, match.CurrentRound.GetHand(playerId));
+        HandUpdatedNotice notice = new HandUpdatedNotice(playerId, matchState.CurrentRound.GetHand(playerId));
         return notice;
     }
 
@@ -262,23 +264,23 @@ public sealed class MatchUseCases : IMatchUseCases
         return shuffledTiles;
     }
 
-    private bool CloseRoundIfFinished(MatchState match)
+    private bool CloseRoundIfFinished(MatchState matchState)
     {
-        bool hasEndedRound = match.CurrentRound.IsFinished;
-        match.ScoreFinishedRound();
+        bool hasEndedRound = matchState.CurrentRound.IsFinished;
+        matchState.ScoreFinishedRound();
 
-        if (match.IsFinished)
+        if (matchState.IsFinished)
         {
-            _matchRegistry.RemoveMatch(match);
-            _logger.InfoFormat("A match ended. RoundEndReason: {0}.", match.CurrentRound.EndReason);
+            _matchRegistry.RemoveMatch(matchState);
+            _logger.InfoFormat("A match ended. RoundEndReason: {0}.", matchState.CurrentRound.EndReason);
         }
         else if (hasEndedRound)
         {
             _logger.InfoFormat(
                 "A round ended. EnginePips: {0}. RoundEndReason: {1}.",
-                match.CurrentRound.EngineTile.LeftPips,
-                match.CurrentRound.EndReason);
-            match.StartNextRound(ShuffleTiles());
+                matchState.CurrentRound.EngineTile.LeftPips,
+                matchState.CurrentRound.EndReason);
+            matchState.StartNextRound(ShuffleTiles());
         }
 
         return hasEndedRound;
@@ -300,26 +302,26 @@ public sealed class MatchUseCases : IMatchUseCases
         }
     }
 
-    private void NotifyTurnResult(MatchState match, IReadOnlyList<int> turnHandOwnerIds, bool hasEndedRound)
+    private void NotifyTurnResult(MatchState matchState, IReadOnlyList<int> turnHandOwnerIds, bool hasEndedRound)
     {
-        IReadOnlyList<int> handOwnerIds = hasEndedRound ? match.PlayerIds : turnHandOwnerIds;
-        NotifyUpdates(match, match.PlayerIds, handOwnerIds);
+        IReadOnlyList<int> handOwnerIds = hasEndedRound ? matchState.PlayerIds : turnHandOwnerIds;
+        NotifyUpdates(matchState, matchState.PlayerIds, handOwnerIds);
 
         if (hasEndedRound)
         {
-            NotifyRoundEnded(match);
+            NotifyRoundEnded(matchState);
         }
     }
 
-    private void NotifyRoundEnded(MatchState match)
+    private void NotifyRoundEnded(MatchState matchState)
     {
         RoundEndedNotice roundNotice;
         bool isMatchFinished;
 
-        lock (match.SyncRoot)
+        lock (matchState.SyncRoot)
         {
-            roundNotice = CreateRoundEndedNotice(match);
-            isMatchFinished = match.IsFinished;
+            roundNotice = CreateRoundEndedNotice(matchState);
+            isMatchFinished = matchState.IsFinished;
         }
 
         _gameNotifier.NotifyRoundEnded(roundNotice);
@@ -333,33 +335,33 @@ public sealed class MatchUseCases : IMatchUseCases
         }
     }
 
-    private void NotifyMatchEnded(MatchState match, MatchEndReason endReason)
+    private void NotifyMatchEnded(MatchState matchState, MatchEndReason endReason)
     {
         MatchEndedNotice notice;
 
-        lock (match.SyncRoot)
+        lock (matchState.SyncRoot)
         {
-            notice = new MatchEndedNotice(new List<int>(match.PlayerIds), endReason);
+            notice = new MatchEndedNotice(new List<int>(matchState.PlayerIds), endReason);
         }
 
         _gameNotifier.NotifyMatchEnded(notice);
     }
 
     private void NotifyUpdates(
-        MatchState match,
+        MatchState matchState,
         IReadOnlyList<int> boardRecipientIds,
         IReadOnlyList<int> handOwnerIds)
     {
         MatchUpdatedNotice matchNotice;
         List<HandUpdatedNotice> handNotices = new List<HandUpdatedNotice>();
 
-        lock (match.SyncRoot)
+        lock (matchState.SyncRoot)
         {
-            matchNotice = CreateMatchUpdatedNotice(match, boardRecipientIds);
+            matchNotice = CreateMatchUpdatedNotice(matchState, boardRecipientIds);
 
             foreach (int handOwnerId in handOwnerIds)
             {
-                handNotices.Add(CreateHandUpdatedNotice(match, handOwnerId));
+                handNotices.Add(CreateHandUpdatedNotice(matchState, handOwnerId));
             }
         }
 

@@ -19,7 +19,7 @@ public sealed class TrainViewModel
         IsMexicanTrain = train.IsMexicanTrain;
         IsOpen = train.IsOpen;
         Tiles = train.Tiles;
-        IsAvailable = canReceiveTile;
+        CanReceiveTile = canReceiveTile;
         DropTileCommand = dropTileCommand ?? throw new ArgumentNullException(nameof(dropTileCommand));
     }
 
@@ -31,7 +31,7 @@ public sealed class TrainViewModel
 
     public bool IsOpen { get; }
 
-    public bool IsAvailable { get; }
+    public bool CanReceiveTile { get; }
 
     public IReadOnlyList<TileSummary> Tiles { get; }
 

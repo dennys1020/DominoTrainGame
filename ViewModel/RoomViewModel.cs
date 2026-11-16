@@ -16,8 +16,8 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
-    private const int MinimumPlayers = 2;
-    private const string RoomLostMessageKey = "RoomLostAfterReconnectMessage";
+    private const int MinimumPlayersToStart = 2;
+    private const string RoomLostAfterReconnectMessageKey = "RoomLostAfterReconnectMessage";
     private const string ChatMessageEmptyMessageKey = "ChatMessageEmptyMessage";
     private const string ChatMessageTooLongMessageKey = "ChatMessageTooLongMessage";
 
@@ -182,13 +182,13 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (hasLobby)
         {
-            ApplySnapshot(currentLobby);
+            ApplyLobby(currentLobby);
         }
 
         return hasLobby;
     }
 
-    private void ApplySnapshot(LobbyResult lobby)
+    private void ApplyLobby(LobbyResult lobby)
     {
         Players.Clear();
 
@@ -237,7 +237,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void RefreshStartAvailability()
     {
-        bool hasMinimumPlayers = Players.Count >= MinimumPlayers;
+        bool hasMinimumPlayers = Players.Count >= MinimumPlayersToStart;
         bool areAllPlayersReady = Players.All(player => player.IsReady);
         CanStartMatch = IsHost && hasMinimumPlayers && areAllPlayersReady;
     }
@@ -269,7 +269,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (!wasRoomRestored)
         {
-            ExitRoom(_previousScreen, RoomLostMessageKey);
+            ExitRoom(_previousScreen, RoomLostAfterReconnectMessageKey);
         }
     }
 
@@ -281,9 +281,9 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private async Task LeaveRoomAsync()
     {
-        LobbyActionResult result = await _gameServices.LeaveLobbyAsync();
+        LobbyActionResult leaveResult = await _gameServices.LeaveLobbyAsync();
 
-        if (result == LobbyActionResult.Success)
+        if (leaveResult == LobbyActionResult.Success)
         {
             WindowService.Navigate(_previousScreen);
         }
@@ -293,12 +293,12 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     {
         bool isLocalPlayerReady = Players.Any(player => player.IsCurrentPlayer && player.IsReady);
         bool requestedReadyState = !isLocalPlayerReady;
-        await RunLobbyCommandAsync(() => _gameServices.SetReadyAsync(requestedReadyState));
+        await RunLobbyRequestAsync(() => _gameServices.SetReadyAsync(requestedReadyState));
     }
 
     private async Task StartMatchAsync()
     {
-        await RunLobbyCommandAsync(() => _gameServices.StartMatchAsync());
+        await RunLobbyRequestAsync(() => _gameServices.StartMatchAsync());
     }
 
     private async Task SendMessageAsync()
@@ -318,43 +318,44 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private async Task SubmitMessageAsync()
     {
         string normalizedText = LobbyMessageInputValidator.Normalize(MessageText);
-        LobbyActionResult result = await RunLobbyCommandAsync(
+        LobbyActionResult sendResult = await RunLobbyRequestAsync(
             () => _gameServices.SendLobbyMessageAsync(normalizedText));
 
-        bool wasDelivered = result == LobbyActionResult.Success || result == LobbyActionResult.ChatWarning;
+        bool wasDelivered = sendResult == LobbyActionResult.Success || sendResult == LobbyActionResult.ChatWarning;
 
         if (wasDelivered)
         {
             MessageText = string.Empty;
         }
 
-        ChatNotice = GetChatNotice(result);
+        ChatNotice = GetChatNotice(sendResult);
     }
 
-    private string GetChatNotice(LobbyActionResult result)
+    private string GetChatNotice(LobbyActionResult sendResult)
     {
-        string chatNotice = IsChatSanction(result)
-            ? _localization[LobbyResultMessageKeys.GetMessageKey(result)]
+        string chatNotice = IsChatSanction(sendResult)
+            ? _localization[LobbyResultMessageKeys.GetMessageKey(sendResult)]
             : string.Empty;
         return chatNotice;
     }
 
-    private async Task<LobbyActionResult> RunLobbyCommandAsync(Func<Task<LobbyActionResult>> command)
+    private async Task<LobbyActionResult> RunLobbyRequestAsync(Func<Task<LobbyActionResult>> sendRequest)
     {
-        LobbyActionResult result = await RunWhileBusyAsync(command);
-        bool isFailure = result != LobbyActionResult.Success && !IsChatSanction(result);
+        LobbyActionResult requestResult = await RunWhileBusyAsync(sendRequest);
+        bool isFailure = requestResult != LobbyActionResult.Success && !IsChatSanction(requestResult);
 
         if (isFailure)
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result));
+            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(requestResult));
         }
 
-        return result;
+        return requestResult;
     }
 
-    private static bool IsChatSanction(LobbyActionResult result)
+    private static bool IsChatSanction(LobbyActionResult actionResult)
     {
-        bool isChatSanction = result == LobbyActionResult.ChatWarning || result == LobbyActionResult.ChatBlocked;
+        bool isChatSanction = actionResult == LobbyActionResult.ChatWarning
+            || actionResult == LobbyActionResult.ChatBlocked;
         return isChatSanction;
     }
 
