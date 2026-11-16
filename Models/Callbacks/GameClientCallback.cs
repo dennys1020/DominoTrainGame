@@ -172,7 +172,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
     {
         if (matchEndedMessage == null)
         {
-            _logger.Warn("A match end notice without conent was ignored.");
+            _logger.Warn("A match end notice without content was ignored.");
         }
         else if (matchEndedMessage.EndReason == MatchEndReasonCode.NotEnoughPlayers)
         {
