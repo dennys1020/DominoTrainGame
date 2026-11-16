@@ -736,4 +736,13 @@ on the train</value>
   <data name="MatchScoreboardLabel" xml:space="preserve">
     <value>Scoreboard</value>
   </data>
+  <data name="RoundEndedLabel" xml:space="preserve">
+    <value>Double</value>
+  </data>
+  <data name="RoundWinnerLabel" xml:space="preserve">
+    <value>round · won by</value>
+  </data>
+  <data name="MatchAbandonedMessage" xml:space="preserve">
+    <value>The other players left the match.</value>
+  </data>
 </root>

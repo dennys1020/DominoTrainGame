@@ -16,14 +16,20 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 {
     private const string LeaveConfirmationMessageKey = "MatchLeaveConfirmationMessage";
+    private const string MatchAbandonedMessageKey = "MatchAbandonedMessage";
 
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IMatchEvents _matchEvents;
+    private readonly AsyncRelayCommand _closeAbandonedMatchCommand;
+
     private int _enginePips;
     private int _boneyardCount;
+    private int _lastRoundEnginePips;
     private bool _isMyTurn;
+    private bool _hasRoundSummary;
     private string _turnUsername = string.Empty;
+    private string _lastRoundWinner = string.Empty;
 
     public MatchViewModel(
         IWindowService windowService,
@@ -37,12 +43,16 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         DrawTileCommand = new AsyncRelayCommand(DrawTileAsync);
         PassTurnCommand = new AsyncRelayCommand(PassTurnAsync);
         LeaveMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
+        _closeAbandonedMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
 
         ApplyCurrentMatch();
         ApplyCurrentHand();
 
         _matchEvents.MatchChanged += HandleMatchChanged;
         _matchEvents.HandChanged += HandleHandChanged;
+        _matchEvents.RoundEnded += HandleRoundEnded;
+        _matchEvents.MatchFinished += HandleMatchFinished;
+        _matchEvents.MatchAbandoned += HandleMatchAbandoned;
     }
 
     public ObservableCollection<TileSummary> Hand { get; } = new ObservableCollection<TileSummary>();
@@ -100,6 +110,42 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
+    public int LastRoundEnginePips
+    {
+        get
+        {
+            return _lastRoundEnginePips;
+        }
+        private set
+        {
+            SetProperty(ref _lastRoundEnginePips, value);
+        }
+    }
+
+    public string LastRoundWinner
+    {
+        get
+        {
+            return _lastRoundWinner;
+        }
+        private set
+        {
+            SetProperty(ref _lastRoundWinner, value ?? string.Empty);
+        }
+    }
+
+    public bool HasRoundSummary
+    {
+        get
+        {
+            return _hasRoundSummary;
+        }
+        private set
+        {
+            SetProperty(ref _hasRoundSummary, value);
+        }
+    }
+
     public AsyncRelayCommand DrawTileCommand { get; }
 
     public AsyncRelayCommand PassTurnCommand { get; }
@@ -110,6 +156,9 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     {
         _matchEvents.MatchChanged -= HandleMatchChanged;
         _matchEvents.HandChanged -= HandleHandChanged;
+        _matchEvents.RoundEnded -= HandleRoundEnded;
+        _matchEvents.MatchFinished -= HandleMatchFinished;
+        _matchEvents.MatchAbandoned -= HandleMatchAbandoned;
     }
 
     private void ApplyCurrentMatch()
@@ -143,6 +192,49 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     {
         ApplyCurrentHand();
     }
+
+    private void HandleRoundEnded(object sendes, EventArgs e)
+    {
+        IReadOnlyList<RoundSummary> roundHistory = _matchServices.RoundHistory;
+
+        if (roundHistory.Any())
+        {
+            ShowRoundSummary(roundHistory.Last());
+        }
+    }
+
+    private void HandleMatchFinished(object sender, EventArgs e)
+    {
+        WindowService.Navigate(Screen.MatchResults);
+    }
+
+    private void HandleMatchAbandoned(object sender, EventArgs e)
+    {
+        if (_closeAbandonedMatchCommand.CanExecute(null))
+        {
+            _closeAbandonedMatchCommand.Execute(null);
+        }
+    }
+
+    private void ShowRoundSummary(RoundSummary roundSummary)
+    {
+        int winnerPlayerId = roundSummary.ScoresByPlayerId
+            .OrderBy(playerScore => playerScore.Value)
+            .Select(playerScore => playerScore.Key)
+            .FirstOrDefault();
+
+        LastRoundEnginePips = roundSummary.EnginePips;
+        LastRoundWinner = FindUsername(_matchServices.CurrentMatch.Players, winnerPlayerId);
+        HasRoundSummary = true;
+    }
+
+    private async Task CloseAbandonedMatchAsync()
+    {
+        WindowService.ShowMessage(MatchAbandonedMessageKey);
+        await RunWhileBusyAsync(_gameServices.LeaveLobbyAsync);
+        WindowService.Navigate(Screen.Main);
+    }
+
 
     private void ApplySnapshot(MatchSnapshot matchSnapshot)
     {

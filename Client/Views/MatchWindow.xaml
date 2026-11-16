@@ -152,6 +152,15 @@
                                 Style="{StaticResource MatchHeaderStatStyle}"
                                 Margin="40,0,8,0" />
                             <TextBlock Text="{Binding BoneyardCount}" Style="{StaticResource MatchHeaderStatStyle}" />
+                            <TextBlock
+                                Style="{StaticResource MatchHeaderStatStyle}"
+                                Margin="40,0,0,0"
+                                Visibility="{Binding HasRoundSummary, Converter={StaticResource BoardVisibility}}">
+                                <Run Text="{Binding [RoundEndedLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                <Run Text="{Binding LastRoundEnginePips, Mode=OneWay}" />
+                                <Run Text="{Binding [RoundWinnerLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                <Run Text="{Binding LastRoundWinner, Mode=OneWay}" />
+                            </TextBlock>
                         </StackPanel>
                     </DockPanel>
                     <Grid Grid.Row="1" Margin="0,8,0,16">
