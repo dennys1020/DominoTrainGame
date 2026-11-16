@@ -39,6 +39,12 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
 
     public event EventHandler<EventArgs> HandChanged;
 
+    public event EventHandler<EventArgs> RoundEnded;
+
+    public event EventHandler<EventArgs> MatchFinished;
+
+    public event EventHandler<EventArgs> MatchAbandoned;
+
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
         if (message?.Player == null)
@@ -96,6 +102,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         }
         else
         {
+            _session.ClearRoundHistory();
             OnMatchStarting(new MatchStartingEventArgs(message.Code));
         }
     }
@@ -147,6 +154,36 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         }
     }
 
+    public void ReceiveRoundEnded(RoundEndedMessage roundEndedMessage)
+    {
+        if (roundEndedMessage == null)
+        {
+            _logger.Warn("A round end notice without content was ignored.");
+        }
+        else
+        {
+            _session.StoreRound(MatchSnapshotMapper.ToRoundSummary(roundEndedMessage));
+
+            OnRoundEnded(EventArgs.Empty);
+        }
+    }
+
+    public void ReceiveMatchEnded(MatchEndedMessage matchEndedMessage)
+    {
+        if (matchEndedMessage == null)
+        {
+            _logger.Warn("A match end notice without conent was ignored.");
+        }
+        else if (matchEndedMessage.EndReason == MatchEndReasonCode.NotEnoughPlayers)
+        {
+            OnMatchAbandoned(EventArgs.Empty);
+        }
+        else
+        {
+            OnMatchFinished(EventArgs.Empty);
+        }
+    }
+
     public void ReportConnectionState(ConnectionState connectionState)
     {
         OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
@@ -195,5 +232,20 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
     private void OnHandChanged(EventArgs eventArgs)
     {
         HandChanged?.Invoke(this, eventArgs);
+    }
+
+    private void OnRoundEnded(EventArgs eventArgs)
+    {
+        RoundEnded?.Invoke(this, eventArgs);
+    }
+
+    private void OnMatchFinished(EventArgs eventArgs)
+    {
+        MatchFinished?.Invoke(this, eventArgs);
+    }
+
+    private void OnMatchAbandoned(EventArgs eventArgs)
+    {
+        MatchAbandoned?.Invoke(this, eventArgs);
     }
 }
