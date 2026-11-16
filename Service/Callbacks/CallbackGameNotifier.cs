@@ -159,6 +159,96 @@ public sealed class CallbackGameNotifier : IGameNotifier
             callback => callback.ReceiveHand(message));
     }
 
+    public void NotifyRoundEnded(RoundEndedNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        RoundEndedMessage message = new RoundEndedMessage
+        {
+            EnginePips = notice.EnginePips,
+            EndReason = ToRoundEndReasonCode(notice.EndReason),
+            RoundScores = ToPlayerScoreData(notice.RoundScoresByPlayerId)
+        };
+        RoundEndedSender sender = new RoundEndedSender(message);
+
+        Broadcast(notice.RecipientPlayerIds, sender.Send);
+    }
+
+    public void NotifyMatchEnded(MatchEndedNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        MatchEndedMessage message = new MatchEndedMessage
+        {
+            EndReason = ToMatchEndReasonCode(notice.EndReason)
+        };
+        MatchEndedSender sender = new MatchEndedSender(message);
+
+        Broadcast(notice.RecipientPlayerIds, sender.Send);
+    }
+
+    private static RoundEndReasonCode ToRoundEndReasonCode(RoundEndReason endReason)
+    {
+        RoundEndReasonCode endReasonCode;
+
+        switch (endReason)
+        {
+            case RoundEndReason.EmptyHand:
+                endReasonCode = RoundEndReasonCode.EmptyHand;
+                break;
+            case RoundEndReason.Blocked:
+                endReasonCode = RoundEndReasonCode.Blocked;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(endReason));
+        }
+
+        return endReasonCode;
+    }
+
+    private static MatchEndReasonCode ToMatchEndReasonCode(MatchEndReason endReason)
+    {
+        MatchEndReasonCode endReasonCode;
+
+        switch (endReason)
+        {
+            case MatchEndReason.AllRoundsPlayed:
+                endReasonCode = MatchEndReasonCode.AllRoundsPlayed;
+                break;
+            case MatchEndReason.NotEnoughPlayers:
+                endReasonCode = MatchEndReasonCode.NotEnoughPlayers;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(endReason));
+        }
+
+        return endReasonCode;
+    }
+
+    private static List<PlayerScoreData> ToPlayerScoreData(IReadOnlyDictionary<int, int> scoresByPlayerId)
+    {
+        List<PlayerScoreData> scores = new List<PlayerScoreData>();
+
+        foreach (KeyValuePair<int, int> score in scoresByPlayerId)
+        {
+            PlayerScoreData scoreData = new PlayerScoreData
+            {
+                PlayerId = score.Key,
+                Score = score.Value
+            };
+
+            scores.Add(scoreData);
+        }
+
+        return scores;
+    }
+
     private static TileData ToTileData(Tile tile)
     {
         TileData tileData = new TileData
