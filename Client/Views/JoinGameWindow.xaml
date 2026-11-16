@@ -92,7 +92,7 @@
                                     <Button
                                         Content="{Binding [JoinRoomButtonLabel], Source={StaticResource Localization}}"
                                         Style="{StaticResource MatchButtonStyle}"
-                                        Command="{Binding DataContext.RoomCommand,
+                                        Command="{Binding DataContext.JoinLobbyCommand,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                         Grid.Row="2"
                                         Background="{StaticResource Aqua}" />

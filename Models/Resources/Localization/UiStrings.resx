@@ -724,6 +724,9 @@ en el tren</value>
   <data name="MatchTrainNotAvailableMessage" xml:space="preserve">
     <value>Ese tren no está disponible para ti.</value>
   </data>
+  <data name="MatchMustSatisfyDoubleMessage" xml:space="preserve">
+    <value>Hay un doble abierto. Cúbrelo antes de jugar en otro tren.</value>
+  </data>
   <data name="MatchAlreadyDrawnMessage" xml:space="preserve">
     <value>Ya robaste una ficha en este turno.</value>
   </data>

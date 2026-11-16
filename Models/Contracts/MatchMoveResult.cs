@@ -8,6 +8,7 @@ public enum MatchMoveResult
     TileNotInHand,
     TileDoesNotMatch,
     TrainNotAvailable,
+    MustSatisfyDouble,
     BoneyardEmpty,
     AlreadyDrawn,
     MustDrawFirst,

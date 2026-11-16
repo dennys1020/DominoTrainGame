@@ -10,7 +10,7 @@ public abstract class ObservableViewModel : INotifyPropertyChanged
 {
     private const int NoActiveOperations = 0;
 
-    private int _activeOperations;
+    private int _activeOperationCount;
     private bool _isBusy;
 
     public event PropertyChangedEventHandler PropertyChanged;
@@ -66,7 +66,7 @@ public abstract class ObservableViewModel : INotifyPropertyChanged
     private async Task<TResult> RunWhileBusyCoreAsync<TResult>(Func<Task<TResult>> operation)
     {
         TResult result;
-        _activeOperations++;
+        _activeOperationCount++;
         IsBusy = true;
 
         try
@@ -75,8 +75,8 @@ public abstract class ObservableViewModel : INotifyPropertyChanged
         }
         finally
         {
-            _activeOperations--;
-            IsBusy = _activeOperations > NoActiveOperations;
+            _activeOperationCount--;
+            IsBusy = _activeOperationCount > NoActiveOperations;
         }
 
         return result;

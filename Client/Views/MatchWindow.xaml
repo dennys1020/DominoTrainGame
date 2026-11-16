@@ -43,7 +43,7 @@
             <Border
                 Style="{StaticResource TrainRowStyle}"
                 behaviors:TileDragDropBehavior.DropTileCommand="{Binding DropTileCommand}"
-                behaviors:TileDragDropBehavior.IsDropAllowed="{Binding IsAvailable}">
+                behaviors:TileDragDropBehavior.IsDropAllowed="{Binding CanReceiveTile}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="170" />
@@ -159,7 +159,7 @@
                                 <Run Text="{Binding [RoundEndedLabel], Source={StaticResource Localization}, Mode=OneWay}" />
                                 <Run Text="{Binding LastRoundEnginePips, Mode=OneWay}" />
                                 <Run Text="{Binding [RoundWinnerLabel], Source={StaticResource Localization}, Mode=OneWay}" />
-                                <Run Text="{Binding LastRoundWinner, Mode=OneWay}" />
+                                <Run Text="{Binding LastRoundWinnerUsername, Mode=OneWay}" />
                             </TextBlock>
                         </StackPanel>
                     </DockPanel>
@@ -214,7 +214,7 @@
                                                 Text="{Binding [MatchYourTurnLabel],
                                                     Source={StaticResource Localization}}"
                                                 Style="{StaticResource TrainLabelStyle}"
-                                                Visibility="{Binding IsMyTurn,
+                                                Visibility="{Binding IsLocalPlayerTurn,
                                                     Converter={StaticResource BoardVisibility},
                                                     FallbackValue=Collapsed}" />
                                             <StackPanel Style="{StaticResource WaitingTurnPanelStyle}">
@@ -223,7 +223,7 @@
                                                         Source={StaticResource Localization}}"
                                                     Style="{StaticResource MatchStatTextStyle}" />
                                                 <TextBlock
-                                                    Text="{Binding TurnUsername}"
+                                                    Text="{Binding TurnPlayerUsername}"
                                                     Style="{StaticResource TrainLabelStyle}" />
                                             </StackPanel>
                                         </Grid>
@@ -256,13 +256,13 @@
                                     <Button
                                         Content="{Binding [MatchDrawButtonLabel], Source={StaticResource Localization}}"
                                         Command="{Binding DrawTileCommand}"
-                                        IsEnabled="{Binding IsMyTurn}"
+                                        IsEnabled="{Binding IsLocalPlayerTurn}"
                                         Style="{StaticResource MatchButtonStyle}"
                                         Background="{StaticResource Aqua}" />
                                     <Button
                                         Content="{Binding [MatchPassButtonLabel], Source={StaticResource Localization}}"
                                         Command="{Binding PassTurnCommand}"
-                                        IsEnabled="{Binding IsMyTurn}"
+                                        IsEnabled="{Binding IsLocalPlayerTurn}"
                                         Style="{StaticResource MatchButtonStyle}"
                                         Background="{StaticResource Frost}"
                                         Margin="0,12,0,0" />
@@ -275,7 +275,7 @@
                                     HorizontalScrollBarVisibility="Auto"
                                     VerticalScrollBarVisibility="Disabled">
                                     <ItemsControl
-                                        ItemsSource="{Binding Hand}"
+                                        ItemsSource="{Binding HandTiles}"
                                         ItemTemplate="{StaticResource HandTileTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>

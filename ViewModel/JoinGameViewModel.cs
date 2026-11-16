@@ -21,7 +21,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _lobbyCode = string.Empty;
         BackCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
-        RoomCommand = new AsyncRelayCommand(JoinLobbyAsync);
+        JoinLobbyCommand = new AsyncRelayCommand(JoinLobbyAsync);
     }
 
     public string LobbyCode
@@ -38,19 +38,19 @@ public sealed class JoinGameViewModel : ScreenViewModel
 
     public RelayCommand BackCommand { get; }
 
-    public AsyncRelayCommand RoomCommand { get; }
+    public AsyncRelayCommand JoinLobbyCommand { get; }
 
     private async Task JoinLobbyAsync()
     {
-        LobbyResult result = await RunWhileBusyAsync(() => _gameServices.JoinLobbyAsync(LobbyCode.Trim()));
+        LobbyResult joinResult = await RunWhileBusyAsync(() => _gameServices.JoinLobbyAsync(LobbyCode.Trim()));
 
-        if (result.Status == LobbyActionResult.Success)
+        if (joinResult.Status == LobbyActionResult.Success)
         {
             WindowService.Navigate(Screen.Room);
         }
         else
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result.Status));
+            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
         }
     }
 }

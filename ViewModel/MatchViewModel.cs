@@ -26,10 +26,10 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private int _enginePips;
     private int _boneyardCount;
     private int _lastRoundEnginePips;
-    private bool _isMyTurn;
+    private bool _isLocalPlayerTurn;
     private bool _hasRoundSummary;
-    private string _turnUsername = string.Empty;
-    private string _lastRoundWinner = string.Empty;
+    private string _turnPlayerUsername = string.Empty;
+    private string _lastRoundWinnerUsername = string.Empty;
 
     public MatchViewModel(
         IWindowService windowService,
@@ -55,7 +55,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _matchEvents.MatchAbandoned += HandleMatchAbandoned;
     }
 
-    public ObservableCollection<TileSummary> Hand { get; } = new ObservableCollection<TileSummary>();
+    public ObservableCollection<TileSummary> HandTiles { get; } = new ObservableCollection<TileSummary>();
 
     public ObservableCollection<TrainViewModel> Trains { get; } = new ObservableCollection<TrainViewModel>();
 
@@ -86,27 +86,27 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    public bool IsMyTurn
+    public bool IsLocalPlayerTurn
     {
         get
         {
-            return _isMyTurn;
+            return _isLocalPlayerTurn;
         }
         private set
         {
-            SetProperty(ref _isMyTurn, value);
+            SetProperty(ref _isLocalPlayerTurn, value);
         }
     }
 
-    public string TurnUsername
+    public string TurnPlayerUsername
     {
         get
         {
-            return _turnUsername;
+            return _turnPlayerUsername;
         }
         private set
         {
-            SetProperty(ref _turnUsername, value);
+            SetProperty(ref _turnPlayerUsername, value);
         }
     }
 
@@ -122,15 +122,15 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    public string LastRoundWinner
+    public string LastRoundWinnerUsername
     {
         get
         {
-            return _lastRoundWinner;
+            return _lastRoundWinnerUsername;
         }
         private set
         {
-            SetProperty(ref _lastRoundWinner, value ?? string.Empty);
+            SetProperty(ref _lastRoundWinnerUsername, value ?? string.Empty);
         }
     }
 
@@ -183,17 +183,17 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    private void HandleMatchChanged(object sender, EventArgs e)
+    private void HandleMatchChanged(object sender, EventArgs eventArgs)
     {
         ApplyCurrentMatch();
     }
 
-    private void HandleHandChanged(object sender, EventArgs e)
+    private void HandleHandChanged(object sender, EventArgs eventArgs)
     {
         ApplyCurrentHand();
     }
 
-    private void HandleRoundEnded(object sendes, EventArgs e)
+    private void HandleRoundEnded(object sender, EventArgs eventArgs)
     {
         IReadOnlyList<RoundSummary> roundHistory = _matchServices.RoundHistory;
 
@@ -203,12 +203,12 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    private void HandleMatchFinished(object sender, EventArgs e)
+    private void HandleMatchFinished(object sender, EventArgs eventArgs)
     {
         WindowService.Navigate(Screen.MatchResults);
     }
 
-    private void HandleMatchAbandoned(object sender, EventArgs e)
+    private void HandleMatchAbandoned(object sender, EventArgs eventArgs)
     {
         if (_closeAbandonedMatchCommand.CanExecute(null))
         {
@@ -224,7 +224,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
             .FirstOrDefault();
 
         LastRoundEnginePips = roundSummary.EnginePips;
-        LastRoundWinner = FindUsername(_matchServices.CurrentMatch.Players, winnerPlayerId);
+        LastRoundWinnerUsername = FindUsername(_matchServices.CurrentMatch.Players, winnerPlayerId);
         HasRoundSummary = true;
     }
 
@@ -240,8 +240,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     {
         EnginePips = matchSnapshot.EnginePips;
         BoneyardCount = matchSnapshot.BoneyardCount;
-        IsMyTurn = matchSnapshot.CurrentPlayerId == _gameServices.CurrentPlayerId;
-        TurnUsername = FindUsername(matchSnapshot.Players, matchSnapshot.CurrentPlayerId);
+        IsLocalPlayerTurn = matchSnapshot.CurrentPlayerId == _gameServices.CurrentPlayerId;
+        TurnPlayerUsername = FindUsername(matchSnapshot.Players, matchSnapshot.CurrentPlayerId);
 
         ReplaceTrains(matchSnapshot.Trains);
         ReplacePlayers(matchSnapshot.Players, matchSnapshot.CurrentPlayerId);
@@ -249,11 +249,11 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ReplaceHand(IReadOnlyList<TileSummary> tiles)
     {
-        Hand.Clear();
+        HandTiles.Clear();
 
         foreach (TileSummary tile in tiles)
         {
-            Hand.Add(tile);
+            HandTiles.Add(tile);
         }
     }
 
@@ -263,7 +263,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
         foreach (TrainSummary train in trains)
         {
-            bool canReceiveTile = IsMyTurn && IsTrainAvailable(train);
+            bool canReceiveTile = IsLocalPlayerTurn && IsTrainAvailable(train);
             ICommand dropTileCommand = CreateDropTileCommand(train.TrainId);
 
             Trains.Add(new TrainViewModel(train, canReceiveTile, dropTileCommand));
@@ -295,29 +295,29 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
     private Task PlayTileAsync(int tileId, int trainId)
     {
-        Task playing = RunMoveAsync(() => _matchServices.PlayTileAsync(tileId, trainId));
-        return playing;
+        Task playTileTask = RunMoveAsync(() => _matchServices.PlayTileAsync(tileId, trainId));
+        return playTileTask;
     }
 
     private Task DrawTileAsync()
     {
-        Task drawing = RunMoveAsync(() => _matchServices.DrawTileAsync());
-        return drawing;
+        Task drawTileTask = RunMoveAsync(() => _matchServices.DrawTileAsync());
+        return drawTileTask;
     }
 
     private Task PassTurnAsync()
     {
-        Task passing = RunMoveAsync(() => _matchServices.PassTurnAsync());
-        return passing;
+        Task passTurnTask = RunMoveAsync(() => _matchServices.PassTurnAsync());
+        return passTurnTask;
     }
 
     private async Task RunMoveAsync(Func<Task<MatchMoveResult>> sendMove)
     {
-        MatchMoveResult matchResult = await RunWhileBusyAsync(sendMove);
+        MatchMoveResult moveResult = await RunWhileBusyAsync(sendMove);
 
-        if (matchResult != MatchMoveResult.Success)
+        if (moveResult != MatchMoveResult.Success)
         {
-            WindowService.ShowMessage(MatchMessageKeys.GetMessageKey(matchResult));
+            WindowService.ShowMessage(MatchMessageKeys.GetMessageKey(moveResult));
         }
     }
 

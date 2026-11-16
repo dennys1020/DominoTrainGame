@@ -86,7 +86,7 @@
                                                 Content="{Binding [CreateGameTitle],
                                                     Source={StaticResource Localization}}"
                                                 Style="{StaticResource MatchButtonStyle}"
-                                                Command="{Binding DataContext.RoomCommand,
+                                                Command="{Binding DataContext.CreateLobbyCommand,
                                                     RelativeSource={RelativeSource AncestorType=Window}}"
                                                 Grid.Row="3"
                                                 Background="{StaticResource Aqua}" />

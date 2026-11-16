@@ -124,6 +124,9 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.TrainNotAvailable:
                 resultStatus = MatchMoveResult.TrainNotAvailable;
                 break;
+            case GameServiceFaultCode.MustSatisfyDouble:
+                resultStatus = MatchMoveResult.MustSatisfyDouble;
+                break;
             default:
                 resultStatus = MapTurnFault(faultCode);
                 break;

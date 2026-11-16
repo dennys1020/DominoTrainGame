@@ -155,7 +155,7 @@
                         FontSize="13"
                         Width="380"
                         Height="58"
-                        Command="{Binding DataContext.LogoutCommand,
+                        Command="{Binding DataContext.LogOutCommand,
                             RelativeSource={RelativeSource AncestorType=Window}}" />
                 </StackPanel>
                 <Rectangle

@@ -44,11 +44,11 @@ public sealed class LobbyInvitationController
 
     private async Task AnswerInvitationAsync(IWindowService windowService, LobbyInvitationReceivedEventArgs invitation)
     {
-        string message = string.Format(
+        string invitationMessage = string.Format(
             CultureInfo.CurrentCulture,
             _localization[InvitationReceivedMessageKey],
             invitation.InviterUsername);
-        bool isAccepted = windowService.Confirm(message);
+        bool isAccepted = windowService.Confirm(invitationMessage);
 
         if (isAccepted)
         {
@@ -56,17 +56,17 @@ public sealed class LobbyInvitationController
         }
     }
 
-    private async Task JoinInvitedLobbyAsync(IWindowService windowService, string code)
+    private async Task JoinInvitedLobbyAsync(IWindowService windowService, string lobbyCode)
     {
-        LobbyResult result = await _gameServices.JoinLobbyAsync(code);
+        LobbyResult joinResult = await _gameServices.JoinLobbyAsync(lobbyCode);
 
-        if (result.Status == LobbyActionResult.Success)
+        if (joinResult.Status == LobbyActionResult.Success)
         {
             windowService.Navigate(Screen.Room);
         }
         else
         {
-            windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result.Status));
+            windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
         }
     }
 }

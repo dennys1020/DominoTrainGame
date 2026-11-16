@@ -724,6 +724,9 @@ on the train</value>
   <data name="MatchTrainNotAvailableMessage" xml:space="preserve">
     <value>That train is not available to you.</value>
   </data>
+  <data name="MatchMustSatisfyDoubleMessage" xml:space="preserve">
+    <value>There is an open double. Cover it before playing on another train.</value>
+  </data>
   <data name="MatchAlreadyDrawnMessage" xml:space="preserve">
     <value>You already drew a tile this turn.</value>
   </data>

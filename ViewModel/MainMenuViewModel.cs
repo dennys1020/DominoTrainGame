@@ -24,7 +24,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
 
         NewGameCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
         ResultsCommand = new RelayCommand(() => WindowService.Navigate(Screen.MatchResults));
-        LogoutCommand = new RelayCommand(LogOut);
+        LogOutCommand = new RelayCommand(LogOut);
         LeaderboardCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Leaderboard));
         ProfileCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Profile));
         FriendsCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Friends));
@@ -37,7 +37,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
 
     public RelayCommand ResultsCommand { get; }
 
-    public RelayCommand LogoutCommand { get; }
+    public RelayCommand LogOutCommand { get; }
 
     public RelayCommand LeaderboardCommand { get; }
 

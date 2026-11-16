@@ -20,26 +20,26 @@ public sealed class NewGameViewModel : ScreenViewModel
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         BackCommand = new RelayCommand(() => WindowService.Navigate(Screen.Main));
         JoinGameCommand = new RelayCommand(() => WindowService.Navigate(Screen.JoinGame));
-        RoomCommand = new AsyncRelayCommand(CreateLobbyAsync);
+        CreateLobbyCommand = new AsyncRelayCommand(CreateLobbyAsync);
     }
 
     public RelayCommand BackCommand { get; }
 
     public RelayCommand JoinGameCommand { get; }
 
-    public AsyncRelayCommand RoomCommand { get; }
+    public AsyncRelayCommand CreateLobbyCommand { get; }
 
     private async Task CreateLobbyAsync()
     {
-        LobbyResult result = await RunWhileBusyAsync(() => _gameServices.CreateLobbyAsync());
+        LobbyResult createResult = await RunWhileBusyAsync(() => _gameServices.CreateLobbyAsync());
 
-        if (result.Status == LobbyActionResult.Success)
+        if (createResult.Status == LobbyActionResult.Success)
         {
             WindowService.Navigate(Screen.Room);
         }
         else
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(result.Status));
+            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(createResult.Status));
         }
     }
 }

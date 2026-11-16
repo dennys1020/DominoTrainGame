@@ -182,7 +182,7 @@
             <DataTrigger Binding="{Binding IsMexicanTrain}" Value="True">
                 <Setter Property="Background" Value="{StaticResource Seafoam}" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsAvailable}" Value="True">
+            <DataTrigger Binding="{Binding CanReceiveTile}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource Aqua}" />
                 <Setter Property="BorderThickness" Value="4" />
             </DataTrigger>
@@ -212,7 +212,7 @@
     <Style x:Key="WaitingTurnPanelStyle" TargetType="StackPanel">
         <Setter Property="Visibility" Value="Visible" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsMyTurn}" Value="True">
+            <DataTrigger Binding="{Binding IsLocalPlayerTurn}" Value="True">
                 <Setter Property="Visibility" Value="Collapsed" />
             </DataTrigger>
         </Style.Triggers>
