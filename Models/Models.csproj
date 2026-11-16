@@ -70,6 +70,7 @@
     <Compile Include="Contracts\MatchTableSummary.cs" />
     <Compile Include="Contracts\MatchTurnSummary.cs" />
     <Compile Include="Contracts\PlayerHand.cs" />
+    <Compile Include="Contracts\RoundSummary.cs" />
     <Compile Include="Contracts\SignUpResult.cs" />
     <Compile Include="Contracts\TileSummary.cs" />
     <Compile Include="Contracts\TrainStatus.cs" />

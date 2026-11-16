@@ -45,6 +45,7 @@
       <xs:enumeration value="AlreadyDrawn" />
       <xs:enumeration value="MustDrawFirst" />
       <xs:enumeration value="MatchAlreadyStarted" />
+      <xs:enumeration value="MustSatisfyDouble" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -197,4 +198,45 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="HandMessage" nillable="true" type="tns:HandMessage" />
+  <xs:complexType name="RoundEndedMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EndReason" type="tns:RoundEndReasonCode" />
+      <xs:element minOccurs="0" name="EnginePips" type="xs:int" />
+      <xs:element minOccurs="0" name="RoundScores" nillable="true" type="tns:ArrayOfPlayerScoreData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RoundEndedMessage" nillable="true" type="tns:RoundEndedMessage" />
+  <xs:simpleType name="RoundEndReasonCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EmptyHand" />
+      <xs:enumeration value="Blocked" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RoundEndReasonCode" nillable="true" type="tns:RoundEndReasonCode" />
+  <xs:complexType name="ArrayOfPlayerScoreData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PlayerScoreData" nillable="true" type="tns:PlayerScoreData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPlayerScoreData" nillable="true" type="tns:ArrayOfPlayerScoreData" />
+  <xs:complexType name="PlayerScoreData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PlayerScoreData" nillable="true" type="tns:PlayerScoreData" />
+  <xs:complexType name="MatchEndedMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="EndReason" type="tns:MatchEndReasonCode" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="MatchEndedMessage" nillable="true" type="tns:MatchEndedMessage" />
+  <xs:simpleType name="MatchEndReasonCode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AllRoundsPlayed" />
+      <xs:enumeration value="NotEnoughPlayers" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="MatchEndReasonCode" nillable="true" type="tns:MatchEndReasonCode" />
 </xs:schema>

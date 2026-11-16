@@ -151,4 +151,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReceiveRoundEnded">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q16="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q16:RoundEndedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReceiveMatchEnded">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q17="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q17:MatchEndedMessage" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

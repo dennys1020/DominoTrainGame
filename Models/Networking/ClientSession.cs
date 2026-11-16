@@ -18,6 +18,7 @@ public sealed class ClientSession
     private SynchronizationContext _callerContext = new SynchronizationContext();
     private MatchSnapshot _matchSnapshot = MatchSnapshot.Empty;
     private PlayerHand _playerHand = PlayerHand.Empty;
+    private List<RoundSummary> _roundHistory = new List<RoundSummary>();
 
     public LobbyResult CurrentLobby
     {
@@ -166,6 +167,42 @@ public sealed class ClientSession
         }
     }
 
+    public IReadOnlyList<RoundSummary> RoundHistory
+    {
+        get
+        {
+            IReadOnlyList<RoundSummary> roundHistory;
+
+            lock (_sessionSyncRoot)
+            {
+                roundHistory = new List<RoundSummary>(_roundHistory);
+            }
+
+            return roundHistory;
+        }
+    }
+
+    public void StoreRound(RoundSummary roundSummary)
+    {
+        if (roundSummary == null)
+        {
+            throw new ArgumentNullException(nameof(roundSummary));
+        }
+
+        lock (_sessionSyncRoot)
+        {
+            _roundHistory.Add(roundSummary);
+        }
+    }
+
+    public void ClearRoundHistory()
+    {
+        lock (_sessionSyncRoot)
+        {
+            _roundHistory = new List<RoundSummary>();
+        }
+    }
+
     public void StoreHand(PlayerHand hand)
     {
         if (hand == null)
@@ -187,6 +224,7 @@ public sealed class ClientSession
             _matchSnapshot = MatchSnapshot.Empty;
             _playerHand = PlayerHand.Empty;
             _pendingLobbyUpdates.Clear();
+            _roundHistory = new List<RoundSummary>();
         }
     }
 
