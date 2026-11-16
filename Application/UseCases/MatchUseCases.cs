@@ -196,7 +196,7 @@ public sealed class MatchUseCases : IMatchUseCases
             round.Boneyard.Count,
             round.EngineTile,
             CountTilesByPlayer(match),
-            CollectScoresByPlayer(match),
+            CollectScoresByPlayer(match.PlayerIds, match.ScoresByPlayerId),
             CreateTrainSnapshots(round));
         return notice;
     }
@@ -213,16 +213,18 @@ public sealed class MatchUseCases : IMatchUseCases
         return tileCountsByPlayerId;
     }
 
-    private static Dictionary<int, int> CollectScoresByPlayer(MatchState match)
+    private static Dictionary<int, int> CollectScoresByPlayer(
+        IReadOnlyList<int> playerIds,
+        IReadOnlyDictionary<int, int> scoresByPlayerId)
     {
-        Dictionary<int, int> scoresByPlayerId = new Dictionary<int, int>();
+        Dictionary<int, int> collectedScoresByPlayerId = new Dictionary<int, int>();
 
-        foreach (int playerId in match.PlayerIds)
+        foreach (int playerId in playerIds)
         {
-            scoresByPlayerId.Add(playerId, match.ScoresByPlayerId[playerId]);
+            collectedScoresByPlayerId.Add(playerId, scoresByPlayerId[playerId]);
         }
 
-        return scoresByPlayerId;
+        return collectedScoresByPlayerId;
     }
 
     private static List<TrainSnapshot> CreateTrainSnapshots(RoundState round)
@@ -244,7 +246,7 @@ public sealed class MatchUseCases : IMatchUseCases
             new List<int>(match.PlayerIds),
             finishedRound.EngineTile.LeftPips,
             finishedRound.EndReason,
-            new Dictionary<int, int>(match.LastRoundScoresByPlayerId));
+            CollectScoresByPlayer(match.PlayerIds, match.LastRoundScoresByPlayerId));
         return notice;
     }
 
