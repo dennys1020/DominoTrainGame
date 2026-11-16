@@ -45,6 +45,21 @@ internal static class MatchSnapshotMapper
         return hand;
     }
 
+    public static RoundSummary ToRoundSummary(RoundEndedMessage roundEndedMessage)
+    {
+        if (roundEndedMessage == null)
+        {
+            throw new ArgumentNullException(nameof(roundEndedMessage));
+        }
+
+        Dictionary<int, int> scoresByPlayerId = (roundEndedMessage.RoundScores ?? Enumerable.Empty<PlayerScoreData>())
+            .Where(scoreData => scoreData != null)
+            .ToDictionary(scoreData => scoreData.PlayerId, scoreData => scoreData.Score);
+        RoundSummary roundSummary = new RoundSummary(roundEndedMessage.EnginePips, scoresByPlayerId);
+
+        return roundSummary;
+    }
+
     private static int GetEnginePips(TileData engineTile)
     {
         int enginePips = engineTile?.LeftPips ?? MatchSnapshot.Empty.EnginePips;
