@@ -111,6 +111,12 @@
   <wsdl:message name="ILobbyService_ReceiveHand_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveHand" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveRoundEnded_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveRoundEnded" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveMatchEnded_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveMatchEnded" />
+  </wsdl:message>
   <wsdl:portType msc:usingSession="true" name="ILobbyService">
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="Connect">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/Connect" message="tns:ILobbyService_Connect_InputMessage" />
@@ -175,6 +181,12 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveHand">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveHand" message="tns:ILobbyService_ReceiveHand_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveRoundEnded">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveRoundEnded" message="tns:ILobbyService_ReceiveRoundEnded_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveMatchEnded">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveMatchEnded" message="tns:ILobbyService_ReceiveMatchEnded_OutputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="LobbyService" type="tns:ILobbyService">
@@ -320,6 +332,18 @@
     </wsdl:operation>
     <wsdl:operation name="ReceiveHand">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveHand" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveRoundEnded">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveRoundEnded" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveMatchEnded">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveMatchEnded" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

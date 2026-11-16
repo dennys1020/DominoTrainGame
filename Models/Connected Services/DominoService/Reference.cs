@@ -154,6 +154,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         MatchAlreadyStarted = 30,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MustSatisfyDouble = 31,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1551,6 +1554,211 @@ namespace DominoTrainGame.Client.Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoundEndedMessage", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class RoundEndedMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DominoTrainGame.Client.Models.DominoService.RoundEndReasonCode EndReasonField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int EnginePipsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DominoTrainGame.Client.Models.DominoService.PlayerScoreData[] RoundScoresField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DominoTrainGame.Client.Models.DominoService.RoundEndReasonCode EndReason {
+            get {
+                return this.EndReasonField;
+            }
+            set {
+                if ((this.EndReasonField.Equals(value) != true)) {
+                    this.EndReasonField = value;
+                    this.RaisePropertyChanged("EndReason");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int EnginePips {
+            get {
+                return this.EnginePipsField;
+            }
+            set {
+                if ((this.EnginePipsField.Equals(value) != true)) {
+                    this.EnginePipsField = value;
+                    this.RaisePropertyChanged("EnginePips");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DominoTrainGame.Client.Models.DominoService.PlayerScoreData[] RoundScores {
+            get {
+                return this.RoundScoresField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RoundScoresField, value) != true)) {
+                    this.RoundScoresField = value;
+                    this.RaisePropertyChanged("RoundScores");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RoundEndReasonCode", Namespace="http://dominotraingame/services")]
+    public enum RoundEndReasonCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        EmptyHand = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Blocked = 1,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PlayerScoreData", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class PlayerScoreData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PlayerIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ScoreField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PlayerId {
+            get {
+                return this.PlayerIdField;
+            }
+            set {
+                if ((this.PlayerIdField.Equals(value) != true)) {
+                    this.PlayerIdField = value;
+                    this.RaisePropertyChanged("PlayerId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Score {
+            get {
+                return this.ScoreField;
+            }
+            set {
+                if ((this.ScoreField.Equals(value) != true)) {
+                    this.ScoreField = value;
+                    this.RaisePropertyChanged("Score");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MatchEndedMessage", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class MatchEndedMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private DominoTrainGame.Client.Models.DominoService.MatchEndReasonCode EndReasonField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public DominoTrainGame.Client.Models.DominoService.MatchEndReasonCode EndReason {
+            get {
+                return this.EndReasonField;
+            }
+            set {
+                if ((this.EndReasonField.Equals(value) != true)) {
+                    this.EndReasonField = value;
+                    this.RaisePropertyChanged("EndReason");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MatchEndReasonCode", Namespace="http://dominotraingame/services")]
+    public enum MatchEndReasonCode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AllRoundsPlayed = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NotEnoughPlayers = 1,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FriendResponse", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
     public partial class FriendResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -2207,6 +2415,12 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameClientCallback/ReceiveHand")]
         void ReceiveHand(DominoTrainGame.Client.Models.DominoService.HandMessage message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameClientCallback/ReceiveRoundEnded")]
+        void ReceiveRoundEnded(DominoTrainGame.Client.Models.DominoService.RoundEndedMessage message);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, Action="http://tempuri.org/IGameClientCallback/ReceiveMatchEnded")]
+        void ReceiveMatchEnded(DominoTrainGame.Client.Models.DominoService.MatchEndedMessage message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
