@@ -33,6 +33,15 @@
   <wsdl:message name="IAuthenticationService_SignUp_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q2="http://dominotraingame/services" name="detail" element="q2:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IAuthenticationService_LogInAsGuest_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogInAsGuest" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_LogInAsGuest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogInAsGuestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IAuthenticationService_LogInAsGuest_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://dominotraingame/services" name="detail" element="q3:GameServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IAuthenticationService">
     <wsdl:operation name="LogIn">
       <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/LogIn" message="tns:IAuthenticationService_LogIn_InputMessage" />
@@ -43,6 +52,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/SignUp" message="tns:IAuthenticationService_SignUp_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/SignUpResponse" message="tns:IAuthenticationService_SignUp_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IAuthenticationService/SignUpGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IAuthenticationService_SignUp_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LogInAsGuest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IAuthenticationService/LogInAsGuest" message="tns:IAuthenticationService_LogInAsGuest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IAuthenticationService/LogInAsGuestResponse" message="tns:IAuthenticationService_LogInAsGuest_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IAuthenticationService/LogInAsGuestGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IAuthenticationService_LogInAsGuest_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="AuthenticationService" type="tns:IAuthenticationService">
@@ -62,6 +76,18 @@
     </wsdl:operation>
     <wsdl:operation name="SignUp">
       <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/SignUp" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="LogInAsGuest">
+      <soap12:operation soapAction="http://tempuri.org/IAuthenticationService/LogInAsGuest" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -63,11 +63,23 @@ public abstract class ObservableViewModel : INotifyPropertyChanged
         return busyOperation;
     }
 
+    protected Task<TResult> RunWhileBusyAsync<TArgument, TResult>(
+        Func<TArgument, Task<TResult>> operation,
+        TArgument argument)
+    {
+        if (operation == null)
+        {
+            throw new ArgumentNullException(nameof(operation));
+        }
+
+        Task<TResult> busyOperation = RunWhileBusyCoreAsync(operation, argument);
+        return busyOperation;
+    }
+
     private async Task<TResult> RunWhileBusyCoreAsync<TResult>(Func<Task<TResult>> operation)
     {
         TResult result;
-        _activeOperationCount++;
-        IsBusy = true;
+        BeginBusyOperation();
 
         try
         {
@@ -75,10 +87,40 @@ public abstract class ObservableViewModel : INotifyPropertyChanged
         }
         finally
         {
-            _activeOperationCount--;
-            IsBusy = _activeOperationCount > NoActiveOperations;
+            EndBusyOperation();
         }
 
         return result;
+    }
+
+    private async Task<TResult> RunWhileBusyCoreAsync<TArgument, TResult>(
+        Func<TArgument, Task<TResult>> operation,
+        TArgument argument)
+    {
+        TResult result;
+        BeginBusyOperation();
+
+        try
+        {
+            result = await operation(argument);
+        }
+        finally
+        {
+            EndBusyOperation();
+        }
+
+        return result;
+    }
+
+    private void BeginBusyOperation()
+    {
+        _activeOperationCount++;
+        IsBusy = true;
+    }
+
+    private void EndBusyOperation()
+    {
+        _activeOperationCount--;
+        IsBusy = _activeOperationCount > NoActiveOperations;
     }
 }

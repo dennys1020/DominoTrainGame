@@ -90,12 +90,14 @@
     <Compile Include="Domain\Tile.cs" />
     <Compile Include="Domain\Train.cs" />
     <Compile Include="Domain\Boneyard.cs" />
+    <Compile Include="Domain\DominoSet.cs" />
     <Compile Include="Domain\MatchState.cs" />
     <Compile Include="Domain\RoundState.cs" />
     <Compile Include="Domain\RoundEndReason.cs" />
     <Compile Include="Domain\MatchEndReason.cs" />
     <Compile Include="Ports\PlayerJoinedNotice.cs" />
     <Compile Include="Ports\PlayerLeftNotice.cs" />
+    <Compile Include="Ports\DominoSetChangedNotice.cs" />
     <Compile Include="Ports\PlayerReadyChangedNotice.cs" />
     <Compile Include="Ports\LobbyMessageNotice.cs" />
     <Compile Include="Ports\MatchStartingNotice.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Ports\IFriendshipRepository.cs" />
     <Compile Include="Results\RemoveFriendStatus.cs" />
     <Compile Include="Results\SendFriendRequestStatus.cs" />
+    <Compile Include="Results\SelectDominoSetStatus.cs" />
     <Compile Include="Results\StartMatchStatus.cs" />
     <Compile Include="Results\PlayTileStatus.cs" />
     <Compile Include="Results\LobbyOutcome.cs" />

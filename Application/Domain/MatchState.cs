@@ -6,7 +6,6 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class MatchState
 {
-    private const int FirstRoundEnginePips = Tile.MaximumPips;
     private const int EnginePipsStep = 1;
     private const int InitialScore = 0;
 
@@ -19,30 +18,38 @@ public sealed class MatchState
         Empty = new MatchState();
     }
 
-    public MatchState(IReadOnlyList<int> playerIds, IReadOnlyList<Tile> shuffledTiles)
+    public MatchState(IReadOnlyList<int> playerIds, DominoSet dominoSet, IReadOnlyList<Tile> shuffledTiles)
     {
         if (playerIds == null)
         {
             throw new ArgumentNullException(nameof(playerIds));
         }
 
-        bool hasValidPlayerCount = playerIds.Count >= LobbyState.MinimumPlayerCount
-            && playerIds.Count <= LobbyState.MaximumPlayerCount;
+        if (dominoSet == null)
+        {
+            throw new ArgumentNullException(nameof(dominoSet));
+        }
 
-        if (!hasValidPlayerCount)
+        if (!dominoSet.SupportsPlayerCount(playerIds.Count))
         {
             throw new ArgumentOutOfRangeException(nameof(playerIds));
         }
 
+        DominoSet = dominoSet;
         _playerIds = new List<int>(playerIds);
         SyncRoot = new object();
-        CurrentRound = new RoundState(_playerIds, shuffledTiles, FirstRoundEnginePips);
+        CurrentRound = new RoundState(
+            _playerIds,
+            shuffledTiles,
+            DominoSet.HighestDouble,
+            DominoSet.GetHandSize(_playerIds.Count));
         AddInitialScores();
     }
 
     private MatchState()
     {
         _playerIds = new List<int>();
+        DominoSet = DominoSet.DoubleTwelve;
         SyncRoot = new object();
         CurrentRound = RoundState.Empty;
     }
@@ -52,6 +59,8 @@ public sealed class MatchState
     public bool IsEmpty => ReferenceEquals(this, Empty);
 
     public object SyncRoot { get; }
+
+    public DominoSet DominoSet { get; }
 
     public IReadOnlyList<int> PlayerIds => _playerIds;
 
@@ -63,8 +72,7 @@ public sealed class MatchState
 
     public IReadOnlyDictionary<int, int> LastRoundScoresByPlayerId => _lastRoundScoresByPlayerId;
 
-    public bool HasEnoughPlayers => _playerIds.Count >=
-        LobbyState.MinimumPlayerCount;
+    public bool HasEnoughPlayers => _playerIds.Count >= DominoSet.MinimumPlayerCount;
 
     public bool HasNextRound => CurrentRound.EngineTile.LeftPips > Tile.MinimumPips;
 
@@ -94,7 +102,12 @@ public sealed class MatchState
         if (canStartNextRound)
         {
             int nextEnginePips = CurrentRound.EngineTile.LeftPips - EnginePipsStep;
-            CurrentRound = new RoundState(OrderPlayersForRound(nextEnginePips), shuffledTiles, nextEnginePips);
+            IReadOnlyList<int> roundPlayerIds = OrderPlayersForRound(nextEnginePips);
+            CurrentRound = new RoundState(
+                roundPlayerIds,
+                shuffledTiles,
+                nextEnginePips,
+                DominoSet.GetHandSize(roundPlayerIds.Count));
         }
     }
 
@@ -139,7 +152,7 @@ public sealed class MatchState
 
     private IReadOnlyList<int> OrderPlayersForRound(int enginePips)
     {
-        int startingPlayerIndex = (FirstRoundEnginePips - enginePips) % _playerIds.Count;
+        int startingPlayerIndex = (DominoSet.HighestDouble - enginePips) % _playerIds.Count;
         List<int> roundPlayerIds = _playerIds
             .Skip(startingPlayerIndex)
             .Concat(_playerIds.Take(startingPlayerIndex))

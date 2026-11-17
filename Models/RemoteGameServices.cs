@@ -127,6 +127,19 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return command;
     }
 
+    public Task<LobbyActionResult> SelectDominoSetAsync(int highestDouble)
+    {
+        SelectDominoSetRequest request = new SelectDominoSetRequest
+        {
+            HighestDouble = highestDouble
+        };
+        LobbyCommand<SelectDominoSetRequest> selectionCommand = new LobbyCommand<SelectDominoSetRequest>(
+            request,
+            SendDominoSetSelectionAsync);
+        Task<LobbyActionResult> command = _lobbyChannel.SendCommandAsync(selectionCommand.SendAsync);
+        return command;
+    }
+
     public Task<LobbyActionResult> SendLobbyMessageAsync(string text)
     {
         SendLobbyMessageRequest request = new SendLobbyMessageRequest
@@ -181,6 +194,12 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private static Task SendReadyStateAsync(LobbyServiceClient lobbyClient, SetReadyRequest request)
     {
         Task sending = lobbyClient.SetReadyAsync(request);
+        return sending;
+    }
+
+    private static Task SendDominoSetSelectionAsync(LobbyServiceClient lobbyClient, SelectDominoSetRequest request)
+    {
+        Task sending = lobbyClient.SelectDominoSetAsync(request);
         return sending;
     }
 

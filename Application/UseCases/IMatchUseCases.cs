@@ -6,7 +6,7 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface IMatchUseCases
 {
-    bool StartMatch(string code, IReadOnlyList<int> playerIds);
+    bool StartMatch(string code, IReadOnlyList<int> playerIds, DominoSet dominoSet);
 
     PlayTileStatus PlayTile(int playerId, Tile tile, int trainOwnerId);
 

@@ -90,6 +90,12 @@ public sealed class LobbyRoster
         return roster;
     }
 
+    public LobbyRoster WithNextVersion()
+    {
+        LobbyRoster roster = new LobbyRoster(Version + VersionStep, Players);
+        return roster;
+    }
+
     public LobbyPlayerState FindPlayer(int playerId)
     {
         LobbyPlayerState player = Players.FirstOrDefault(candidate => candidate.PlayerId == playerId)

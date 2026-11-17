@@ -6,17 +6,24 @@ namespace DominoTrainGame.Client.Models.Contracts;
 public sealed class LobbyResult
 {
     private const int EmptyMaximumPlayers = 0;
+    private const int DefaultHighestDouble = 12;
 
     static LobbyResult()
     {
         Empty = CreateFailure(LobbyActionResult.LobbyNotFound);
     }
 
-    public LobbyResult(LobbyActionResult status, string code, int maximumPlayers, LobbyRoster roster)
+    public LobbyResult(
+        LobbyActionResult status,
+        string code,
+        int maximumPlayers,
+        int highestDouble,
+        LobbyRoster roster)
     {
         Status = status;
         Code = code ?? string.Empty;
         MaximumPlayers = maximumPlayers;
+        HighestDouble = highestDouble;
         Roster = roster ?? throw new ArgumentNullException(nameof(roster));
     }
 
@@ -28,6 +35,8 @@ public sealed class LobbyResult
 
     public int MaximumPlayers { get; }
 
+    public int HighestDouble { get; }
+
     public LobbyRoster Roster { get; }
 
     public long Version => Roster.Version;
@@ -38,13 +47,24 @@ public sealed class LobbyResult
 
     public static LobbyResult CreateFailure(LobbyActionResult status)
     {
-        LobbyResult failure = new LobbyResult(status, string.Empty, EmptyMaximumPlayers, LobbyRoster.Empty);
+        LobbyResult failure = new LobbyResult(
+            status,
+            string.Empty,
+            EmptyMaximumPlayers,
+            DefaultHighestDouble,
+            LobbyRoster.Empty);
         return failure;
     }
 
     public LobbyResult WithRoster(LobbyRoster roster)
     {
-        LobbyResult lobby = new LobbyResult(Status, Code, MaximumPlayers, roster);
+        LobbyResult lobby = new LobbyResult(Status, Code, MaximumPlayers, HighestDouble, roster);
+        return lobby;
+    }
+
+    public LobbyResult WithDominoSet(int highestDouble, int maximumPlayers, LobbyRoster roster)
+    {
+        LobbyResult lobby = new LobbyResult(Status, Code, maximumPlayers, highestDouble, roster);
         return lobby;
     }
 }

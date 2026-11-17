@@ -7,7 +7,6 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class RoundState
 {
-    private const int HandSize = 15;
     private const int TurnStep = 1;
     private const int FirstIndex = 0;
     private const int TileNotFoundIndex = -1;
@@ -24,7 +23,7 @@ public sealed class RoundState
         Empty = new RoundState();
     }
 
-    public RoundState(IReadOnlyList<int> playerIds, IReadOnlyList<Tile> shuffledTiles, int enginePips)
+    public RoundState(IReadOnlyList<int> playerIds, IReadOnlyList<Tile> shuffledTiles, int enginePips, int handSize)
     {
         if (playerIds == null)
         {
@@ -47,12 +46,21 @@ public sealed class RoundState
                 nameof(shuffledTiles));
         }
 
+        bool hasEnoughTiles = playerIds.Count * handSize <= remainingTiles.Count;
+
+        if (!hasEnoughTiles)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(handSize),
+                "The tile set does not have enough tiles to deal that hand size.");
+        }
+
         _playerIds = new List<int>(playerIds);
         _handsByPlayerId = new Dictionary<int, List<Tile>>();
         _trainsByOwnerId = new Dictionary<int, Train>();
 
-        DealHands(remainingTiles);
-        Boneyard = new Boneyard(remainingTiles.Skip(_playerIds.Count * HandSize));
+        DealHands(remainingTiles, handSize);
+        Boneyard = new Boneyard(remainingTiles.Skip(_playerIds.Count * handSize));
         CreateTrains();
     }
 
@@ -301,11 +309,11 @@ public sealed class RoundState
         return remainingTiles;
     }
 
-    private void DealHands(List<Tile> tiles)
+    private void DealHands(List<Tile> tiles, int handSize)
     {
         for (int playerIndex = FirstIndex; playerIndex < _playerIds.Count; playerIndex++)
         {
-            List<Tile> hand = tiles.GetRange(playerIndex * HandSize, HandSize);
+            List<Tile> hand = tiles.GetRange(playerIndex * handSize, handSize);
             _handsByPlayerId.Add(_playerIds[playerIndex], hand);
         }
     }

@@ -18,6 +18,7 @@ internal static class LobbyResultMapper
                 LobbyActionResult.Success,
                 response.Code,
                 response.MaximumPlayers,
+                response.HighestDouble,
                 MapLobbyRoster(response));
         }
 

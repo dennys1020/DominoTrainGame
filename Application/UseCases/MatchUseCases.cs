@@ -28,14 +28,19 @@ public sealed class MatchUseCases : IMatchUseCases
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
     }
 
-    public bool StartMatch(string code, IReadOnlyList<int> playerIds)
+    public bool StartMatch(string code, IReadOnlyList<int> playerIds, DominoSet dominoSet)
     {
-        MatchState matchState = new MatchState(playerIds, ShuffleTiles());
+        if (dominoSet == null)
+        {
+            throw new ArgumentNullException(nameof(dominoSet));
+        }
+
+        MatchState matchState = new MatchState(playerIds, dominoSet, ShuffleTiles(dominoSet));
         bool wasStarted = _matchRegistry.TryAdd(code, matchState);
 
         if (wasStarted)
         {
-            _logger.InfoFormat("A match started. MatchCode: {0}.", code);
+            _logger.InfoFormat("A match started. MatchCode: {0}. HighestDouble: {1}.", code, dominoSet.HighestDouble);
             NotifyUpdates(matchState, matchState.PlayerIds, matchState.PlayerIds);
         }
         else
@@ -258,9 +263,9 @@ public sealed class MatchUseCases : IMatchUseCases
         return notice;
     }
 
-    private IReadOnlyList<Tile> ShuffleTiles()
+    private IReadOnlyList<Tile> ShuffleTiles(DominoSet dominoSet)
     {
-        IReadOnlyList<Tile> shuffledTiles = _tileShuffler.Shuffle(Tile.CreateDoubleTwelveSet());
+        IReadOnlyList<Tile> shuffledTiles = _tileShuffler.Shuffle(dominoSet.CreateTiles());
         return shuffledTiles;
     }
 
@@ -280,7 +285,7 @@ public sealed class MatchUseCases : IMatchUseCases
                 "A round ended. EnginePips: {0}. RoundEndReason: {1}.",
                 matchState.CurrentRound.EngineTile.LeftPips,
                 matchState.CurrentRound.EndReason);
-            matchState.StartNextRound(ShuffleTiles());
+            matchState.StartNextRound(ShuffleTiles(matchState.DominoSet));
         }
 
         return hasEndedRound;

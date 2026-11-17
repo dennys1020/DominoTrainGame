@@ -112,6 +112,24 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(wasUpdated, GameServiceFaultCode.LobbyNotFound);
     }
 
+    public void SelectDominoSet(SelectDominoSetRequest selectDominoSetRequest)
+    {
+        int highestDouble = selectDominoSetRequest?.HighestDouble ?? default;
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
+        SelectDominoSetStatus status;
+
+        try
+        {
+            status = _lobbyUseCases.SelectDominoSet(caller.PlayerId, highestDouble);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+
+        GameFaultFactory.ThrowIfRejected(status, SelectDominoSetStatus.Success, MapSelectDominoSetFaultCode);
+    }
+
     public void SendLobbyMessage(SendLobbyMessageRequest sendMessageRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
@@ -197,7 +215,8 @@ public sealed class LobbyService : ILobbyService
             MaximumPlayers = lobby.MaximumPlayers,
             Version = lobby.Roster.Version,
             HostPlayerId = lobby.Roster.HostPlayerId,
-            Players = players
+            Players = players,
+            HighestDouble = lobby.DominoSet.HighestDouble
         };
 
         return response;
@@ -240,6 +259,29 @@ public sealed class LobbyService : ILobbyService
                 break;
             case JoinLobbyStatus.PlayerBanned:
                 faultCode = GameServiceFaultCode.PlayerBanned;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidLobbyRequest;
+                break;
+        }
+
+        return faultCode;
+    }
+
+    private static GameServiceFaultCode MapSelectDominoSetFaultCode(SelectDominoSetStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case SelectDominoSetStatus.LobbyNotFound:
+                faultCode = GameServiceFaultCode.LobbyNotFound;
+                break;
+            case SelectDominoSetStatus.NotLobbyHost:
+                faultCode = GameServiceFaultCode.NotLobbyHost;
+                break;
+            case SelectDominoSetStatus.DominoSetTooSmall:
+                faultCode = GameServiceFaultCode.DominoSetTooSmall;
                 break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;

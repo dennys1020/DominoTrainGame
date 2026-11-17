@@ -319,6 +319,9 @@ en el tren</value>
   <data name="LobbyFullMessage" xml:space="preserve">
     <value>La sala ya está llena.</value>
   </data>
+  <data name="DominoSetTooSmallMessage" xml:space="preserve">
+    <value>Ese doble no alcanza para todos los jugadores de la sala.</value>
+  </data>
   <data name="LobbyConflictMessage" xml:space="preserve">
     <value>Ya estás dentro de una sala.</value>
   </data>
