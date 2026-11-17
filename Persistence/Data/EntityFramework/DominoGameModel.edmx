@@ -765,7 +765,7 @@
         </Options>
         <!-- Diagram content (shape and connector positions) -->
         <Diagrams>
-      <Diagram DiagramId="efc8d13a70c44f35bc50a62350273db8" Name="Diagram1">
+      <Diagram DiagramId="efc8d13a70c44f35bc50a62350273db8" Name="Diagram1" ZoomLevel="69">
         <EntityTypeShape EntityType="DominoGameDBModel.Match" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.MatchResult" Width="1.5" PointX="4.125" PointY="3.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DominoGameDBModel.Player" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
