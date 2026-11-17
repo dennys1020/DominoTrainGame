@@ -114,6 +114,7 @@
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Repositories\ConnectionRepository.cs" />
+    <Compile Include="Data\Repositories\GuestPlayerCreation.cs" />
     <Compile Include="Data\Repositories\PlayerRepository.cs" />
     <Compile Include="Data\Repositories\SanctionRepository.cs" />
     <Compile Include="Email\SmtpEmailSender.cs" />

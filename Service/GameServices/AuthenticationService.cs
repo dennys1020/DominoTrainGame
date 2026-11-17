@@ -14,17 +14,20 @@ namespace DominoTrainGame.Server.Service.Implementation;
 public sealed class AuthenticationService : IAuthenticationService
 {
     private readonly ILoginUseCases _loginUseCases;
+    private readonly IGuestLoginUseCases _guestLoginUseCases;
     private readonly ISignUpUseCases _signUpUseCases;
     private readonly PlayerSessionManager<IGameClientCallback> _lobbySessionManager;
     private readonly ServiceFaultTranslator _faultTranslator;
 
     public AuthenticationService(
         ILoginUseCases loginUseCases,
+        IGuestLoginUseCases guestLoginUseCases,
         ISignUpUseCases signUpUseCases,
         PlayerSessionManager<IGameClientCallback> lobbySessionManager,
         ServiceFaultTranslator faultTranslator)
     {
         _loginUseCases = loginUseCases ?? throw new ArgumentNullException(nameof(loginUseCases));
+        _guestLoginUseCases = guestLoginUseCases ?? throw new ArgumentNullException(nameof(guestLoginUseCases));
         _signUpUseCases = signUpUseCases ?? throw new ArgumentNullException(nameof(signUpUseCases));
         _lobbySessionManager = lobbySessionManager ?? throw new ArgumentNullException(nameof(lobbySessionManager));
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
@@ -47,10 +50,24 @@ public sealed class AuthenticationService : IAuthenticationService
             throw _faultTranslator.TranslateDatabaseUnavailable(exception);
         }
 
-        LoginResponse response = player.IsEmpty
-            ? CreateRejectedLoginResponse()
-            : CreateLoginResponse(player);
+        LoginResponse response = CreateLoginResponse(player);
+        return response;
+    }
 
+    public LoginResponse LogInAsGuest()
+    {
+        PlayerIdentity guest;
+
+        try
+        {
+            guest = _guestLoginUseCases.LogInAsGuest();
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
+        }
+
+        LoginResponse response = CreateLoginResponse(guest);
         return response;
     }
 
@@ -89,6 +106,15 @@ public sealed class AuthenticationService : IAuthenticationService
     }
 
     private LoginResponse CreateLoginResponse(PlayerIdentity player)
+    {
+        LoginResponse response = player.IsEmpty
+            ? CreateRejectedLoginResponse()
+            : CreateAcceptedLoginResponse(player);
+
+        return response;
+    }
+
+    private LoginResponse CreateAcceptedLoginResponse(PlayerIdentity player)
     {
         string sessionToken = _lobbySessionManager.IssueToken(player);
         LoginResponse response = new LoginResponse
