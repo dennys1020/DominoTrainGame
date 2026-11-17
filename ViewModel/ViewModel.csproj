@@ -59,6 +59,7 @@
     <Compile Include="Contracts\IWindowService.cs" />
     <Compile Include="Localization\MatchMessageKeys.cs" />
     <Compile Include="MatchPlayerViewModel.cs" />
+    <Compile Include="PlayerResultViewModel.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
