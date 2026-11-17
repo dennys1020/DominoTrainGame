@@ -69,8 +69,10 @@
     <Compile Include="State\ChatInfractionRegistry.cs" />
     <Compile Include="UseCases\ChatSanctionUseCases.cs" />
     <Compile Include="UseCases\IChatSanctionUseCases.cs" />
+    <Compile Include="UseCases\IGuestLoginUseCases.cs" />
     <Compile Include="UseCases\ILoginUseCases.cs" />
     <Compile Include="UseCases\ISignUpUseCases.cs" />
+    <Compile Include="UseCases\GuestLoginUseCases.cs" />
     <Compile Include="UseCases\LoginUseCases.cs" />
     <Compile Include="UseCases\SignUpUseCases.cs" />
     <Compile Include="UseCases\ConnectionUseCases.cs" />
@@ -108,10 +110,12 @@
     <Compile Include="Ports\IPlayerRepository.cs" />
     <Compile Include="Ports\PlayerCredentials.cs" />
     <Compile Include="Ports\PlayerRegistration.cs" />
+    <Compile Include="Ports\IGuestUsernameGenerator.cs" />
     <Compile Include="Ports\ILobbyCodeGenerator.cs" />
     <Compile Include="Ports\ITileShuffler.cs" />
     <Compile Include="Results\JoinLobbyStatus.cs" />
     <Compile Include="Results\SendMessageStatus.cs" />
+    <Compile Include="Security\GuestUsernameGenerator.cs" />
     <Compile Include="Security\LobbyCodeGenerator.cs" />
     <Compile Include="Security\TileShuffler.cs" />
     <Compile Include="Security\PasswordHasher.cs" />

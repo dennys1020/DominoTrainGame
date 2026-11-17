@@ -27,6 +27,8 @@ internal static class GameServiceFactory
 
         IConnectionUseCases connectionUseCases = new ConnectionUseCases(connectionRepository);
         ILoginUseCases loginUseCases = new LoginUseCases(playerRepository, passwordHasher);
+        IGuestUsernameGenerator guestUsernameGenerator = new GuestUsernameGenerator();
+        IGuestLoginUseCases guestLoginUseCases = new GuestLoginUseCases(playerRepository, guestUsernameGenerator);
         ISignUpUseCases signUpUseCases = new SignUpUseCases(playerRepository, passwordHasher);
 
         PlayerSessionRegistry<IGameClientCallback> lobbySessions = new PlayerSessionRegistry<IGameClientCallback>();
@@ -80,6 +82,7 @@ internal static class GameServiceFactory
         ConnectionService connectionService = new ConnectionService(connectionUseCases);
         AuthenticationService authenticationService = new AuthenticationService(
             loginUseCases,
+            guestLoginUseCases,
             signUpUseCases,
             lobbySessionManager,
             faultTranslator);

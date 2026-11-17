@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Persistence.Data.Repositories;
@@ -40,6 +41,18 @@ public sealed class PlayerRepository : IPlayerRepository
         bool isRegistered = _databaseExecutor.Execute(
             context => RegisterPlayer(context, registration));
         return isRegistered;
+    }
+
+    public PlayerIdentity CreateGuest(string username)
+    {
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            throw new ArgumentException("The guest username cannot be empty.", nameof(username));
+        }
+
+        GuestPlayerCreation guestCreation = new GuestPlayerCreation(username);
+        PlayerIdentity guest = _databaseExecutor.Execute(guestCreation.Create);
+        return guest;
     }
 
     private static List<PlayerCredentials> QueryCredentials(DominoGameDBEntities context, string identifier)
