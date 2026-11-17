@@ -22,7 +22,7 @@
         </Style>
         <DataTemplate x:Key="ResultsScoreCell">
             <TextBlock
-                Text="{Binding Points, TargetNullValue=—}"
+                Text="{Binding}"
                 Style="{StaticResource MatchTableCellStyle}"
                 Width="140"
                 Margin="0"
@@ -76,21 +76,17 @@
                                         FontSize="16" />
                                     <StackPanel
                                         Orientation="Horizontal"
-                                        Margin="0,8,0,0"
-                                        DataContext="{Binding DataContext.Results,
-                                            RelativeSource={RelativeSource AncestorType=Window}}">
-                                        <TextBlock
-                                            Text="{Binding RoundCountText}"
-                                            Style="{StaticResource MatchBodyStyle}"
-                                            FontSize="16" />
+                                        Margin="0,8,0,0">
+                                        <TextBlock Style="{StaticResource MatchBodyStyle}" FontSize="16">
+                                            <Run Text="{Binding [RoundCountLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                            <Run Text="{Binding RoundCount, Mode=OneWay}" />
+                                        </TextBlock>
                                     </StackPanel>
                                 </StackPanel>
                                 <Border
                                     Grid.Row="1"
                                     BorderBrush="{StaticResource Ink}"
-                                    BorderThickness="2"
-                                    DataContext="{Binding DataContext.Results,
-                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                    BorderThickness="2">
                                     <ScrollViewer
                                         HorizontalScrollBarVisibility="Auto"
                                         VerticalScrollBarVisibility="Auto">
@@ -174,20 +170,7 @@
                                                                                 MatchTableCellStyle}">
                                                                             <Setter
                                                                                 Property="Text"
-                                                                                Value="{Binding Player.Username}" />
-                                                                            <Style.Triggers>
-                                                                                <DataTrigger
-                                                                                    Binding="{Binding
-                                                                                        Player.IsCurrentPlayer}"
-                                                                                    Value="True">
-                                                                                    <Setter
-                                                                                        Property="Text"
-                                                                                        Value="{Binding
-                                                                                            [YouPlayerLabel],
-                                                                                            Source={StaticResource
-                                                                                                Localization}}" />
-                                                                                </DataTrigger>
-                                                                            </Style.Triggers>
+                                                                                Value="{Binding Username}" />
                                                                         </Style>
                                                                     </TextBlock.Style>
                                                                 </TextBlock>
@@ -232,9 +215,7 @@
                                 </Border>
                                 <Grid
                                     Grid.Row="2"
-                                    VerticalAlignment="Center"
-                                    DataContext="{Binding DataContext.Results,
-                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                    VerticalAlignment="Center">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -261,10 +242,12 @@
                                             VerticalScrollBarVisibility="Auto"
                                             HorizontalScrollBarVisibility="Disabled">
                                             <TextBlock
-                                                Text="{Binding WinnerText}"
                                                 Style="{StaticResource PixelTextStyle}"
                                                 FontSize="13"
-                                                TextWrapping="Wrap" />
+                                                TextWrapping="Wrap">
+                                                <Run Text="{Binding [MatchWinnerLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                                <Run Text="{Binding WinnerUsernames, Mode=OneWay}" />
+                                            </TextBlock>
                                         </ScrollViewer>
                                         <TextBlock
                                             Style="{StaticResource MatchBodyStyle}"

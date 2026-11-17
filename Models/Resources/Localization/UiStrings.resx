@@ -748,4 +748,10 @@ en el tren</value>
   <data name="MatchAbandonedMessage" xml:space="preserve">
     <value>Los demás jugadores abandonaron la partida.</value>
   </data>
+  <data name="RoundCountLabel" xml:space="preserve">
+    <value>Rondas jugadas:</value>
+  </data>
+  <data name="MatchWinnerLabel" xml:space="preserve">
+    <value>Ganador:</value>
+  </data>
 </root>
