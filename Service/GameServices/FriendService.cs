@@ -34,12 +34,12 @@ public sealed class FriendService : IFriendService
     public void Connect(SessionTokenRequest connectRequest)
     {
         string sessionToken = connectRequest?.SessionToken ?? string.Empty;
-        _socialSessionManager.Connect(sessionToken);
+        _socialSessionManager.ConnectRegisteredPlayer(sessionToken);
     }
 
     public List<FriendResponse> GetFriends()
     {
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         IReadOnlyList<FriendPresence> friends;
 
         try
@@ -62,7 +62,7 @@ public sealed class FriendService : IFriendService
 
     public List<PendingFriendshipResponse> GetPendingRequests()
     {
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         IReadOnlyList<PendingFriendshipSummary> pendingRequests;
 
         try
@@ -86,7 +86,7 @@ public sealed class FriendService : IFriendService
     public List<PlayerSearchResponse> SearchPlayers(PlayerSearchRequest searchPlayersRequest)
     {
         string usernameFragment = searchPlayersRequest?.UsernameFragment ?? string.Empty;
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         IReadOnlyList<PlayerIdentity> players;
 
         try
@@ -110,7 +110,7 @@ public sealed class FriendService : IFriendService
     public void SendFriendRequest(FriendUsernameRequest addresseeRequest)
     {
         string addresseeUsername = addresseeRequest?.Username ?? string.Empty;
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         SendFriendRequestStatus status;
 
         try
@@ -132,7 +132,7 @@ public sealed class FriendService : IFriendService
     public void AcceptFriendRequest(FriendshipDecisionRequest acceptanceRequest)
     {
         int requestId = acceptanceRequest?.RequestId ?? default;
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         bool isAccepted;
 
         try
@@ -154,7 +154,7 @@ public sealed class FriendService : IFriendService
     public void RejectFriendRequest(FriendshipDecisionRequest rejectionRequest)
     {
         int requestId = rejectionRequest?.RequestId ?? default;
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         bool isRejected;
 
         try
@@ -176,7 +176,7 @@ public sealed class FriendService : IFriendService
     public void RemoveFriend(FriendUsernameRequest removeFriendRequest)
     {
         string friendUsername = removeFriendRequest?.Username ?? string.Empty;
-        int playerId = _socialSessionManager.ResolveCaller().PlayerId;
+        int playerId = _socialSessionManager.ResolveRegisteredCaller().PlayerId;
         RemoveFriendStatus status;
 
         try

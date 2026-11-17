@@ -55,10 +55,14 @@ public sealed class PlayerSessionManager<TCallback>
     public void Connect(string sessionToken)
     {
         PlayerIdentity player = ResolveToken(sessionToken);
+        ConnectPlayer(player, sessionToken);
+    }
 
-        ReplacePreviousConnection(player.PlayerId);
-        Register(player, sessionToken);
-        OnPlayerConnected(new PlayerSessionEventArgs(player.PlayerId));
+    public void ConnectRegisteredPlayer(string sessionToken)
+    {
+        PlayerIdentity player = ResolveToken(sessionToken);
+        RejectGuest(player);
+        ConnectPlayer(player, sessionToken);
     }
 
     public PlayerIdentity ResolveCaller()
@@ -74,6 +78,25 @@ public sealed class PlayerSessionManager<TCallback>
         return player;
     }
 
+    public PlayerIdentity ResolveRegisteredCaller()
+    {
+        PlayerIdentity player = ResolveCaller();
+        RejectGuest(player);
+        return player;
+    }
+
+    private static void RejectGuest(PlayerIdentity player)
+    {
+        if (player.IsGuest)
+        {
+            _logger.WarnFormat(
+                "An account-only operation was rejected because the player is a guest. Channel: {0}. PlayerId: {1}.",
+                _channelName,
+                player.PlayerId);
+            throw GameFaultFactory.Create(GameServiceFaultCode.GuestNotAllowed);
+        }
+    }
+
     private PlayerIdentity ResolveToken(string sessionToken)
     {
         PlayerIdentity player = _sessionTokens.Resolve(sessionToken);
@@ -87,6 +110,13 @@ public sealed class PlayerSessionManager<TCallback>
         }
 
         return player;
+    }
+
+    private void ConnectPlayer(PlayerIdentity player, string sessionToken)
+    {
+        ReplacePreviousConnection(player.PlayerId);
+        Register(player, sessionToken);
+        OnPlayerConnected(new PlayerSessionEventArgs(player.PlayerId));
     }
 
     private void ReplacePreviousConnection(int playerId)

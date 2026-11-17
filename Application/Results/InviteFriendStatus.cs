@@ -7,5 +7,6 @@ public enum InviteFriendStatus
     LobbyFull,
     PlayerNotFound,
     NotFriends,
-    PlayerOffline
+    PlayerOffline,
+    GuestNotAllowed
 }

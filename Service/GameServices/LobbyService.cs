@@ -332,6 +332,9 @@ public sealed class LobbyService : ILobbyService
             case InviteFriendStatus.PlayerOffline:
                 faultCode = GameServiceFaultCode.PlayerOffline;
                 break;
+            case InviteFriendStatus.GuestNotAllowed:
+                faultCode = GameServiceFaultCode.GuestNotAllowed;
+                break;
             default:
                 faultCode = GameServiceFaultCode.InvalidLobbyRequest;
                 break;

@@ -57,7 +57,7 @@ internal sealed class GuestPlayerCreation
         context.Players.Add(player);
         context.SaveChanges();
 
-        PlayerIdentity guest = new PlayerIdentity(player.PlayerId, player.Username);
+        PlayerIdentity guest = PlayerIdentity.CreateGuest(player.PlayerId, player.Username);
         return guest;
     }
 }

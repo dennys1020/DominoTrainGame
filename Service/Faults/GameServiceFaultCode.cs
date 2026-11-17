@@ -102,5 +102,8 @@ public enum GameServiceFaultCode
     MustSatisfyDouble,
 
     [EnumMember]
-    DominoSetTooSmall
+    DominoSetTooSmall,
+
+    [EnumMember]
+    GuestNotAllowed
 }

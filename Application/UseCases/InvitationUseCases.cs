@@ -38,14 +38,22 @@ public sealed class InvitationUseCases : IInvitationUseCases
             throw new ArgumentNullException(nameof(inviter));
         }
 
-        string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
+        InviteFriendStatus status = inviter.IsGuest
+            ? InviteFriendStatus.GuestNotAllowed
+            : InviteFromLobby(inviter, friendUsername);
 
+        LogInvitation(inviter.PlayerId, status);
+        return status;
+    }
+
+    private InviteFriendStatus InviteFromLobby(PlayerIdentity inviter, string friendUsername)
+    {
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(friendUsername);
         LobbyState lobby = _lobbyRegistry.FindLobbyOfPlayer(inviter.PlayerId);
         InviteFriendStatus status = lobby.IsEmpty
             ? InviteFriendStatus.LobbyNotFound
             : InviteToLobby(inviter, normalizedUsername, lobby);
 
-        LogInvitation(inviter.PlayerId, status);
         return status;
     }
 
