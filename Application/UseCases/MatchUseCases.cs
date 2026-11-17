@@ -234,11 +234,11 @@ public sealed class MatchUseCases : IMatchUseCases
         return collectedScoresByPlayerId;
     }
 
-    private static List<TrainSnapshot> CreateTrainSnapshots(RoundState round)
+    private static List<TrainSnapshot> CreateTrainSnapshots(RoundState roundState)
     {
         List<TrainSnapshot> trains = new List<TrainSnapshot>();
 
-        foreach (Train train in round.Trains)
+        foreach (Train train in roundState.Trains)
         {
             trains.Add(new TrainSnapshot(train.OwnerId, train.IsOpen, train.Tiles));
         }
