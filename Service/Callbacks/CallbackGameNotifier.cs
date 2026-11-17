@@ -71,6 +71,24 @@ public sealed class CallbackGameNotifier : IGameNotifier
         Broadcast(notice.RecipientPlayerIds, callback => callback.ReceivePlayerReadyChanged(message));
     }
 
+    public void NotifyDominoSetChanged(DominoSetChangedNotice notice)
+    {
+        if (notice == null)
+        {
+            throw new ArgumentNullException(nameof(notice));
+        }
+
+        DominoSetChangedMessage message = new DominoSetChangedMessage
+        {
+            Version = notice.Version,
+            HighestDouble = notice.DominoSet.HighestDouble,
+            MaximumPlayers = notice.DominoSet.MaximumPlayerCount
+        };
+        DominoSetChangedSender sender = new DominoSetChangedSender(message);
+
+        Broadcast(notice.RecipientPlayerIds, sender.Send);
+    }
+
     public void NotifyLobbyMessage(LobbyMessageNotice notice)
     {
         if (notice == null)

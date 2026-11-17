@@ -46,6 +46,7 @@
       <xs:enumeration value="MustDrawFirst" />
       <xs:enumeration value="MatchAlreadyStarted" />
       <xs:enumeration value="MustSatisfyDouble" />
+      <xs:enumeration value="DominoSetTooSmall" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />

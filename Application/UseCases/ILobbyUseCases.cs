@@ -13,6 +13,8 @@ public interface ILobbyUseCases
 
     bool TrySetReady(int playerId, bool isReady);
 
+    SelectDominoSetStatus SelectDominoSet(int playerId, int highestDouble);
+
     SendMessageStatus SendMessage(int playerId, string text);
 
     StartMatchStatus StartMatch(int playerId);

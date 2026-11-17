@@ -24,6 +24,11 @@ public interface IGameClientCallback
     void ReceivePlayerReadyChanged(PlayerReadyChangedMessage message);
 
     [OperationContract(
+        Action = "http://tempuri.org/IGameClientCallback/ReceiveDominoSetChanged",
+        IsOneWay = true)]
+    void ReceiveDominoSetChanged(DominoSetChangedMessage message);
+
+    [OperationContract(
         Action = "http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage",
         IsOneWay = true)]
     void ReceiveLobbyMessage(LobbyChatMessage message);

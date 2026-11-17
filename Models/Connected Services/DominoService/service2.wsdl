@@ -60,6 +60,15 @@
   <wsdl:message name="ILobbyService_SetReady_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q5="http://dominotraingame/services" name="detail" element="q5:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_SelectDominoSet_InputMessage">
+    <wsdl:part name="parameters" element="tns:SelectDominoSet" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SelectDominoSet_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SelectDominoSetResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_SelectDominoSet_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://dominotraingame/services" name="detail" element="q6:GameServiceFault" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_SendLobbyMessage_InputMessage">
     <wsdl:part name="parameters" element="tns:SendLobbyMessage" />
   </wsdl:message>
@@ -67,7 +76,7 @@
     <wsdl:part name="parameters" element="tns:SendLobbyMessageResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_SendLobbyMessage_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q6="http://dominotraingame/services" name="detail" element="q6:GameServiceFault" />
+    <wsdl:part xmlns:q7="http://dominotraingame/services" name="detail" element="q7:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_StartMatch_InputMessage">
     <wsdl:part name="parameters" element="tns:StartMatch" />
@@ -76,7 +85,7 @@
     <wsdl:part name="parameters" element="tns:StartMatchResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_StartMatch_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q7="http://dominotraingame/services" name="detail" element="q7:GameServiceFault" />
+    <wsdl:part xmlns:q8="http://dominotraingame/services" name="detail" element="q8:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_InviteFriend_InputMessage">
     <wsdl:part name="parameters" element="tns:InviteFriend" />
@@ -85,7 +94,7 @@
     <wsdl:part name="parameters" element="tns:InviteFriendResponse" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_InviteFriend_GameServiceFaultFault_FaultMessage">
-    <wsdl:part xmlns:q8="http://dominotraingame/services" name="detail" element="q8:GameServiceFault" />
+    <wsdl:part xmlns:q9="http://dominotraingame/services" name="detail" element="q9:GameServiceFault" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerJoined" />
@@ -95,6 +104,9 @@
   </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerReadyChanged" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_ReceiveDominoSetChanged_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:ReceiveDominoSetChanged" />
   </wsdl:message>
   <wsdl:message name="ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceiveLobbyMessage" />
@@ -143,6 +155,11 @@
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SetReadyResponse" message="tns:ILobbyService_SetReady_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SetReadyGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SetReady_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SelectDominoSet">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SelectDominoSet" message="tns:ILobbyService_SelectDominoSet_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SelectDominoSetResponse" message="tns:ILobbyService_SelectDominoSet_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/SelectDominoSetGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_SelectDominoSet_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
     <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="SendLobbyMessage">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessage" message="tns:ILobbyService_SendLobbyMessage_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/SendLobbyMessageResponse" message="tns:ILobbyService_SendLobbyMessage_OutputMessage" />
@@ -166,6 +183,9 @@
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerReadyChanged">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" message="tns:ILobbyService_ReceivePlayerReadyChanged_OutputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveDominoSetChanged">
+      <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveDominoSetChanged" message="tns:ILobbyService_ReceiveDominoSetChanged_OutputCallbackMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceiveLobbyMessage">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceiveLobbyMessage" message="tns:ILobbyService_ReceiveLobbyMessage_OutputCallbackMessage" />
@@ -252,6 +272,18 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="SelectDominoSet">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/SelectDominoSet" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
     <wsdl:operation name="SendLobbyMessage">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/SendLobbyMessage" style="document" />
       <wsdl:input>
@@ -302,6 +334,12 @@
     </wsdl:operation>
     <wsdl:operation name="ReceivePlayerReadyChanged">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerReadyChanged" style="document" />
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReceiveDominoSetChanged">
+      <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceiveDominoSetChanged" style="document" />
       <wsdl:output>
         <soap12:body use="literal" />
       </wsdl:output>

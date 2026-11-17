@@ -20,4 +20,7 @@ public sealed class LobbyResponse
 
     [DataMember]
     public List<LobbyPlayer> Players { get; set; }
+
+    [DataMember(IsRequired = false)]
+    public int HighestDouble { get; set; }
 }

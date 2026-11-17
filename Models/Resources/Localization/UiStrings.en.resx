@@ -319,6 +319,9 @@ on the train</value>
   <data name="LobbyFullMessage" xml:space="preserve">
     <value>The room is already full.</value>
   </data>
+  <data name="DominoSetTooSmallMessage" xml:space="preserve">
+    <value>That double is too small for all the players in the room.</value>
+  </data>
   <data name="LobbyConflictMessage" xml:space="preserve">
     <value>You are already in a room.</value>
   </data>

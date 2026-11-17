@@ -29,4 +29,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="LogInAsGuest">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LogInAsGuestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://dominotraingame/services" minOccurs="0" name="LogInAsGuestResult" nillable="true" type="q4:LoginResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

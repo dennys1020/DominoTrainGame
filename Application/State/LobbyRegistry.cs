@@ -81,6 +81,23 @@ public sealed class LobbyRegistry
         return updatedLobby;
     }
 
+    public LobbyOutcome<SelectDominoSetStatus> SelectDominoSet(int playerId, DominoSet dominoSet)
+    {
+        if (dominoSet == null)
+        {
+            throw new ArgumentNullException(nameof(dominoSet));
+        }
+
+        LobbyOutcome<SelectDominoSetStatus> outcome;
+
+        lock (_lobbiesLock)
+        {
+            outcome = ReplaceDominoSet(playerId, dominoSet);
+        }
+
+        return outcome;
+    }
+
     public LobbyState FindLobbyOfPlayer(int playerId)
     {
         LobbyState lobby;
@@ -114,7 +131,7 @@ public sealed class LobbyRegistry
     private LobbyState AddLobby(PlayerIdentity host)
     {
         string code = GenerateUniqueCode();
-        LobbyState createdLobby = LobbyState.CreateWithHost(code, LobbyState.MaximumPlayerCount, host);
+        LobbyState createdLobby = LobbyState.CreateWithHost(code, host);
 
         _lobbiesByCode.Add(code, createdLobby);
         return createdLobby;
@@ -145,6 +162,34 @@ public sealed class LobbyRegistry
         }
 
         LobbyOutcome<JoinLobbyStatus> outcome = new LobbyOutcome<JoinLobbyStatus>(status, joinedLobby);
+        return outcome;
+    }
+
+    private LobbyOutcome<SelectDominoSetStatus> ReplaceDominoSet(int playerId, DominoSet dominoSet)
+    {
+        LobbyState currentLobby = FindLobby(playerId);
+        LobbyState updatedLobby = LobbyState.Empty;
+        SelectDominoSetStatus status = SelectDominoSetStatus.Success;
+
+        if (currentLobby.IsEmpty)
+        {
+            status = SelectDominoSetStatus.LobbyNotFound;
+        }
+        else if (currentLobby.Roster.HostPlayerId != playerId)
+        {
+            status = SelectDominoSetStatus.NotLobbyHost;
+        }
+        else if (!currentLobby.FitsDominoSet(dominoSet))
+        {
+            status = SelectDominoSetStatus.DominoSetTooSmall;
+        }
+        else
+        {
+            updatedLobby = currentLobby.WithDominoSet(dominoSet);
+            StoreLobby(updatedLobby);
+        }
+
+        LobbyOutcome<SelectDominoSetStatus> outcome = new LobbyOutcome<SelectDominoSetStatus>(status, updatedLobby);
         return outcome;
     }
 

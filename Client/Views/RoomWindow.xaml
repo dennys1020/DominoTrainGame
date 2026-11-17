@@ -4,6 +4,7 @@
     xmlns:controls="clr-namespace:DominoTrainGame.Client.View.Views.Controls"
     xmlns:strings="clr-namespace:DominoTrainGame.Client.Models.Resources.Localization;assembly=Models"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:viewModels="clr-namespace:DominoTrainGame.Client.ViewModel;assembly=ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="DominoTrainGame.Client.View.Views.RoomWindow"
@@ -188,9 +189,12 @@
                                                 Margin="0,0,10,0"
                                                 FontSize="20"
                                                 Padding="18,20"
-                                                IsChecked="{Binding DataContext.Room.IsDoubleSixSelected,
+                                                IsChecked="{Binding DataContext.IsDoubleSixSelected,
                                                     RelativeSource={RelativeSource AncestorType=Window},
-                                                    Mode=TwoWay}"
+                                                    Mode=OneWay}"
+                                                Command="{Binding DataContext.SelectDominoSetCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleSixPips}"
                                                 d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [DoubleNineOptionLabel],
@@ -200,9 +204,12 @@
                                                 Margin="0,0,10,0"
                                                 FontSize="20"
                                                 Padding="18,20"
-                                                IsChecked="{Binding DataContext.Room.IsDoubleNineSelected,
+                                                IsChecked="{Binding DataContext.IsDoubleNineSelected,
                                                     RelativeSource={RelativeSource AncestorType=Window},
-                                                    Mode=TwoWay}"
+                                                    Mode=OneWay}"
+                                                Command="{Binding DataContext.SelectDominoSetCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleNinePips}"
                                                 d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [DoubleTwelveOptionLabel],
@@ -212,9 +219,12 @@
                                                 Margin="0,0,10,0"
                                                 FontSize="20"
                                                 Padding="18,20"
-                                                IsChecked="{Binding DataContext.Room.IsDoubleTwelveSelected,
+                                                IsChecked="{Binding DataContext.IsDoubleTwelveSelected,
                                                     RelativeSource={RelativeSource AncestorType=Window},
-                                                    Mode=TwoWay}"
+                                                    Mode=OneWay}"
+                                                Command="{Binding DataContext.SelectDominoSetCommand,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleTwelvePips}"
                                                 d:IsChecked="True" />
                                         </UniformGrid>
                                         <Border
@@ -236,7 +246,7 @@
                                             </Border.Style>
                                             <StackPanel>
                                                 <TextBlock
-                                                    Text="{Binding DataContext.Room.MaximumDouble,
+                                                    Text="{Binding DataContext.HighestDouble,
                                                         RelativeSource={RelativeSource AncestorType=Window}}"
                                                     Style="{StaticResource PixelTextStyle}"
                                                     FontSize="24"

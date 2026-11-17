@@ -86,17 +86,8 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.LobbyConflict:
                 resultStatus = LobbyActionResult.AlreadyInLobby;
                 break;
-            case GameServiceFaultCode.NotLobbyHost:
-                resultStatus = LobbyActionResult.NotLobbyHost;
-                break;
-            case GameServiceFaultCode.PlayersNotReady:
-                resultStatus = LobbyActionResult.PlayersNotReady;
-                break;
-            case GameServiceFaultCode.MatchAlreadyStarted:
-                resultStatus = LobbyActionResult.MatchAlreadyStarted;
-                break;
             default:
-                resultStatus = MapInvitationFault(faultCode);
+                resultStatus = MapMatchSetupFault(faultCode);
                 break;
         }
 
@@ -129,6 +120,32 @@ internal static class FaultCodeMapper
                 break;
             default:
                 resultStatus = MapTurnFault(faultCode);
+                break;
+        }
+
+        return resultStatus;
+    }
+
+    private static LobbyActionResult MapMatchSetupFault(GameServiceFaultCode faultCode)
+    {
+        LobbyActionResult resultStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.NotLobbyHost:
+                resultStatus = LobbyActionResult.NotLobbyHost;
+                break;
+            case GameServiceFaultCode.PlayersNotReady:
+                resultStatus = LobbyActionResult.PlayersNotReady;
+                break;
+            case GameServiceFaultCode.MatchAlreadyStarted:
+                resultStatus = LobbyActionResult.MatchAlreadyStarted;
+                break;
+            case GameServiceFaultCode.DominoSetTooSmall:
+                resultStatus = LobbyActionResult.DominoSetTooSmall;
+                break;
+            default:
+                resultStatus = MapInvitationFault(faultCode);
                 break;
         }
 

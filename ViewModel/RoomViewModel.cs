@@ -14,6 +14,9 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
+    public const int DoubleSixPips = 6;
+    public const int DoubleNinePips = 9;
+    public const int DoubleTwelvePips = 12;
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayersToStart = 2;
@@ -32,6 +35,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private int _maximumPlayers;
     private string _messageText = string.Empty;
     private string _chatNotice = string.Empty;
+    private int _highestDouble = DoubleTwelvePips;
 
     public RoomViewModel(
         IWindowService windowService,
@@ -48,6 +52,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
         SendMessageCommand = new AsyncRelayCommand(SendMessageAsync);
         StartMatchCommand = new AsyncRelayCommand(StartMatchAsync);
+        SelectDominoSetCommand = new AsyncParameterRelayCommand<int>(SelectDominoSetAsync);
 
         TryApplyCurrentLobby();
         _previousScreen = IsHost ? Screen.NewGame : Screen.JoinGame;
@@ -149,6 +154,29 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     public bool HasChatNotice => !string.IsNullOrEmpty(ChatNotice);
 
+    public int HighestDouble
+    {
+        get
+        {
+            return _highestDouble;
+        }
+        private set
+        {
+            bool hasChanged = SetProperty(ref _highestDouble, value);
+
+            if (hasChanged)
+            {
+                RaiseDominoSetSelectionChanged();
+            }
+        }
+    }
+
+    public bool IsDoubleSixSelected => HighestDouble == DoubleSixPips;
+
+    public bool IsDoubleNineSelected => HighestDouble == DoubleNinePips;
+
+    public bool IsDoubleTwelveSelected => HighestDouble == DoubleTwelvePips;
+
     public int MaximumMessageLength => LobbyMessageInputValidator.MaximumMessageLength;
 
     public InviteFriendsViewModel InviteFriends { get; }
@@ -166,6 +194,8 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     public AsyncRelayCommand SendMessageCommand { get; }
 
     public AsyncRelayCommand StartMatchCommand { get; }
+
+    public AsyncParameterRelayCommand<int> SelectDominoSetCommand { get; }
 
     public void Unsubscribe()
     {
@@ -203,6 +233,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         }
 
         LobbyCode = lobby.Code;
+        HighestDouble = lobby.HighestDouble;
         MaximumPlayers = lobby.MaximumPlayers;
         IsHost = lobby.HostPlayerId == _gameServices.CurrentPlayerId;
         RefreshStartAvailability();
@@ -339,17 +370,43 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         return chatNotice;
     }
 
+    private async Task SelectDominoSetAsync(int highestDouble)
+    {
+        bool isNewSelection = highestDouble != HighestDouble;
+
+        if (isNewSelection)
+        {
+            LobbyActionResult selectionResult = await RunWhileBusyAsync(
+                _gameServices.SelectDominoSetAsync,
+                highestDouble);
+            ShowRequestFailure(selectionResult);
+        }
+
+        RaiseDominoSetSelectionChanged();
+    }
+
+    private void RaiseDominoSetSelectionChanged()
+    {
+        OnPropertyChanged(nameof(IsDoubleSixSelected));
+        OnPropertyChanged(nameof(IsDoubleNineSelected));
+        OnPropertyChanged(nameof(IsDoubleTwelveSelected));
+    }
+
     private async Task<LobbyActionResult> RunLobbyRequestAsync(Func<Task<LobbyActionResult>> sendRequest)
     {
         LobbyActionResult requestResult = await RunWhileBusyAsync(sendRequest);
+        ShowRequestFailure(requestResult);
+        return requestResult;
+    }
+
+    private void ShowRequestFailure(LobbyActionResult requestResult)
+    {
         bool isFailure = requestResult != LobbyActionResult.Success && !IsChatSanction(requestResult);
 
         if (isFailure)
         {
             WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(requestResult));
         }
-
-        return requestResult;
     }
 
     private static bool IsChatSanction(LobbyActionResult actionResult)

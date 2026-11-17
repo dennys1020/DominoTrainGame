@@ -46,12 +46,14 @@
       <xs:enumeration value="MustDrawFirst" />
       <xs:enumeration value="MatchAlreadyStarted" />
       <xs:enumeration value="MustSatisfyDouble" />
+      <xs:enumeration value="DominoSetTooSmall" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
   <xs:complexType name="LobbyResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="Code" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HighestDouble" type="xs:int" />
       <xs:element minOccurs="0" name="HostPlayerId" type="xs:int" />
       <xs:element minOccurs="0" name="MaximumPlayers" type="xs:int" />
       <xs:element minOccurs="0" name="Players" nillable="true" type="tns:ArrayOfLobbyPlayer" />
@@ -85,6 +87,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SetReadyRequest" nillable="true" type="tns:SetReadyRequest" />
+  <xs:complexType name="SelectDominoSetRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HighestDouble" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SelectDominoSetRequest" nillable="true" type="tns:SelectDominoSetRequest" />
   <xs:complexType name="SendLobbyMessageRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="Text" nillable="true" type="xs:string" />
@@ -120,6 +128,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PlayerReadyChangedMessage" nillable="true" type="tns:PlayerReadyChangedMessage" />
+  <xs:complexType name="DominoSetChangedMessage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="HighestDouble" type="xs:int" />
+      <xs:element minOccurs="0" name="MaximumPlayers" type="xs:int" />
+      <xs:element minOccurs="0" name="Version" type="xs:long" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DominoSetChangedMessage" nillable="true" type="tns:DominoSetChangedMessage" />
   <xs:complexType name="LobbyChatMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="PlayerId" type="xs:int" />

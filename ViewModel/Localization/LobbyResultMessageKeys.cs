@@ -13,6 +13,7 @@ public static class LobbyResultMessageKeys
     private const string NotLobbyHostMessageKey = "NotLobbyHostMessage";
     private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
     private const string MatchAlreadyStartedMessageKey = "MatchAlreadyStartedMessage";
+    private const string DominoSetTooSmallMessageKey = "DominoSetTooSmallMessage";
     private const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
     private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
@@ -69,6 +70,9 @@ public static class LobbyResultMessageKeys
                 break;
             case LobbyActionResult.MatchAlreadyStarted:
                 messageKey = MatchAlreadyStartedMessageKey;
+                break;
+            case LobbyActionResult.DominoSetTooSmall:
+                messageKey = DominoSetTooSmallMessageKey;
                 break;
             default:
                 messageKey = GetInvitationMessageKey(status);

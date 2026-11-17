@@ -26,6 +26,8 @@ public interface IRemoteGameServices
 
     Task<LobbyActionResult> SetReadyAsync(bool isReady);
 
+    Task<LobbyActionResult> SelectDominoSetAsync(int highestDouble);
+
     Task<LobbyActionResult> SendLobbyMessageAsync(string text);
 
     Task<LobbyActionResult> StartMatchAsync();

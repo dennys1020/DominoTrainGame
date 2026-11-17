@@ -81,6 +81,19 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         }
     }
 
+    public void ReceiveDominoSetChanged(DominoSetChangedMessage message)
+    {
+        if (message == null)
+        {
+            _logger.Warn("A domino set notice without content was ignored.");
+        }
+        else
+        {
+            DominoSetUpdate dominoSetUpdate = new DominoSetUpdate(message);
+            ApplyLobbyUpdate(message.Version, dominoSetUpdate.Apply);
+        }
+    }
+
     public void ReceiveLobbyMessage(LobbyChatMessage message)
     {
         if (message == null)

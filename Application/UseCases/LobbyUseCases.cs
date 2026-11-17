@@ -138,6 +138,26 @@ public sealed class LobbyUseCases : ILobbyUseCases
         return wasUpdated;
     }
 
+    public SelectDominoSetStatus SelectDominoSet(int playerId, int highestDouble)
+    {
+        DominoSet dominoSet = DominoSet.FromHighestDouble(highestDouble);
+        LobbyOutcome<SelectDominoSetStatus> outcome = _lobbyRegistry.SelectDominoSet(playerId, dominoSet);
+
+        if (outcome.Status == SelectDominoSetStatus.Success)
+        {
+            NotifyDominoSetChanged(playerId, outcome.Lobby);
+        }
+        else
+        {
+            _logger.WarnFormat(
+                "A domino set selection was rejected. PlayerId: {0}. Status: {1}.",
+                playerId,
+                outcome.Status);
+        }
+
+        return outcome.Status;
+    }
+
     public SendMessageStatus SendMessage(int playerId, string text)
     {
         string normalizedText = text?.Trim() ?? string.Empty;
@@ -168,7 +188,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
         if (status == StartMatchStatus.Success)
         {
-            bool wasStarted = _matchUseCases.StartMatch(lobby.Code, lobby.Roster.GetPlayerIds());
+            bool wasStarted = _matchUseCases.StartMatch(lobby.Code, lobby.Roster.GetPlayerIds(), lobby.DominoSet);
             status = wasStarted ? StartMatchStatus.Success : StartMatchStatus.MatchAlreadyStarted;
         }
 
@@ -273,6 +293,21 @@ public sealed class LobbyUseCases : ILobbyUseCases
                 player.IsReady);
             _gameNotifier.NotifyPlayerReadyChanged(notice);
         }
+    }
+
+    private void NotifyDominoSetChanged(int playerId, LobbyState lobby)
+    {
+        LobbyRoster roster = lobby.Roster;
+        DominoSetChangedNotice notice = new DominoSetChangedNotice(
+            roster.GetPlayerIds(),
+            lobby.DominoSet,
+            roster.Version);
+
+        _logger.InfoFormat(
+            "The host changed the domino set. PlayerId: {0}. HighestDouble: {1}.",
+            playerId,
+            lobby.DominoSet.HighestDouble);
+        _gameNotifier.NotifyDominoSetChanged(notice);
     }
 
     private void NotifyLobbyMessage(int playerId, string text, LobbyState lobby)

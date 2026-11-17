@@ -8,6 +8,8 @@ public interface IGameNotifier
 
     void NotifyPlayerReadyChanged(PlayerReadyChangedNotice notice);
 
+    void NotifyDominoSetChanged(DominoSetChangedNotice notice);
+
     void NotifyLobbyMessage(LobbyMessageNotice notice);
 
     void NotifyMatchStarting(MatchStartingNotice notice);

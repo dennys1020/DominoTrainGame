@@ -99,5 +99,8 @@ public enum GameServiceFaultCode
     MatchAlreadyStarted,
 
     [EnumMember]
-    MustSatisfyDouble
+    MustSatisfyDouble,
+
+    [EnumMember]
+    DominoSetTooSmall
 }
