@@ -18,4 +18,12 @@ public interface IAuthenticationService
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
     LoginResponse LogInAsGuest();
+
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
+    void VerifyEmail(VerifyEmailRequest request);
+
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
+    bool ResendVerificationCode(ResendVerificationCodeRequest request);
 }

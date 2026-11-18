@@ -1,6 +1,7 @@
 using System;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -54,6 +55,51 @@ public sealed class AuthenticationService : IAuthenticationService
             () => _signUpUseCases.SignUp(signUpRequest?.Username, signUpRequest?.Email, signUpRequest?.Password));
 
         return isRegistered;
+    }
+
+    public void VerifyEmail(VerifyEmailRequest verifyEmailRequest)
+    {
+        VerifyEmailStatus status = _faultTranslator.Execute(
+            () => _signUpUseCases.VerifyEmail(verifyEmailRequest?.Email, verifyEmailRequest?.VerificationCode));
+
+        GameFaultFactory.ThrowIfRejected(status, VerifyEmailStatus.Success, MapVerifyEmailFaultCode);
+    }
+
+    public bool ResendVerificationCode(ResendVerificationCodeRequest resendRequest)
+    {
+        bool wasResent = _faultTranslator.Execute(
+            () => _signUpUseCases.ResendVerificationCode(resendRequest?.Email));
+
+        return wasResent;
+    }
+
+    private static GameServiceFaultCode MapVerifyEmailFaultCode(VerifyEmailStatus status)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (status)
+        {
+            case VerifyEmailStatus.RegistrationNotFound:
+                faultCode = GameServiceFaultCode.VerificationNotFound;
+                break;
+            case VerifyEmailStatus.InvalidCode:
+                faultCode = GameServiceFaultCode.InvalidVerificationCode;
+                break;
+            case VerifyEmailStatus.CodeExpired:
+                faultCode = GameServiceFaultCode.VerificationCodeExpired;
+                break;
+            case VerifyEmailStatus.TooManyAttempts:
+                faultCode = GameServiceFaultCode.TooManyVerificationAttempts;
+                break;
+            case VerifyEmailStatus.AlreadyRegistered:
+                faultCode = GameServiceFaultCode.AccountAlreadyExists;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidInput;
+                break;
+        }
+
+        return faultCode;
     }
 
     private static LoginResponse CreateRejectedLoginResponse()
