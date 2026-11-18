@@ -84,9 +84,8 @@ public sealed class CallbackGameNotifier : IGameNotifier
             HighestDouble = notice.DominoSet.HighestDouble,
             MaximumPlayers = notice.DominoSet.MaximumPlayerCount
         };
-        DominoSetChangedSender sender = new DominoSetChangedSender(message);
 
-        Broadcast(notice.RecipientPlayerIds, sender.Send);
+        Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveDominoSetChanged(message));
     }
 
     public void NotifyLobbyMessage(LobbyMessageNotice notice)
@@ -190,9 +189,8 @@ public sealed class CallbackGameNotifier : IGameNotifier
             EndReason = ToRoundEndReasonCode(notice.EndReason),
             RoundScores = ToPlayerScoreData(notice.RoundScoresByPlayerId)
         };
-        RoundEndedSender sender = new RoundEndedSender(message);
 
-        Broadcast(notice.RecipientPlayerIds, sender.Send);
+        Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveRoundEnded(message));
     }
 
     public void NotifyMatchEnded(MatchEndedNotice notice)
@@ -206,9 +204,8 @@ public sealed class CallbackGameNotifier : IGameNotifier
         {
             EndReason = ToMatchEndReasonCode(notice.EndReason)
         };
-        MatchEndedSender sender = new MatchEndedSender(message);
 
-        Broadcast(notice.RecipientPlayerIds, sender.Send);
+        Broadcast(notice.RecipientPlayerIds, callback => callback.ReceiveMatchEnded(message));
     }
 
     private static RoundEndReasonCode ToRoundEndReasonCode(RoundEndReason endReason)

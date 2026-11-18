@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.ViewModel.Commands;
 using DominoTrainGame.Client.ViewModel.Common;
@@ -12,6 +13,8 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class MatchResultsViewModel : ScreenViewModel
 {
     private const string WinnerSeparator = ", ";
+
+    private readonly IRemoteGameServices _gameServices;
 
     public MatchResultsViewModel(
         IWindowService windowService,
@@ -28,6 +31,7 @@ public sealed class MatchResultsViewModel : ScreenViewModel
             throw new ArgumentNullException(nameof(matchServices));
         }
 
+        _gameServices = gameServices;
         bool isHost = gameServices.CurrentLobby.HostPlayerId == gameServices.CurrentPlayerId;
         Screen previousScreen = isHost ? Screen.NewGame : Screen.JoinGame;
         IReadOnlyList<RoundSummary> roundHistory = matchServices.RoundHistory;
@@ -37,7 +41,7 @@ public sealed class MatchResultsViewModel : ScreenViewModel
         WinnerUsernames = string.Join(WinnerSeparator, Players.Where(row => row.IsWinner).Select(row => row.Username));
 
         BackCommand = new RelayCommand(() => WindowService.Navigate(previousScreen));
-        MainMenuCommand = new RelayCommand(() => WindowService.Navigate(Screen.Main));
+        MainMenuCommand = new AsyncRelayCommand(ReturnToMainMenuAsync);
         RoomCommand = new RelayCommand(() => WindowService.Navigate(Screen.Room));
     }
 
@@ -55,7 +59,7 @@ public sealed class MatchResultsViewModel : ScreenViewModel
 
     public RelayCommand BackCommand { get; }
 
-    public RelayCommand MainMenuCommand { get; }
+    public AsyncRelayCommand MainMenuCommand { get; }
 
     public RelayCommand RoomCommand { get; }
 
@@ -100,5 +104,17 @@ public sealed class MatchResultsViewModel : ScreenViewModel
         int roundScore;
         round.ScoresByPlayerId.TryGetValue(playerId, out roundScore);
         return roundScore;
+    }
+
+    private async Task ReturnToMainMenuAsync()
+    {
+        bool isInLobby = _gameServices.CurrentLobby.Status == LobbyActionResult.Success;
+
+        if (isInLobby)
+        {
+            await RunWhileBusyAsync(_gameServices.LeaveLobbyAsync);
+        }
+
+        WindowService.Navigate(Screen.Main);
     }
 }

@@ -38,11 +38,7 @@ internal sealed class GuestPlayerCreation
 
     private bool IsUsernameTaken(DominoGameDBEntities context)
     {
-        IQueryable<int> matchingPlayerIds =
-            from player in context.Players
-            where player.Username == _username
-            select player.PlayerId;
-        bool isTaken = matchingPlayerIds.Any();
+        bool isTaken = context.Players.Any(player => player.Username == _username);
         return isTaken;
     }
 

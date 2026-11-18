@@ -1,7 +1,6 @@
 using System;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
-using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.DataContracts;
@@ -35,20 +34,8 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public LoginResponse LogIn(LoginRequest logInRequest)
     {
-        PlayerIdentity player;
-
-        try
-        {
-            player = _loginUseCases.LogIn(logInRequest?.Identifier, logInRequest?.Password);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        PlayerIdentity player = _faultTranslator.Execute(
+            () => _loginUseCases.LogIn(logInRequest?.Identifier, logInRequest?.Password));
 
         LoginResponse response = CreateLoginResponse(player);
         return response;
@@ -56,40 +43,15 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public LoginResponse LogInAsGuest()
     {
-        PlayerIdentity guest;
-
-        try
-        {
-            guest = _guestLoginUseCases.LogInAsGuest();
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
-
+        PlayerIdentity guest = _faultTranslator.Execute(_guestLoginUseCases.LogInAsGuest);
         LoginResponse response = CreateLoginResponse(guest);
         return response;
     }
 
     public bool SignUp(SignUpRequest signUpRequest)
     {
-        bool isRegistered;
-
-        try
-        {
-            isRegistered = _signUpUseCases.SignUp(
-                signUpRequest?.Username,
-                signUpRequest?.Email,
-                signUpRequest?.Password);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        bool isRegistered = _faultTranslator.Execute(
+            () => _signUpUseCases.SignUp(signUpRequest?.Username, signUpRequest?.Email, signUpRequest?.Password));
 
         return isRegistered;
     }

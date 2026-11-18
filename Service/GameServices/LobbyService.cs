@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
-using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
@@ -41,20 +40,9 @@ public sealed class LobbyService : ILobbyService
     public LobbyResponse CreateLobby()
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyOutcome<CreateLobbyStatus> outcome;
-
-        try
-        {
-            outcome = _lobbyUseCases.CreateLobby(caller);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidLobbyRequest);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        LobbyOutcome<CreateLobbyStatus> outcome = _faultTranslator.Execute(
+            () => _lobbyUseCases.CreateLobby(caller),
+            GameServiceFaultCode.InvalidLobbyRequest);
 
         GameFaultFactory.ThrowIfRejected(outcome.Status, CreateLobbyStatus.Success, MapCreateFaultCode);
         LobbyResponse response = ToLobbyResponse(outcome.Lobby);
@@ -64,20 +52,9 @@ public sealed class LobbyService : ILobbyService
     public LobbyResponse JoinLobby(JoinLobbyRequest joinLobbyRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyOutcome<JoinLobbyStatus> outcome;
-
-        try
-        {
-            outcome = _lobbyUseCases.JoinLobby(caller, joinLobbyRequest?.Code);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidLobbyRequest);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        LobbyOutcome<JoinLobbyStatus> outcome = _faultTranslator.Execute(
+            () => _lobbyUseCases.JoinLobby(caller, joinLobbyRequest?.Code),
+            GameServiceFaultCode.InvalidLobbyRequest);
 
         GameFaultFactory.ThrowIfRejected(outcome.Status, JoinLobbyStatus.Success, MapJoinFaultCode);
         LobbyResponse response = ToLobbyResponse(outcome.Lobby);
@@ -94,20 +71,7 @@ public sealed class LobbyService : ILobbyService
     {
         bool isReady = setReadyRequest?.IsReady ?? false;
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        bool wasUpdated;
-
-        try
-        {
-            wasUpdated = _lobbyUseCases.TrySetReady(caller.PlayerId, isReady);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        bool wasUpdated = _faultTranslator.Execute(() => _lobbyUseCases.TrySetReady(caller.PlayerId, isReady));
 
         GameFaultFactory.ThrowIfRejected(wasUpdated, GameServiceFaultCode.LobbyNotFound);
     }
@@ -116,16 +80,8 @@ public sealed class LobbyService : ILobbyService
     {
         int highestDouble = selectDominoSetRequest?.HighestDouble ?? default;
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        SelectDominoSetStatus status;
-
-        try
-        {
-            status = _lobbyUseCases.SelectDominoSet(caller.PlayerId, highestDouble);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
+        SelectDominoSetStatus status = _faultTranslator.Execute(
+            () => _lobbyUseCases.SelectDominoSet(caller.PlayerId, highestDouble));
 
         GameFaultFactory.ThrowIfRejected(status, SelectDominoSetStatus.Success, MapSelectDominoSetFaultCode);
     }
@@ -133,20 +89,8 @@ public sealed class LobbyService : ILobbyService
     public void SendLobbyMessage(SendLobbyMessageRequest sendMessageRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        SendMessageStatus status;
-
-        try
-        {
-            status = _lobbyUseCases.SendMessage(caller.PlayerId, sendMessageRequest?.Text);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        SendMessageStatus status = _faultTranslator.Execute(
+            () => _lobbyUseCases.SendMessage(caller.PlayerId, sendMessageRequest?.Text));
 
         GameFaultFactory.ThrowIfRejected(status, SendMessageStatus.Success, MapSendMessageFaultCode);
     }
@@ -154,20 +98,9 @@ public sealed class LobbyService : ILobbyService
     public void StartMatch()
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        StartMatchStatus status;
-
-        try
-        {
-            status = _lobbyUseCases.StartMatch(caller.PlayerId);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidLobbyRequest);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        StartMatchStatus status = _faultTranslator.Execute(
+            () => _lobbyUseCases.StartMatch(caller.PlayerId),
+            GameServiceFaultCode.InvalidLobbyRequest);
 
         GameFaultFactory.ThrowIfRejected(status, StartMatchStatus.Success, MapStartFaultCode);
     }
@@ -175,20 +108,8 @@ public sealed class LobbyService : ILobbyService
     public void InviteFriend(FriendUsernameRequest inviteFriendRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        InviteFriendStatus status;
-
-        try
-        {
-            status = _invitationUseCases.InviteFriend(caller, inviteFriendRequest?.Username);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        InviteFriendStatus status = _faultTranslator.Execute(
+            () => _invitationUseCases.InviteFriend(caller, inviteFriendRequest?.Username));
 
         GameFaultFactory.ThrowIfRejected(status, InviteFriendStatus.Success, MapInviteFaultCode);
     }

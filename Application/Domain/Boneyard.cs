@@ -28,4 +28,17 @@ public sealed class Boneyard
         Tile tile = _tiles.Dequeue();
         return tile;
     }
+
+    public void ReturnTiles(IEnumerable<Tile> tiles)
+    {
+        if (tiles == null)
+        {
+            throw new ArgumentNullException(nameof(tiles));
+        }
+
+        foreach (Tile tile in tiles)
+        {
+            _tiles.Enqueue(tile);
+        }
+    }
 }

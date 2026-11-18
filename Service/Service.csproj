@@ -113,9 +113,6 @@
     <Compile Include="GameServices\AuthenticationService.cs" />
     <Compile Include="GameServices\ConnectionService.cs" />
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
-    <Compile Include="Callbacks\DominoSetChangedSender.cs" />
-    <Compile Include="Callbacks\RoundEndedSender.cs" />
-    <Compile Include="Callbacks\MatchEndedSender.cs" />
     <Compile Include="GameServices\FriendService.cs" />
     <Compile Include="GameServices\LobbyService.cs" />
     <Compile Include="Sessions\SessionTokenRegistry.cs" />

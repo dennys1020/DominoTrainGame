@@ -114,43 +114,52 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return matchingTiles;
     }
 
-    private async Task<MatchMoveResult> SendPlayTileAsync(TileSummary tile, int trainId)
+    private Task<MatchMoveResult> SendPlayTileAsync(TileSummary tile, int trainId)
     {
-        MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchMoveResult resultStatus;
-
-        try
+        PlayTileRequest request = new PlayTileRequest
         {
-            PlayTileRequest request = new PlayTileRequest
+            SessionToken = _session.SessionToken,
+            Tile = new TileData
             {
-                SessionToken = _session.SessionToken,
-                Tile = new TileData
-                {
-                    LeftPips = tile.LeftPips,
-                    RightPips = tile.RightPips
-                },
-                TrainOwnerId = trainId
-            };
+                LeftPips = tile.LeftPips,
+                RightPips = tile.RightPips
+            },
+            TrainOwnerId = trainId
+        };
+        Task<MatchMoveResult> playing = SendMoveAsync(matchClient => matchClient.PlayTileAsync(request));
 
-            await matchClient.PlayTileAsync(request).ConfigureAwait(false);
-            resultStatus = MatchMoveResult.Success;
-        }
-        finally
-        {
-            _channelCloser.Close(matchClient);
-        }
-
-        return resultStatus;
+        return playing;
     }
 
-    private async Task<MatchMoveResult> SendDrawTileAsync()
+    private Task<MatchMoveResult> SendDrawTileAsync()
+    {
+        Task<MatchMoveResult> drawing = SendMoveAsync(
+            matchClient => matchClient.DrawTileAsync(CreateSessionTokenRequest()));
+        return drawing;
+    }
+
+    private Task<MatchMoveResult> SendPassTurnAsync()
+    {
+        Task<MatchMoveResult> passing = SendMoveAsync(
+            matchClient => matchClient.PassTurnAsync(CreateSessionTokenRequest()));
+        return passing;
+    }
+
+    private Task<MatchMoveResult> SendLeaveMatchAsync()
+    {
+        Task<MatchMoveResult> leaving = SendMoveAsync(
+            matchClient => matchClient.LeaveMatchAsync(CreateSessionTokenRequest()));
+        return leaving;
+    }
+
+    private async Task<MatchMoveResult> SendMoveAsync(Func<MatchServiceClient, Task> sendMove)
     {
         MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
         MatchMoveResult resultStatus;
 
         try
         {
-            await matchClient.DrawTileAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
+            await sendMove(matchClient).ConfigureAwait(false);
             resultStatus = MatchMoveResult.Success;
         }
         finally
@@ -159,42 +168,6 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         }
 
         return resultStatus;
-    }
-
-    private async Task<MatchMoveResult> SendPassTurnAsync()
-    {
-        MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchMoveResult resultStatus;
-
-        try
-        {
-            await matchClient.PassTurnAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
-            resultStatus = MatchMoveResult.Success;
-        }
-        finally
-        {
-            _channelCloser.Close(matchClient);
-        }
-
-        return resultStatus;
-    }
-
-    private async Task<MatchMoveResult> SendLeaveMatchAsync()
-    {
-        MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchMoveResult leaveMatchResult;
-
-        try
-        {
-            await matchClient.LeaveMatchAsync(CreateSessionTokenRequest()).ConfigureAwait(false);
-            leaveMatchResult = MatchMoveResult.Success;
-        }
-        finally
-        {
-            _channelCloser.Close(matchClient);
-        }
-
-        return leaveMatchResult;
     }
 
     private SessionTokenRequest CreateSessionTokenRequest()
