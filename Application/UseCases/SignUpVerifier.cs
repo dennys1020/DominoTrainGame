@@ -21,7 +21,7 @@ public sealed class SignUpVerifier
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
     }
 
-    public void SendCode(PlayerRegistration registration)
+    public void SendVerificationCode(PlayerRegistration registration)
     {
         if (registration == null)
         {
@@ -31,35 +31,36 @@ public sealed class SignUpVerifier
         string verificationCode = _codeGenerator.Generate();
 
         _emailSender.SendVerificationCode(registration.Email, verificationCode);
-        _pendingSignUps.Store(registration, verificationCode);
+        _pendingSignUps.StorePendingSignUp(registration, verificationCode);
     }
 
-    public bool ResendCode(string email)
+    public bool ResendVerificationCode(string email)
     {
-        bool isPending = _pendingSignUps.TryFind(email, out PendingSignUp pendingSignUp);
+        PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(email);
+        bool isPending = !pendingSignUp.IsEmpty;
 
         if (isPending)
         {
-            SendCode(pendingSignUp.Registration);
+            SendVerificationCode(pendingSignUp.Registration);
         }
 
         return isPending;
     }
 
-    public VerifyEmailStatus VerifyAccount(string email, string verificationCode)
+    public VerifyEmailStatus VerifyPendingSignUpCode(string email, string verificationCode)
     {
-        VerifyEmailStatus status = _pendingSignUps.Verify(email, verificationCode);
-        return status;
+        VerifyEmailStatus emailStatus = _pendingSignUps.VerifyPendingSignUpCode(email, verificationCode);
+        return emailStatus;
     }
 
-    public bool TryFindPendingSignUp(string email, out PendingSignUp pendingSignUp)
+    public PendingSignUp FindPendingSignUpByEmail(string email)
     {
-        bool isFound = _pendingSignUps.TryFind(email, out pendingSignUp);
-        return isFound;
+        PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(email);
+        return pendingSignUp;
     }
 
     public void DiscardPendingSignUp(string email)
     {
-        _pendingSignUps.Remove(email);
+        _pendingSignUps.RemovePendingSignUp(email);
     }
 }

@@ -12,6 +12,7 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class MatchResultsViewModel : ScreenViewModel
 {
+    private const int NoScore = 0;
     private const string WinnerSeparator = ", ";
 
     private readonly IRemoteGameServices _gameServices;
@@ -69,7 +70,7 @@ public sealed class MatchResultsViewModel : ScreenViewModel
     {
         Dictionary<int, IReadOnlyList<int>> roundScoresByPlayerId = players.ToDictionary(
             player => player.Player.PlayerId,
-            player => GetRoundScores(roundHistory, player.Player.PlayerId));
+            player => GetPlayerRoundScores(roundHistory, player.Player.PlayerId));
         int winningTotal = roundScoresByPlayerId.Values
             .Select(roundScores => roundScores.Sum())
             .DefaultIfEmpty()
@@ -93,16 +94,15 @@ public sealed class MatchResultsViewModel : ScreenViewModel
         return playerResult;
     }
 
-    private static IReadOnlyList<int> GetRoundScores(IReadOnlyList<RoundSummary> roundHistory, int playerId)
+    private static IReadOnlyList<int> GetPlayerRoundScores(IReadOnlyList<RoundSummary> roundHistory, int playerId)
     {
-        List<int> roundScores = roundHistory.Select(round => GetRoundScore(round, playerId)).ToList();
+        List<int> roundScores = roundHistory.Select(round => GetPlayerRoundScore(round, playerId)).ToList();
         return roundScores;
     }
 
-    private static int GetRoundScore(RoundSummary round, int playerId)
+    private static int GetPlayerRoundScore(RoundSummary round, int playerId)
     {
-        int roundScore;
-        round.ScoresByPlayerId.TryGetValue(playerId, out roundScore);
+        int roundScore = round.ScoresByPlayerId.ContainsKey(playerId) ? round.ScoresByPlayerId[playerId] : NoScore;
         return roundScore;
     }
 

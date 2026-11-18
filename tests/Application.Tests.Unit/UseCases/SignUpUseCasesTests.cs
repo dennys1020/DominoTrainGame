@@ -544,7 +544,7 @@ public sealed class SignUpUseCasesTests
 
     private PlayerRegistration FindPendingRegistration()
     {
-        _pendingSignUps.TryFind(NewEmail, out PendingSignUp pendingSignUp);
+        PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(NewEmail);
         PlayerRegistration registration = pendingSignUp.Registration;
         return registration;
     }

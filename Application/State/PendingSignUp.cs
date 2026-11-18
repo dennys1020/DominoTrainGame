@@ -34,7 +34,7 @@ public sealed class PendingSignUp
 
     public PlayerRegistration Registration { get; }
 
-    public VerifyEmailStatus Verify(string verificationCode, DateTime currentTime)
+    public VerifyEmailStatus VerifyCode(string verificationCode, DateTime currentTime)
     {
         VerifyEmailStatus emailStatus = VerifyEmailStatus.Success;
         bool hasTooManyAttempts = _failedAttempts >= MaximumFailedAttempts;

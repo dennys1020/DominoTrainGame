@@ -19,7 +19,7 @@ public sealed class PendingSignUpRegistry
         _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
-    public void Store(PlayerRegistration playerRegistration, string verificationCode)
+    public void StorePendingSignUp(PlayerRegistration playerRegistration, string verificationCode)
     {
         if (playerRegistration == null)
         {
@@ -35,44 +35,50 @@ public sealed class PendingSignUpRegistry
         }
     }
 
-    public VerifyEmailStatus Verify(string email, string verificationCode)
+    public VerifyEmailStatus VerifyPendingSignUpCode(string email, string verificationCode)
     {
         DateTime currentTime = _clock.UtcNow;
         VerifyEmailStatus status = VerifyEmailStatus.RegistrationNotFound;
 
         lock (_pendingSignUpsLock)
         {
-            bool isFound = _pendingSignUpsByEmail.TryGetValue(
-                email ?? string.Empty,
-                out PendingSignUp foundSignUp);
+            PendingSignUp pendingSignUp = GetPendingSignUpOrEmpty(email);
 
-            if (isFound)
+            if (!pendingSignUp.IsEmpty)
             {
-                status = foundSignUp.Verify(verificationCode, currentTime);
+                status = pendingSignUp.VerifyCode(verificationCode, currentTime);
             }
         }
 
         return status;
     }
 
-    public bool TryFind(string email, out PendingSignUp pendingSignUp)
+    public PendingSignUp FindPendingSignUpByEmail(string email)
     {
-        bool isFound;
+        PendingSignUp pendingSignUp;
 
         lock (_pendingSignUpsLock)
         {
-            isFound = _pendingSignUpsByEmail.TryGetValue(email ?? string.Empty, out PendingSignUp foundSignUp);
-            pendingSignUp = isFound ? foundSignUp : PendingSignUp.Empty;
+            pendingSignUp = GetPendingSignUpOrEmpty(email);
         }
 
-        return isFound;
+        return pendingSignUp;
     }
 
-    public void Remove(string email)
+    public void RemovePendingSignUp(string email)
     {
         lock (_pendingSignUpsLock)
         {
             _pendingSignUpsByEmail.Remove(email ?? string.Empty);
         }
+    }
+
+    private PendingSignUp GetPendingSignUpOrEmpty(string email)
+    {
+        string emailKey = email ?? string.Empty;
+        PendingSignUp pendingSignUp = _pendingSignUpsByEmail.ContainsKey(emailKey)
+            ? _pendingSignUpsByEmail[emailKey]
+            : PendingSignUp.Empty;
+        return pendingSignUp;
     }
 }
