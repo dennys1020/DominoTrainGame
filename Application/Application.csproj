@@ -55,6 +55,7 @@
     <Compile Include="Results\CreateLobbyStatus.cs" />
     <Compile Include="Results\DrawTileStatus.cs" />
     <Compile Include="Results\PassTurnStatus.cs" />
+    <Compile Include="Results\VerifyEmailStatus.cs" />
     <Compile Include="UseCases\PlayerInputValidator.cs" />
     <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="UseCases\IConnectionUseCases.cs" />
     <Compile Include="State\LobbyRegistry.cs" />
     <Compile Include="State\MatchRegistry.cs" />
+    <Compile Include="State\PendingSignUp.cs" />
+    <Compile Include="State\PendingSignUpRegistry.cs" />
     <Compile Include="UseCases\LobbyUseCases.cs" />
     <Compile Include="Ports\IGameNotifier.cs" />
     <Compile Include="UseCases\ILobbyUseCases.cs" />
