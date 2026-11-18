@@ -14,6 +14,7 @@ public sealed class ClientSession
         new List<Func<LobbyResult, LobbyResult>>();
     private LobbyResult _currentLobby = LobbyResult.Empty;
     private int _currentPlayerId;
+    private bool _isGuest;
     private string _sessionToken = string.Empty;
     private SynchronizationContext _callerContext = new SynchronizationContext();
     private MatchSnapshot _matchSnapshot = MatchSnapshot.Empty;
@@ -95,6 +96,21 @@ public sealed class ClientSession
         }
     }
 
+    public bool IsGuest
+    {
+        get
+        {
+            bool isGuest;
+
+            lock (_sessionSyncRoot)
+            {
+                isGuest = _isGuest;
+            }
+
+            return isGuest;
+        }
+    }
+
     public SynchronizationContext CallerContext
     {
         get
@@ -117,6 +133,15 @@ public sealed class ClientSession
             _callerContext = callerContext ?? _callerContext;
             _currentPlayerId = playerId;
             _sessionToken = sessionToken ?? string.Empty;
+            _isGuest = false;
+        }
+    }
+
+    public void MarkAsGuest()
+    {
+        lock (_sessionSyncRoot)
+        {
+            _isGuest = true;
         }
     }
 
@@ -126,6 +151,7 @@ public sealed class ClientSession
         {
             _sessionToken = string.Empty;
             _currentPlayerId = NoPlayerId;
+            _isGuest = false;
         }
     }
 

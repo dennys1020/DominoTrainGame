@@ -9,6 +9,9 @@
     WindowStartupLocation="CenterScreen"
     Background="{StaticResource Glacier}"
     Style="{StaticResource AppWindowStyle}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="AccountFeaturesVisibility" />
+    </Window.Resources>
     <Grid Background="{StaticResource Glacier}">
         <Rectangle
             IsHitTestVisible="False"
@@ -67,6 +70,9 @@
                         Margin="0,0,0,14"
                         Command="{Binding DataContext.ProfileCommand,
                             RelativeSource={RelativeSource AncestorType=Window}}"
+                        Visibility="{Binding DataContext.AreAccountFeaturesAvailable,
+                            RelativeSource={RelativeSource AncestorType=Window},
+                            Converter={StaticResource AccountFeaturesVisibility}}"
                         ToolTip="{Binding [ProfileLabel], Source={StaticResource Localization}}">
                         <Rectangle
                             Width="41"
@@ -80,6 +86,9 @@
                         Margin="0,0,0,14"
                         Command="{Binding DataContext.FriendsCommand,
                             RelativeSource={RelativeSource AncestorType=Window}}"
+                        Visibility="{Binding DataContext.AreAccountFeaturesAvailable,
+                            RelativeSource={RelativeSource AncestorType=Window},
+                            Converter={StaticResource AccountFeaturesVisibility}}"
                         IsEnabled="{Binding DataContext.IsIdle,
                             RelativeSource={RelativeSource AncestorType=Window}}"
                         ToolTip="{Binding [FriendsLabel], Source={StaticResource Localization}}">

@@ -167,6 +167,9 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.PlayerOffline:
                 resultStatus = LobbyActionResult.PlayerOffline;
                 break;
+            case GameServiceFaultCode.GuestNotAllowed:
+                resultStatus = LobbyActionResult.GuestNotAllowed;
+                break;
             default:
                 resultStatus = MapSessionFault(faultCode);
                 break;

@@ -25,6 +25,7 @@ public sealed class LoginViewModel : ScreenViewModel
         _password = string.Empty;
 
         LogInCommand = new AsyncRelayCommand(LogInAsync);
+        GuestLogInCommand = new AsyncRelayCommand(LogInAsGuestAsync);
         SignUpCommand = new RelayCommand(() => WindowService.Navigate(Screen.SignUp));
         RecoverPasswordCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.RecoverPassword));
 
@@ -58,6 +59,8 @@ public sealed class LoginViewModel : ScreenViewModel
 
     public AsyncRelayCommand LogInCommand { get; }
 
+    public AsyncRelayCommand GuestLogInCommand { get; }
+
     public RelayCommand SignUpCommand { get; }
 
     public RelayCommand RecoverPasswordCommand { get; }
@@ -80,6 +83,12 @@ public sealed class LoginViewModel : ScreenViewModel
     {
         LoginResult loginResult = await RunWhileBusyAsync(
             () => _gameServices.LogInAsync(UsernameOrEmail.Trim(), Password));
+        HandleLoginResult(loginResult);
+    }
+
+    private async Task LogInAsGuestAsync()
+    {
+        LoginResult loginResult = await RunWhileBusyAsync<LoginResult>(_gameServices.LogInAsGuestAsync);
         HandleLoginResult(loginResult);
     }
 

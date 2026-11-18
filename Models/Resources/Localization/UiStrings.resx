@@ -757,4 +757,10 @@ en el tren</value>
   <data name="MatchWinnerLabel" xml:space="preserve">
     <value>Ganador:</value>
   </data>
+  <data name="GuestLoginUnavailableMessage" xml:space="preserve">
+    <value>No fue posible entrar como invitado. Inténtalo de nuevo.</value>
+  </data>
+  <data name="GuestNotAllowedMessage" xml:space="preserve">
+    <value>Los invitados no pueden usar esta función. Crea una cuenta para acceder a ella.</value>
+  </data>
 </root>

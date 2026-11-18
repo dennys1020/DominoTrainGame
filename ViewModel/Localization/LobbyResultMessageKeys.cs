@@ -97,6 +97,9 @@ public static class LobbyResultMessageKeys
             case LobbyActionResult.PlayerOffline:
                 messageKey = PlayerOfflineMessageKey;
                 break;
+            case LobbyActionResult.GuestNotAllowed:
+                messageKey = CommonMessageKeys.GuestNotAllowedMessageKey;
+                break;
             default:
                 messageKey = GetChatMessageKey(status);
                 break;

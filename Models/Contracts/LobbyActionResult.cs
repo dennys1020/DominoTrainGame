@@ -21,5 +21,6 @@ public enum LobbyActionResult
     ChatBlocked,
     PlayerBanned,
     MatchAlreadyStarted,
-    DominoSetTooSmall
+    DominoSetTooSmall,
+    GuestNotAllowed
 }

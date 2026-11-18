@@ -67,6 +67,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
 
     public string SessionToken => _session.SessionToken;
 
+    public bool IsGuest => _session.IsGuest;
+
     public Task<ConnectionCheckResult> CheckConnectionAsync()
     {
         Task<ConnectionCheckResult> connectionCheck = _callGuard.ExecuteAsync(
@@ -75,17 +77,18 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return connectionCheck;
     }
 
-    public async Task<LoginResult> LogInAsync(string identifier, string password)
+    public Task<LoginResult> LogInAsync(string identifier, string password)
     {
         LoginAttempt loginAttempt = new LoginAttempt(this, identifier, password, SynchronizationContext.Current);
-        LoginResult loginResult = await _callGuard.ExecuteAsync(loginAttempt.AuthenticateAsync, _loginFailures);
+        Task<LoginResult> login = RunLoginAsync(loginAttempt.AuthenticateAsync);
+        return login;
+    }
 
-        if (loginResult != LoginResult.Success)
-        {
-            _session.Forget();
-        }
-
-        return loginResult;
+    public Task<LoginResult> LogInAsGuestAsync()
+    {
+        GuestLoginAttempt guestLoginAttempt = new GuestLoginAttempt(this, SynchronizationContext.Current);
+        Task<LoginResult> login = RunLoginAsync(guestLoginAttempt.AuthenticateAsync);
+        return login;
     }
 
     public void LogOut()
@@ -215,23 +218,56 @@ public sealed class RemoteGameServices : IRemoteGameServices
         return sending;
     }
 
+    private async Task<LoginResult> RunLoginAsync(Func<Task<LoginResult>> authenticate)
+    {
+        LoginResult loginResult = await _callGuard.ExecuteAsync(authenticate, _loginFailures);
+
+        if (loginResult != LoginResult.Success)
+        {
+            _session.Forget();
+        }
+
+        return loginResult;
+    }
+
     private async Task<LoginResult> AuthenticateAsync(
         string identifier,
         string password,
         SynchronizationContext callerContext)
     {
-        LoginResult loginResult = LoginResult.InvalidCredentials;
         LoginResponse response = await SendLogInAsync(identifier, password);
+        bool isAuthenticated = await OpenSessionAsync(response, callerContext);
+        LoginResult loginResult = isAuthenticated ? LoginResult.Success : LoginResult.InvalidCredentials;
+
+        return loginResult;
+    }
+
+    private async Task<LoginResult> AuthenticateGuestAsync(SynchronizationContext callerContext)
+    {
+        LoginResult loginResult = LoginResult.GuestUnavailable;
+        LoginResponse response = await SendLogInAsGuestAsync();
+        bool isAuthenticated = await OpenSessionAsync(response, callerContext);
+
+        if (isAuthenticated)
+        {
+            _session.MarkAsGuest();
+            loginResult = LoginResult.Success;
+        }
+
+        return loginResult;
+    }
+
+    private async Task<bool> OpenSessionAsync(LoginResponse response, SynchronizationContext callerContext)
+    {
         bool isAuthenticated = response?.IsAuthenticated ?? false;
 
         if (isAuthenticated)
         {
             _session.Store(response.PlayerId, response.SessionToken, callerContext);
             await _lobbyChannel.OpenAsync(response.SessionToken);
-            loginResult = LoginResult.Success;
         }
 
-        return loginResult;
+        return isAuthenticated;
     }
 
     private async Task<LoginResponse> SendLogInAsync(string identifier, string password)
@@ -248,6 +284,23 @@ public sealed class RemoteGameServices : IRemoteGameServices
             };
 
             response = await authenticationClient.LogInAsync(request).ConfigureAwait(false);
+        }
+        finally
+        {
+            _channelCloser.Close(authenticationClient);
+        }
+
+        return response;
+    }
+
+    private async Task<LoginResponse> SendLogInAsGuestAsync()
+    {
+        AuthenticationServiceClient authenticationClient = _connectionFactory.CreateAuthenticationClient();
+        LoginResponse response;
+
+        try
+        {
+            response = await authenticationClient.LogInAsGuestAsync().ConfigureAwait(false);
         }
         finally
         {
@@ -324,6 +377,24 @@ public sealed class RemoteGameServices : IRemoteGameServices
         public Task<LoginResult> AuthenticateAsync()
         {
             Task<LoginResult> authentication = _gameServices.AuthenticateAsync(_identifier, _password, _callerContext);
+            return authentication;
+        }
+    }
+
+    private sealed class GuestLoginAttempt
+    {
+        private readonly RemoteGameServices _gameServices;
+        private readonly SynchronizationContext _callerContext;
+
+        public GuestLoginAttempt(RemoteGameServices gameServices, SynchronizationContext callerContext)
+        {
+            _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+            _callerContext = callerContext;
+        }
+
+        public Task<LoginResult> AuthenticateAsync()
+        {
+            Task<LoginResult> authentication = _gameServices.AuthenticateGuestAsync(_callerContext);
             return authentication;
         }
     }

@@ -160,6 +160,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         DominoSetTooSmall = 32,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        GuestNotAllowed = 33,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]

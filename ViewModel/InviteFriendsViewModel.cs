@@ -26,8 +26,11 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
+        CanInviteFriends = !_gameServices.IsGuest;
         OpenCommand = new AsyncRelayCommand(OpenAsync);
     }
+
+    public bool CanInviteFriends { get; }
 
     public bool IsOpen
     {

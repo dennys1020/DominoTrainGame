@@ -14,5 +14,6 @@ public enum FriendActionResult
     SessionNotFound,
     DatabaseUnavailable,
     ServerUnavailable,
-    ServerError
+    ServerError,
+    GuestNotAllowed
 }
