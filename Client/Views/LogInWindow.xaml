@@ -133,6 +133,8 @@
                                             Margin="0,2,0,0" />
                                         <Button
                                             Content="{Binding [GuestButtonLabel], Source={StaticResource Localization}}"
+                                            Command="{Binding DataContext.GuestLogInCommand,
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
                                             Style="{StaticResource PixelButtonStyle}"
                                             FontSize="9"
                                             Height="36"

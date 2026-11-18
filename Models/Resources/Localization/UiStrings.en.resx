@@ -757,4 +757,10 @@ on the train</value>
   <data name="MatchWinnerLabel" xml:space="preserve">
     <value>Winner:</value>
   </data>
+  <data name="GuestLoginUnavailableMessage" xml:space="preserve">
+    <value>Could not sign in as a guest. Please try again.</value>
+  </data>
+  <data name="GuestNotAllowedMessage" xml:space="preserve">
+    <value>Guests can't use this feature. Create an account to access it.</value>
+  </data>
 </root>

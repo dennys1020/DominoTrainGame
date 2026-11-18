@@ -10,6 +10,7 @@ public static class LoginMessageKeys
     private const string LoginFailedMessageKey = "LoginFailedMessage";
     private const string LoginSystemErrorMessageKey = "LoginSystemErrorMessage";
     private const string AlreadyConnectedMessageKey = "AlreadyConnectedMessage";
+    private const string GuestLoginUnavailableMessageKey = "GuestLoginUnavailableMessage";
 
     public static string GetInputMessageKey(LoginInputStatus inputStatus)
     {
@@ -45,6 +46,9 @@ public static class LoginMessageKeys
                 break;
             case LoginResult.AlreadyConnected:
                 messageKey = AlreadyConnectedMessageKey;
+                break;
+            case LoginResult.GuestUnavailable:
+                messageKey = GuestLoginUnavailableMessageKey;
                 break;
             case LoginResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;

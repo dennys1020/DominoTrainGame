@@ -32,6 +32,9 @@ public static class FriendMessageKeys
             case FriendActionResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
+            case FriendActionResult.GuestNotAllowed:
+                messageKey = CommonMessageKeys.GuestNotAllowedMessageKey;
+                break;
             default:
                 messageKey = GetFriendshipMessageKey(status);
                 break;

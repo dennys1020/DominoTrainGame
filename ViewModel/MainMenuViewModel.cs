@@ -29,9 +29,16 @@ public sealed class MainMenuViewModel : ScreenViewModel
         ProfileCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Profile));
         FriendsCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Friends));
 
+        AreAccountFeaturesAvailable = !_gameServices.IsGuest;
         _connectSocialCommand = new AsyncRelayCommand(ConnectSocialAsync);
-        _connectSocialCommand.Execute(null);
+
+        if (AreAccountFeaturesAvailable)
+        {
+            _connectSocialCommand.Execute(null);
+        }
     }
+
+    public bool AreAccountFeaturesAvailable { get; }
 
     public RelayCommand NewGameCommand { get; }
 

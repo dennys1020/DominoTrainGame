@@ -15,6 +15,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="HostVisibility" />
         <BooleanToVisibilityConverter x:Key="ChatNoticeVisibility" />
+        <BooleanToVisibilityConverter x:Key="InviteFriendsVisibility" />
         <Style x:Key="ReadyButtonStyle" TargetType="Button" BasedOn="{StaticResource MatchButtonStyle}">
             <Setter
                 Property="Command"
@@ -587,6 +588,8 @@
                                     <Grid
                                         DataContext="{Binding InviteFriends}"
                                         IsEnabled="{Binding IsIdle}"
+                                        Visibility="{Binding CanInviteFriends,
+                                            Converter={StaticResource InviteFriendsVisibility}}"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center">
                                         <Button

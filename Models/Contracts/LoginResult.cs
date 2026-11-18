@@ -8,5 +8,6 @@ public enum LoginResult
     DatabaseUnavailable,
     AlreadyConnected,
     ServerError,
-    ServerUnavailable
+    ServerUnavailable,
+    GuestUnavailable
 }

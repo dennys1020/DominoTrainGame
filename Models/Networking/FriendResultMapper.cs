@@ -61,6 +61,9 @@ internal static class FriendResultMapper
             case GameServiceFaultCode.PlayerNotFound:
                 status = FriendActionResult.PlayerNotFound;
                 break;
+            case GameServiceFaultCode.GuestNotAllowed:
+                status = FriendActionResult.GuestNotAllowed;
+                break;
             default:
                 status = MapFriendshipFault(faultCode);
                 break;

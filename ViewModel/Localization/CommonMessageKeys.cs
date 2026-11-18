@@ -7,4 +7,5 @@ public static class CommonMessageKeys
     public const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
     public const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
     public const string SessionExpiredMessageKey = "LobbySessionExpiredMessage";
+    public const string GuestNotAllowedMessageKey = "GuestNotAllowedMessage";
 }

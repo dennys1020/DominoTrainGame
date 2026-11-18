@@ -12,9 +12,13 @@ public interface IRemoteGameServices
 
     string SessionToken { get; }
 
+    bool IsGuest { get; }
+
     Task<ConnectionCheckResult> CheckConnectionAsync();
 
     Task<LoginResult> LogInAsync(string identifier, string password);
+
+    Task<LoginResult> LogInAsGuestAsync();
 
     void LogOut();
 
