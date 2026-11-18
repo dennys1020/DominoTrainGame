@@ -41,15 +41,17 @@ public sealed class SignUpUseCases : ISignUpUseCases
         ValidateEmail(normalizedEmail);
         PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
 
-        bool isAvailable = IsAccountAvailable(normalizedUsername, normalizedEmail);
+        bool isAvailable = IsUsernameAndEmailAvailable(normalizedUsername, normalizedEmail);
 
         if (isAvailable)
         {
             string passwordHash = _passwordHasher.Hash(password);
-            _signUpVerifier.SendCode(new PlayerRegistration(normalizedUsername, normalizedEmail, passwordHash));
+            PlayerRegistration registration = new PlayerRegistration(normalizedUsername, normalizedEmail, passwordHash);
+
+            _signUpVerifier.SendVerificationCode(registration);
         }
 
-        LogSignUpAttempt(isAvailable);
+        LogVerificationCodeRequest(isAvailable);
         return isAvailable;
     }
 
@@ -57,22 +59,22 @@ public sealed class SignUpUseCases : ISignUpUseCases
     {
         string normalizedEmail = NormalizeEmail(email);
         string normalizedCode = verificationCode?.Trim() ?? string.Empty;
-        VerifyEmailStatus status = _signUpVerifier.VerifyAccount(normalizedEmail, normalizedCode);
-        bool isCodeAccepted = status == VerifyEmailStatus.Success;
+        VerifyEmailStatus emailStatus = _signUpVerifier.VerifyPendingSignUpCode(normalizedEmail, normalizedCode);
+        bool isCodeAccepted = emailStatus == VerifyEmailStatus.Success;
 
         if (isCodeAccepted)
         {
-            status = CompleteRegistration(normalizedEmail);
+            emailStatus = RegisterVerifiedPlayer(normalizedEmail);
         }
 
-        _logger.InfoFormat("An email verification finished. Status: {0}.", status);
-        return status;
+        _logger.InfoFormat("An email verification finished. Status: {0}.", emailStatus);
+        return emailStatus;
     }
 
     public bool ResendVerificationCode(string email)
     {
         string normalizedEmail = NormalizeEmail(email);
-        bool wasResent = _signUpVerifier.ResendCode(normalizedEmail);
+        bool wasResent = _signUpVerifier.ResendVerificationCode(normalizedEmail);
 
         _logger.InfoFormat("A verification code resend finished. Resent: {0}.", wasResent);
         return wasResent;
@@ -115,7 +117,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
         return isWellFormed;
     }
 
-    private static void LogSignUpAttempt(bool isAvailable)
+    private static void LogVerificationCodeRequest(bool isAvailable)
     {
         if (isAvailable)
         {
@@ -127,18 +129,18 @@ public sealed class SignUpUseCases : ISignUpUseCases
         }
     }
 
-    private bool IsAccountAvailable(string username, string email)
+    private bool IsUsernameAndEmailAvailable(string username, string email)
     {
         bool isAvailable = !_playerRepository.IsRegistrationTaken(username, email);
         return isAvailable;
     }
 
-    private VerifyEmailStatus CompleteRegistration(string email)
+    private VerifyEmailStatus RegisterVerifiedPlayer(string email)
     {
-        bool isPending = _signUpVerifier.TryFindPendingSignUp(email, out PendingSignUp pendingSignUp);
+        PendingSignUp pendingSignUp = _signUpVerifier.FindPendingSignUpByEmail(email);
         bool isRegistered = false;
 
-        if (isPending)
+        if (!pendingSignUp.IsEmpty)
         {
             isRegistered = _playerRepository.CreatePlayer(pendingSignUp.Registration);
         }
