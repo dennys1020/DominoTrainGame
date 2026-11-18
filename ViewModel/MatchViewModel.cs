@@ -43,7 +43,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         DrawTileCommand = new AsyncRelayCommand(DrawTileAsync);
         PassTurnCommand = new AsyncRelayCommand(PassTurnAsync);
         LeaveMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
-        _closeAbandonedMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
+        _closeAbandonedMatchCommand = new AsyncRelayCommand(CloseAbandonedMatchAsync);
 
         ApplyCurrentMatch();
         ApplyCurrentHand();
@@ -234,7 +234,6 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         await RunWhileBusyAsync(_gameServices.LeaveLobbyAsync);
         WindowService.Navigate(Screen.Main);
     }
-
 
     private void ApplySnapshot(MatchSnapshot matchSnapshot)
     {

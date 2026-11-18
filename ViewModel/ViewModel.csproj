@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AsyncCommand.cs" />
     <Compile Include="Commands\AsyncRelayCommand.cs" />
     <Compile Include="Commands\AsyncParameterRelayCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />

@@ -20,6 +20,37 @@ public sealed class ServiceFaultTranslator
         _logger = TraceLogManager.GetLogger(typeof(ServiceFaultTranslator));
     }
 
+    public TResult Execute<TResult>(Func<TResult> operation)
+    {
+        TResult result = Execute(operation, GameServiceFaultCode.InvalidInput);
+        return result;
+    }
+
+    public TResult Execute<TResult>(Func<TResult> operation, GameServiceFaultCode invalidInputFaultCode)
+    {
+        if (operation == null)
+        {
+            throw new ArgumentNullException(nameof(operation));
+        }
+
+        TResult result;
+
+        try
+        {
+            result = operation();
+        }
+        catch (ArgumentException exception)
+        {
+            throw TranslateInvalidInput(exception, invalidInputFaultCode);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            throw TranslateDatabaseUnavailable(exception);
+        }
+
+        return result;
+    }
+
     public FaultException<GameServiceFault> TranslateInvalidInput(
         ArgumentException exception,
         GameServiceFaultCode invalidInputFaultCode)

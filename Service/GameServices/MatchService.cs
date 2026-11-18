@@ -1,7 +1,6 @@
 using System;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
-using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Service.Contracts;
@@ -36,23 +35,8 @@ public sealed class MatchService : IMatchService
         }
 
         PlayerIdentity caller = ResolveCaller(playTileRequest.SessionToken);
-        PlayTileStatus status;
-
-        try
-        {
-            status = _matchUseCases.PlayTile(
-                caller.PlayerId,
-                ToTile(playTileRequest.Tile),
-                playTileRequest.TrainOwnerId);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        PlayTileStatus status = _faultTranslator.Execute(
+            () => _matchUseCases.PlayTile(caller.PlayerId, ToTile(playTileRequest.Tile), playTileRequest.TrainOwnerId));
 
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
@@ -60,20 +44,7 @@ public sealed class MatchService : IMatchService
     public void DrawTile(SessionTokenRequest drawTileRequest)
     {
         PlayerIdentity caller = ResolveCaller(drawTileRequest?.SessionToken);
-        DrawTileStatus status;
-
-        try
-        {
-            status = _matchUseCases.DrawTile(caller.PlayerId);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        DrawTileStatus status = _faultTranslator.Execute(() => _matchUseCases.DrawTile(caller.PlayerId));
 
         GameFaultFactory.ThrowIfRejected(status, DrawTileStatus.Success, MapDrawTileFaultCode);
     }
@@ -81,20 +52,7 @@ public sealed class MatchService : IMatchService
     public void PassTurn(SessionTokenRequest passTurnRequest)
     {
         PlayerIdentity caller = ResolveCaller(passTurnRequest?.SessionToken);
-        PassTurnStatus status;
-
-        try
-        {
-            status = _matchUseCases.PassTurn(caller.PlayerId);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        PassTurnStatus status = _faultTranslator.Execute(() => _matchUseCases.PassTurn(caller.PlayerId));
 
         GameFaultFactory.ThrowIfRejected(status, PassTurnStatus.Success, MapPassTurnFaultCode);
     }
@@ -102,20 +60,7 @@ public sealed class MatchService : IMatchService
     public void LeaveMatch(SessionTokenRequest leaveMatchRequest)
     {
         PlayerIdentity caller = ResolveCaller(leaveMatchRequest?.SessionToken);
-        bool wasRemoved;
-
-        try
-        {
-            wasRemoved = _matchUseCases.LeaveMatch(caller.PlayerId);
-        }
-        catch (ArgumentException exception)
-        {
-            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
-        }
-        catch (DatabaseUnavailableException exception)
-        {
-            throw _faultTranslator.TranslateDatabaseUnavailable(exception);
-        }
+        bool wasRemoved = _faultTranslator.Execute(() => _matchUseCases.LeaveMatch(caller.PlayerId));
 
         GameFaultFactory.ThrowIfRejected(wasRemoved, GameServiceFaultCode.MatchNotFound);
     }

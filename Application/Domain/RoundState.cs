@@ -184,6 +184,7 @@ public sealed class RoundState
         int leavingIndex = _playerIds.IndexOf(playerId);
         bool wasPlayerTurn = leavingIndex == _currentTurnIndex;
 
+        Boneyard.ReturnTiles(_handsByPlayerId[playerId]);
         _playerIds.RemoveAt(leavingIndex);
         _handsByPlayerId.Remove(playerId);
         _consecutivePasserIds.Remove(playerId);
@@ -191,7 +192,7 @@ public sealed class RoundState
         AdjustTurnAfterRemoval(leavingIndex, wasPlayerTurn);
     }
 
-    private  void AdjustTurnAfterRemoval(int leavingIndex, bool wasPlayerTurn)
+    private void AdjustTurnAfterRemoval(int leavingIndex, bool wasPlayerTurn)
     {
         bool hasPlayersLeft = _playerIds.Any();
 

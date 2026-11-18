@@ -17,8 +17,8 @@ public sealed class GuestLoginUseCasesTests
     private const int ExpectedCallCount = 1;
     private const int RetryCallCount = 2;
     private const int MaximumUsernameAttempts = 5;
-    private const string FirstGuestUsername = "Invitado111111";
-    private const string SecondGuestUsername = "Invitado222222";
+    private const string FirstGuestUsername = "Guest111111";
+    private const string SecondGuestUsername = "Guest222222";
     private const string DatabaseErrorMessage = "The database is unavailable.";
 
     private IPlayerRepository _playerRepository;

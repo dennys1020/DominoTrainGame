@@ -121,6 +121,7 @@
     <Compile Include="Results\JoinLobbyStatus.cs" />
     <Compile Include="Results\SendMessageStatus.cs" />
     <Compile Include="Security\GuestUsernameGenerator.cs" />
+    <Compile Include="Security\SecureRandomNumber.cs" />
     <Compile Include="Security\LobbyCodeGenerator.cs" />
     <Compile Include="Security\TileShuffler.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
