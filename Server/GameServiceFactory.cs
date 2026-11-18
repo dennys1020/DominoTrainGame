@@ -7,6 +7,7 @@ using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Email;
 using DominoTrainGame.Server.Persistence.Time;
 using DominoTrainGame.Server.Service.Callbacks;
 using DominoTrainGame.Server.Service.Contracts;
@@ -29,7 +30,13 @@ internal static class GameServiceFactory
         ILoginUseCases loginUseCases = new LoginUseCases(playerRepository, passwordHasher);
         IGuestUsernameGenerator guestUsernameGenerator = new GuestUsernameGenerator();
         IGuestLoginUseCases guestLoginUseCases = new GuestLoginUseCases(playerRepository, guestUsernameGenerator);
-        ISignUpUseCases signUpUseCases = new SignUpUseCases(playerRepository, passwordHasher);
+        IClock clock = new SystemClock();
+        PendingSignUpRegistry pendingSignUps = new PendingSignUpRegistry(clock);
+        SignUpVerifier signUpVerifier = new SignUpVerifier(
+            pendingSignUps,
+            new VerificationCodeGenerator(),
+            new SmtpEmailSender());
+        ISignUpUseCases signUpUseCases = new SignUpUseCases(playerRepository, passwordHasher, signUpVerifier);
 
         PlayerSessionRegistry<IGameClientCallback> lobbySessions = new PlayerSessionRegistry<IGameClientCallback>();
         IGameNotifier gameNotifier = new CallbackGameNotifier(lobbySessions);
@@ -39,7 +46,6 @@ internal static class GameServiceFactory
         IChatMessageFilter chatMessageFilter = new ChatMessageFilter(forbiddenWordSource);
         ISanctionRepository sanctionRepository = new SanctionRepository(databaseExecutor);
         ChatInfractionRegistry chatInfractions = new ChatInfractionRegistry();
-        IClock clock = new SystemClock();
         IChatSanctionUseCases chatSanctionUseCases = new ChatSanctionUseCases(
             sanctionRepository,
             chatInfractions,

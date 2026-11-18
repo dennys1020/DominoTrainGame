@@ -55,6 +55,12 @@ public sealed class PlayerRepository : IPlayerRepository
         return guest;
     }
 
+    public bool IsRegistrationTaken(string username, string email)
+    {
+        bool isTaken = _databaseExecutor.Execute(context => IsUsernameOrEmailInUse(context, username, email));
+        return isTaken;
+    }
+
     private static List<PlayerCredentials> QueryCredentials(DominoGameDBEntities context, string identifier)
     {
         List<PlayerCredentials> matches = context.Players
@@ -75,7 +81,7 @@ public sealed class PlayerRepository : IPlayerRepository
 
         using (DbContextTransaction transaction = context.Database.BeginTransaction(IsolationLevel.Serializable))
         {
-            isRegistered = !IsRegistrationTaken(context, registration);
+            isRegistered = !IsUsernameOrEmailInUse(context, registration.Username, registration.Email);
 
             if (isRegistered)
             {
@@ -88,12 +94,12 @@ public sealed class PlayerRepository : IPlayerRepository
         return isRegistered;
     }
 
-    private static bool IsRegistrationTaken(DominoGameDBEntities context, PlayerRegistration registration)
+    private static bool IsUsernameOrEmailInUse(DominoGameDBEntities context, string username, string email)
     {
-        bool isTaken = context.Players
+        bool isInUse = context.Players
             .AsNoTracking()
-            .Any(player => player.Username == registration.Username || player.Email == registration.Email);
-        return isTaken;
+            .Any(player => player.Username == username || player.Email == email);
+        return isInUse;
     }
 
     private static void InsertPlayer(DominoGameDBEntities context, PlayerRegistration registration)

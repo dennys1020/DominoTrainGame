@@ -9,4 +9,6 @@ public interface IPlayerRepository
     bool CreatePlayer(PlayerRegistration registration);
 
     PlayerIdentity CreateGuest(string username);
+
+    bool IsRegistrationTaken(string username, string email);
 }
