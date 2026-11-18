@@ -105,5 +105,23 @@ public enum GameServiceFaultCode
     DominoSetTooSmall,
 
     [EnumMember]
-    GuestNotAllowed
+    GuestNotAllowed,
+
+    [EnumMember]
+    EmailUnavailable,
+
+    [EnumMember]
+    VerificationNotFound,
+
+    [EnumMember]
+    InvalidVerificationCode,
+
+    [EnumMember]
+    VerificationCodeExpired,
+
+    [EnumMember]
+    TooManyVerificationAttempts,
+
+    [EnumMember]
+    AccountAlreadyExists
 }

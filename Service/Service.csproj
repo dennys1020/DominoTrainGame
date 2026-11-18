@@ -110,6 +110,8 @@
     <Compile Include="DataContracts\RoundEndedMessage.cs" />
     <Compile Include="DataContracts\MatchEndedMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />
+    <Compile Include="DataContracts\VerifyEmailRequest.cs" />
+    <Compile Include="DataContracts\ResendVerificationCodeRequest.cs" />
     <Compile Include="GameServices\AuthenticationService.cs" />
     <Compile Include="GameServices\ConnectionService.cs" />
     <Compile Include="Callbacks\CallbackGameNotifier.cs" />
