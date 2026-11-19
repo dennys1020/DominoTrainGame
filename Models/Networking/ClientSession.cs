@@ -16,6 +16,7 @@ public sealed class ClientSession
     private int _currentPlayerId;
     private bool _isGuest;
     private string _sessionToken = string.Empty;
+    private string _pendingVerificationEmail = string.Empty;
     private SynchronizationContext _callerContext = new SynchronizationContext();
     private MatchSnapshot _matchSnapshot = MatchSnapshot.Empty;
     private PlayerHand _playerHand = PlayerHand.Empty;
@@ -111,6 +112,21 @@ public sealed class ClientSession
         }
     }
 
+    public string PendingVerificationEmail
+    {
+        get
+        {
+            string pendingVerificationEmail;
+
+            lock (_sessionSyncRoot)
+            {
+                pendingVerificationEmail = _pendingVerificationEmail;
+            }
+
+            return pendingVerificationEmail;
+        }
+    }
+
     public SynchronizationContext CallerContext
     {
         get
@@ -134,6 +150,14 @@ public sealed class ClientSession
             _currentPlayerId = playerId;
             _sessionToken = sessionToken ?? string.Empty;
             _isGuest = false;
+        }
+    }
+
+    public void StorePendingVerificationEmail(string email)
+    {
+        lock (_sessionSyncRoot)
+        {
+            _pendingVerificationEmail = email ?? string.Empty;
         }
     }
 

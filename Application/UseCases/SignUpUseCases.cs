@@ -16,7 +16,9 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     private readonly IPlayerRepository _playerRepository;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly SignUpVerifier _signUpVerifier;
+    private readonly PendingSignUpRegistry _pendingSignUps;
+    private readonly IVerificationCodeGenerator _codeGenerator;
+    private readonly IEmailSender _emailSender;
 
     static SignUpUseCases()
     {
@@ -26,11 +28,15 @@ public sealed class SignUpUseCases : ISignUpUseCases
     public SignUpUseCases(
         IPlayerRepository playerRepository,
         IPasswordHasher passwordHasher,
-        SignUpVerifier signUpVerifier)
+        PendingSignUpRegistry pendingSignUps,
+        IVerificationCodeGenerator codeGenerator,
+        IEmailSender emailSender)
     {
         _playerRepository = playerRepository ?? throw new ArgumentNullException(nameof(playerRepository));
         _passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
-        _signUpVerifier = signUpVerifier ?? throw new ArgumentNullException(nameof(signUpVerifier));
+        _pendingSignUps = pendingSignUps ?? throw new ArgumentNullException(nameof(pendingSignUps));
+        _codeGenerator = codeGenerator ?? throw new ArgumentNullException(nameof(codeGenerator));
+        _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
     }
 
     public bool SignUp(string username, string email, string password)
@@ -48,7 +54,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
             string passwordHash = _passwordHasher.Hash(password);
             PlayerRegistration registration = new PlayerRegistration(normalizedUsername, normalizedEmail, passwordHash);
 
-            _signUpVerifier.SendVerificationCode(registration);
+            SendVerificationCode(registration);
         }
 
         LogVerificationCodeRequest(isAvailable);
@@ -59,7 +65,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
     {
         string normalizedEmail = NormalizeEmail(email);
         string normalizedCode = verificationCode?.Trim() ?? string.Empty;
-        VerifyEmailStatus emailStatus = _signUpVerifier.VerifyPendingSignUpCode(normalizedEmail, normalizedCode);
+        VerifyEmailStatus emailStatus = _pendingSignUps.VerifyPendingSignUpCode(normalizedEmail, normalizedCode);
         bool isCodeAccepted = emailStatus == VerifyEmailStatus.Success;
 
         if (isCodeAccepted)
@@ -71,13 +77,20 @@ public sealed class SignUpUseCases : ISignUpUseCases
         return emailStatus;
     }
 
-    public bool ResendVerificationCode(string email)
+    public ResendVerificationCodeStatus ResendVerificationCode(string email)
     {
         string normalizedEmail = NormalizeEmail(email);
-        bool wasResent = _signUpVerifier.ResendVerificationCode(normalizedEmail);
+        PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(normalizedEmail);
+        ResendVerificationCodeStatus resendStatus = GetResendStatus(pendingSignUp);
+        bool canResend = resendStatus == ResendVerificationCodeStatus.Success;
 
-        _logger.InfoFormat("A verification code resend finished. Resent: {0}.", wasResent);
-        return wasResent;
+        if (canResend)
+        {
+            SendVerificationCode(pendingSignUp.Registration);
+        }
+
+        _logger.InfoFormat("A verification code resend finished. Status: {0}.", resendStatus);
+        return resendStatus;
     }
 
     private static string NormalizeEmail(string email)
@@ -129,6 +142,27 @@ public sealed class SignUpUseCases : ISignUpUseCases
         }
     }
 
+    private void SendVerificationCode(PlayerRegistration registration)
+    {
+        string verificationCode = _codeGenerator.Generate();
+
+        _emailSender.SendVerificationCode(registration.Email, verificationCode);
+        _pendingSignUps.StorePendingSignUp(registration, verificationCode);
+    }
+
+    private ResendVerificationCodeStatus GetResendStatus(PendingSignUp pendingSignUp)
+    {
+        ResendVerificationCodeStatus resendStatus = ResendVerificationCodeStatus.RegistrationNotFound;
+
+        if (!pendingSignUp.IsEmpty)
+        {
+            bool isAvailable = _pendingSignUps.IsResendAvailable(pendingSignUp);
+            resendStatus = isAvailable ? ResendVerificationCodeStatus.Success : ResendVerificationCodeStatus.TooSoon;
+        }
+
+        return resendStatus;
+    }
+
     private bool IsUsernameAndEmailAvailable(string username, string email)
     {
         bool isAvailable = !_playerRepository.IsRegistrationTaken(username, email);
@@ -137,7 +171,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     private VerifyEmailStatus RegisterVerifiedPlayer(string email)
     {
-        PendingSignUp pendingSignUp = _signUpVerifier.FindPendingSignUpByEmail(email);
+        PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(email);
         bool isRegistered = false;
 
         if (!pendingSignUp.IsEmpty)
@@ -145,7 +179,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
             isRegistered = _playerRepository.CreatePlayer(pendingSignUp.Registration);
         }
 
-        _signUpVerifier.DiscardPendingSignUp(email);
+        _pendingSignUps.RemovePendingSignUp(email);
 
         VerifyEmailStatus status = isRegistered ? VerifyEmailStatus.Success : VerifyEmailStatus.AlreadyRegistered;
         return status;

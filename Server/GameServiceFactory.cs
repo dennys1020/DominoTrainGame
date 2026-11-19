@@ -32,11 +32,12 @@ internal static class GameServiceFactory
         IGuestLoginUseCases guestLoginUseCases = new GuestLoginUseCases(playerRepository, guestUsernameGenerator);
         IClock clock = new SystemClock();
         PendingSignUpRegistry pendingSignUps = new PendingSignUpRegistry(clock);
-        SignUpVerifier signUpVerifier = new SignUpVerifier(
+        ISignUpUseCases signUpUseCases = new SignUpUseCases(
+            playerRepository,
+            passwordHasher,
             pendingSignUps,
             new VerificationCodeGenerator(),
             new SmtpEmailSender());
-        ISignUpUseCases signUpUseCases = new SignUpUseCases(playerRepository, passwordHasher, signUpVerifier);
 
         PlayerSessionRegistry<IGameClientCallback> lobbySessions = new PlayerSessionRegistry<IGameClientCallback>();
         IGameNotifier gameNotifier = new CallbackGameNotifier(lobbySessions);

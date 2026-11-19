@@ -5,6 +5,7 @@ public enum SignUpResult
     Success,
     InvalidInput,
     AlreadyExists,
+    EmailUnavailable,
     DatabaseUnavailable,
     ServerError,
     ServerUnavailable

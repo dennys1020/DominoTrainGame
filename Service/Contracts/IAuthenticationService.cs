@@ -25,5 +25,5 @@ public interface IAuthenticationService
 
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
-    bool ResendVerificationCode(ResendVerificationCodeRequest request);
+    void ResendVerificationCode(ResendVerificationCodeRequest request);
 }

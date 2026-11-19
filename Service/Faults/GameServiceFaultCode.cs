@@ -123,5 +123,8 @@ public enum GameServiceFaultCode
     TooManyVerificationAttempts,
 
     [EnumMember]
-    AccountAlreadyExists
+    AccountAlreadyExists,
+
+    [EnumMember]
+    ResendTooSoon
 }

@@ -57,12 +57,53 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.DatabaseUnavailable:
                 signUpResult = SignUpResult.DatabaseUnavailable;
                 break;
+            case GameServiceFaultCode.EmailUnavailable:
+                signUpResult = SignUpResult.EmailUnavailable;
+                break;
             default:
                 signUpResult = SignUpResult.ServerError;
                 break;
         }
 
         return signUpResult;
+    }
+
+    public static EmailVerificationResult MapEmailVerificationFault(GameServiceFaultCode faultCode)
+    {
+        EmailVerificationResult verificationResult;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.InvalidVerificationCode:
+                verificationResult = EmailVerificationResult.InvalidCode;
+                break;
+            case GameServiceFaultCode.VerificationCodeExpired:
+                verificationResult = EmailVerificationResult.CodeExpired;
+                break;
+            case GameServiceFaultCode.TooManyVerificationAttempts:
+                verificationResult = EmailVerificationResult.TooManyAttempts;
+                break;
+            case GameServiceFaultCode.EmailUnavailable:
+                verificationResult = EmailVerificationResult.EmailUnavailable;
+                break;
+            case GameServiceFaultCode.VerificationNotFound:
+                verificationResult = EmailVerificationResult.RegistrationNotFound;
+                break;
+            case GameServiceFaultCode.ResendTooSoon:
+                verificationResult = EmailVerificationResult.ResendTooSoon;
+                break;
+            case GameServiceFaultCode.AccountAlreadyExists:
+                verificationResult = EmailVerificationResult.AlreadyExists;
+                break;
+            case GameServiceFaultCode.DatabaseUnavailable:
+                verificationResult = EmailVerificationResult.DatabaseUnavailable;
+                break;
+            default:
+                verificationResult = EmailVerificationResult.ServerError;
+                break;
+        }
+
+        return verificationResult;
     }
 
     public static LobbyActionResult MapLobbyFault(GameServiceFaultCode faultCode)

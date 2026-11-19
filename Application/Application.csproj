@@ -56,6 +56,7 @@
     <Compile Include="Results\DrawTileStatus.cs" />
     <Compile Include="Results\PassTurnStatus.cs" />
     <Compile Include="Results\VerifyEmailStatus.cs" />
+    <Compile Include="Results\ResendVerificationCodeStatus.cs" />
     <Compile Include="UseCases\PlayerInputValidator.cs" />
     <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />
@@ -126,7 +127,6 @@
     <Compile Include="Security\TileShuffler.cs" />
     <Compile Include="Security\PasswordHasher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UseCases\SignUpVerifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

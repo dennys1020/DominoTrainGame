@@ -65,12 +65,32 @@ public sealed class AuthenticationService : IAuthenticationService
         GameFaultFactory.ThrowIfRejected(status, VerifyEmailStatus.Success, MapVerifyEmailFaultCode);
     }
 
-    public bool ResendVerificationCode(ResendVerificationCodeRequest resendRequest)
+    public void ResendVerificationCode(ResendVerificationCodeRequest resendRequest)
     {
-        bool wasResent = _faultTranslator.Execute(
+        ResendVerificationCodeStatus resendStatus = _faultTranslator.Execute(
             () => _signUpUseCases.ResendVerificationCode(resendRequest?.Email));
 
-        return wasResent;
+        GameFaultFactory.ThrowIfRejected(resendStatus, ResendVerificationCodeStatus.Success, MapResendFaultCode);
+    }
+
+    private static GameServiceFaultCode MapResendFaultCode(ResendVerificationCodeStatus resendStatus)
+    {
+        GameServiceFaultCode faultCode;
+
+        switch (resendStatus)
+        {
+            case ResendVerificationCodeStatus.RegistrationNotFound:
+                faultCode = GameServiceFaultCode.VerificationNotFound;
+                break;
+            case ResendVerificationCodeStatus.TooSoon:
+                faultCode = GameServiceFaultCode.ResendTooSoon;
+                break;
+            default:
+                faultCode = GameServiceFaultCode.InvalidInput;
+                break;
+        }
+
+        return faultCode;
     }
 
     private static GameServiceFaultCode MapVerifyEmailFaultCode(VerifyEmailStatus status)

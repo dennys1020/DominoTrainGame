@@ -8,5 +8,5 @@ public interface ISignUpUseCases
 
     VerifyEmailStatus VerifyEmail(string email, string verificationCode);
 
-    bool ResendVerificationCode(string email);
+    ResendVerificationCodeStatus ResendVerificationCode(string email);
 }
