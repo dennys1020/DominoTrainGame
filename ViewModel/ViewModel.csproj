@@ -59,6 +59,7 @@
     <Compile Include="Common\ScreenViewModel.cs" />
     <Compile Include="Contracts\IWindowService.cs" />
     <Compile Include="Localization\MatchMessageKeys.cs" />
+    <Compile Include="Localization\LeaderboardMessageKeys.cs" />
     <Compile Include="MatchPlayerViewModel.cs" />
     <Compile Include="PlayerResultViewModel.cs" />
     <Compile Include="Navigation\Screen.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MainMenuViewModel.cs" />
     <Compile Include="MatchResultsViewModel.cs" />
+    <Compile Include="LeaderboardViewModel.cs" />
     <Compile Include="MatchViewModel.cs" />
     <Compile Include="NewGameViewModel.cs" />
     <Compile Include="RoomViewModel.cs" />

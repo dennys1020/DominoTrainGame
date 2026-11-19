@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Results;
@@ -14,15 +15,18 @@ namespace DominoTrainGame.Server.Service.Implementation;
 public sealed class MatchService : IMatchService
 {
     private readonly IMatchUseCases _matchUseCases;
+    private readonly ILeaderboardUseCases _leaderboardUseCases;
     private readonly SessionTokenRegistry _sessionToken;
     private readonly ServiceFaultTranslator _faultTranslator;
 
     public MatchService(
         IMatchUseCases matchUseCases,
+        ILeaderboardUseCases leaderboardUseCases,
         SessionTokenRegistry sessionTokenRegistry,
         ServiceFaultTranslator faultTranslator)
     {
         _matchUseCases = matchUseCases ?? throw new ArgumentNullException(nameof(matchUseCases));
+        _leaderboardUseCases = leaderboardUseCases ?? throw new ArgumentNullException(nameof(leaderboardUseCases));
         _sessionToken = sessionTokenRegistry ?? throw new ArgumentNullException(nameof(sessionTokenRegistry));
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
@@ -65,6 +69,15 @@ public sealed class MatchService : IMatchService
         GameFaultFactory.ThrowIfRejected(wasRemoved, GameServiceFaultCode.MatchNotFound);
     }
 
+    public List<LeaderboardEntryData> GetLeaderboard(SessionTokenRequest leaderboardRequest)
+    {
+        ResolveCaller(leaderboardRequest?.SessionToken);
+        IReadOnlyList<LeaderboardEntry> leaderboard = _faultTranslator.Execute(_leaderboardUseCases.GetLeaderboard);
+        List<LeaderboardEntryData> leaderboardData = ToLeaderboardData(leaderboard);
+
+        return leaderboardData;
+    }
+
     private static Tile ToTile(TileData tileData)
     {
         if (tileData == null)
@@ -75,6 +88,24 @@ public sealed class MatchService : IMatchService
         Tile tile = new Tile(tileData.LeftPips, tileData.RightPips);
 
         return tile;
+    }
+
+    private static List<LeaderboardEntryData> ToLeaderboardData(IReadOnlyList<LeaderboardEntry> leaderboard)
+    {
+        List<LeaderboardEntryData> leaderboardData = new List<LeaderboardEntryData>();
+
+        foreach (LeaderboardEntry entry in leaderboard)
+        {
+            leaderboardData.Add(new LeaderboardEntryData
+            {
+                Rank = entry.Rank,
+                Username = entry.Statistics.Username,
+                Wins = entry.Statistics.Wins,
+                GamesPlayed = entry.Statistics.GamesPlayed
+            });
+        }
+
+        return leaderboardData;
     }
 
     private static GameServiceFaultCode MapPlayTileFaultCode(PlayTileStatus status)

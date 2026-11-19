@@ -107,6 +107,7 @@
     <Compile Include="DataContracts\RoundEndReasonCode.cs" />
     <Compile Include="DataContracts\MatchEndReasonCode.cs" />
     <Compile Include="DataContracts\PlayerScoreData.cs" />
+    <Compile Include="DataContracts\LeaderboardEntryData.cs" />
     <Compile Include="DataContracts\RoundEndedMessage.cs" />
     <Compile Include="DataContracts\MatchEndedMessage.cs" />
     <Compile Include="DataContracts\SignUpRequest.cs" />

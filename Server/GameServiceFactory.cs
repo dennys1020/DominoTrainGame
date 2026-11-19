@@ -66,6 +66,7 @@ internal static class GameServiceFactory
             tileShuffler,
             gameNotifier,
             matchResultRepository);
+        ILeaderboardUseCases leaderboardUseCases = new LeaderboardUseCases(matchResultRepository);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(
             lobbyRegistry,
             gameNotifier,
@@ -104,7 +105,11 @@ internal static class GameServiceFactory
             lobbySessionManager,
             faultTranslator);
         FriendService friendService = new FriendService(friendUseCases, socialSessionManager, faultTranslator);
-        MatchService matchService = new MatchService(matchUseCases, sessionTokens, faultTranslator);
+        MatchService matchService = new MatchService(
+            matchUseCases,
+            leaderboardUseCases,
+            sessionTokens,
+            faultTranslator);
 
         IErrorHandler errorHandler = new GameErrorHandler();
         List<ServiceHost> serviceHosts = new List<ServiceHost>

@@ -10,6 +10,9 @@
     MinHeight="480"
     WindowStartupLocation="CenterOwner"
     Style="{StaticResource AppWindowStyle}">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="EmptyLeaderboardVisibility" />
+    </Window.Resources>
     <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -56,7 +59,7 @@
                 Content="{Binding [RefreshButtonLabel], Source={StaticResource Localization}}"
                 Style="{StaticResource PixelButtonStyle}"
                 Margin="16,0,0,0"
-                IsEnabled="{Binding CanRefresh}"
+                IsEnabled="{Binding IsIdle}"
                 Command="{Binding DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
         </Grid>
         <DataGrid
@@ -137,7 +140,8 @@
         </DataGrid>
         <TextBlock
             Grid.Row="4"
-            Text="{Binding StatusMessage}"
+            Text="{Binding [LeaderboardEmptyMessage], Source={StaticResource Localization}}"
+            Visibility="{Binding HasNoEntries, Converter={StaticResource EmptyLeaderboardVisibility}}"
             Foreground="{StaticResource Ink}"
             FontSize="14"
             TextWrapping="Wrap"

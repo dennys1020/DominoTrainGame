@@ -63,6 +63,7 @@
       <xs:enumeration value="VerificationCodeExpired" />
       <xs:enumeration value="TooManyVerificationAttempts" />
       <xs:enumeration value="AccountAlreadyExists" />
+      <xs:enumeration value="ResendTooSoon" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />
@@ -72,4 +73,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="SessionTokenRequest" nillable="true" type="tns:SessionTokenRequest" />
+  <xs:complexType name="ArrayOfLeaderboardEntryData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="LeaderboardEntryData" nillable="true" type="tns:LeaderboardEntryData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfLeaderboardEntryData" nillable="true" type="tns:ArrayOfLeaderboardEntryData" />
+  <xs:complexType name="LeaderboardEntryData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="GamesPlayed" type="xs:int" />
+      <xs:element minOccurs="0" name="Rank" type="xs:int" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Wins" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LeaderboardEntryData" nillable="true" type="tns:LeaderboardEntryData" />
 </xs:schema>

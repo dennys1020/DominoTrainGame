@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
 public static class MatchRanking
 {
-    private const int FirstRank = 1;
+    public const int FirstRank = 1;
 
     public static IReadOnlyList<PlayerMatchResult> RankByLowestScore(
         IReadOnlyDictionary<int, int> totalScoresByPlayerId)
@@ -26,6 +27,24 @@ public static class MatchRanking
         return playerResults;
     }
 
+    public static IReadOnlyList<LeaderboardEntry> RankByMostWins(
+        IReadOnlyList<PlayerStatistics> statisticsByMostWins)
+    {
+        if (statisticsByMostWins == null)
+        {
+            throw new ArgumentNullException(nameof(statisticsByMostWins));
+        }
+
+        List<LeaderboardEntry> leaderboard = new List<LeaderboardEntry>();
+
+        foreach (PlayerStatistics statistics in statisticsByMostWins)
+        {
+            leaderboard.Add(new LeaderboardEntry(CalculateWinsRank(leaderboard, statistics), statistics));
+        }
+
+        return leaderboard;
+    }
+
     private static int CalculateRank(IReadOnlyDictionary<int, int> totalScoresByPlayerId, int totalScore)
     {
         int finalRank = FirstRank;
@@ -39,5 +58,14 @@ public static class MatchRanking
         }
 
         return finalRank;
+    }
+
+    private static int CalculateWinsRank(List<LeaderboardEntry> rankedEntries, PlayerStatistics statistics)
+    {
+        bool tiesPreviousEntry = rankedEntries.Any() && rankedEntries.Last().Statistics.Wins == statistics.Wins;
+        int position = rankedEntries.Count + FirstRank;
+        int rank = tiesPreviousEntry ? rankedEntries.Last().Rank : position;
+
+        return rank;
     }
 }

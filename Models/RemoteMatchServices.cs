@@ -15,12 +15,14 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
     private const string DrawTileOperationName = "draw tile";
     private const string PassTurnOperationName = "pass turn";
     private const string LeaveMatchOperationName = "leave match";
+    private const string LeaderboardOperationName = "leaderboard";
 
     private static readonly ServiceFailureMapping<MatchMoveResult> _playTileFailures;
     private static readonly ServiceFailureMapping<MatchMoveResult> _drawTileFailures;
     private static readonly ServiceFailureMapping<MatchMoveResult> _passTurnFailures;
 
     private static readonly ServiceFailureMapping<MatchMoveResult> _leaveMatchFailures;
+    private static readonly ServiceFailureMapping<LeaderboardStatus> _leaderboardFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -34,6 +36,11 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         _drawTileFailures = CreateFailures(DrawTileOperationName);
         _passTurnFailures = CreateFailures(PassTurnOperationName);
         _leaveMatchFailures = CreateFailures(LeaveMatchOperationName);
+        _leaderboardFailures = new ServiceFailureMapping<LeaderboardStatus>(
+            LeaderboardOperationName,
+            FaultCodeMapper.MapLeaderboardFault,
+            LeaderboardStatus.ServerError,
+            LeaderboardStatus.ServerUnavailable);
     }
 
     public RemoteMatchServices(
@@ -89,6 +96,15 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return leaving;
     }
 
+    public Task<LeaderboardResult> GetLeaderboardAsync()
+    {
+        Task<LeaderboardResult> request = _callGuard.ExecuteAsync(
+            SendLeaderboardRequestAsync,
+            _leaderboardFailures,
+            LeaderboardResult.CreateFailure);
+        return request;
+    }
+
     private static ServiceFailureMapping<MatchMoveResult> CreateFailures(string operationName)
     {
         ServiceFailureMapping<MatchMoveResult> failures = new ServiceFailureMapping<MatchMoveResult>(
@@ -97,6 +113,43 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
             MatchMoveResult.ServerError,
             MatchMoveResult.ServerUnavailable);
         return failures;
+    }
+
+    private static Task<MatchMoveResult> CompleteMoveAsync(
+        MatchServiceClient matchClient,
+        Func<MatchServiceClient, Task> sendMove)
+    {
+        Task<MatchMoveResult> moving = RemoteCallGuard.CompleteCommandAsync(
+            sendMove(matchClient),
+            MatchMoveResult.Success);
+        return moving;
+    }
+
+    private static async Task<LeaderboardResult> RequestLeaderboardAsync(
+        MatchServiceClient matchClient,
+        SessionTokenRequest leaderboardRequest)
+    {
+        LeaderboardEntryData[] responses =
+            await matchClient.GetLeaderboardAsync(leaderboardRequest).ConfigureAwait(false);
+        LeaderboardResult result = new LeaderboardResult(LeaderboardStatus.Success, ToLeaderboardEntries(responses));
+
+        return result;
+    }
+
+    private static List<LeaderboardEntryResult> ToLeaderboardEntries(LeaderboardEntryData[] responses)
+    {
+        List<LeaderboardEntryResult> entries = new List<LeaderboardEntryResult>();
+
+        foreach (LeaderboardEntryData response in responses ?? Array.Empty<LeaderboardEntryData>())
+        {
+            entries.Add(new LeaderboardEntryResult(
+                response.Rank,
+                response.Username,
+                response.Wins,
+                response.GamesPlayed));
+        }
+
+        return entries;
     }
 
     private List<TileSummary> FindHandTiles(int tileId)
@@ -152,22 +205,35 @@ public sealed class RemoteMatchServices : IRemoteMatchServices
         return leaving;
     }
 
-    private async Task<MatchMoveResult> SendMoveAsync(Func<MatchServiceClient, Task> sendMove)
+    private Task<LeaderboardResult> SendLeaderboardRequestAsync()
+    {
+        Task<LeaderboardResult> request = CallMatchServiceAsync(RequestLeaderboardAsync, CreateSessionTokenRequest());
+        return request;
+    }
+
+    private Task<MatchMoveResult> SendMoveAsync(Func<MatchServiceClient, Task> sendMove)
+    {
+        Task<MatchMoveResult> sending = CallMatchServiceAsync(CompleteMoveAsync, sendMove);
+        return sending;
+    }
+
+    private async Task<TResult> CallMatchServiceAsync<TData, TResult>(
+        Func<MatchServiceClient, TData, Task<TResult>> call,
+        TData data)
     {
         MatchServiceClient matchClient = _connectionFactory.CreateMatchClient();
-        MatchMoveResult resultStatus;
+        TResult result;
 
         try
         {
-            await sendMove(matchClient).ConfigureAwait(false);
-            resultStatus = MatchMoveResult.Success;
+            result = await call(matchClient, data).ConfigureAwait(false);
         }
         finally
         {
             _channelCloser.Close(matchClient);
         }
 
-        return resultStatus;
+        return result;
     }
 
     private SessionTokenRequest CreateSessionTokenRequest()

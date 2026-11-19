@@ -51,6 +51,15 @@
   <wsdl:message name="IMatchService_LeaveMatch_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q4="http://dominotraingame/services" name="detail" element="q4:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="IMatchService_GetLeaderboard_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboard" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_GetLeaderboard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLeaderboardResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMatchService_GetLeaderboard_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://dominotraingame/services" name="detail" element="q5:GameServiceFault" />
+  </wsdl:message>
   <wsdl:portType name="IMatchService">
     <wsdl:operation name="PlayTile">
       <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/PlayTile" message="tns:IMatchService_PlayTile_InputMessage" />
@@ -71,6 +80,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/LeaveMatch" message="tns:IMatchService_LeaveMatch_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchResponse" message="tns:IMatchService_LeaveMatch_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/LeaveMatchGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IMatchService_LeaveMatch_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLeaderboard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMatchService/GetLeaderboard" message="tns:IMatchService_GetLeaderboard_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMatchService/GetLeaderboardResponse" message="tns:IMatchService_GetLeaderboard_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IMatchService/GetLeaderboardGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IMatchService_GetLeaderboard_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="MatchService" type="tns:IMatchService">
@@ -114,6 +128,18 @@
     </wsdl:operation>
     <wsdl:operation name="LeaveMatch">
       <soap12:operation soapAction="http://tempuri.org/IMatchService/LeaveMatch" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetLeaderboard">
+      <soap12:operation soapAction="http://tempuri.org/IMatchService/GetLeaderboard" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

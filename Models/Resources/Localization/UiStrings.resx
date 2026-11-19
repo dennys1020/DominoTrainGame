@@ -796,4 +796,19 @@ en el tren</value>
   <data name="VerificationResendTooSoonMessage" xml:space="preserve">
     <value>Espera un momento antes de pedir otro código.</value>
   </data>
+  <data name="LeaderboardServerErrorMessage" xml:space="preserve">
+    <value>No se pudo cargar la tabla de posiciones. Inténtalo de nuevo.</value>
+  </data>
+  <data name="LeaderboardEmptyMessage" xml:space="preserve">
+    <value>Todavía no hay partidas terminadas.</value>
+  </data>
+  <data name="RoundNoticeTitle" xml:space="preserve">
+    <value>Terminó la ronda del doble</value>
+  </data>
+  <data name="RoundNoticeWinnerLabel" xml:space="preserve">
+    <value>Ganó:</value>
+  </data>
+  <data name="RoundNoticeNextRoundLabel" xml:space="preserve">
+    <value>Siguiente ronda: doble</value>
+  </data>
 </root>
