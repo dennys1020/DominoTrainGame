@@ -11,6 +11,7 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 public sealed class MatchResultRepository : IMatchResultRepository
 {
     private const int NoSavedRows = 0;
+    private const byte GuestPlayerFlag = 1;
     private const string PrivateAccessType = "Private";
     private const string FinishedStatus = "Finished";
 
@@ -30,6 +31,16 @@ public sealed class MatchResultRepository : IMatchResultRepository
 
         bool wasSaved = _databaseExecutor.Execute(InsertFinishedMatch, finishedMatch);
         return wasSaved;
+    }
+
+    public IReadOnlyList<PlayerStatistics> GetStatisticsByMostWins(int maximumPlayers)
+    {
+        List<PlayerStatisticsRow> statisticsRows = _databaseExecutor.Execute(
+            QueryStatisticsByMostWins,
+            maximumPlayers);
+        IReadOnlyList<PlayerStatistics> statisticsByMostWins = ToStatistics(statisticsRows);
+
+        return statisticsByMostWins;
     }
 
     private static bool InsertFinishedMatch(DominoGameDBEntities context, FinishedMatchRecord finishedMatch)
@@ -88,5 +99,41 @@ public sealed class MatchResultRepository : IMatchResultRepository
             TotalScore = playerResult.TotalScore
         };
         return matchResult;
+    }
+
+    private static List<PlayerStatisticsRow> QueryStatisticsByMostWins(
+        DominoGameDBEntities context,
+        int maximumPlayers)
+    {
+        List<PlayerStatisticsRow> statisticsRows = (from player in context.Players
+                                                    where player.IsGuest != GuestPlayerFlag
+                                                        && player.MatchResults.Any()
+                                                    let wins = (from matchResult in player.MatchResults
+                                                                where matchResult.FinalRank == MatchRanking.FirstRank
+                                                                select matchResult).Count()
+                                                    let gamesPlayed = player.MatchResults.Count()
+                                                    orderby wins descending, gamesPlayed, player.Username
+                                                    select new PlayerStatisticsRow
+                                                    {
+                                                        Username = player.Username,
+                                                        Wins = wins,
+                                                        GamesPlayed = gamesPlayed
+                                                    }).Take(maximumPlayers).ToList();
+        return statisticsRows;
+    }
+
+    private static IReadOnlyList<PlayerStatistics> ToStatistics(List<PlayerStatisticsRow> statisticsRows)
+    {
+        List<PlayerStatistics> statisticsByMostWins = new List<PlayerStatistics>();
+
+        foreach (PlayerStatisticsRow statisticsRow in statisticsRows)
+        {
+            statisticsByMostWins.Add(new PlayerStatistics(
+                statisticsRow.Username,
+                statisticsRow.Wins,
+                statisticsRow.GamesPlayed));
+        }
+
+        return statisticsByMostWins;
     }
 }

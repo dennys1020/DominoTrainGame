@@ -19,5 +19,7 @@ public interface IRemoteMatchServices
 
     Task<MatchMoveResult> LeaveMatchAsync();
 
+    Task<LeaderboardResult> GetLeaderboardAsync();
+
     IReadOnlyList<RoundSummary> RoundHistory { get; }
 }

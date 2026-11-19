@@ -796,4 +796,19 @@ on the train</value>
   <data name="VerificationResendTooSoonMessage" xml:space="preserve">
     <value>Wait a moment before requesting another code.</value>
   </data>
+  <data name="LeaderboardServerErrorMessage" xml:space="preserve">
+    <value>The leaderboard could not be loaded. Try again.</value>
+  </data>
+  <data name="LeaderboardEmptyMessage" xml:space="preserve">
+    <value>There are no finished matches yet.</value>
+  </data>
+  <data name="RoundNoticeTitle" xml:space="preserve">
+    <value>Round finished: double</value>
+  </data>
+  <data name="RoundNoticeWinnerLabel" xml:space="preserve">
+    <value>Winner:</value>
+  </data>
+  <data name="RoundNoticeNextRoundLabel" xml:space="preserve">
+    <value>Next round: double</value>
+  </data>
 </root>

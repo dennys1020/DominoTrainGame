@@ -85,7 +85,8 @@ internal sealed class WindowFactory
                 windowService,
                 _gameServices,
                 _matchServices),
-            [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization)
+            [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
+            [Screen.Leaderboard] = CreateLeaderboardViewModel
         };
     }
 
@@ -103,6 +104,12 @@ internal sealed class WindowFactory
         window.DataContext = CreateViewModel(screen, windowService);
         window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
         return window;
+    }
+
+    private ScreenViewModel CreateLeaderboardViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new LeaderboardViewModel(windowService, _matchServices);
+        return viewModel;
     }
 
     private ScreenViewModel CreateViewModel(Screen screen, IWindowService windowService)

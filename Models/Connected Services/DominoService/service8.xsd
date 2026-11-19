@@ -49,4 +49,18 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetLeaderboard">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://dominotraingame/services" minOccurs="0" name="leaderboardRequest" nillable="true" type="q5:SessionTokenRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetLeaderboardResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://dominotraingame/services" minOccurs="0" name="GetLeaderboardResult" nillable="true" type="q6:ArrayOfLeaderboardEntryData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

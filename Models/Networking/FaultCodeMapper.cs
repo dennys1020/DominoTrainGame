@@ -263,6 +263,27 @@ internal static class FaultCodeMapper
         return resultStatus;
     }
 
+    public static LeaderboardStatus MapLeaderboardFault(GameServiceFaultCode faultCode)
+    {
+        LeaderboardStatus leaderboardStatus;
+
+        switch (faultCode)
+        {
+            case GameServiceFaultCode.DatabaseUnavailable:
+                leaderboardStatus = LeaderboardStatus.DatabaseUnavailable;
+                break;
+            case GameServiceFaultCode.SessionNotFound:
+            case GameServiceFaultCode.InvalidSessionToken:
+                leaderboardStatus = LeaderboardStatus.SessionNotFound;
+                break;
+            default:
+                leaderboardStatus = LeaderboardStatus.ServerError;
+                break;
+        }
+
+        return leaderboardStatus;
+    }
+
     private static MatchMoveResult MapTurnFault(GameServiceFaultCode faultCode)
     {
         MatchMoveResult resultStatus;

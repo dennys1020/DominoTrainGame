@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ServiceModel;
 using DominoTrainGame.Server.Service.DataContracts;
 using DominoTrainGame.Server.Service.Faults;
@@ -22,4 +23,8 @@ public interface IMatchService
     [OperationContract]
     [FaultContract(typeof(GameServiceFault))]
     void LeaveMatch(SessionTokenRequest leaveMatchRequest);
+
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
+    List<LeaderboardEntryData> GetLeaderboard(SessionTokenRequest leaderboardRequest);
 }

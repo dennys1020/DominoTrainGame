@@ -18,17 +18,23 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private const string LeaveConfirmationMessageKey = "MatchLeaveConfirmationMessage";
     private const string MatchAbandonedMessageKey = "MatchAbandonedMessage";
     private const int FirstTrainIndex = 0;
+    private const int RoundNoticeSeconds = 3;
+    private const string WinnerSeparator = ", ";
+
+    private static readonly TimeSpan _roundNoticeDuration = TimeSpan.FromSeconds(RoundNoticeSeconds);
 
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IMatchEvents _matchEvents;
     private readonly AsyncRelayCommand _closeAbandonedMatchCommand;
+    private readonly AsyncRelayCommand _showRoundNoticeCommand;
 
     private int _enginePips;
     private int _boneyardCount;
     private int _lastRoundEnginePips;
     private bool _isLocalPlayerTurn;
     private bool _hasRoundSummary;
+    private bool _isRoundNoticeVisible;
     private string _turnPlayerUsername = string.Empty;
     private string _lastRoundWinnerUsername = string.Empty;
 
@@ -45,6 +51,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         PassTurnCommand = new AsyncRelayCommand(PassTurnAsync);
         LeaveMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
         _closeAbandonedMatchCommand = new AsyncRelayCommand(CloseAbandonedMatchAsync);
+        _showRoundNoticeCommand = new AsyncRelayCommand(ShowRoundNoticeAsync);
 
         ApplyCurrentMatch();
         ApplyCurrentHand();
@@ -147,6 +154,18 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
+    public bool IsRoundNoticeVisible
+    {
+        get
+        {
+            return _isRoundNoticeVisible;
+        }
+        private set
+        {
+            SetProperty(ref _isRoundNoticeVisible, value);
+        }
+    }
+
     public AsyncRelayCommand DrawTileCommand { get; }
 
     public AsyncRelayCommand PassTurnCommand { get; }
@@ -219,14 +238,37 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ShowRoundSummary(RoundSummary roundSummary)
     {
-        int winnerPlayerId = roundSummary.ScoresByPlayerId
-            .OrderBy(playerScore => playerScore.Value)
-            .Select(playerScore => playerScore.Key)
-            .FirstOrDefault();
-
         LastRoundEnginePips = roundSummary.EnginePips;
-        LastRoundWinnerUsername = FindUsername(_matchServices.CurrentMatch.Players, winnerPlayerId);
+        LastRoundWinnerUsername = string.Join(WinnerSeparator, FindRoundWinnerUsernames(roundSummary));
         HasRoundSummary = true;
+
+        if (_showRoundNoticeCommand.CanExecute(null))
+        {
+            _showRoundNoticeCommand.Execute(null);
+        }
+    }
+
+    private List<string> FindRoundWinnerUsernames(RoundSummary roundSummary)
+    {
+        int lowestRoundScore = roundSummary.ScoresByPlayerId.Values.DefaultIfEmpty().Min();
+        List<string> winnerUsernames = new List<string>();
+
+        foreach (KeyValuePair<int, int> playerScore in roundSummary.ScoresByPlayerId)
+        {
+            if (playerScore.Value == lowestRoundScore)
+            {
+                winnerUsernames.Add(FindUsername(_matchServices.CurrentMatch.Players, playerScore.Key));
+            }
+        }
+
+        return winnerUsernames;
+    }
+
+    private async Task ShowRoundNoticeAsync()
+    {
+        IsRoundNoticeVisible = true;
+        await Task.Delay(_roundNoticeDuration);
+        IsRoundNoticeVisible = false;
     }
 
     private async Task CloseAbandonedMatchAsync()

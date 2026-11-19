@@ -113,6 +113,9 @@
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.FriendResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LeaderboardEntryData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.LobbyResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -197,6 +200,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\FriendListResult.cs" />
+    <Compile Include="Contracts\LeaderboardEntryResult.cs" />
+    <Compile Include="Contracts\LeaderboardResult.cs" />
+    <Compile Include="Contracts\LeaderboardStatus.cs" />
     <Compile Include="Contracts\PendingFriendshipListResult.cs" />
     <Compile Include="Contracts\PendingFriendshipResult.cs" />
     <Compile Include="Contracts\FriendResult.cs" />

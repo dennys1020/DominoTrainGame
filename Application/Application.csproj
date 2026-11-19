@@ -88,6 +88,8 @@
     <Compile Include="UseCases\ILobbyUseCases.cs" />
     <Compile Include="UseCases\IMatchUseCases.cs" />
     <Compile Include="UseCases\MatchUseCases.cs" />
+    <Compile Include="UseCases\ILeaderboardUseCases.cs" />
+    <Compile Include="UseCases\LeaderboardUseCases.cs" />
     <Compile Include="Domain\LobbyPlayerState.cs" />
     <Compile Include="Domain\LobbyRoster.cs" />
     <Compile Include="Domain\LobbyState.cs" />
@@ -97,6 +99,8 @@
     <Compile Include="Domain\DominoSet.cs" />
     <Compile Include="Domain\MatchState.cs" />
     <Compile Include="Domain\MatchRanking.cs" />
+    <Compile Include="Domain\LeaderboardEntry.cs" />
+    <Compile Include="Domain\PlayerStatistics.cs" />
     <Compile Include="Domain\PlayerMatchResult.cs" />
     <Compile Include="Domain\RoundState.cs" />
     <Compile Include="Domain\RoundEndReason.cs" />

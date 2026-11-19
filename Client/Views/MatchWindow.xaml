@@ -290,6 +290,32 @@
                         </Border>
                     </Grid>
                 </Grid>
+                <Grid Visibility="{Binding IsRoundNoticeVisible, Converter={StaticResource BoardVisibility}}">
+                    <Rectangle Fill="{StaticResource Ink}" Opacity="0.55" />
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                        <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8" MinWidth="480">
+                            <StackPanel AutomationProperties.LiveSetting="Assertive">
+                                <TextBlock
+                                    Style="{StaticResource MatchSectionStyle}"
+                                    FontSize="16"
+                                    TextAlignment="Center"
+                                    Margin="0,0,0,20">
+                                    <Run Text="{Binding [RoundNoticeTitle], Source={StaticResource Localization}, Mode=OneWay}" />
+                                    <Run Text="{Binding LastRoundEnginePips, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource MatchSectionStyle}" TextAlignment="Center">
+                                    <Run Text="{Binding [RoundNoticeWinnerLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                    <Run Text="{Binding LastRoundWinnerUsername, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource MatchSectionStyle}" TextAlignment="Center" Margin="0">
+                                    <Run Text="{Binding [RoundNoticeNextRoundLabel], Source={StaticResource Localization}, Mode=OneWay}" />
+                                    <Run Text="{Binding EnginePips, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
             </Grid>
         </Viewbox>
     </Grid>
