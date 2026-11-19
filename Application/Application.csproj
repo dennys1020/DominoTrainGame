@@ -96,6 +96,8 @@
     <Compile Include="Domain\Boneyard.cs" />
     <Compile Include="Domain\DominoSet.cs" />
     <Compile Include="Domain\MatchState.cs" />
+    <Compile Include="Domain\MatchRanking.cs" />
+    <Compile Include="Domain\PlayerMatchResult.cs" />
     <Compile Include="Domain\RoundState.cs" />
     <Compile Include="Domain\RoundEndReason.cs" />
     <Compile Include="Domain\MatchEndReason.cs" />
@@ -110,6 +112,8 @@
     <Compile Include="Ports\HandUpdatedNotice.cs" />
     <Compile Include="Ports\RoundEndedNotice.cs" />
     <Compile Include="Ports\MatchEndedNotice.cs" />
+    <Compile Include="Ports\FinishedMatchRecord.cs" />
+    <Compile Include="Ports\IMatchResultRepository.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />
