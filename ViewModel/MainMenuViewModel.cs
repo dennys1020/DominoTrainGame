@@ -10,16 +10,17 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class MainMenuViewModel : ScreenViewModel
 {
-    private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteAuthenticationServices _authenticationServices;
     private readonly IRemoteSocialServices _socialServices;
     private readonly AsyncRelayCommand _connectSocialCommand;
 
     public MainMenuViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices,
+        IRemoteAuthenticationServices authenticationServices,
         IRemoteSocialServices socialServices) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _authenticationServices = authenticationServices
+            ?? throw new ArgumentNullException(nameof(authenticationServices));
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
         NewGameCommand = new RelayCommand(() => WindowService.Navigate(Screen.NewGame));
@@ -29,7 +30,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
         ProfileCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Profile));
         FriendsCommand = new RelayCommand(() => WindowService.ShowDialog(Screen.Friends));
 
-        AreAccountFeaturesAvailable = !_gameServices.IsGuest;
+        AreAccountFeaturesAvailable = !_authenticationServices.IsGuest;
         _connectSocialCommand = new AsyncRelayCommand(ConnectSocialAsync);
 
         if (AreAccountFeaturesAvailable)
@@ -60,7 +61,7 @@ public sealed class MainMenuViewModel : ScreenViewModel
     private void LogOut()
     {
         _socialServices.Disconnect();
-        _gameServices.LogOut();
+        _authenticationServices.LogOut();
         WindowService.Navigate(Screen.Login);
     }
 }

@@ -12,16 +12,17 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class SignUpViewModel : ScreenViewModel
 {
-    private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteAuthenticationServices _authenticationServices;
     private string _email;
     private string _username;
     private string _password;
 
     public SignUpViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices) : base(windowService)
+        IRemoteAuthenticationServices authenticationServices) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _authenticationServices = authenticationServices
+            ?? throw new ArgumentNullException(nameof(authenticationServices));
         _email = string.Empty;
         _username = string.Empty;
         _password = string.Empty;
@@ -87,7 +88,7 @@ public sealed class SignUpViewModel : ScreenViewModel
     private async Task SubmitSignUpAsync()
     {
         SignUpResult signUpResult = await RunWhileBusyAsync(
-            () => _gameServices.SignUpAsync(Username.Trim(), Email.Trim(), Password));
+            () => _authenticationServices.SignUpAsync(Username.Trim(), Email.Trim(), Password));
         HandleSignUpResult(signUpResult);
     }
 

@@ -20,13 +20,19 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
     public InviteFriendsViewModel(
         IWindowService windowService,
         IRemoteGameServices gameServices,
-        IRemoteSocialServices socialServices)
+        IRemoteSocialServices socialServices,
+        IRemoteAuthenticationServices authenticationServices)
     {
+        if (authenticationServices == null)
+        {
+            throw new ArgumentNullException(nameof(authenticationServices));
+        }
+
         _windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _socialServices = socialServices ?? throw new ArgumentNullException(nameof(socialServices));
 
-        CanInviteFriends = !_gameServices.IsGuest;
+        CanInviteFriends = !authenticationServices.IsGuest;
         OpenCommand = new AsyncRelayCommand(OpenAsync);
     }
 

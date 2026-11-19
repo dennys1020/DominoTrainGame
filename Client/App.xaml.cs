@@ -37,12 +37,12 @@ public sealed partial class App : Application
         ClientSession clientSession = new ClientSession();
         GameClientCallback lobbyCallback = new GameClientCallback(clientSession);
         LobbyChannel lobbyChannel = new LobbyChannel(connectionFactory, channelCloser, clientSession, lobbyCallback);
-        IRemoteGameServices gameServices = new RemoteGameServices(
+        IRemoteAuthenticationServices authenticationServices = new RemoteAuthenticationServices(
             connectionFactory,
             channelCloser,
             lobbyChannel,
-            clientSession,
-            lobbyCallback);
+            clientSession);
+        IRemoteGameServices gameServices = new RemoteGameServices(lobbyChannel, clientSession, lobbyCallback);
         SocialClientCallback socialCallback = new SocialClientCallback();
         IRemoteSocialServices socialServices = new RemoteSocialServices(
             connectionFactory,
@@ -54,7 +54,11 @@ public sealed partial class App : Application
             channelCloser,
             clientSession,
             lobbyCallback);
-        RemoteServices remoteServices = new RemoteServices(gameServices, socialServices, matchServices);
+        RemoteServices remoteServices = new RemoteServices(
+            authenticationServices,
+            gameServices,
+            socialServices,
+            matchServices);
         return remoteServices;
     }
 

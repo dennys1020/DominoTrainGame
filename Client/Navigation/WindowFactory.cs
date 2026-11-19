@@ -15,6 +15,7 @@ internal sealed class WindowFactory
 {
     private static readonly IReadOnlyDictionary<Screen, Func<Window>> _windowsByScreen;
 
+    private readonly IRemoteAuthenticationServices _authenticationServices;
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IRemoteSocialServices _socialServices;
@@ -55,6 +56,7 @@ internal sealed class WindowFactory
             throw new ArgumentNullException(nameof(remoteServices));
         }
 
+        _authenticationServices = remoteServices.AuthenticationServices;
         _gameServices = remoteServices.GameServices;
         _socialServices = remoteServices.SocialServices;
         _matchServices = remoteServices.MatchServices;
@@ -63,28 +65,15 @@ internal sealed class WindowFactory
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
-            [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
-            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
-            [Screen.Verification] = windowService => new VerificationCodeViewModel(
-                windowService,
-                _gameServices,
-                _localization),
-            [Screen.Main] = windowService => new MainMenuViewModel(
-                windowService,
-                _gameServices,
-                _socialServices),
+            [Screen.Login] = windowService => new LoginViewModel(windowService, _authenticationServices),
+            [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _authenticationServices),
+            [Screen.Verification] = CreateVerificationViewModel,
+            [Screen.Main] = CreateMainMenuViewModel,
             [Screen.NewGame] = windowService => new NewGameViewModel(windowService, _gameServices),
             [Screen.JoinGame] = windowService => new JoinGameViewModel(windowService, _gameServices),
-            [Screen.Room] = windowService => new RoomViewModel(
-                windowService,
-                _gameServices,
-                new InviteFriendsViewModel(windowService, _gameServices, _socialServices),
-                _localization),
+            [Screen.Room] = CreateRoomViewModel,
             [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchServices),
-            [Screen.MatchResults] = windowService => new MatchResultsViewModel(
-                windowService,
-                _gameServices,
-                _matchServices),
+            [Screen.MatchResults] = CreateMatchResultsViewModel,
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
             [Screen.Leaderboard] = CreateLeaderboardViewModel
         };
@@ -104,6 +93,42 @@ internal sealed class WindowFactory
         window.DataContext = CreateViewModel(screen, windowService);
         window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
         return window;
+    }
+
+    private ScreenViewModel CreateVerificationViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new VerificationCodeViewModel(
+            windowService,
+            _authenticationServices,
+            _localization);
+        return viewModel;
+    }
+
+    private ScreenViewModel CreateMainMenuViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new MainMenuViewModel(windowService, _authenticationServices, _socialServices);
+        return viewModel;
+    }
+
+    private ScreenViewModel CreateRoomViewModel(IWindowService windowService)
+    {
+        InviteFriendsViewModel inviteFriendsViewModel = new InviteFriendsViewModel(
+            windowService,
+            _gameServices,
+            _socialServices,
+            _authenticationServices);
+        ScreenViewModel viewModel = new RoomViewModel(
+            windowService,
+            _gameServices,
+            inviteFriendsViewModel,
+            _localization);
+        return viewModel;
+    }
+
+    private ScreenViewModel CreateMatchResultsViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new MatchResultsViewModel(windowService, _gameServices, _matchServices);
+        return viewModel;
     }
 
     private ScreenViewModel CreateLeaderboardViewModel(IWindowService windowService)

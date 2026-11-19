@@ -12,18 +12,6 @@ public interface IRemoteGameServices
 
     string SessionToken { get; }
 
-    string PendingVerificationEmail { get; }
-
-    bool IsGuest { get; }
-
-    Task<ConnectionCheckResult> CheckConnectionAsync();
-
-    Task<LoginResult> LogInAsync(string identifier, string password);
-
-    Task<LoginResult> LogInAsGuestAsync();
-
-    void LogOut();
-
     Task<LobbyResult> CreateLobbyAsync();
 
     Task<LobbyResult> JoinLobbyAsync(string code);
@@ -39,10 +27,4 @@ public interface IRemoteGameServices
     Task<LobbyActionResult> StartMatchAsync();
 
     Task<LobbyActionResult> InviteFriendAsync(string username);
-
-    Task<SignUpResult> SignUpAsync(string username, string email, string password);
-
-    Task<EmailVerificationResult> VerifyEmailAsync(string verificationCode);
-
-    Task<EmailVerificationResult> ResendVerificationCodeAsync();
 }

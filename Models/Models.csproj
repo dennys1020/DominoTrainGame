@@ -79,6 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteMatchServices.cs" />
     <Compile Include="Resources\Localization\UiStrings.Designer.cs" />
+    <Compile Include="Contracts\IRemoteAuthenticationServices.cs" />
     <Compile Include="Contracts\IRemoteGameServices.cs" />
     <Compile Include="Contracts\LoginResult.cs" />
     <Compile Include="Contracts\LobbyActionResult.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Networking\RemoteCallGuard.cs" />
     <Compile Include="Networking\DuplexClientSlot.cs" />
     <Compile Include="Callbacks\GameClientCallback.cs" />
+    <Compile Include="RemoteAuthenticationServices.cs" />
     <Compile Include="RemoteGameServices.cs" />
   </ItemGroup>
   <ItemGroup>

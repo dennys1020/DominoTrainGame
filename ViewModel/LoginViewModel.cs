@@ -12,15 +12,16 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class LoginViewModel : ScreenViewModel
 {
-    private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteAuthenticationServices _authenticationServices;
     private string _usernameOrEmail;
     private string _password;
 
     public LoginViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices) : base(windowService)
+        IRemoteAuthenticationServices authenticationServices) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _authenticationServices = authenticationServices
+            ?? throw new ArgumentNullException(nameof(authenticationServices));
         _usernameOrEmail = string.Empty;
         _password = string.Empty;
 
@@ -82,19 +83,19 @@ public sealed class LoginViewModel : ScreenViewModel
     private async Task SubmitLogInAsync()
     {
         LoginResult loginResult = await RunWhileBusyAsync(
-            () => _gameServices.LogInAsync(UsernameOrEmail.Trim(), Password));
+            () => _authenticationServices.LogInAsync(UsernameOrEmail.Trim(), Password));
         HandleLoginResult(loginResult);
     }
 
     private async Task LogInAsGuestAsync()
     {
-        LoginResult loginResult = await RunWhileBusyAsync<LoginResult>(_gameServices.LogInAsGuestAsync);
+        LoginResult loginResult = await RunWhileBusyAsync<LoginResult>(_authenticationServices.LogInAsGuestAsync);
         HandleLoginResult(loginResult);
     }
 
     private async Task CheckConnectionAsync()
     {
-        ConnectionCheckResult connectionResult = await _gameServices.CheckConnectionAsync();
+        ConnectionCheckResult connectionResult = await _authenticationServices.CheckConnectionAsync();
 
         if (connectionResult != ConnectionCheckResult.Connected)
         {

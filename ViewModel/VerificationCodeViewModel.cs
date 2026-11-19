@@ -28,7 +28,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
 
     private static readonly TimeSpan _countdownStep;
 
-    private readonly IRemoteGameServices _gameServices;
+    private readonly IRemoteAuthenticationServices _authenticationServices;
     private readonly LocalizationViewModel _localization;
     private readonly AsyncRelayCommand _countdownCommand;
     private CancellationTokenSource _countdownCancellation;
@@ -42,10 +42,11 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
 
     public VerificationCodeViewModel(
         IWindowService windowService,
-        IRemoteGameServices gameServices,
+        IRemoteAuthenticationServices authenticationServices,
         LocalizationViewModel localization) : base(windowService)
     {
-        _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
+        _authenticationServices = authenticationServices
+            ?? throw new ArgumentNullException(nameof(authenticationServices));
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
         List<VerificationDigitViewModel> digits = Enumerable
@@ -56,7 +57,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
         Instruction = string.Format(
             CultureInfo.CurrentCulture,
             _localization[InstructionFormatKey],
-            _gameServices.PendingVerificationEmail);
+            _authenticationServices.PendingVerificationEmail);
 
         _countdownCancellation = new CancellationTokenSource();
         _countdownCommand = new AsyncRelayCommand(RunResendCountdownAsync);
@@ -127,7 +128,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
         if (isCodeComplete)
         {
             EmailVerificationResult verificationResult = await RunWhileBusyAsync(
-                _gameServices.VerifyEmailAsync,
+                _authenticationServices.VerifyEmailAsync,
                 verificationCode);
             HandleVerificationResult(verificationResult);
         }
@@ -139,7 +140,8 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
 
     private async Task ResendCodeAsync()
     {
-        EmailVerificationResult resendResult = await RunWhileBusyAsync(_gameServices.ResendVerificationCodeAsync);
+        EmailVerificationResult resendResult = await RunWhileBusyAsync(
+            _authenticationServices.ResendVerificationCodeAsync);
         bool wasResent = resendResult == EmailVerificationResult.Success;
         string messageKey = wasResent
             ? CodeResentMessageKey
