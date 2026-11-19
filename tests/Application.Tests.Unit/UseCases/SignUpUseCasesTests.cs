@@ -42,6 +42,7 @@ public sealed class SignUpUseCasesTests
     private const string WrongVerificationCode = "654321";
     private const string DatabaseErrorMessage = "The database is unavailable.";
     private const string EmailErrorMessage = "The email could not be sent.";
+    private const string Language = "en-US";
 
     private static readonly DateTime _currentTime;
 
@@ -126,7 +127,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_NewPlayer_ReturnsTrue()
     {
-        bool isPending = _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        bool isPending = SignUpWith(NewUsername, NewEmail, ValidPassword);
 
         Assert.That(isPending, Is.True);
     }
@@ -134,15 +135,15 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_NewPlayer_SendsVerificationCodeByEmail()
     {
-        _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        SignUpWith(NewUsername, NewEmail, ValidPassword);
 
-        _emailSender.Received(ExpectedCallCount).SendVerificationCode(NewEmail, VerificationCode);
+        _emailSender.Received(ExpectedCallCount).SendVerificationCode(NewEmail, VerificationCode, Language);
     }
 
     [Test]
     public void Test_SignUp_NewPlayer_DoesNotCreatePlayerBeforeVerification()
     {
-        _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        SignUpWith(NewUsername, NewEmail, ValidPassword);
 
         _playerRepository.DidNotReceive().CreatePlayer(Arg.Any<PlayerRegistration>());
     }
@@ -152,7 +153,7 @@ public sealed class SignUpUseCasesTests
     {
         GivenRegistrationTaken();
 
-        bool isPending = _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        bool isPending = SignUpWith(NewUsername, NewEmail, ValidPassword);
 
         Assert.That(isPending, Is.False);
     }
@@ -162,15 +163,15 @@ public sealed class SignUpUseCasesTests
     {
         GivenRegistrationTaken();
 
-        _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        SignUpWith(NewUsername, NewEmail, ValidPassword);
 
-        _emailSender.DidNotReceive().SendVerificationCode(Arg.Any<string>(), Arg.Any<string>());
+        _emailSender.DidNotReceive().SendVerificationCode(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
     }
 
     [Test]
     public void Test_SignUp_NewPlayer_StoresPasswordHash()
     {
-        _signUpUseCases.SignUp(NewUsername, NewEmail, ValidPassword);
+        SignUpWith(NewUsername, NewEmail, ValidPassword);
 
         Assert.That(FindPendingRegistration().PasswordHash, Is.EqualTo(StoredPasswordHash));
     }
@@ -178,7 +179,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_PaddedPassword_HashesPasswordWithoutTrimming()
     {
-        _signUpUseCases.SignUp(NewUsername, NewEmail, PaddedPassword);
+        SignUpWith(NewUsername, NewEmail, PaddedPassword);
 
         _passwordHasher.Received(ExpectedCallCount).Hash(PaddedPassword);
     }
@@ -186,7 +187,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_PaddedUsername_StoresTrimmedUsername()
     {
-        _signUpUseCases.SignUp(PaddedUsername, NewEmail, ValidPassword);
+        SignUpWith(PaddedUsername, NewEmail, ValidPassword);
 
         Assert.That(FindPendingRegistration().Username, Is.EqualTo(NewUsername));
     }
@@ -194,7 +195,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_PaddedEmail_StoresTrimmedEmail()
     {
-        _signUpUseCases.SignUp(NewUsername, PaddedEmail, ValidPassword);
+        SignUpWith(NewUsername, PaddedEmail, ValidPassword);
 
         Assert.That(FindPendingRegistration().Email, Is.EqualTo(NewEmail));
     }
@@ -202,7 +203,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MaximumLengthUsername_ReturnsTrue()
     {
-        bool isPending = _signUpUseCases.SignUp(CreateText(MaximumUsernameLength), NewEmail, ValidPassword);
+        bool isPending = SignUpWith(CreateText(MaximumUsernameLength), NewEmail, ValidPassword);
 
         Assert.That(isPending, Is.True);
     }
@@ -212,7 +213,7 @@ public sealed class SignUpUseCasesTests
     {
         string maximumLengthEmail = CreateEmail(MaximumEmailLength);
 
-        bool isPending = _signUpUseCases.SignUp(NewUsername, maximumLengthEmail, ValidPassword);
+        bool isPending = SignUpWith(NewUsername, maximumLengthEmail, ValidPassword);
 
         Assert.That(isPending, Is.True);
     }
@@ -220,7 +221,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MinimumLengthPassword_ReturnsTrue()
     {
-        bool isPending = _signUpUseCases.SignUp(NewUsername, NewEmail, CreateText(MinimumPasswordLength));
+        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(MinimumPasswordLength));
 
         Assert.That(isPending, Is.True);
     }
@@ -228,7 +229,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MaximumLengthPassword_ReturnsTrue()
     {
-        bool isPending = _signUpUseCases.SignUp(NewUsername, NewEmail, CreateText(MaximumPasswordLength));
+        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(MaximumPasswordLength));
 
         Assert.That(isPending, Is.True);
     }
@@ -334,7 +335,7 @@ public sealed class SignUpUseCasesTests
     public void Test_SignUp_EmailUnavailable_ThrowsEmailUnavailableException()
     {
         _emailSender
-            .When(sender => sender.SendVerificationCode(NewEmail, VerificationCode))
+            .When(sender => sender.SendVerificationCode(NewEmail, VerificationCode, Language))
             .Throw(new EmailUnavailableException(EmailErrorMessage));
 
         Assert.Throws<EmailUnavailableException>(SignUpWithArrangedData);
@@ -465,7 +466,7 @@ public sealed class SignUpUseCasesTests
         SignUpWithArrangedData();
         WaitForResendCooldown();
 
-        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.Success));
     }
@@ -477,9 +478,9 @@ public sealed class SignUpUseCasesTests
         WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
 
-        _signUpUseCases.ResendVerificationCode(NewEmail);
+        _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
-        _emailSender.Received(ExpectedCallCount).SendVerificationCode(NewEmail, WrongVerificationCode);
+        _emailSender.Received(ExpectedCallCount).SendVerificationCode(NewEmail, WrongVerificationCode, Language);
     }
 
     [Test]
@@ -487,7 +488,7 @@ public sealed class SignUpUseCasesTests
     {
         SignUpWithArrangedData();
 
-        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.TooSoon));
     }
@@ -498,9 +499,9 @@ public sealed class SignUpUseCasesTests
         SignUpWithArrangedData();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
 
-        _signUpUseCases.ResendVerificationCode(NewEmail);
+        _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
-        _emailSender.DidNotReceive().SendVerificationCode(NewEmail, WrongVerificationCode);
+        _emailSender.DidNotReceive().SendVerificationCode(NewEmail, WrongVerificationCode, Language);
     }
 
     [Test]
@@ -508,9 +509,9 @@ public sealed class SignUpUseCasesTests
     {
         SignUpWithArrangedData();
         WaitForResendCooldown();
-        _signUpUseCases.ResendVerificationCode(NewEmail);
+        _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
-        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.TooSoon));
     }
@@ -521,7 +522,7 @@ public sealed class SignUpUseCasesTests
         SignUpWithArrangedData();
         WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
-        _signUpUseCases.ResendVerificationCode(NewEmail);
+        _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         VerifyEmailStatus status = _signUpUseCases.VerifyEmail(NewEmail, VerificationCode);
 
@@ -539,7 +540,7 @@ public sealed class SignUpUseCasesTests
         }
 
         WaitForResendCooldown();
-        _signUpUseCases.ResendVerificationCode(NewEmail);
+        _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         VerifyEmailStatus status = _signUpUseCases.VerifyEmail(NewEmail, VerificationCode);
 
@@ -549,7 +550,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_ResendVerificationCode_NoPendingSignUp_ReturnsRegistrationNotFound()
     {
-        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.RegistrationNotFound));
     }
@@ -561,10 +562,10 @@ public sealed class SignUpUseCasesTests
         WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
         _emailSender
-            .When(sender => sender.SendVerificationCode(NewEmail, WrongVerificationCode))
+            .When(sender => sender.SendVerificationCode(NewEmail, WrongVerificationCode, Language))
             .Throw(new EmailUnavailableException(EmailErrorMessage));
 
-        Action resendCode = () => _signUpUseCases.ResendVerificationCode(NewEmail);
+        Action resendCode = () => _signUpUseCases.ResendVerificationCode(NewEmail, Language);
 
         Assert.Throws<EmailUnavailableException>(resendCode);
     }
@@ -591,9 +592,15 @@ public sealed class SignUpUseCasesTests
             _emailSender);
     }
 
+    private bool SignUpWith(string username, string email, string password)
+    {
+        bool isPending = _signUpUseCases.SignUp(new SignUpDetails(username, email, password), Language);
+        return isPending;
+    }
+
     private void SignUpWithArrangedData()
     {
-        _signUpUseCases.SignUp(_username, _email, _password);
+        SignUpWith(_username, _email, _password);
     }
 
     private void WaitForResendCooldown()

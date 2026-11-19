@@ -1,9 +1,11 @@
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 using DominoTrainGame.Client.Models.Networking;
+using DominoTrainGame.Client.Models.Resources.Localization;
 
 namespace DominoTrainGame.Client.Models;
 
@@ -70,6 +72,8 @@ public sealed class RemoteAuthenticationServices : IRemoteAuthenticationServices
     }
 
     public string PendingVerificationEmail => _session.PendingVerificationEmail;
+
+    private static string CurrentLanguage => (UiStrings.Culture ?? CultureInfo.CurrentUICulture).Name;
 
     public bool IsGuest => _session.IsGuest;
 
@@ -246,7 +250,8 @@ public sealed class RemoteAuthenticationServices : IRemoteAuthenticationServices
             {
                 Username = username,
                 Email = email,
-                Password = password
+                Password = password,
+                Language = CurrentLanguage
             };
 
             bool isRegistered = await authenticationClient.SignUpAsync(request).ConfigureAwait(false);
@@ -298,7 +303,8 @@ public sealed class RemoteAuthenticationServices : IRemoteAuthenticationServices
         {
             ResendVerificationCodeRequest request = new ResendVerificationCodeRequest
             {
-                Email = _session.PendingVerificationEmail
+                Email = _session.PendingVerificationEmail,
+                Language = CurrentLanguage
             };
 
             await authenticationClient.ResendVerificationCodeAsync(request).ConfigureAwait(false);

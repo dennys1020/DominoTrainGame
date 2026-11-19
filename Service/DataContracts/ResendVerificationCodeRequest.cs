@@ -7,4 +7,7 @@ public sealed class ResendVerificationCodeRequest
 {
     [DataMember]
     public string Email { get; set; }
+
+    [DataMember(IsRequired = false)]
+    public string Language { get; set; }
 }

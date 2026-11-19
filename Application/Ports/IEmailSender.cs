@@ -2,5 +2,5 @@ namespace DominoTrainGame.Server.Application.Ports;
 
 public interface IEmailSender
 {
-    void SendVerificationCode(string recipientEmail, string verificationCode);
+    void SendVerificationCode(string recipientEmail, string verificationCode, string language);
 }

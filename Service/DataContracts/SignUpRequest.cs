@@ -13,4 +13,7 @@ public sealed class SignUpRequest
 
     [DataMember]
     public string Password { get; set; }
+
+    [DataMember(IsRequired = false)]
+    public string Language { get; set; }
 }
