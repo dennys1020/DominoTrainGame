@@ -70,8 +70,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
             _logger.InfoFormat("A lobby creation was rejected. PlayerId: {0}. Status: {1}.", host.PlayerId, status);
         }
 
-        LobbyOutcome<CreateLobbyStatus> outcome = new LobbyOutcome<CreateLobbyStatus>(status, lobby);
-        return outcome;
+        LobbyOutcome<CreateLobbyStatus> lobbyCreation = new LobbyOutcome<CreateLobbyStatus>(status, lobby);
+        return lobbyCreation;
     }
 
     public LobbyOutcome<JoinLobbyStatus> JoinLobby(PlayerIdentity member, string code)
@@ -82,19 +82,19 @@ public sealed class LobbyUseCases : ILobbyUseCases
         }
 
         string normalizedCode = _lobbyRegistry.NormalizeCode(code);
-        LobbyOutcome<JoinLobbyStatus> outcome = new LobbyOutcome<JoinLobbyStatus>(
+        LobbyOutcome<JoinLobbyStatus> lobbyJoin = new LobbyOutcome<JoinLobbyStatus>(
             JoinLobbyStatus.PlayerBanned,
             LobbyState.Empty);
         bool isBanned = _chatSanctionUseCases.IsBannedFromPlaying(member.PlayerId);
 
         if (!isBanned)
         {
-            outcome = _lobbyRegistry.Join(member, normalizedCode);
+            lobbyJoin = _lobbyRegistry.Join(member, normalizedCode);
         }
 
-        if (outcome.Status == JoinLobbyStatus.Success)
+        if (lobbyJoin.Status == JoinLobbyStatus.Success)
         {
-            NotifyPlayerJoined(member, outcome.Lobby);
+            NotifyPlayerJoined(member, lobbyJoin.Lobby);
             _friendUseCases.PublishStatus(member.PlayerId);
         }
         else
@@ -102,10 +102,10 @@ public sealed class LobbyUseCases : ILobbyUseCases
             _logger.InfoFormat(
                 "A join request was rejected. PlayerId: {0}. Status: {1}.",
                 member.PlayerId,
-                outcome.Status);
+                lobbyJoin.Status);
         }
 
-        return outcome;
+        return lobbyJoin;
     }
 
     public void LeaveLobby(int playerId)
@@ -141,21 +141,21 @@ public sealed class LobbyUseCases : ILobbyUseCases
     public SelectDominoSetStatus SelectDominoSet(int playerId, int highestDouble)
     {
         DominoSet dominoSet = DominoSet.FromHighestDouble(highestDouble);
-        LobbyOutcome<SelectDominoSetStatus> outcome = _lobbyRegistry.SelectDominoSet(playerId, dominoSet);
+        LobbyOutcome<SelectDominoSetStatus> dominoSetSelection = _lobbyRegistry.SelectDominoSet(playerId, dominoSet);
 
-        if (outcome.Status == SelectDominoSetStatus.Success)
+        if (dominoSetSelection.Status == SelectDominoSetStatus.Success)
         {
-            NotifyDominoSetChanged(playerId, outcome.Lobby);
+            NotifyDominoSetChanged(playerId, dominoSetSelection.Lobby);
         }
         else
         {
             _logger.WarnFormat(
                 "A domino set selection was rejected. PlayerId: {0}. Status: {1}.",
                 playerId,
-                outcome.Status);
+                dominoSetSelection.Status);
         }
 
-        return outcome.Status;
+        return dominoSetSelection.Status;
     }
 
     public SendMessageStatus SendMessage(int playerId, string text)

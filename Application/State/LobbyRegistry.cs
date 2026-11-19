@@ -47,14 +47,14 @@ public sealed class LobbyRegistry
         }
 
         string lobbyCode = code ?? string.Empty;
-        LobbyOutcome<JoinLobbyStatus> outcome;
+        LobbyOutcome<JoinLobbyStatus> lobbyJoin;
 
         lock (_lobbiesLock)
         {
-            outcome = AddPlayer(member, lobbyCode);
+            lobbyJoin = AddPlayer(member, lobbyCode);
         }
 
-        return outcome;
+        return lobbyJoin;
     }
 
     public string NormalizeCode(string code)
@@ -88,14 +88,14 @@ public sealed class LobbyRegistry
             throw new ArgumentNullException(nameof(dominoSet));
         }
 
-        LobbyOutcome<SelectDominoSetStatus> outcome;
+        LobbyOutcome<SelectDominoSetStatus> dominoSetSelection;
 
         lock (_lobbiesLock)
         {
-            outcome = ReplaceDominoSet(playerId, dominoSet);
+            dominoSetSelection = ReplaceDominoSet(playerId, dominoSet);
         }
 
-        return outcome;
+        return dominoSetSelection;
     }
 
     public LobbyState FindLobbyOfPlayer(int playerId)
@@ -161,8 +161,8 @@ public sealed class LobbyRegistry
             _lobbiesByCode[code] = joinedLobby;
         }
 
-        LobbyOutcome<JoinLobbyStatus> outcome = new LobbyOutcome<JoinLobbyStatus>(status, joinedLobby);
-        return outcome;
+        LobbyOutcome<JoinLobbyStatus> lobbyJoin = new LobbyOutcome<JoinLobbyStatus>(status, joinedLobby);
+        return lobbyJoin;
     }
 
     private LobbyOutcome<SelectDominoSetStatus> ReplaceDominoSet(int playerId, DominoSet dominoSet)
@@ -189,8 +189,10 @@ public sealed class LobbyRegistry
             StoreLobby(updatedLobby);
         }
 
-        LobbyOutcome<SelectDominoSetStatus> outcome = new LobbyOutcome<SelectDominoSetStatus>(status, updatedLobby);
-        return outcome;
+        LobbyOutcome<SelectDominoSetStatus> dominoSetSelection = new LobbyOutcome<SelectDominoSetStatus>(
+            status,
+            updatedLobby);
+        return dominoSetSelection;
     }
 
     private void StoreLobby(LobbyState lobby)

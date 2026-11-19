@@ -86,11 +86,13 @@ public static class TileDragDropBehavior
         target.SetValue(IsDragOverProperty, value);
     }
 
-    private static void OnIsTileSourceChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+    private static void OnIsTileSourceChanged(
+        DependencyObject tileObject,
+        DependencyPropertyChangedEventArgs eventArgs)
     {
-        if (target is UIElement tileElement)
+        if (tileObject is UIElement tileElement)
         {
-            bool isTileSource = (bool)e.NewValue;
+            bool isTileSource = (bool)eventArgs.NewValue;
 
             tileElement.MouseMove -= OnTileMouseMove;
 
@@ -101,11 +103,13 @@ public static class TileDragDropBehavior
         }
     }
 
-    private static void OnDropTileCommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+    private static void OnDropTileCommandChanged(
+        DependencyObject trainObject,
+        DependencyPropertyChangedEventArgs eventArgs)
     {
-        if (target is UIElement train)
+        if (trainObject is UIElement train)
         {
-            bool hasCommand = e.NewValue is ICommand;
+            bool hasCommand = eventArgs.NewValue is ICommand;
 
             train.DragEnter -= OnTrainDragOver;
             train.DragOver -= OnTrainDragOver;
@@ -123,10 +127,10 @@ public static class TileDragDropBehavior
         }
     }
 
-    private static void OnTileMouseMove(object sender, MouseEventArgs e)
+    private static void OnTileMouseMove(object hoveredTile, MouseEventArgs eventArgs)
     {
-        FrameworkElement tileElement = (FrameworkElement)sender;
-        bool isDragging = e.LeftButton == MouseButtonState.Pressed && tileElement.DataContext is TileSummary;
+        FrameworkElement tileElement = (FrameworkElement)hoveredTile;
+        bool isDragging = eventArgs.LeftButton == MouseButtonState.Pressed && tileElement.DataContext is TileSummary;
 
         if (isDragging)
         {
@@ -176,27 +180,27 @@ public static class TileDragDropBehavior
         return dragSurface;
     }
 
-    private static void OnTrainDragOver(object sender, DragEventArgs e)
+    private static void OnTrainDragOver(object targetTrain, DragEventArgs eventArgs)
     {
-        DependencyObject train = (DependencyObject)sender;
-        bool canDrop = CanAcceptTile(train, e.Data);
+        DependencyObject train = (DependencyObject)targetTrain;
+        bool canDrop = CanAcceptTile(train, eventArgs.Data);
 
-        e.Effects = canDrop ? DragDropEffects.Move : DragDropEffects.None;
+        eventArgs.Effects = canDrop ? DragDropEffects.Move : DragDropEffects.None;
         SetIsDragOver(train, canDrop);
-        e.Handled = true;
+        eventArgs.Handled = true;
     }
 
-    private static void OnTrainDragLeave(object sender, DragEventArgs e)
+    private static void OnTrainDragLeave(object leftTrain, DragEventArgs eventArgs)
     {
-        SetIsDragOver((DependencyObject)sender, false);
+        SetIsDragOver((DependencyObject)leftTrain, false);
     }
 
-    private static void OnTrainDrop(object sender, DragEventArgs e)
+    private static void OnTrainDrop(object targetTrain, DragEventArgs eventArgs)
     {
-        DependencyObject train = (DependencyObject)sender;
+        DependencyObject train = (DependencyObject)targetTrain;
         ICommand dropTileCommand = GetDropTileCommand(train);
-        object tileId = e.Data.GetData(TileIdFormat);
-        bool canDrop = CanAcceptTile(train, e.Data) && dropTileCommand.CanExecute(tileId);
+        object tileId = eventArgs.Data.GetData(TileIdFormat);
+        bool canDrop = CanAcceptTile(train, eventArgs.Data) && dropTileCommand.CanExecute(tileId);
 
         SetIsDragOver(train, false);
 
@@ -205,7 +209,7 @@ public static class TileDragDropBehavior
             dropTileCommand.Execute(tileId);
         }
 
-        e.Handled = true;
+        eventArgs.Handled = true;
     }
 
     private static bool CanAcceptTile(DependencyObject train, IDataObject data)

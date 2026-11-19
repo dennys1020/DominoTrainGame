@@ -57,13 +57,13 @@ public sealed class TileDragAdorner : Adorner
         drawingContext.DrawRectangle(_tileBrush, null, new Rect(_tileOrigin, _tileSize));
     }
 
-    private static void RejectDropOutsideTrains(object sender, DragEventArgs eventArgs)
+    private static void RejectDropOutsideTrains(object pointerSurface, DragEventArgs eventArgs)
     {
         eventArgs.Effects = DragDropEffects.None;
         eventArgs.Handled = true;
     }
 
-    private void FollowPointer(object sender, DragEventArgs eventArgs)
+    private void FollowPointer(object pointerSurface, DragEventArgs eventArgs)
     {
         _tileOrigin = eventArgs.GetPosition(AdornedElement) - _grabOffset;
         InvalidateVisual();
