@@ -17,6 +17,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 {
     private const string LeaveConfirmationMessageKey = "MatchLeaveConfirmationMessage";
     private const string MatchAbandonedMessageKey = "MatchAbandonedMessage";
+    private const int FirstTrainIndex = 0;
 
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
@@ -262,10 +263,23 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
         foreach (TrainSummary train in trains)
         {
+            bool isLocalPlayerTrain = IsLocalPlayerTrain(train);
             bool canReceiveTile = IsLocalPlayerTurn && IsTrainAvailable(train);
             ICommand dropTileCommand = CreateDropTileCommand(train.TrainId);
+            TrainViewModel trainViewModel = new TrainViewModel(
+                train,
+                isLocalPlayerTrain,
+                canReceiveTile,
+                dropTileCommand);
 
-            Trains.Add(new TrainViewModel(train, canReceiveTile, dropTileCommand));
+            if (isLocalPlayerTrain)
+            {
+                Trains.Insert(FirstTrainIndex, trainViewModel);
+            }
+            else
+            {
+                Trains.Add(trainViewModel);
+            }
         }
     }
 
@@ -279,10 +293,15 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
+    private bool IsLocalPlayerTrain(TrainSummary train)
+    {
+        bool isLocalPlayerTrain = !train.IsMexicanTrain && train.Owner.PlayerId == _gameServices.CurrentPlayerId;
+        return isLocalPlayerTrain;
+    }
+
     private bool IsTrainAvailable(TrainSummary train)
     {
-        bool isOwnTrain = !train.IsMexicanTrain && train.Owner.PlayerId == _gameServices.CurrentPlayerId;
-        bool isAvailable = isOwnTrain || train.IsMexicanTrain || train.IsOpen;
+        bool isAvailable = IsLocalPlayerTrain(train) || train.IsMexicanTrain || train.IsOpen;
         return isAvailable;
     }
 

@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using DominoTrainGame.Client.Models.Contracts;
 
@@ -132,8 +133,47 @@ public static class TileDragDropBehavior
             TileSummary tile = (TileSummary)tileElement.DataContext;
             DataObject draggedTile = new DataObject(TileIdFormat, tile.TileId);
 
+            DragTile(tileElement, draggedTile);
+        }
+    }
+
+    private static void DragTile(FrameworkElement tileElement, DataObject draggedTile)
+    {
+        UIElement dragSurface = FindDragSurface(tileElement);
+        AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(dragSurface);
+        bool canShowDraggedTile = adornerLayer != null;
+        Point grabPoint = Mouse.GetPosition(dragSurface);
+        TileDragAdorner draggedTileAdorner = new TileDragAdorner(dragSurface, tileElement, grabPoint);
+
+        if (canShowDraggedTile)
+        {
+            draggedTileAdorner.Show(adornerLayer);
+        }
+
+        try
+        {
             DragDrop.DoDragDrop(tileElement, draggedTile, DragDropEffects.Move);
         }
+        finally
+        {
+            if (canShowDraggedTile)
+            {
+                draggedTileAdorner.Hide(adornerLayer);
+            }
+        }
+    }
+
+    private static UIElement FindDragSurface(FrameworkElement tileElement)
+    {
+        Window window = Window.GetWindow(tileElement);
+        UIElement dragSurface = tileElement;
+
+        if (window != null && window.Content is UIElement windowContent)
+        {
+            dragSurface = windowContent;
+        }
+
+        return dragSurface;
     }
 
     private static void OnTrainDragOver(object sender, DragEventArgs e)

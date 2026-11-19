@@ -17,9 +17,12 @@
                         <ColumnDefinition Width="2" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding LeftPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <ContentControl Content="{Binding LeftPips}" Style="{StaticResource SideDominoHalfStyle}" />
                     <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
-                    <TextBlock Grid.Column="2" Text="{Binding RightPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <ContentControl
+                        Grid.Column="2"
+                        Content="{Binding RightPips}"
+                        Style="{StaticResource SideDominoHalfStyle}" />
                 </Grid>
             </Border>
         </DataTemplate>
@@ -33,9 +36,12 @@
                         <RowDefinition Height="2" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Text="{Binding LeftPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <ContentControl Content="{Binding LeftPips}" Style="{StaticResource DominoHalfStyle}" />
                     <Rectangle Grid.Row="1" Fill="{StaticResource Ink}" />
-                    <TextBlock Grid.Row="2" Text="{Binding RightPips}" Style="{StaticResource DominoPipTextStyle}" />
+                    <ContentControl
+                        Grid.Row="2"
+                        Content="{Binding RightPips}"
+                        Style="{StaticResource DominoHalfStyle}" />
                 </Grid>
             </Border>
         </DataTemplate>
@@ -64,33 +70,29 @@
                                 Converter={StaticResource BoardVisibility},
                                 FallbackValue=Collapsed}" />
                     </StackPanel>
-                    <ScrollViewer
-                        Grid.Column="1"
-                        HorizontalScrollBarVisibility="Auto"
-                        VerticalScrollBarVisibility="Disabled"
-                        VerticalAlignment="Center">
-                        <ItemsControl ItemsSource="{Binding Tiles}" ItemTemplate="{StaticResource TrainTileTemplate}">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock
+                            Text="{Binding HiddenTileCount, StringFormat=+{0}}"
+                            Style="{StaticResource HiddenTilesCountStyle}"
+                            Visibility="{Binding HasHiddenTiles,
+                                Converter={StaticResource BoardVisibility},
+                                FallbackValue=Collapsed}" />
+                        <ItemsControl
+                            ItemsSource="{Binding VisibleTiles}"
+                            ItemTemplate="{StaticResource TrainTileTemplate}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
-                    </ScrollViewer>
+                    </StackPanel>
                 </Grid>
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="MatchPlayerTemplate">
             <Border Style="{StaticResource MatchPlayerCardStyle}">
-                <StackPanel>
-                    <TextBlock Text="{Binding Username}" Style="{StaticResource TrainLabelStyle}" />
-                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
-                        <TextBlock
-                            Text="{Binding [MatchTilesLabel], Source={StaticResource Localization}}"
-                            Style="{StaticResource MatchStatTextStyle}" />
-                        <TextBlock Text="{Binding HandCount}" Style="{StaticResource MatchStatTextStyle}" />
-                    </StackPanel>
-                </StackPanel>
+                <TextBlock Text="{Binding Username}" Style="{StaticResource TrainLabelStyle}" />
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="ScoreboardRowTemplate">
@@ -185,14 +187,14 @@
                                                     <ColumnDefinition Width="2" />
                                                     <ColumnDefinition Width="*" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock
-                                                    Text="{Binding EnginePips}"
-                                                    Style="{StaticResource DominoPipTextStyle}" />
+                                                <ContentControl
+                                                    Content="{Binding EnginePips}"
+                                                    Style="{StaticResource SideDominoHalfStyle}" />
                                                 <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
-                                                <TextBlock
+                                                <ContentControl
                                                     Grid.Column="2"
-                                                    Text="{Binding EnginePips}"
-                                                    Style="{StaticResource DominoPipTextStyle}" />
+                                                    Content="{Binding EnginePips}"
+                                                    Style="{StaticResource SideDominoHalfStyle}" />
                                             </Grid>
                                         </Border>
                                     </StackPanel>

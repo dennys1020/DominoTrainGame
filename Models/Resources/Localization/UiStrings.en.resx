@@ -688,9 +688,6 @@ on the train</value>
   <data name="MatchTurnOfLabel" xml:space="preserve">
     <value>Turn of:</value>
   </data>
-  <data name="MatchTilesLabel" xml:space="preserve">
-    <value>Tiles:</value>
-  </data>
   <data name="MatchHandLabel" xml:space="preserve">
     <value>Your hand</value>
   </data>

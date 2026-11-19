@@ -135,30 +135,88 @@
         <Setter Property="Margin" Value="0,0,6,0" />
     </Style>
     <Style x:Key="DominoTileBorderStyle" TargetType="Border">
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Background" Value="{StaticResource Mist}" />
         <Setter Property="BorderBrush" Value="{StaticResource Ink}" />
         <Setter Property="BorderThickness" Value="2" />
     </Style>
     <Style x:Key="TrainTileBorderStyle" TargetType="Border" BasedOn="{StaticResource DominoTileBorderStyle}">
-        <Setter Property="Width" Value="64" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="80" />
+        <Setter Property="Height" Value="40" />
         <Setter Property="Margin" Value="0,0,4,0" />
     </Style>
     <Style x:Key="HandTileBorderStyle" TargetType="Border" BasedOn="{StaticResource DominoTileBorderStyle}">
-        <Setter Property="Width" Value="44" />
-        <Setter Property="Height" Value="84" />
+        <Setter Property="Width" Value="52" />
+        <Setter Property="Height" Value="100" />
         <Setter Property="Margin" Value="0,0,8,0" />
         <Setter Property="Cursor" Value="Hand" />
     </Style>
     <Style x:Key="EngineTileBorderStyle" TargetType="Border" BasedOn="{StaticResource DominoTileBorderStyle}">
-        <Setter Property="Width" Value="84" />
-        <Setter Property="Height" Value="42" />
+        <Setter Property="Width" Value="96" />
+        <Setter Property="Height" Value="48" />
         <Setter Property="Background" Value="{StaticResource Aqua}" />
     </Style>
-    <Style x:Key="DominoPipTextStyle" TargetType="TextBlock" BasedOn="{StaticResource PixelTextStyle}">
-        <Setter Property="FontSize" Value="12" />
+    <Style x:Key="DominoFaceImageStyle" TargetType="Image">
+        <Setter Property="Stretch" Value="None" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="NearestNeighbor" />
+        <Setter Property="RenderOptions.EdgeMode" Value="Aliased" />
+        <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips00.png" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding}" Value="1">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips01.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="2">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips02.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="3">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips03.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="4">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips04.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="5">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips05.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="6">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips06.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="7">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips07.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="8">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips08.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="9">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips09.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="10">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips10.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="11">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips11.png" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}" Value="12">
+                <Setter Property="Source" Value="/Client;component/Resources/Images/Pips/Pips12.png" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <DataTemplate x:Key="DominoHalfTemplate">
+        <Image Style="{StaticResource DominoFaceImageStyle}" ToolTip="{Binding}" />
+    </DataTemplate>
+    <Style x:Key="DominoHalfStyle" TargetType="ContentControl">
+        <Setter Property="ContentTemplate" Value="{StaticResource DominoHalfTemplate}" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+    </Style>
+    <Style x:Key="SideDominoHalfStyle" TargetType="ContentControl" BasedOn="{StaticResource DominoHalfStyle}">
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <RotateTransform Angle="90" />
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style x:Key="TrainLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource PixelTextStyle}">
         <Setter Property="FontSize" Value="10" />
@@ -167,6 +225,13 @@
     <Style x:Key="TrainBadgeStyle" TargetType="TextBlock" BasedOn="{StaticResource MatchBodyStyle}">
         <Setter Property="FontSize" Value="13" />
         <Setter Property="Margin" Value="0,4,0,0" />
+        <Setter Property="Padding" Value="6,2" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Background" Value="{StaticResource Amber}" />
+    </Style>
+    <Style x:Key="HiddenTilesCountStyle" TargetType="TextBlock" BasedOn="{StaticResource MatchStatTextStyle}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0,0,8,0" />
     </Style>
     <Style x:Key="TrainRowStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource Glacier}" />
@@ -176,15 +241,19 @@
         <Setter Property="Margin" Value="0,0,0,8" />
         <Setter Property="MinHeight" Value="56" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsOpen}" Value="True">
-                <Setter Property="Background" Value="{StaticResource Mint}" />
-            </DataTrigger>
             <DataTrigger Binding="{Binding IsMexicanTrain}" Value="True">
                 <Setter Property="Background" Value="{StaticResource Seafoam}" />
             </DataTrigger>
             <DataTrigger Binding="{Binding CanReceiveTile}" Value="True">
                 <Setter Property="BorderBrush" Value="{StaticResource Aqua}" />
                 <Setter Property="BorderThickness" Value="4" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsOpen}" Value="True">
+                <Setter Property="Background" Value="{StaticResource Mint}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Amber}" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsLocalPlayerTrain}" Value="True">
+                <Setter Property="BorderThickness" Value="6" />
             </DataTrigger>
             <Trigger Property="behaviors:TileDragDropBehavior.IsDragOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Aqua}" />
