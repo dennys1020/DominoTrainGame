@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using DominoTrainGame.Server.Application.Domain;
 
 namespace DominoTrainGame.Server.Application.State;
@@ -12,25 +11,25 @@ public sealed class MatchRegistry
     private readonly Dictionary<int, MatchState> _matchesByPlayerId = new Dictionary<int, MatchState>();
     private readonly object _matchesLock = new object();
 
-    public bool TryAdd(string code, MatchState match)
+    public bool TryAdd(MatchState match)
     {
-        if (string.IsNullOrWhiteSpace(code))
-        {
-            throw new ArgumentException("The match code cannot be empty.", nameof(code));
-        }
-
         if (match == null)
         {
             throw new ArgumentNullException(nameof(match));
+        }
+
+        if (string.IsNullOrWhiteSpace(match.Code))
+        {
+            throw new ArgumentException("The match code cannot be empty.", nameof(match));
         }
 
         bool wasAdded = false;
 
         lock (_matchesLock)
         {
-            if (CanAdd(code, match))
+            if (CanAdd(match))
             {
-                AddMatch(code, match);
+                AddMatch(match);
                 wasAdded = true;
             }
         }
@@ -67,12 +66,13 @@ public sealed class MatchRegistry
 
         lock (_matchesLock)
         {
-            List<string> matchCodes = _matchesByCode
-                .Where(matchEntry => ReferenceEquals(matchEntry.Value, matchState))
-                .Select(matchEntry => matchEntry.Key)
-                .ToList();
+            bool isRegisteredMatch = _matchesByCode.ContainsKey(matchState.Code)
+                && ReferenceEquals(_matchesByCode[matchState.Code], matchState);
 
-            matchCodes.ForEach(matchCode => _matchesByCode.Remove(matchCode));
+            if (isRegisteredMatch)
+            {
+                _matchesByCode.Remove(matchState.Code);
+            }
 
             foreach(int playerId in matchState.PlayerIds)
             {
@@ -81,9 +81,9 @@ public sealed class MatchRegistry
         }
     }
 
-    private bool CanAdd(string code, MatchState match)
+    private bool CanAdd(MatchState match)
     {
-        bool isCodeAvailable = !_matchesByCode.ContainsKey(code);
+        bool isCodeAvailable = !_matchesByCode.ContainsKey(match.Code);
         bool arePlayersAvailable = true;
 
         foreach (int playerId in match.PlayerIds)
@@ -98,9 +98,9 @@ public sealed class MatchRegistry
         return canAdd;
     }
 
-    private void AddMatch(string code, MatchState match)
+    private void AddMatch(MatchState match)
     {
-        _matchesByCode.Add(code, match);
+        _matchesByCode.Add(match.Code, match);
 
         foreach (int playerId in match.PlayerIds)
         {

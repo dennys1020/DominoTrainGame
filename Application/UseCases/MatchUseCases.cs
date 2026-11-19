@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
@@ -15,17 +16,24 @@ public sealed class MatchUseCases : IMatchUseCases
     private readonly MatchRegistry _matchRegistry;
     private readonly ITileShuffler _tileShuffler;
     private readonly IGameNotifier _gameNotifier;
+    private readonly IMatchResultRepository _matchResultRepository;
 
     static MatchUseCases()
     {
         _logger = TraceLogManager.GetLogger(typeof(MatchUseCases));
     }
 
-    public MatchUseCases(MatchRegistry matchRegistry, ITileShuffler tileShuffler, IGameNotifier gameNotifier)
+    public MatchUseCases(
+        MatchRegistry matchRegistry,
+        ITileShuffler tileShuffler,
+        IGameNotifier gameNotifier,
+        IMatchResultRepository matchResultRepository)
     {
         _matchRegistry = matchRegistry ?? throw new ArgumentNullException(nameof(matchRegistry));
         _tileShuffler = tileShuffler ?? throw new ArgumentNullException(nameof(tileShuffler));
         _gameNotifier = gameNotifier ?? throw new ArgumentNullException(nameof(gameNotifier));
+        _matchResultRepository = matchResultRepository
+            ?? throw new ArgumentNullException(nameof(matchResultRepository));
     }
 
     public bool StartMatch(string code, IReadOnlyList<int> playerIds, DominoSet dominoSet)
@@ -35,8 +43,8 @@ public sealed class MatchUseCases : IMatchUseCases
             throw new ArgumentNullException(nameof(dominoSet));
         }
 
-        MatchState matchState = new MatchState(playerIds, dominoSet, ShuffleTiles(dominoSet));
-        bool wasStarted = _matchRegistry.TryAdd(code, matchState);
+        MatchState matchState = new MatchState(code, playerIds, dominoSet, ShuffleTiles(dominoSet));
+        bool wasStarted = _matchRegistry.TryAdd(matchState);
 
         if (wasStarted)
         {
@@ -257,6 +265,17 @@ public sealed class MatchUseCases : IMatchUseCases
         return notice;
     }
 
+    private static FinishedMatchRecord CreateFinishedMatchRecord(MatchState matchState)
+    {
+        Dictionary<int, int> totalScoresByPlayerId =
+            CollectScoresByPlayer(matchState.PlayerIds, matchState.ScoresByPlayerId);
+        FinishedMatchRecord finishedMatch = new FinishedMatchRecord(
+            matchState.Code,
+            matchState.DominoSet.MaximumPlayerCount,
+            MatchRanking.RankByLowestScore(totalScoresByPlayerId));
+        return finishedMatch;
+    }
+
     private static HandUpdatedNotice CreateHandUpdatedNotice(MatchState matchState, int playerId)
     {
         HandUpdatedNotice notice = new HandUpdatedNotice(playerId, matchState.CurrentRound.GetHand(playerId));
@@ -303,7 +322,7 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             _matchRegistry.RemoveMatch(matchState);
             _logger.InfoFormat("A match was closed because too few players remain. PlayerId: {0}.", playerId);
-            NotifyMatchEnded(matchState, MatchEndReason.NotEnoughPlayers);
+            FinishMatch(matchState, MatchEndReason.NotEnoughPlayers);
         }
     }
 
@@ -333,23 +352,39 @@ public sealed class MatchUseCases : IMatchUseCases
 
         if (isMatchFinished)
         {
-            MatchEndedNotice matchNotice = new MatchEndedNotice(
-                roundNotice.RecipientPlayerIds,
-                MatchEndReason.AllRoundsPlayed);
-            _gameNotifier.NotifyMatchEnded(matchNotice);
+            FinishMatch(matchState, MatchEndReason.AllRoundsPlayed);
         }
     }
 
-    private void NotifyMatchEnded(MatchState matchState, MatchEndReason endReason)
+    private void FinishMatch(MatchState matchState, MatchEndReason endReason)
     {
         MatchEndedNotice notice;
+        FinishedMatchRecord finishedMatch;
 
         lock (matchState.SyncRoot)
         {
             notice = new MatchEndedNotice(new List<int>(matchState.PlayerIds), endReason);
+            finishedMatch = CreateFinishedMatchRecord(matchState);
         }
 
         _gameNotifier.NotifyMatchEnded(notice);
+        SaveMatchResults(finishedMatch);
+    }
+
+    private void SaveMatchResults(FinishedMatchRecord finishedMatch)
+    {
+        try
+        {
+            bool wasSaved = _matchResultRepository.SaveMatchResults(finishedMatch);
+            _logger.InfoFormat(
+                "The match results were processed. MatchCode: {0}. WasSaved: {1}.",
+                finishedMatch.LobbyCode,
+                wasSaved);
+        }
+        catch (DatabaseUnavailableException exception)
+        {
+            _logger.Error("The match results were not saved because the database is unavailable.", exception);
+        }
     }
 
     private void NotifyUpdates(

@@ -18,7 +18,11 @@ public sealed class MatchState
         Empty = new MatchState();
     }
 
-    public MatchState(IReadOnlyList<int> playerIds, DominoSet dominoSet, IReadOnlyList<Tile> shuffledTiles)
+    public MatchState(
+        string code,
+        IReadOnlyList<int> playerIds,
+        DominoSet dominoSet,
+        IReadOnlyList<Tile> shuffledTiles)
     {
         if (playerIds == null)
         {
@@ -35,6 +39,7 @@ public sealed class MatchState
             throw new ArgumentOutOfRangeException(nameof(playerIds));
         }
 
+        Code = code ?? throw new ArgumentNullException(nameof(code));
         DominoSet = dominoSet;
         _playerIds = new List<int>(playerIds);
         SyncRoot = new object();
@@ -49,6 +54,7 @@ public sealed class MatchState
     private MatchState()
     {
         _playerIds = new List<int>();
+        Code = string.Empty;
         DominoSet = DominoSet.DoubleTwelve;
         SyncRoot = new object();
         CurrentRound = RoundState.Empty;
@@ -59,6 +65,8 @@ public sealed class MatchState
     public bool IsEmpty => ReferenceEquals(this, Empty);
 
     public object SyncRoot { get; }
+
+    public string Code { get; }
 
     public DominoSet DominoSet { get; }
 

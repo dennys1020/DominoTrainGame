@@ -17,13 +17,24 @@ public sealed class DatabaseExecutor
             throw new ArgumentNullException(nameof(operation));
         }
 
+        TResult result = Execute<Func<DominoGameDBEntities, TResult>, TResult>(RunOperation, operation);
+        return result;
+    }
+
+    public TResult Execute<TData, TResult>(Func<DominoGameDBEntities, TData, TResult> operation, TData data)
+    {
+        if (operation == null)
+        {
+            throw new ArgumentNullException(nameof(operation));
+        }
+
         TResult result;
 
         try
         {
             using (DominoGameDBEntities context = DatabaseContextFactory.Create())
             {
-                result = operation(context);
+                result = operation(context, data);
             }
         }
         catch (DbEntityValidationException exception)
@@ -57,6 +68,14 @@ public sealed class DatabaseExecutor
                 exception);
         }
 
+        return result;
+    }
+
+    private static TResult RunOperation<TResult>(
+        DominoGameDBEntities context,
+        Func<DominoGameDBEntities, TResult> operation)
+    {
+        TResult result = operation(context);
         return result;
     }
 }

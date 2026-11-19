@@ -60,7 +60,12 @@ internal static class GameServiceFactory
         IFriendUseCases friendUseCases = new FriendUseCases(friendshipRepository, presenceUseCases, socialNotifier);
         MatchRegistry matchRegistry = new MatchRegistry();
         ITileShuffler tileShuffler = new TileShuffler();
-        IMatchUseCases matchUseCases = new MatchUseCases(matchRegistry, tileShuffler, gameNotifier);
+        IMatchResultRepository matchResultRepository = new MatchResultRepository(databaseExecutor);
+        IMatchUseCases matchUseCases = new MatchUseCases(
+            matchRegistry,
+            tileShuffler,
+            gameNotifier,
+            matchResultRepository);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(
             lobbyRegistry,
             gameNotifier,
