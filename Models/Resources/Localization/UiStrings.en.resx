@@ -763,4 +763,40 @@ on the train</value>
   <data name="GuestNotAllowedMessage" xml:space="preserve">
     <value>Guests can't use this feature. Create an account to access it.</value>
   </data>
+  <data name="VerificationInstructionFormat" xml:space="preserve">
+    <value>Enter the 6-digit code we sent to {0}.</value>
+  </data>
+  <data name="VerificationCodeIncompleteMessage" xml:space="preserve">
+    <value>Enter all 6 digits of the code.</value>
+  </data>
+  <data name="AccountVerifiedMessage" xml:space="preserve">
+    <value>Your account was verified. You can now log in.</value>
+  </data>
+  <data name="EmailUnavailableMessage" xml:space="preserve">
+    <value>We could not send the email. Try again later.</value>
+  </data>
+  <data name="InvalidVerificationCodeMessage" xml:space="preserve">
+    <value>The code is not correct.</value>
+  </data>
+  <data name="VerificationCodeExpiredMessage" xml:space="preserve">
+    <value>The code expired. Request a new one with "Resend code".</value>
+  </data>
+  <data name="TooManyVerificationAttemptsMessage" xml:space="preserve">
+    <value>Too many attempts. Request a new code with "Resend code".</value>
+  </data>
+  <data name="VerificationNotFoundMessage" xml:space="preserve">
+    <value>We could not find a pending sign up. Sign up again.</value>
+  </data>
+  <data name="ResendCodeButtonLabel" xml:space="preserve">
+    <value>Resend code</value>
+  </data>
+  <data name="VerificationCodeResentMessage" xml:space="preserve">
+    <value>We sent you a new code. Check your email.</value>
+  </data>
+  <data name="ResendCodeCountdownFormat" xml:space="preserve">
+    <value>Resend code in {0}</value>
+  </data>
+  <data name="VerificationResendTooSoonMessage" xml:space="preserve">
+    <value>Wait a moment before requesting another code.</value>
+  </data>
 </root>

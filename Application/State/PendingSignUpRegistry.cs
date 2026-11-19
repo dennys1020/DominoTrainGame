@@ -7,8 +7,6 @@ namespace DominoTrainGame.Server.Application.State;
 
 public sealed class PendingSignUpRegistry
 {
-    private const int CodeLifetimeMinutes = 10;
-
     private readonly Dictionary<string, PendingSignUp> _pendingSignUpsByEmail =
         new Dictionary<string, PendingSignUp>(StringComparer.OrdinalIgnoreCase);
     private readonly object _pendingSignUpsLock = new object();
@@ -26,8 +24,7 @@ public sealed class PendingSignUpRegistry
             throw new ArgumentNullException(nameof(playerRegistration));
         }
 
-        DateTime expiresAt = _clock.UtcNow.AddMinutes(CodeLifetimeMinutes);
-        PendingSignUp pendingSignUp = new PendingSignUp(playerRegistration, verificationCode, expiresAt);
+        PendingSignUp pendingSignUp = new PendingSignUp(playerRegistration, verificationCode, _clock.UtcNow);
 
         lock (_pendingSignUpsLock)
         {
@@ -51,6 +48,17 @@ public sealed class PendingSignUpRegistry
         }
 
         return status;
+    }
+
+    public bool IsResendAvailable(PendingSignUp pendingSignUp)
+    {
+        if (pendingSignUp == null)
+        {
+            throw new ArgumentNullException(nameof(pendingSignUp));
+        }
+
+        bool isAvailable = pendingSignUp.CanResend(_clock.UtcNow);
+        return isAvailable;
     }
 
     public PendingSignUp FindPendingSignUpByEmail(string email)

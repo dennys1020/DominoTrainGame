@@ -90,6 +90,7 @@
     <Compile Include="Validation\SignUpInputStatus.cs" />
     <Compile Include="Validation\SignUpInputValidator.cs" />
     <Compile Include="VerificationCodeViewModel.cs" />
+    <Compile Include="VerificationDigitViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

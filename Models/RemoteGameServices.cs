@@ -13,10 +13,14 @@ public sealed class RemoteGameServices : IRemoteGameServices
     private const string ConnectionOperationName = "connection";
     private const string LoginOperationName = "login";
     private const string SignUpOperationName = "sign up";
+    private const string VerifyEmailOperationName = "verify email";
+    private const string ResendCodeOperationName = "resend verification code";
 
     private static readonly ServiceFailureMapping<ConnectionCheckResult> _connectionFailures;
     private static readonly ServiceFailureMapping<LoginResult> _loginFailures;
     private static readonly ServiceFailureMapping<SignUpResult> _signUpFailures;
+    private static readonly ServiceFailureMapping<EmailVerificationResult> _verifyEmailFailures;
+    private static readonly ServiceFailureMapping<EmailVerificationResult> _resendCodeFailures;
 
     private readonly IGameConnectionFactory _connectionFactory;
     private readonly GameChannelCloser _channelCloser;
@@ -42,6 +46,16 @@ public sealed class RemoteGameServices : IRemoteGameServices
             FaultCodeMapper.MapSignUpFault,
             SignUpResult.ServerError,
             SignUpResult.ServerUnavailable);
+        _verifyEmailFailures = new ServiceFailureMapping<EmailVerificationResult>(
+            VerifyEmailOperationName,
+            FaultCodeMapper.MapEmailVerificationFault,
+            EmailVerificationResult.ServerError,
+            EmailVerificationResult.ServerUnavailable);
+        _resendCodeFailures = new ServiceFailureMapping<EmailVerificationResult>(
+            ResendCodeOperationName,
+            FaultCodeMapper.MapEmailVerificationFault,
+            EmailVerificationResult.ServerError,
+            EmailVerificationResult.ServerUnavailable);
     }
 
     public RemoteGameServices(
@@ -66,6 +80,8 @@ public sealed class RemoteGameServices : IRemoteGameServices
     public int CurrentPlayerId => _session.CurrentPlayerId;
 
     public string SessionToken => _session.SessionToken;
+
+    public string PendingVerificationEmail => _session.PendingVerificationEmail;
 
     public bool IsGuest => _session.IsGuest;
 
@@ -180,6 +196,22 @@ public sealed class RemoteGameServices : IRemoteGameServices
         SignUpAttempt signUpAttempt = new SignUpAttempt(this, username, email, password);
         Task<SignUpResult> signUp = _callGuard.ExecuteAsync(signUpAttempt.SendAsync, _signUpFailures);
         return signUp;
+    }
+
+    public Task<EmailVerificationResult> VerifyEmailAsync(string verificationCode)
+    {
+        Task<EmailVerificationResult> verifying = _callGuard.ExecuteAsync(
+            () => SendVerifyEmailAsync(verificationCode),
+            _verifyEmailFailures);
+        return verifying;
+    }
+
+    public Task<EmailVerificationResult> ResendVerificationCodeAsync()
+    {
+        Task<EmailVerificationResult> resending = _callGuard.ExecuteAsync(
+            SendResendVerificationCodeAsync,
+            _resendCodeFailures);
+        return resending;
     }
 
     private static Task SendLeaveLobbyAsync(LobbyServiceClient lobbyClient)
@@ -346,6 +378,11 @@ public sealed class RemoteGameServices : IRemoteGameServices
             signUpResult = isRegistered
                 ? SignUpResult.Success
                 : SignUpResult.AlreadyExists;
+
+            if (isRegistered)
+            {
+                _session.StorePendingVerificationEmail(email);
+            }
         }
         finally
         {
@@ -353,6 +390,50 @@ public sealed class RemoteGameServices : IRemoteGameServices
         }
 
         return signUpResult;
+    }
+
+    private async Task<EmailVerificationResult> SendVerifyEmailAsync(string verificationCode)
+    {
+        AuthenticationServiceClient authenticationClient = _connectionFactory.CreateAuthenticationClient();
+
+        try
+        {
+            VerifyEmailRequest request = new VerifyEmailRequest
+            {
+                Email = _session.PendingVerificationEmail,
+                VerificationCode = verificationCode
+            };
+
+            await authenticationClient.VerifyEmailAsync(request).ConfigureAwait(false);
+            _session.StorePendingVerificationEmail(string.Empty);
+        }
+        finally
+        {
+            _channelCloser.Close(authenticationClient);
+        }
+
+        return EmailVerificationResult.Success;
+    }
+
+    private async Task<EmailVerificationResult> SendResendVerificationCodeAsync()
+    {
+        AuthenticationServiceClient authenticationClient = _connectionFactory.CreateAuthenticationClient();
+
+        try
+        {
+            ResendVerificationCodeRequest request = new ResendVerificationCodeRequest
+            {
+                Email = _session.PendingVerificationEmail
+            };
+
+            await authenticationClient.ResendVerificationCodeAsync(request).ConfigureAwait(false);
+        }
+        finally
+        {
+            _channelCloser.Close(authenticationClient);
+        }
+
+        return EmailVerificationResult.Success;
     }
 
     private sealed class LoginAttempt

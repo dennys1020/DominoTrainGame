@@ -7,9 +7,12 @@ namespace DominoTrainGame.Server.Application.State;
 public sealed class PendingSignUp
 {
     private const int MaximumFailedAttempts = 5;
+    private const int CodeLifetimeMinutes = 10;
+    private const int ResendCooldownSeconds = 60;
 
     private readonly string _verificationCode;
     private readonly DateTime _expiresAt;
+    private readonly DateTime _resendAvailableAt;
 
     private int _failedAttempts;
 
@@ -21,11 +24,12 @@ public sealed class PendingSignUp
             DateTime.MinValue);
     }
 
-    public PendingSignUp(PlayerRegistration playerRegistration, string verificationCode, DateTime expiresAt)
+    public PendingSignUp(PlayerRegistration playerRegistration, string verificationCode, DateTime sentAt)
     {
         Registration = playerRegistration ?? throw new ArgumentNullException(nameof(playerRegistration));
         _verificationCode = verificationCode ?? string.Empty;
-        _expiresAt = expiresAt;
+        _expiresAt = sentAt.AddMinutes(CodeLifetimeMinutes);
+        _resendAvailableAt = sentAt.AddSeconds(ResendCooldownSeconds);
     }
 
     public static PendingSignUp Empty { get; }
@@ -33,6 +37,12 @@ public sealed class PendingSignUp
     public bool IsEmpty => ReferenceEquals(this, Empty);
 
     public PlayerRegistration Registration { get; }
+
+    public bool CanResend(DateTime currentTime)
+    {
+        bool canResend = currentTime >= _resendAvailableAt;
+        return canResend;
+    }
 
     public VerifyEmailStatus VerifyCode(string verificationCode, DateTime currentTime)
     {

@@ -65,7 +65,10 @@ internal sealed class WindowFactory
         {
             [Screen.Login] = windowService => new LoginViewModel(windowService, _gameServices),
             [Screen.SignUp] = windowService => new SignUpViewModel(windowService, _gameServices),
-            [Screen.Verification] = windowService => new VerificationCodeViewModel(windowService),
+            [Screen.Verification] = windowService => new VerificationCodeViewModel(
+                windowService,
+                _gameServices,
+                _localization),
             [Screen.Main] = windowService => new MainMenuViewModel(
                 windowService,
                 _gameServices,

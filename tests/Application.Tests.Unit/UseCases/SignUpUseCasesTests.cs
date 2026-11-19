@@ -24,6 +24,7 @@ public sealed class SignUpUseCasesTests
     private const int TooLongPasswordLength = MaximumPasswordLength + 1;
     private const int CodeLifetimeMinutes = 10;
     private const int MaximumFailedAttempts = 5;
+    private const int ResendCooldownSeconds = 60;
     private const char FillerCharacter = 'a';
     private const string NewUsername = "samuel";
     private const string PaddedUsername = "  samuel  ";
@@ -99,11 +100,27 @@ public sealed class SignUpUseCasesTests
     }
 
     [Test]
-    public void Test_Constructor_NullSignUpVerifier_ThrowsArgumentNullException()
+    public void Test_Constructor_NullPendingSignUps_ThrowsArgumentNullException()
     {
-        Action createWithoutVerifier = () => new SignUpUseCases(_playerRepository, _passwordHasher, null);
+        _pendingSignUps = null;
 
-        Assert.Throws<ArgumentNullException>(createWithoutVerifier);
+        Assert.Throws<ArgumentNullException>(CreateSignUpUseCases);
+    }
+
+    [Test]
+    public void Test_Constructor_NullCodeGenerator_ThrowsArgumentNullException()
+    {
+        _codeGenerator = null;
+
+        Assert.Throws<ArgumentNullException>(CreateSignUpUseCases);
+    }
+
+    [Test]
+    public void Test_Constructor_NullEmailSender_ThrowsArgumentNullException()
+    {
+        _emailSender = null;
+
+        Assert.Throws<ArgumentNullException>(CreateSignUpUseCases);
     }
 
     [Test]
@@ -443,19 +460,21 @@ public sealed class SignUpUseCasesTests
     }
 
     [Test]
-    public void Test_ResendVerificationCode_PendingSignUp_ReturnsTrue()
+    public void Test_ResendVerificationCode_AfterCooldown_ReturnsSuccess()
     {
         SignUpWithArrangedData();
+        WaitForResendCooldown();
 
-        bool wasResent = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
 
-        Assert.That(wasResent, Is.True);
+        Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.Success));
     }
 
     [Test]
-    public void Test_ResendVerificationCode_PendingSignUp_SendsNewCode()
+    public void Test_ResendVerificationCode_AfterCooldown_SendsNewCode()
     {
         SignUpWithArrangedData();
+        WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
 
         _signUpUseCases.ResendVerificationCode(NewEmail);
@@ -464,9 +483,43 @@ public sealed class SignUpUseCasesTests
     }
 
     [Test]
+    public void Test_ResendVerificationCode_BeforeCooldown_ReturnsTooSoon()
+    {
+        SignUpWithArrangedData();
+
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+
+        Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.TooSoon));
+    }
+
+    [Test]
+    public void Test_ResendVerificationCode_BeforeCooldown_DoesNotSendEmail()
+    {
+        SignUpWithArrangedData();
+        _codeGenerator.Generate().Returns(WrongVerificationCode);
+
+        _signUpUseCases.ResendVerificationCode(NewEmail);
+
+        _emailSender.DidNotReceive().SendVerificationCode(NewEmail, WrongVerificationCode);
+    }
+
+    [Test]
+    public void Test_ResendVerificationCode_RightAfterResend_ReturnsTooSoon()
+    {
+        SignUpWithArrangedData();
+        WaitForResendCooldown();
+        _signUpUseCases.ResendVerificationCode(NewEmail);
+
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
+
+        Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.TooSoon));
+    }
+
+    [Test]
     public void Test_ResendVerificationCode_NewCode_ReplacesPreviousCode()
     {
         SignUpWithArrangedData();
+        WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
         _signUpUseCases.ResendVerificationCode(NewEmail);
 
@@ -485,6 +538,7 @@ public sealed class SignUpUseCasesTests
             _signUpUseCases.VerifyEmail(NewEmail, WrongVerificationCode);
         }
 
+        WaitForResendCooldown();
         _signUpUseCases.ResendVerificationCode(NewEmail);
 
         VerifyEmailStatus status = _signUpUseCases.VerifyEmail(NewEmail, VerificationCode);
@@ -493,17 +547,18 @@ public sealed class SignUpUseCasesTests
     }
 
     [Test]
-    public void Test_ResendVerificationCode_NoPendingSignUp_ReturnsFalse()
+    public void Test_ResendVerificationCode_NoPendingSignUp_ReturnsRegistrationNotFound()
     {
-        bool wasResent = _signUpUseCases.ResendVerificationCode(NewEmail);
+        ResendVerificationCodeStatus status = _signUpUseCases.ResendVerificationCode(NewEmail);
 
-        Assert.That(wasResent, Is.False);
+        Assert.That(status, Is.EqualTo(ResendVerificationCodeStatus.RegistrationNotFound));
     }
 
     [Test]
     public void Test_ResendVerificationCode_EmailUnavailable_ThrowsEmailUnavailableException()
     {
         SignUpWithArrangedData();
+        WaitForResendCooldown();
         _codeGenerator.Generate().Returns(WrongVerificationCode);
         _emailSender
             .When(sender => sender.SendVerificationCode(NewEmail, WrongVerificationCode))
@@ -528,13 +583,22 @@ public sealed class SignUpUseCasesTests
 
     private void CreateSignUpUseCases()
     {
-        SignUpVerifier signUpVerifier = new SignUpVerifier(_pendingSignUps, _codeGenerator, _emailSender);
-        _signUpUseCases = new SignUpUseCases(_playerRepository, _passwordHasher, signUpVerifier);
+        _signUpUseCases = new SignUpUseCases(
+            _playerRepository,
+            _passwordHasher,
+            _pendingSignUps,
+            _codeGenerator,
+            _emailSender);
     }
 
     private void SignUpWithArrangedData()
     {
         _signUpUseCases.SignUp(_username, _email, _password);
+    }
+
+    private void WaitForResendCooldown()
+    {
+        _clock.UtcNow.Returns(_currentTime.AddSeconds(ResendCooldownSeconds));
     }
 
     private void GivenRegistrationTaken()
