@@ -124,6 +124,7 @@
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Behaviors\PasswordBoxBinding.cs" />
+    <Compile Include="Behaviors\TileDragAdorner.cs" />
     <Compile Include="Behaviors\TileDragDropBehavior.cs" />
     <Compile Include="Navigation\WindowFactory.cs" />
     <Compile Include="Navigation\WindowService.cs" />
@@ -262,6 +263,19 @@
     <Resource Include="Resources\Images\MiniDominoTile.png" />
     <Resource Include="Resources\Images\person.png" />
     <Resource Include="Resources\Images\PixelTrain.png" />
+    <Resource Include="Resources\Images\Pips\Pips00.png" />
+    <Resource Include="Resources\Images\Pips\Pips01.png" />
+    <Resource Include="Resources\Images\Pips\Pips02.png" />
+    <Resource Include="Resources\Images\Pips\Pips03.png" />
+    <Resource Include="Resources\Images\Pips\Pips04.png" />
+    <Resource Include="Resources\Images\Pips\Pips05.png" />
+    <Resource Include="Resources\Images\Pips\Pips06.png" />
+    <Resource Include="Resources\Images\Pips\Pips07.png" />
+    <Resource Include="Resources\Images\Pips\Pips08.png" />
+    <Resource Include="Resources\Images\Pips\Pips09.png" />
+    <Resource Include="Resources\Images\Pips\Pips10.png" />
+    <Resource Include="Resources\Images\Pips\Pips11.png" />
+    <Resource Include="Resources\Images\Pips\Pips12.png" />
     <Resource Include="Resources\Images\search.png" />
     <Resource Include="Resources\Images\trash.png" />
   </ItemGroup>
