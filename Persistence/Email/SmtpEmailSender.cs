@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Net.Mail;
+using System.Resources;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 
@@ -8,11 +9,21 @@ namespace DominoTrainGame.Server.Persistence.Email;
 
 public sealed class SmtpEmailSender : IEmailSender
 {
-    private const string VerificationSubject = "Domino Train - Código de verificación / Verification code";
-    private const string VerificationBodyFormat =
-        "Tu código de verificación es: {0}\r\n\r\nYour verification code is: {0}";
+    private const string TemplatesBaseName = "DominoTrainGame.Server.Persistence.Email.EmailTemplates";
+    private const string VerificationSubjectKey = "VerificationEmailSubject";
+    private const string VerificationBodyFormatKey = "VerificationEmailBodyFormat";
+    private const string EnglishLanguageCode = "en";
 
-    public void SendVerificationCode(string recipientEmail, string verificationCode)
+    private static readonly ResourceManager _emailTemplates;
+    private static readonly CultureInfo _englishCulture;
+
+    static SmtpEmailSender()
+    {
+        _emailTemplates = new ResourceManager(TemplatesBaseName, typeof(SmtpEmailSender).Assembly);
+        _englishCulture = CultureInfo.GetCultureInfo(EnglishLanguageCode);
+    }
+
+    public void SendVerificationCode(string recipientEmail, string verificationCode, string language)
     {
         if (string.IsNullOrWhiteSpace(recipientEmail))
         {
@@ -24,19 +35,46 @@ public sealed class SmtpEmailSender : IEmailSender
             throw new ArgumentException("The verification code cannot be empty.", nameof(verificationCode));
         }
 
-        using (MailMessage message = CreateVerificationMessage(recipientEmail, verificationCode))
+        CultureInfo emailCulture = ResolveCulture(language);
+
+        using (MailMessage message = CreateVerificationMessage(recipientEmail, verificationCode, emailCulture))
         {
             Send(message);
         }
     }
 
-    private static MailMessage CreateVerificationMessage(string recipientEmail, string verificationCode)
+    private static CultureInfo ResolveCulture(string language)
+    {
+        bool isEnglish = (language ?? string.Empty).StartsWith(EnglishLanguageCode, StringComparison.OrdinalIgnoreCase);
+        CultureInfo emailCulture = isEnglish ? _englishCulture : CultureInfo.InvariantCulture;
+        return emailCulture;
+    }
+
+    private static MailMessage CreateVerificationMessage(
+        string recipientEmail,
+        string verificationCode,
+        CultureInfo emailCulture)
     {
         MailMessage message = new MailMessage();
         message.To.Add(recipientEmail);
-        message.Subject = VerificationSubject;
-        message.Body = string.Format(CultureInfo.InvariantCulture, VerificationBodyFormat, verificationCode);
+        message.Subject = GetTemplate(VerificationSubjectKey, emailCulture);
+        message.Body = string.Format(
+            CultureInfo.InvariantCulture,
+            GetTemplate(VerificationBodyFormatKey, emailCulture),
+            verificationCode);
         return message;
+    }
+
+    private static string GetTemplate(string templateKey, CultureInfo emailCulture)
+    {
+        string template = _emailTemplates.GetString(templateKey, emailCulture);
+
+        if (string.IsNullOrEmpty(template))
+        {
+            throw new InvalidOperationException("The email template is missing from the resources.");
+        }
+
+        return template;
     }
 
     private static void Send(MailMessage message)

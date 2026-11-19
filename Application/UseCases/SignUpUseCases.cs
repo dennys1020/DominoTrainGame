@@ -39,22 +39,27 @@ public sealed class SignUpUseCases : ISignUpUseCases
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
     }
 
-    public bool SignUp(string username, string email, string password)
+    public bool SignUp(SignUpDetails detailsS, string language)
     {
-        string normalizedUsername = PlayerInputValidator.NormalizeUsername(username);
-        string normalizedEmail = NormalizeEmail(email);
+        if (details == null)
+        {
+            throw new ArgumentNullException(nameof(details));
+        }
+
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(details.Username);
+        string normalizedEmail = NormalizeEmail(details.Email);
 
         ValidateEmail(normalizedEmail);
-        PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
+        PlayerInputValidator.ValidatePassword(details.Password, MinimumPasswordLength);
 
         bool isAvailable = IsUsernameAndEmailAvailable(normalizedUsername, normalizedEmail);
 
         if (isAvailable)
         {
-            string passwordHash = _passwordHasher.Hash(password);
+            string passwordHash = _passwordHasher.Hash(details.Password);
             PlayerRegistration registration = new PlayerRegistration(normalizedUsername, normalizedEmail, passwordHash);
 
-            SendVerificationCode(registration);
+            SendVerificationCode(registration, language);
         }
 
         LogVerificationCodeRequest(isAvailable);
@@ -77,7 +82,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
         return emailStatus;
     }
 
-    public ResendVerificationCodeStatus ResendVerificationCode(string email)
+    public ResendVerificationCodeStatus ResendVerificationCode(string email, string language)
     {
         string normalizedEmail = NormalizeEmail(email);
         PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(normalizedEmail);
@@ -86,7 +91,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
         if (canResend)
         {
-            SendVerificationCode(pendingSignUp.Registration);
+            SendVerificationCode(pendingSignUp.Registration, language);
         }
 
         _logger.InfoFormat("A verification code resend finished. Status: {0}.", resendStatus);
@@ -142,11 +147,11 @@ public sealed class SignUpUseCases : ISignUpUseCases
         }
     }
 
-    private void SendVerificationCode(PlayerRegistration registration)
+    private void SendVerificationCode(PlayerRegistration registration, string language)
     {
         string verificationCode = _codeGenerator.Generate();
 
-        _emailSender.SendVerificationCode(registration.Email, verificationCode);
+        _emailSender.SendVerificationCode(registration.Email, verificationCode, language);
         _pendingSignUps.StorePendingSignUp(registration, verificationCode);
     }
 

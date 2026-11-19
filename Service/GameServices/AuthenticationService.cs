@@ -51,8 +51,11 @@ public sealed class AuthenticationService : IAuthenticationService
 
     public bool SignUp(SignUpRequest signUpRequest)
     {
-        bool isRegistered = _faultTranslator.Execute(
-            () => _signUpUseCases.SignUp(signUpRequest?.Username, signUpRequest?.Email, signUpRequest?.Password));
+        SignUpDetails details = new SignUpDetails(
+            signUpRequest?.Username,
+            signUpRequest?.Email,
+            signUpRequest?.Password);
+        bool isRegistered = _faultTranslator.Execute(() => _signUpUseCases.SignUp(details, signUpRequest?.Language));
 
         return isRegistered;
     }
@@ -68,7 +71,7 @@ public sealed class AuthenticationService : IAuthenticationService
     public void ResendVerificationCode(ResendVerificationCodeRequest resendRequest)
     {
         ResendVerificationCodeStatus resendStatus = _faultTranslator.Execute(
-            () => _signUpUseCases.ResendVerificationCode(resendRequest?.Email));
+            () => _signUpUseCases.ResendVerificationCode(resendRequest?.Email, resendRequest?.Language));
 
         GameFaultFactory.ThrowIfRejected(resendStatus, ResendVerificationCodeStatus.Success, MapResendFaultCode);
     }

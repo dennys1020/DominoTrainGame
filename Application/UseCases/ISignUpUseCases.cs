@@ -4,9 +4,9 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public interface ISignUpUseCases
 {
-    bool SignUp(string username, string email, string password);
+    bool SignUp(SignUpDetails detailsSignUp, string language);
 
     VerifyEmailStatus VerifyEmail(string email, string verificationCode);
 
-    ResendVerificationCodeStatus ResendVerificationCode(string email);
+    ResendVerificationCodeStatus ResendVerificationCode(string email, string language);
 }

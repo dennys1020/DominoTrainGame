@@ -162,4 +162,8 @@
     <Error Condition="!Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\Server\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
+  <ItemGroup>
+    <EmbeddedResource Include="Email\EmailTemplates.resx" />
+    <EmbeddedResource Include="Email\EmailTemplates.en.resx" />
+  </ItemGroup>
 </Project>
