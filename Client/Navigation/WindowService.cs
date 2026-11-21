@@ -1,5 +1,6 @@
 using System;
 using System.Windows;
+using DominoTrainGame.Client.View.Behaviors;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
@@ -86,7 +87,10 @@ internal sealed class WindowService : IWindowService
 
     private void ReplaceCurrentWindow(Window nextWindow)
     {
+        bool isCurrentWindowFullScreen = WindowFullScreenBehavior.GetIsFullScreenActive(_window);
+
         nextWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        WindowFullScreenBehavior.SetIsFullScreenActive(nextWindow, isCurrentWindowFullScreen);
         nextWindow.WindowState = _window.WindowState;
         Application.Current.MainWindow = nextWindow;
         nextWindow.Show();
