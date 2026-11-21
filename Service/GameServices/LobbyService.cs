@@ -40,24 +40,24 @@ public sealed class LobbyService : ILobbyService
     public LobbyResponse CreateLobby()
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyOutcome<CreateLobbyStatus> outcome = _faultTranslator.Execute(
+        LobbyOutcome<CreateLobbyStatus> lobbyCreation = _faultTranslator.Execute(
             () => _lobbyUseCases.CreateLobby(caller),
             GameServiceFaultCode.InvalidLobbyRequest);
 
-        GameFaultFactory.ThrowIfRejected(outcome.Status, CreateLobbyStatus.Success, MapCreateFaultCode);
-        LobbyResponse response = ToLobbyResponse(outcome.Lobby);
+        GameFaultFactory.ThrowIfRejected(lobbyCreation.Status, CreateLobbyStatus.Success, MapCreateFaultCode);
+        LobbyResponse response = ToLobbyResponse(lobbyCreation.Lobby);
         return response;
     }
 
     public LobbyResponse JoinLobby(JoinLobbyRequest joinLobbyRequest)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
-        LobbyOutcome<JoinLobbyStatus> outcome = _faultTranslator.Execute(
+        LobbyOutcome<JoinLobbyStatus> lobbyJoin = _faultTranslator.Execute(
             () => _lobbyUseCases.JoinLobby(caller, joinLobbyRequest?.Code),
             GameServiceFaultCode.InvalidLobbyRequest);
 
-        GameFaultFactory.ThrowIfRejected(outcome.Status, JoinLobbyStatus.Success, MapJoinFaultCode);
-        LobbyResponse response = ToLobbyResponse(outcome.Lobby);
+        GameFaultFactory.ThrowIfRejected(lobbyJoin.Status, JoinLobbyStatus.Success, MapJoinFaultCode);
+        LobbyResponse response = ToLobbyResponse(lobbyJoin.Lobby);
         return response;
     }
 
