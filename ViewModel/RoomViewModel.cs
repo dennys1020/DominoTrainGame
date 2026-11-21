@@ -342,7 +342,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         }
         else
         {
-            WindowService.ShowMessage(GetInputMessageKey(inputStatus));
+            WindowService.ShowMessageError(GetInputMessageKey(inputStatus));
         }
     }
 
@@ -405,7 +405,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (isFailure)
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(requestResult));
+            WindowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(requestResult));
         }
     }
 

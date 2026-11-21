@@ -10,6 +10,8 @@ public interface IWindowService
 
     void ShowMessage(string messageKey);
 
+    void ShowMessageError(string messageKey);
+
     bool ConfirmMessage(string messageKey);
     
     bool Confirm(string message);

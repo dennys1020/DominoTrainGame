@@ -62,6 +62,7 @@
     <Compile Include="Localization\LeaderboardMessageKeys.cs" />
     <Compile Include="MatchPlayerViewModel.cs" />
     <Compile Include="PlayerResultViewModel.cs" />
+    <Compile Include="Navigation\MessageKind.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Localization\SignUpMessageKeys.cs" />
     <Compile Include="Localization\LocalizationViewModel.cs" />
     <Compile Include="DialogViewModel.cs" />
+    <Compile Include="MessageViewModel.cs" />
     <Compile Include="JoinGameViewModel.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MainMenuViewModel.cs" />

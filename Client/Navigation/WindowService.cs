@@ -8,8 +8,6 @@ namespace DominoTrainGame.Client.View.Navigation;
 
 internal sealed class WindowService : IWindowService
 {
-    private const string MessageTitleKey = "GameTitle";
-
     private readonly Window _window;
     private readonly WindowFactory _windowFactory;
     private readonly LocalizationViewModel _localization;
@@ -39,21 +37,19 @@ internal sealed class WindowService : IWindowService
 
     public void ShowMessage(string messageKey)
     {
-        string title = _localization[MessageTitleKey];
         string message = _localization[messageKey];
-        MessageBox.Show(_window, message, title, MessageBoxButton.OK, MessageBoxImage.Information);
+        ShowMessageWindow(message, MessageKind.Information);
+    }
+
+    public void ShowMessageError(string messageKey)
+    {
+        string message = _localization[messageKey];
+        ShowMessageWindow(message, MessageKind.Error);
     }
 
     public bool Confirm(string message)
     {
-        string title = _localization[MessageTitleKey];
-        MessageBoxResult answer = MessageBox.Show(
-            _window,
-            message,
-            title,
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
-        bool isConfirmed = answer == MessageBoxResult.Yes;
+        bool isConfirmed = ShowMessageWindow(message, MessageKind.Confirmation);
         return isConfirmed;
     }
 
@@ -67,6 +63,25 @@ internal sealed class WindowService : IWindowService
     public void Close()
     {
         _window.Close();
+    }
+
+    private bool ShowMessageWindow(string message, MessageKind kind)
+    {
+        Window messageWindow = _windowFactory.CreateMessageWindow(message, kind);
+        bool canOwnMessageWindow = _window.IsLoaded;
+
+        if (canOwnMessageWindow)
+        {
+            messageWindow.Owner = _window;
+            messageWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
+        else
+        {
+            messageWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        bool isAccepted = messageWindow.ShowDialog().GetValueOrDefault();
+        return isAccepted;
     }
 
     private void ReplaceCurrentWindow(Window nextWindow)

@@ -429,7 +429,7 @@
         </Setter>
     </Style>
     <Style x:Key="DangerPixelButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="#B33A3A" />
+        <Setter Property="Background" Value="{StaticResource Danger}" />
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontFamily" Value="{StaticResource PixelFont}" />
         <Setter Property="FontSize" Value="9" />

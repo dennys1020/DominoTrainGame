@@ -66,7 +66,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
         }
         else
         {
-            _windowService.ShowMessage(FriendMessageKeys.GetMessageKey(friendsResult.Status));
+            _windowService.ShowMessageError(FriendMessageKeys.GetMessageKey(friendsResult.Status));
         }
     }
 
@@ -92,7 +92,7 @@ public sealed class InviteFriendsViewModel : ObservableViewModel
         else
         {
             IsOpen = false;
-            _windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(inviteResult));
+            _windowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(inviteResult));
         }
     }
 }
