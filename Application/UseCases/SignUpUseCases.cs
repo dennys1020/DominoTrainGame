@@ -39,7 +39,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
         _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
     }
 
-    public bool SignUp(SignUpDetails detailsS, string language)
+    public bool SignUp(SignUpDetails details, string language)
     {
         if (details == null)
         {
