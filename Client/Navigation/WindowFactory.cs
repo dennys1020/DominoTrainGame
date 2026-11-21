@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Client.View.Behaviors;
 using DominoTrainGame.Client.View.Views;
 using DominoTrainGame.Client.ViewModel;
 using DominoTrainGame.Client.ViewModel.Common;
@@ -82,6 +83,7 @@ internal sealed class WindowFactory
     public Window Create(Screen screen)
     {
         Window window = CreateDialog(screen);
+        WindowFullScreenBehavior.SetIsFullScreenToggleEnabled(window, true);
         _invitationController.Attach(new WindowService(window, this, _localization));
         return window;
     }

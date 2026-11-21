@@ -123,6 +123,7 @@
     <Compile Include="Views\VerificationCodeWindow.xaml.cs">
       <DependentUpon>VerificationCodeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\WindowFullScreenBehavior.cs" />
     <Compile Include="Behaviors\PasswordBoxBinding.cs" />
     <Compile Include="Behaviors\TileDragAdorner.cs" />
     <Compile Include="Behaviors\TileDragDropBehavior.cs" />
