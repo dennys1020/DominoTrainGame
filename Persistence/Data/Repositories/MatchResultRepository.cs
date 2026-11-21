@@ -12,8 +12,6 @@ public sealed class MatchResultRepository : IMatchResultRepository
 {
     private const int NoSavedRows = 0;
     private const byte GuestPlayerFlag = 1;
-    private const string PrivateAccessType = "Private";
-    private const string FinishedStatus = "Finished";
 
     private readonly DatabaseExecutor _databaseExecutor;
 
@@ -51,8 +49,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
         {
             Match match = new Match
             {
-                Lobby = FindOrCreateLobby(context, finishedMatch),
-                Status = FinishedStatus
+                Lobby = FindOrCreateLobby(context, finishedMatch.LobbyCode)
             };
 
             foreach (PlayerMatchResult playerResult in finishedMatch.PlayerResults)
@@ -68,14 +65,12 @@ public sealed class MatchResultRepository : IMatchResultRepository
         return wasSaved;
     }
 
-    private static Lobby FindOrCreateLobby(DominoGameDBEntities context, FinishedMatchRecord finishedMatch)
+    private static Lobby FindOrCreateLobby(DominoGameDBEntities context, string lobbyCode)
     {
         List<Lobby> savedLobbies = (from lobby in context.Lobbies
-                                    where lobby.Token == finishedMatch.LobbyCode
+                                    where lobby.Token == lobbyCode
                                     select lobby).ToList();
-        Lobby matchLobby = savedLobbies.Any() ? savedLobbies.First() : CreateLobby(finishedMatch.LobbyCode);
-        matchLobby.MaxPlayers = Convert.ToByte(finishedMatch.MaximumPlayers);
-        matchLobby.Status = FinishedStatus;
+        Lobby matchLobby = savedLobbies.Any() ? savedLobbies.First() : CreateLobby(lobbyCode);
 
         return matchLobby;
     }
@@ -84,7 +79,6 @@ public sealed class MatchResultRepository : IMatchResultRepository
     {
         Lobby lobby = new Lobby
         {
-            AccessType = PrivateAccessType,
             Token = lobbyCode
         };
         return lobby;

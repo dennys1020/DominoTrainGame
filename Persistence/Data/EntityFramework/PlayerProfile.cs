@@ -12,14 +12,15 @@ namespace DominoTrainGame.Server.Persistence.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class Account
+    public partial class PlayerProfile
     {
-        public int AccountId { get; set; }
-        public string Biography { get; set; }
-        public string PreferredLanguage { get; set; }
-        public Nullable<System.DateTime> CreatedAt { get; set; }
-        public System.DateTime LastSeenAt { get; set; }
         public int PlayerId { get; set; }
+        public string Biography { get; set; }
+        public string AvatarFileName { get; set; }
+        public string InstagramUsername { get; set; }
+        public string FacebookUsername { get; set; }
+        public string TwitterUsername { get; set; }
+        public System.DateTime CreatedAt { get; set; }
     
         public virtual Player Player { get; set; }
     }

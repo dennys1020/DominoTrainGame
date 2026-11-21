@@ -9,7 +9,8 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 public sealed class SanctionRepository : ISanctionRepository
 {
     private const int NoSavedRows = 0;
-    private const string TemporaryBanType = "Temporal";
+    private const string ChatMuteBanType = "ChatMute";
+    private const string GameBanType = "GameBan";
     private const string ChatMuteReason = "Repeated offensive language in the lobby chat.";
     private const string GameBanReason = "Repeated chat sanctions for offensive language.";
 
@@ -47,28 +48,30 @@ public sealed class SanctionRepository : ISanctionRepository
 
     private static List<Ban> FindActiveBans(DominoGameDBEntities context, int playerId, DateTime now)
     {
-        List<Ban> activeBans = context.Bans
-            .Where(ban => ban.PlayerId == playerId)
-            .Where(ban => ban.ExpiresAt == null || ban.ExpiresAt > now)
-            .ToList();
+        List<Ban> activeBans = (from ban in context.Bans
+                                where ban.PlayerId == playerId
+                                    && (ban.ExpiresAt == null || ban.ExpiresAt > now)
+                                select ban).ToList();
         return activeBans;
     }
 
     private static int CountChatSanctions(DominoGameDBEntities context, int playerId)
     {
-        int sanctionCount = context.Bans
-            .Where(ban => ban.PlayerId == playerId)
-            .Count(ban => ban.Reason == ChatMuteReason || ban.Reason == GameBanReason);
+        int sanctionCount = (from ban in context.Bans
+                             where ban.PlayerId == playerId
+                                 && (ban.BanType == ChatMuteBanType || ban.BanType == GameBanType)
+                             select ban).Count();
         return sanctionCount;
     }
 
     private static bool InsertBan(DominoGameDBEntities context, SanctionRecord sanctionRecord)
     {
+        string banType = ToBanType(sanctionRecord.Sanction.Type);
         Ban ban = new Ban
         {
             PlayerId = sanctionRecord.PlayerId,
-            Reason = ToReason(sanctionRecord.Sanction.Type),
-            BanType = TemporaryBanType,
+            Reason = ToReason(banType),
+            BanType = banType,
             StartedAt = sanctionRecord.StartedAt,
             ExpiresAt = sanctionRecord.Sanction.ExpiresAt
         };
@@ -78,30 +81,31 @@ public sealed class SanctionRepository : ISanctionRepository
         return wasSaved;
     }
 
-    private static string ToReason(SanctionType sanctionType)
+    private static string ToBanType(SanctionType sanctionType)
     {
-        string reason;
+        string banType = sanctionType == SanctionType.GameBan ? GameBanType : ChatMuteBanType;
+        return banType;
+    }
 
-        switch (sanctionType)
-        {
-            case SanctionType.GameBan:
-                reason = GameBanReason;
-                break;
-            default:
-                reason = ChatMuteReason;
-                break;
-        }
-
+    private static string ToReason(string banType)
+    {
+        string reason = banType == GameBanType ? GameBanReason : ChatMuteReason;
         return reason;
     }
 
     private static PlayerSanction ToSanction(List<Ban> activeBans)
     {
-        DateTime expiresAt = activeBans.Max(ban => ban.ExpiresAt ?? DateTime.MaxValue);
-        bool isOnlyChatMuted = activeBans.All(ban => ban.Reason == ChatMuteReason);
-        SanctionType sanctionType = isOnlyChatMuted ? SanctionType.ChatMute : SanctionType.GameBan;
-        PlayerSanction sanction = new PlayerSanction(sanctionType, expiresAt);
+        DateTime expiresAt = DateTime.MinValue;
+        SanctionType sanctionType = SanctionType.ChatMute;
 
+        foreach (Ban activeBan in activeBans)
+        {
+            DateTime banExpiresAt = activeBan.ExpiresAt ?? DateTime.MaxValue;
+            expiresAt = banExpiresAt > expiresAt ? banExpiresAt : expiresAt;
+            sanctionType = activeBan.BanType == GameBanType ? SanctionType.GameBan : sanctionType;
+        }
+
+        PlayerSanction sanction = new PlayerSanction(sanctionType, expiresAt);
         return sanction;
     }
 }

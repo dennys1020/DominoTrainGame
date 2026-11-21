@@ -87,27 +87,18 @@
     <Compile Include="Data\EntityFramework\Lobby.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\EntityFramework\LobbyPlayer.cs">
-      <DependentUpon>DominoGameModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EntityFramework\Report.cs">
-      <DependentUpon>DominoGameModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\EntityFramework\StatusFriendshipRequest.cs">
-      <DependentUpon>DominoGameModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Data\EntityFramework\sysdiagram.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Repositories\FriendshipRepository.cs" />
     <Compile Include="Data\SqlServerConfiguration.cs" />
-    <Compile Include="Data\EntityFramework\Account.cs">
-      <DependentUpon>DominoGameModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Data\EntityFramework\Match.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EntityFramework\MatchResult.cs">
+      <DependentUpon>DominoGameModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\EntityFramework\PlayerProfile.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\EntityFramework\Player.cs">

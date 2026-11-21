@@ -17,18 +17,12 @@ namespace DominoTrainGame.Server.Persistence.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Lobby()
         {
-            this.LobbyPlayers = new HashSet<LobbyPlayer>();
             this.Matches = new HashSet<Match>();
         }
     
         public int LobbyId { get; set; }
-        public string AccessType { get; set; }
-        public byte MaxPlayers { get; set; }
-        public string Status { get; set; }
         public string Token { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LobbyPlayer> LobbyPlayers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Match> Matches { get; set; }
     }

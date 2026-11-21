@@ -18,12 +18,9 @@ namespace DominoTrainGame.Server.Persistence.Data
         public Player()
         {
             this.MatchResults = new HashSet<MatchResult>();
-            this.Accounts = new HashSet<Account>();
             this.Bans = new HashSet<Ban>();
             this.FriendshipRequests = new HashSet<FriendshipRequest>();
             this.FriendshipRequests1 = new HashSet<FriendshipRequest>();
-            this.LobbyPlayers = new HashSet<LobbyPlayer>();
-            this.Reports = new HashSet<Report>();
         }
     
         public int PlayerId { get; set; }
@@ -35,16 +32,11 @@ namespace DominoTrainGame.Server.Persistence.Data
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MatchResult> MatchResults { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Account> Accounts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Ban> Bans { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FriendshipRequest> FriendshipRequests { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FriendshipRequest> FriendshipRequests1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LobbyPlayer> LobbyPlayers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Report> Reports { get; set; }
+        public virtual PlayerProfile PlayerProfile { get; set; }
     }
 }

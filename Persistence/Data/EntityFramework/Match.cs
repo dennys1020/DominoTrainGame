@@ -22,7 +22,6 @@ namespace DominoTrainGame.Server.Persistence.Data
     
         public int MatchId { get; set; }
         public int LobbyId { get; set; }
-        public string Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MatchResult> MatchResults { get; set; }
