@@ -271,7 +271,6 @@ public sealed class MatchUseCases : IMatchUseCases
             CollectScoresByPlayer(matchState.PlayerIds, matchState.ScoresByPlayerId);
         FinishedMatchRecord finishedMatch = new FinishedMatchRecord(
             matchState.Code,
-            matchState.DominoSet.MaximumPlayerCount,
             MatchRanking.RankByLowestScore(totalScoresByPlayerId));
         return finishedMatch;
     }

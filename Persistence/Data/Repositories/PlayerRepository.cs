@@ -109,7 +109,11 @@ public sealed class PlayerRepository : IPlayerRepository
             Username = registration.Username,
             Email = registration.Email,
             PasswordHash = registration.PasswordHash,
-            IsGuest = RegisteredPlayerFlag
+            IsGuest = RegisteredPlayerFlag,
+            PlayerProfile = new PlayerProfile
+            {
+                CreatedAt = DateTime.UtcNow
+            }
         };
 
         context.Players.Add(player);
