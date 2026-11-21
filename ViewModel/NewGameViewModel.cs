@@ -39,7 +39,7 @@ public sealed class NewGameViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(createResult.Status));
+            WindowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(createResult.Status));
         }
     }
 }

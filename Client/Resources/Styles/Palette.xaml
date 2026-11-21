@@ -11,6 +11,7 @@
     <SolidColorBrush x:Key="Aqua" Color="#4FC7A7" />
     <SolidColorBrush x:Key="Ink" Color="#173D35" />
     <SolidColorBrush x:Key="Amber" Color="#E8B04B" />
+    <SolidColorBrush x:Key="Danger" Color="#B33A3A" />
     <SolidColorBrush x:Key="NightBackground" Color="#0B1512" />
     <SolidColorBrush x:Key="NightGridLine" Color="#14261F" />
     <SolidColorBrush x:Key="NightCard" Color="#0E1C18" />

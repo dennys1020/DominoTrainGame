@@ -95,6 +95,13 @@ internal sealed class WindowFactory
         return window;
     }
 
+    public Window CreateMessageWindow(string message, MessageKind kind)
+    {
+        Window window = new MessageWindow();
+        window.DataContext = new MessageViewModel(message, kind, _localization);
+        return window;
+    }
+
     private ScreenViewModel CreateVerificationViewModel(IWindowService windowService)
     {
         ScreenViewModel viewModel = new VerificationCodeViewModel(

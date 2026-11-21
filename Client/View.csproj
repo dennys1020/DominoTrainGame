@@ -128,6 +128,9 @@
     <Compile Include="Behaviors\TileDragDropBehavior.cs" />
     <Compile Include="Navigation\WindowFactory.cs" />
     <Compile Include="Navigation\WindowService.cs" />
+    <Compile Include="Views\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -159,6 +162,10 @@
     <Page Include="Views\Controls\SettingsButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DeleteAccountWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

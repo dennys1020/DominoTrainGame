@@ -50,7 +50,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
+            WindowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
         }
     }
 }

@@ -811,4 +811,22 @@ en el tren</value>
   <data name="RoundNoticeNextRoundLabel" xml:space="preserve">
     <value>Siguiente ronda: doble</value>
   </data>
+  <data name="AcceptButtonLabel" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="ConfirmationMessageTitle" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="ErrorMessageTitle" xml:space="preserve">
+    <value>Algo salió mal</value>
+  </data>
+  <data name="InformationMessageTitle" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="NoButtonLabel" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="YesButtonLabel" xml:space="preserve">
+    <value>Sí</value>
+  </data>
 </root>

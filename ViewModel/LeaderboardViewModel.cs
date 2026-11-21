@@ -75,7 +75,7 @@ public sealed class LeaderboardViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(LeaderboardMessageKeys.GetMessageKey(leaderboardResult.Status));
+            WindowService.ShowMessageError(LeaderboardMessageKeys.GetMessageKey(leaderboardResult.Status));
         }
     }
 

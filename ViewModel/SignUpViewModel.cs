@@ -81,7 +81,7 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(SignUpMessageKeys.GetInputMessageKey(inputStatus));
+            WindowService.ShowMessageError(SignUpMessageKeys.GetInputMessageKey(inputStatus));
         }
     }
 
@@ -101,7 +101,7 @@ public sealed class SignUpViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(SignUpMessageKeys.GetResultMessageKey(signUpResult));
+            WindowService.ShowMessageError(SignUpMessageKeys.GetResultMessageKey(signUpResult));
         }
     }
 }

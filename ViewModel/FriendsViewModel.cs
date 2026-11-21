@@ -212,7 +212,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         }
         else
         {
-            WindowService.ShowMessage(FriendUsernameInputMessageKeys.GetMessageKey(inputStatus));
+            WindowService.ShowMessageError(FriendUsernameInputMessageKeys.GetMessageKey(inputStatus));
         }
     }
 
@@ -325,6 +325,6 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ShowFailure(FriendActionResult failedResult)
     {
-        WindowService.ShowMessage(FriendMessageKeys.GetMessageKey(failedResult));
+        WindowService.ShowMessageError(FriendMessageKeys.GetMessageKey(failedResult));
     }
 }

@@ -66,7 +66,7 @@ public sealed class LobbyInvitationController
         }
         else
         {
-            windowService.ShowMessage(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
+            windowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(joinResult.Status));
         }
     }
 }

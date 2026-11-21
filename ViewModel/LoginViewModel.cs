@@ -76,7 +76,7 @@ public sealed class LoginViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(LoginMessageKeys.GetInputMessageKey(inputStatus));
+            WindowService.ShowMessageError(LoginMessageKeys.GetInputMessageKey(inputStatus));
         }
     }
 
@@ -99,7 +99,7 @@ public sealed class LoginViewModel : ScreenViewModel
 
         if (connectionResult != ConnectionCheckResult.Connected)
         {
-            WindowService.ShowMessage(LoginMessageKeys.GetConnectionMessageKey(connectionResult));
+            WindowService.ShowMessageError(LoginMessageKeys.GetConnectionMessageKey(connectionResult));
         }
     }
 
@@ -112,7 +112,7 @@ public sealed class LoginViewModel : ScreenViewModel
         }
         else
         {
-            WindowService.ShowMessage(LoginMessageKeys.GetResultMessageKey(loginResult));
+            WindowService.ShowMessageError(LoginMessageKeys.GetResultMessageKey(loginResult));
         }
     }
 }

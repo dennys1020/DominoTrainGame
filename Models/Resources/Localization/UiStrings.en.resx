@@ -811,4 +811,22 @@ on the train</value>
   <data name="RoundNoticeNextRoundLabel" xml:space="preserve">
     <value>Next round: double</value>
   </data>
+  <data name="AcceptButtonLabel" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="ConfirmationMessageTitle" xml:space="preserve">
+    <value>Please confirm</value>
+  </data>
+  <data name="ErrorMessageTitle" xml:space="preserve">
+    <value>Something went wrong</value>
+  </data>
+  <data name="InformationMessageTitle" xml:space="preserve">
+    <value>Notice</value>
+  </data>
+  <data name="NoButtonLabel" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="YesButtonLabel" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

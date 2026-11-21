@@ -57,6 +57,14 @@ public class UiStrings
         }
     }
 
+    public static string AcceptButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("AcceptButtonLabel", _resourceCulture);
+        }
+    }
+
     public static string AddButtonLabel
     {
         get
@@ -126,6 +134,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("ConfirmPasswordLabel", _resourceCulture);
+        }
+    }
+
+    public static string ConfirmationMessageTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("ConfirmationMessageTitle", _resourceCulture);
         }
     }
 
@@ -249,6 +265,14 @@ public class UiStrings
         }
     }
 
+    public static string ErrorMessageTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("ErrorMessageTitle", _resourceCulture);
+        }
+    }
+
     public static string ExitToMenuButtonLabel
     {
         get
@@ -302,6 +326,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("GuestButtonLabel", _resourceCulture);
+        }
+    }
+
+    public static string InformationMessageTitle
+    {
+        get
+        {
+            return ResourceManager.GetString("InformationMessageTitle", _resourceCulture);
         }
     }
 
@@ -566,6 +598,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("NoAccountLabel", _resourceCulture);
+        }
+    }
+
+    public static string NoButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("NoButtonLabel", _resourceCulture);
         }
     }
 
@@ -982,6 +1022,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("WinsLabel", _resourceCulture);
+        }
+    }
+
+    public static string YesButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("YesButtonLabel", _resourceCulture);
         }
     }
 

@@ -377,7 +377,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (moveResult != MatchMoveResult.Success)
         {
-            WindowService.ShowMessage(MatchMessageKeys.GetMessageKey(moveResult));
+            WindowService.ShowMessageError(MatchMessageKeys.GetMessageKey(moveResult));
         }
     }
 
