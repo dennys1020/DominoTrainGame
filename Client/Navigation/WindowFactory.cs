@@ -22,6 +22,7 @@ internal sealed class WindowFactory
     private readonly IRemoteSocialServices _socialServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;
+    private readonly ConnectionLossController _connectionLossController;
     private readonly IReadOnlyDictionary<Screen, Func<IWindowService, ScreenViewModel>> _viewModelsByScreen;
 
     static WindowFactory()
@@ -63,6 +64,7 @@ internal sealed class WindowFactory
         _matchServices = remoteServices.MatchServices;
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _invitationController = new LobbyInvitationController(_gameServices, _localization);
+        _connectionLossController = new ConnectionLossController(_gameServices);
 
         _viewModelsByScreen = new Dictionary<Screen, Func<IWindowService, ScreenViewModel>>
         {
@@ -85,7 +87,9 @@ internal sealed class WindowFactory
     {
         Window window = CreateDialog(screen);
         WindowFullScreenBehavior.SetIsFullScreenToggleEnabled(window, true);
-        _invitationController.Attach(new WindowService(window, this, _localization));
+        IWindowService windowService = new WindowService(window, this, _localization);
+        _invitationController.Attach(windowService);
+        _connectionLossController.Attach(windowService);
         return window;
     }
 

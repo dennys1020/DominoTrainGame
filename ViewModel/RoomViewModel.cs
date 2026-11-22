@@ -284,10 +284,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
                 IsReconnecting = false;
                 RestoreRoomAfterReconnect();
                 break;
-            case ConnectionState.Lost:
-                IsReconnecting = false;
-                ExitRoom(Screen.Login, CommonMessageKeys.SessionExpiredMessageKey);
-                break;
             default:
                 IsReconnecting = false;
                 break;

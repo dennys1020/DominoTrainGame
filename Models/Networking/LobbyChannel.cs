@@ -217,8 +217,16 @@ public sealed class LobbyChannel
         {
             _session.Forget();
             _logger.WarnFormat("The lobby channel could not be restored. Result: {0}.", reconnectResult);
-            _callback.ReportConnectionState(ConnectionState.Lost);
+            _callback.ReportConnectionState(ToEndedConnectionState(reconnectResult));
         }
+    }
+
+    private static ConnectionState ToEndedConnectionState(ReconnectResult reconnectResult)
+    {
+        ConnectionState endedState = reconnectResult == ReconnectResult.Rejected
+            ? ConnectionState.Expired
+            : ConnectionState.Lost;
+        return endedState;
     }
 
     private async Task RejoinLobbyAsync(string lobbyCode)

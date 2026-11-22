@@ -4,5 +4,6 @@ public enum ConnectionState
 {
     Reconnecting,
     Reconnected,
-    Lost
+    Lost,
+    Expired
 }
