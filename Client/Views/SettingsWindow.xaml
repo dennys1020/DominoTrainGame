@@ -7,6 +7,69 @@
     WindowStartupLocation="CenterOwner"
     ShowInTaskbar="False"
     Style="{StaticResource AppWindowStyle}">
+    <Window.Resources>
+        <Style x:Key="SettingToggleOptionStyle" TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Border
+                            x:Name="SettingOptionCardBorder"
+                            BorderBrush="{StaticResource Ink}"
+                            BorderThickness="2"
+                            Background="{StaticResource Mist}"
+                            Padding="16,10"
+                            SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="24" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter VerticalAlignment="Center" />
+                                <Border
+                                    Grid.Column="1"
+                                    Width="20"
+                                    Height="20"
+                                    BorderBrush="{StaticResource Ink}"
+                                    BorderThickness="2"
+                                    Background="{StaticResource Glacier}">
+                                    <Rectangle
+                                        x:Name="SettingOptionMarkRectangle"
+                                        Visibility="Collapsed"
+                                        Fill="{StaticResource CheckBrush}"
+                                        Margin="2"
+                                        RenderOptions.EdgeMode="Aliased" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter
+                                    TargetName="SettingOptionCardBorder"
+                                    Property="Background"
+                                    Value="{StaticResource Frost}" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter
+                                    TargetName="SettingOptionCardBorder"
+                                    Property="Background"
+                                    Value="{StaticResource Aqua}" />
+                                <Setter
+                                    TargetName="SettingOptionMarkRectangle"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="SettingOptionCardBorder" Property="BorderThickness" Value="3" />
+                                <Setter TargetName="SettingOptionCardBorder" Property="Padding" Value="15,9" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Rectangle Fill="{StaticResource GridPattern}" Opacity="0.42" IsHitTestVisible="False" />
         <Viewbox Style="{StaticResource ScreenViewboxStyle}">
@@ -78,12 +141,14 @@
                                 </Border>
                                 <Grid Grid.Column="1" Margin="36,28,36,24">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="74" />
+                                        <RowDefinition Height="64" />
                                         <RowDefinition Height="32" />
-                                        <RowDefinition Height="116" />
-                                        <RowDefinition Height="116" />
+                                        <RowDefinition Height="88" />
+                                        <RowDefinition Height="88" />
                                         <RowDefinition Height="54" />
                                         <RowDefinition Height="76" />
+                                        <RowDefinition Height="54" />
+                                        <RowDefinition Height="64" />
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
                                     <StackPanel>
@@ -151,7 +216,7 @@
                                             </Border>
                                             <Slider
                                                 x:Name="MusicVolumeSlider"
-                                                Value="70"
+                                                Value="{Binding MusicVolume}"
                                                 Style="{StaticResource PixelSliderStyle}"
                                                 Margin="0,24,0,22"
                                                 Grid.RowSpan="3"
@@ -206,7 +271,7 @@
                                             <Slider
                                                 x:Name="SoundEffectsVolumeSlider"
                                                 Grid.Row="1"
-                                                Value="85"
+                                                Value="{Binding SoundEffectsVolume}"
                                                 Style="{StaticResource PixelSliderStyle}"
                                                 Margin="0,3,0,18"
                                                 Grid.RowSpan="2"
@@ -309,7 +374,36 @@
                                             </StackPanel>
                                         </RadioButton>
                                     </Grid>
-                                    <Grid Grid.Row="6" Margin="0,26,0,0">
+                                    <DockPanel Grid.Row="6" Margin="0,12,0,0">
+                                        <TextBlock
+                                            Text="{Binding [DisplaySectionLabel],
+                                                Source={StaticResource Localization}}"
+                                            Style="{StaticResource SectionLabelStyle}"
+                                            DockPanel.Dock="Left"
+                                            Margin="0,0,18,0" />
+                                        <Border
+                                            Background="{StaticResource Mint}"
+                                            Height="2"
+                                            VerticalAlignment="Center" />
+                                    </DockPanel>
+                                    <CheckBox
+                                        Grid.Row="7"
+                                        IsChecked="{Binding IsFullScreenEnabled}"
+                                        Style="{StaticResource SettingToggleOptionStyle}">
+                                        <StackPanel>
+                                            <TextBlock
+                                                Text="{Binding [FullScreenOptionLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource PixelTextStyle}"
+                                                FontSize="11" />
+                                            <TextBlock
+                                                Text="{Binding [FullScreenOptionDescription],
+                                                    Source={StaticResource Localization}}"
+                                                FontSize="13"
+                                                Margin="0,7,0,0" />
+                                        </StackPanel>
+                                    </CheckBox>
+                                    <Grid Grid.Row="8" Margin="0,16,0,0">
                                         <Grid VerticalAlignment="Bottom">
                                             <Button
                                                 Content="{Binding [BackButtonLabel],

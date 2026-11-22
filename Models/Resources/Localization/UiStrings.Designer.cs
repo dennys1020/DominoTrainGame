@@ -225,6 +225,14 @@ public class UiStrings
         }
     }
 
+    public static string DisplaySectionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("DisplaySectionLabel", _resourceCulture);
+        }
+    }
+
     public static string EditButtonLabel
     {
         get
@@ -294,6 +302,22 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("FriendsLabel", _resourceCulture);
+        }
+    }
+
+    public static string FullScreenOptionDescription
+    {
+        get
+        {
+            return ResourceManager.GetString("FullScreenOptionDescription", _resourceCulture);
+        }
+    }
+
+    public static string FullScreenOptionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FullScreenOptionLabel", _resourceCulture);
         }
     }
 

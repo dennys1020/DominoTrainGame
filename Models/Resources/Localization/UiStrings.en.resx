@@ -829,4 +829,13 @@ on the train</value>
   <data name="YesButtonLabel" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="DisplaySectionLabel" xml:space="preserve">
+    <value>03 / Display</value>
+  </data>
+  <data name="FullScreenOptionDescription" xml:space="preserve">
+    <value>Also with F11. Esc to exit.</value>
+  </data>
+  <data name="FullScreenOptionLabel" xml:space="preserve">
+    <value>Full screen</value>
+  </data>
 </root>
