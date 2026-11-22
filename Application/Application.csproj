@@ -51,7 +51,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\PlayerProfileStatistics.cs" />
+    <Compile Include="Domain\PlayerProfileSummary.cs" />
+    <Compile Include="Domain\ProfileDetails.cs" />
+    <Compile Include="Domain\SocialLinks.cs" />
+    <Compile Include="Errors\AvatarStorageUnavailableException.cs" />
     <Compile Include="Ports\IVerificationCodeGenerator.cs" />
+    <Compile Include="Results\ChangeUsernameStatus.cs" />
     <Compile Include="Results\CreateLobbyStatus.cs" />
     <Compile Include="Results\DrawTileStatus.cs" />
     <Compile Include="Results\PassTurnStatus.cs" />
