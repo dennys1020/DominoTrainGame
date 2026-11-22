@@ -90,6 +90,7 @@
     <Compile Include="InvitableFriendViewModel.cs" />
     <Compile Include="RoomPlayerViewModel.cs" />
     <Compile Include="RoomChatMessageViewModel.cs" />
+    <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
     <Compile Include="Validation\SignUpInputStatus.cs" />
     <Compile Include="Validation\SignUpInputValidator.cs" />
