@@ -48,6 +48,9 @@ public static class LobbyResultMessageKeys
             case LobbyActionResult.ServerUnavailable:
                 messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
                 break;
+            case LobbyActionResult.DatabaseUnavailable:
+                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                break;
             default:
                 messageKey = GetMatchStartMessageKey(status);
                 break;

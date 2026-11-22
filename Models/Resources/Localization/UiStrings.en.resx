@@ -831,6 +831,7 @@ on the train</value>
   </data>
   <data name="UnexpectedErrorMessage" xml:space="preserve">
     <value>An unexpected error occurred. If it happens again, restart the game.</value>
+  </data>
   <data name="DisplaySectionLabel" xml:space="preserve">
     <value>03 / Display</value>
   </data>

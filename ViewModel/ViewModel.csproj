@@ -65,6 +65,7 @@
     <Compile Include="Navigation\MessageKind.cs" />
     <Compile Include="Navigation\Screen.cs" />
     <Compile Include="Navigation\LobbyInvitationController.cs" />
+    <Compile Include="Navigation\ConnectionLossController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
     <Compile Include="TrainViewModel.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />

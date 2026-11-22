@@ -127,6 +127,9 @@ internal static class FaultCodeMapper
             case GameServiceFaultCode.LobbyConflict:
                 resultStatus = LobbyActionResult.AlreadyInLobby;
                 break;
+            case GameServiceFaultCode.DatabaseUnavailable:
+                resultStatus = LobbyActionResult.DatabaseUnavailable;
+                break;
             default:
                 resultStatus = MapMatchSetupFault(faultCode);
                 break;
