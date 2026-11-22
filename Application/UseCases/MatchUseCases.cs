@@ -384,6 +384,10 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             _logger.Error("The match results were not saved because the database is unavailable.", exception);
         }
+        catch (DataIntegrityException exception)
+        {
+            _logger.Error("The match results were not saved because they violate the database rules.", exception);
+        }
     }
 
     private void NotifyUpdates(

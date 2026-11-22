@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
@@ -10,6 +11,21 @@ namespace DominoTrainGame.Server.Persistence.Data;
 
 public sealed class DatabaseExecutor
 {
+    private const int NullValueErrorNumber = 515;
+    private const int ConstraintConflictErrorNumber = 547;
+    private const int DuplicateIndexKeyErrorNumber = 2601;
+    private const int DuplicateConstraintKeyErrorNumber = 2627;
+    private const int TruncatedValueErrorNumber = 8152;
+
+    private static readonly HashSet<int> _integrityErrorNumbers = new HashSet<int>
+    {
+        NullValueErrorNumber,
+        ConstraintConflictErrorNumber,
+        DuplicateIndexKeyErrorNumber,
+        DuplicateConstraintKeyErrorNumber,
+        TruncatedValueErrorNumber
+    };
+
     public TResult Execute<TResult>(Func<DominoGameDBEntities, TResult> operation)
     {
         if (operation == null)
@@ -39,8 +55,14 @@ public sealed class DatabaseExecutor
         }
         catch (DbEntityValidationException exception)
         {
-            throw new DatabaseUnavailableException(
+            throw new DataIntegrityException(
                 "The data does not satisfy the database model.",
+                exception);
+        }
+        catch (DbUpdateException exception) when (IsIntegrityViolation(exception))
+        {
+            throw new DataIntegrityException(
+                "The changes violate a database constraint.",
                 exception);
         }
         catch (DbUpdateException exception)
@@ -69,6 +91,13 @@ public sealed class DatabaseExecutor
         }
 
         return result;
+    }
+
+    private static bool IsIntegrityViolation(DbUpdateException exception)
+    {
+        bool isIntegrityViolation = exception.GetBaseException() is SqlException sqlException
+            && _integrityErrorNumbers.Contains(sqlException.Number);
+        return isIntegrityViolation;
     }
 
     private static TResult RunOperation<TResult>(
