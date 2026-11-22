@@ -57,7 +57,7 @@ public sealed class ServiceFaultTranslator
         }
         catch (DataIntegrityException exception)
         {
-            throw TranslateDataIntegrity(exception, invalidInputFaultCode);
+            throw CreateLoggedFault(DataIntegrityMessageFormat, exception, invalidInputFaultCode);
         }
 
         return result;
@@ -85,8 +85,10 @@ public sealed class ServiceFaultTranslator
             throw new ArgumentNullException(nameof(exception));
         }
 
-        _logger.Error(CreateLogMessage(DatabaseUnavailableMessageFormat), exception);
-        FaultException<GameServiceFault> fault = GameFaultFactory.Create(GameServiceFaultCode.DatabaseUnavailable);
+        FaultException<GameServiceFault> fault = CreateLoggedFault(
+            DatabaseUnavailableMessageFormat,
+            exception,
+            GameServiceFaultCode.DatabaseUnavailable);
 
         return fault;
     }
@@ -98,18 +100,21 @@ public sealed class ServiceFaultTranslator
             throw new ArgumentNullException(nameof(exception));
         }
 
-        _logger.Error(CreateLogMessage(EmailUnavailableMessageFormat), exception);
-        FaultException<GameServiceFault> fault = GameFaultFactory.Create(GameServiceFaultCode.EmailUnavailable);
+        FaultException<GameServiceFault> fault = CreateLoggedFault(
+            EmailUnavailableMessageFormat,
+            exception,
+            GameServiceFaultCode.EmailUnavailable);
 
         return fault;
     }
 
-    private static FaultException<GameServiceFault> TranslateDataIntegrity(
-        DataIntegrityException exception,
-        GameServiceFaultCode invalidInputFaultCode)
+    private static FaultException<GameServiceFault> CreateLoggedFault(
+        string messageFormat,
+        Exception exception,
+        GameServiceFaultCode faultCode)
     {
-        _logger.Error(CreateLogMessage(DataIntegrityMessageFormat), exception);
-        FaultException<GameServiceFault> fault = GameFaultFactory.Create(invalidInputFaultCode);
+        _logger.Error(CreateLogMessage(messageFormat), exception);
+        FaultException<GameServiceFault> fault = GameFaultFactory.Create(faultCode);
 
         return fault;
     }
