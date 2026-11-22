@@ -103,24 +103,20 @@ public sealed partial class App : Application
 
     private void HandleDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs eventArgs)
     {
-        bool canShowMessage = _windowFactory != null;
+        Window currentWindow = MainWindow;
+        bool canShowMessage = _windowFactory != null && currentWindow != null;
 
         _logger.Error("An unexpected error reached the user interface.", eventArgs.Exception);
         eventArgs.Handled = canShowMessage;
 
         if (canShowMessage)
         {
-            ShowUnexpectedErrorMessage();
+            WindowService windowService = new WindowService(
+                currentWindow,
+                _windowFactory,
+                LocalizationViewModel.Instance);
+            windowService.ShowMessageError(UnexpectedErrorMessageKey);
         }
-    }
-
-    private void ShowUnexpectedErrorMessage()
-    {
-        string message = LocalizationViewModel.Instance[UnexpectedErrorMessageKey];
-        Window messageWindow = _windowFactory.CreateMessageWindow(message, MessageKind.Error);
-
-        messageWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        messageWindow.ShowDialog();
     }
 
     private void ShowLoginWindow(WindowFactory windowFactory)
