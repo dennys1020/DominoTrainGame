@@ -120,6 +120,7 @@
     <Compile Include="Ports\FinishedMatchRecord.cs" />
     <Compile Include="Ports\IMatchResultRepository.cs" />
     <Compile Include="Errors\DatabaseUnavailableException.cs" />
+    <Compile Include="Errors\DataIntegrityException.cs" />
     <Compile Include="Ports\IConnectionRepository.cs" />
     <Compile Include="Ports\IPasswordHasher.cs" />
     <Compile Include="Ports\IPlayerRepository.cs" />

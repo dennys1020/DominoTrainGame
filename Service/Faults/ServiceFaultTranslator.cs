@@ -14,6 +14,8 @@ public sealed class ServiceFaultTranslator
         "A request failed because the database is unavailable. Operation: {0}.";
     private const string EmailUnavailableMessageFormat =
         "A request failed because the verification email could not be sent. Operation: {0}.";
+    private const string DataIntegrityMessageFormat =
+        "A request was rejected because its data violates the database rules. Operation: {0}.";
 
     private static readonly ITraceLog _logger;
 
@@ -52,6 +54,10 @@ public sealed class ServiceFaultTranslator
         catch (EmailUnavailableException exception)
         {
             throw TranslateEmailUnavailable(exception);
+        }
+        catch (DataIntegrityException exception)
+        {
+            throw TranslateDataIntegrity(exception, invalidInputFaultCode);
         }
 
         return result;
@@ -94,6 +100,16 @@ public sealed class ServiceFaultTranslator
 
         _logger.Error(CreateLogMessage(EmailUnavailableMessageFormat), exception);
         FaultException<GameServiceFault> fault = GameFaultFactory.Create(GameServiceFaultCode.EmailUnavailable);
+
+        return fault;
+    }
+
+    private static FaultException<GameServiceFault> TranslateDataIntegrity(
+        DataIntegrityException exception,
+        GameServiceFaultCode invalidInputFaultCode)
+    {
+        _logger.Error(CreateLogMessage(DataIntegrityMessageFormat), exception);
+        FaultException<GameServiceFault> fault = GameFaultFactory.Create(invalidInputFaultCode);
 
         return fault;
     }

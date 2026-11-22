@@ -44,10 +44,6 @@ public abstract class AsyncCommand : ICommand
         {
             _logger.Debug("A command was canceled before it finished.", exception);
         }
-        catch (Exception exception)
-        {
-            _logger.Error("A command failed with an unexpected error.", exception);
-        }
         finally
         {
             _isExecuting = false;
