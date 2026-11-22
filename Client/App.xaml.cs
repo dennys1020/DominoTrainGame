@@ -1,7 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using log4net.Config;
+using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models;
 using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
@@ -15,19 +18,30 @@ namespace DominoTrainGame.Client.View;
 public sealed partial class App : Application
 {
     private const string LogConfigurationFileName = "log4net.config";
+    private const string UnexpectedErrorMessageKey = "UnexpectedErrorMessage";
+
+    private static readonly ITraceLog _logger;
+
+    private WindowFactory _windowFactory;
+
+    static App()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(App));
+    }
 
     protected override void OnStartup(StartupEventArgs eventArgs)
     {
         ConfigureLogging();
+        RegisterUnhandledErrorLogging();
         base.OnStartup(eventArgs);
 
         GameChannelCloser channelCloser = new GameChannelCloser();
         IGameConnectionFactory connectionFactory = new GameConnectionFactory();
         RemoteServices remoteServices = CreateRemoteServices(connectionFactory, channelCloser);
         LocalizationViewModel localization = LocalizationViewModel.Instance;
-        WindowFactory windowFactory = new WindowFactory(remoteServices, localization);
+        _windowFactory = new WindowFactory(remoteServices, localization);
 
-        ShowLoginWindow(windowFactory);
+        ShowLoginWindow(_windowFactory);
     }
 
     private static RemoteServices CreateRemoteServices(
@@ -68,6 +82,45 @@ public sealed partial class App : Application
             AppDomain.CurrentDomain.BaseDirectory,
             LogConfigurationFileName);
         XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
+    }
+
+    private static void HandleUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs eventArgs)
+    {
+        _logger.Error("A background task failed and nobody observed its error.", eventArgs.Exception);
+    }
+
+    private static void HandleDomainUnhandledException(object sender, UnhandledExceptionEventArgs eventArgs)
+    {
+        _logger.FatalFormat("An unhandled error is closing the game. Error: {0}", eventArgs.ExceptionObject);
+    }
+
+    private void RegisterUnhandledErrorLogging()
+    {
+        DispatcherUnhandledException += HandleDispatcherUnhandledException;
+        TaskScheduler.UnobservedTaskException += HandleUnobservedTaskException;
+        AppDomain.CurrentDomain.UnhandledException += HandleDomainUnhandledException;
+    }
+
+    private void HandleDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs eventArgs)
+    {
+        bool canShowMessage = _windowFactory != null;
+
+        _logger.Error("An unexpected error reached the user interface.", eventArgs.Exception);
+        eventArgs.Handled = canShowMessage;
+
+        if (canShowMessage)
+        {
+            ShowUnexpectedErrorMessage();
+        }
+    }
+
+    private void ShowUnexpectedErrorMessage()
+    {
+        string message = LocalizationViewModel.Instance[UnexpectedErrorMessageKey];
+        Window messageWindow = _windowFactory.CreateMessageWindow(message, MessageKind.Error);
+
+        messageWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        messageWindow.ShowDialog();
     }
 
     private void ShowLoginWindow(WindowFactory windowFactory)

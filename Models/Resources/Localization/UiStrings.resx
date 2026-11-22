@@ -829,4 +829,7 @@ en el tren</value>
   <data name="YesButtonLabel" xml:space="preserve">
     <value>Sí</value>
   </data>
+  <data name="UnexpectedErrorMessage" xml:space="preserve">
+    <value>Ocurrió un error inesperado. Si vuelve a pasar, reinicia el juego.</value>
+  </data>
 </root>

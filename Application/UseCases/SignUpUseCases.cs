@@ -127,8 +127,9 @@ public sealed class SignUpUseCases : ISignUpUseCases
             MailAddress address = new MailAddress(email);
             isWellFormed = string.Equals(address.Address, email, StringComparison.OrdinalIgnoreCase);
         }
-        catch (FormatException)
+        catch (FormatException exception)
         {
+            _logger.Debug("An email address was rejected because its format is invalid.", exception);
             isWellFormed = false;
         }
 

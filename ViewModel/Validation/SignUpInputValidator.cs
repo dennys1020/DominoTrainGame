@@ -1,5 +1,6 @@
 using System;
 using System.Net.Mail;
+using log4net.Ext.Trace;
 
 namespace DominoTrainGame.Client.ViewModel.Validation;
 
@@ -10,6 +11,13 @@ public static class SignUpInputValidator
     private const int MinimumPasswordLength = 8;
     private const int MaximumPasswordLength = 128;
     private const int EmptyLength = 0;
+
+    private static readonly ITraceLog _logger;
+
+    static SignUpInputValidator()
+    {
+        _logger = TraceLogManager.GetLogger(typeof(SignUpInputValidator));
+    }
 
     public static SignUpInputStatus Validate(string username, string email, string password)
     {
@@ -82,8 +90,9 @@ public static class SignUpInputValidator
             MailAddress mailAddress = new MailAddress(email);
             isWellFormed = string.Equals(mailAddress.Address, email, StringComparison.OrdinalIgnoreCase);
         }
-        catch (FormatException)
+        catch (FormatException exception)
         {
+            _logger.Debug("An email address was rejected because its format is invalid.", exception);
             isWellFormed = false;
         }
 
