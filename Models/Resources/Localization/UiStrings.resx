@@ -831,5 +831,13 @@ en el tren</value>
   </data>
   <data name="UnexpectedErrorMessage" xml:space="preserve">
     <value>Ocurrió un error inesperado. Si vuelve a pasar, reinicia el juego.</value>
+  <data name="DisplaySectionLabel" xml:space="preserve">
+    <value>03 / Pantalla</value>
+  </data>
+  <data name="FullScreenOptionDescription" xml:space="preserve">
+    <value>También con F11. Esc para salir.</value>
+  </data>
+  <data name="FullScreenOptionLabel" xml:space="preserve">
+    <value>Pantalla completa</value>
   </data>
 </root>

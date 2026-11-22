@@ -76,7 +76,8 @@ internal sealed class WindowFactory
             [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchServices),
             [Screen.MatchResults] = CreateMatchResultsViewModel,
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
-            [Screen.Leaderboard] = CreateLeaderboardViewModel
+            [Screen.Leaderboard] = CreateLeaderboardViewModel,
+            [Screen.Settings] = CreateSettingsViewModel
         };
     }
 
@@ -154,6 +155,12 @@ internal sealed class WindowFactory
             : new DialogViewModel(windowService);
 
         return viewModel;
+    }
+
+    private ScreenViewModel CreateSettingsViewModel(IWindowService windowService)
+    {
+        ScreenViewModel screenViewModel = new SettingsViewModel(windowService);
+        return screenViewModel;
     }
 
     private static void UnsubscribeViewModel(object viewModel)
