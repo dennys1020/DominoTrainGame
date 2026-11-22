@@ -829,6 +829,8 @@ on the train</value>
   <data name="YesButtonLabel" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="UnexpectedErrorMessage" xml:space="preserve">
+    <value>An unexpected error occurred. If it happens again, restart the game.</value>
   <data name="DisplaySectionLabel" xml:space="preserve">
     <value>03 / Display</value>
   </data>
