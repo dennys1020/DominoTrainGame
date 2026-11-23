@@ -1,19 +1,23 @@
-using System;
+using log4net.Ext.Trace;
+using DominoTrainGame.Server.Application.Guards;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class PlayerProfileSummary
 {
+    private static readonly ITraceLog _logger;
+
     static PlayerProfileSummary()
     {
+        _logger = TraceLogManager.GetLogger(typeof(PlayerProfileSummary));
         Empty = new PlayerProfileSummary(PlayerIdentity.Empty, ProfileDetails.Empty, SocialLinks.Empty);
     }
 
     public PlayerProfileSummary(PlayerIdentity player, ProfileDetails details, SocialLinks socialLinks)
     {
-        Player = player ?? throw new ArgumentNullException(nameof(player));
-        Details = details ?? throw new ArgumentNullException(nameof(details));
-        SocialLinks = socialLinks ?? throw new ArgumentNullException(nameof(socialLinks));
+        Player = ArgumentGuard.NotNull(player, nameof(player), _logger);
+        Details = ArgumentGuard.NotNull(details, nameof(details), _logger);
+        SocialLinks = ArgumentGuard.NotNull(socialLinks, nameof(socialLinks), _logger);
     }
 
     public static PlayerProfileSummary Empty { get; }
