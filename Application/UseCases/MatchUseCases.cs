@@ -44,7 +44,12 @@ public sealed class MatchUseCases : IMatchUseCases
         }
 
         MatchState matchState = new MatchState(code, playerIds, dominoSet, ShuffleTiles(dominoSet));
-        bool wasStarted = _matchRegistry.TryAdd(matchState);
+        bool wasStarted;
+
+        lock (matchState.SyncRoot)
+        {
+            wasStarted = _matchRegistry.TryAdd(matchState);
+        }
 
         if (wasStarted)
         {
@@ -181,14 +186,13 @@ public sealed class MatchUseCases : IMatchUseCases
         {
             lock (matchState.SyncRoot)
             {
-                wasRemoved = matchState.RemovePlayer(playerId);
+                wasRemoved = RemoveFromMatch(matchState, playerId);
                 hasEnoughPlayers = matchState.HasEnoughPlayers;
             }
         }
 
         if (wasRemoved)
         {
-            _matchRegistry.RemovePlayer(playerId);
             CompleteLeave(matchState, playerId, hasEnoughPlayers);
         }
         else
@@ -309,6 +313,23 @@ public sealed class MatchUseCases : IMatchUseCases
         return hasEndedRound;
     }
 
+    private bool RemoveFromMatch(MatchState matchState, int playerId)
+    {
+        bool wasRemoved = matchState.RemovePlayer(playerId);
+
+        if (wasRemoved)
+        {
+            _matchRegistry.RemovePlayer(playerId);
+
+            if (!matchState.HasEnoughPlayers)
+            {
+                _matchRegistry.RemoveMatch(matchState);
+            }
+        }
+
+        return wasRemoved;
+    }
+
     private void CompleteLeave(MatchState matchState, int playerId, bool hasEnoughPlayers)
     {
         NotifyUpdates(matchState, matchState.PlayerIds, new List<int>());
@@ -319,7 +340,6 @@ public sealed class MatchUseCases : IMatchUseCases
         }
         else
         {
-            _matchRegistry.RemoveMatch(matchState);
             _logger.InfoFormat("A match was closed because too few players remain. PlayerId: {0}.", playerId);
             FinishMatch(matchState, MatchEndReason.NotEnoughPlayers);
         }

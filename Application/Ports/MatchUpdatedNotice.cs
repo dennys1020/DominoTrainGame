@@ -15,7 +15,8 @@ public sealed class MatchUpdatedNotice
         IReadOnlyDictionary<int, int> scoresByPlayerId,
         IReadOnlyList<TrainSnapshot> trains)
     {
-        RecipientPlayerIds = recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds));
+        RecipientPlayerIds = new List<int>(
+            recipientPlayerIds ?? throw new ArgumentNullException(nameof(recipientPlayerIds)));
         CurrentPlayerId = currentPlayerId;
         BoneyardCount = boneyardCount;
         EngineTile = engineTile ?? throw new ArgumentNullException(nameof(engineTile));
