@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.ServiceModel;
+using System.ServiceModel.Security;
 using System.Threading.Tasks;
 using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models.DominoService;
@@ -13,6 +14,8 @@ internal sealed class RemoteCallGuard
     private const string UndeclaredFaultMessageFormat =
         "The server reported an undeclared fault while processing a {0} request.";
     private const string TimeoutMessageFormat = "A {0} request did not finish before the configured timeout.";
+    private const string SecureChannelMessageFormat =
+        "A {0} request could not establish a secure channel because the server certificate was not accepted.";
     private const string CommunicationMessageFormat = "A {0} request could not reach the server.";
     private const string DisposedChannelMessageFormat = "A {0} request used a channel that was already closed.";
     private const string InvalidEndpointMessageFormat =
@@ -90,6 +93,11 @@ internal sealed class RemoteCallGuard
         catch (TimeoutException exception)
         {
             _logger.Error(CreateLogMessage(TimeoutMessageFormat, failures.OperationName), exception);
+            result = createFailure(failures.ServerUnavailable);
+        }
+        catch (SecurityNegotiationException exception)
+        {
+            _logger.Error(CreateLogMessage(SecureChannelMessageFormat, failures.OperationName), exception);
             result = createFailure(failures.ServerUnavailable);
         }
         catch (CommunicationException exception)
