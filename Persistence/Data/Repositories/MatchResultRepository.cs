@@ -33,12 +33,49 @@ public sealed class MatchResultRepository : IMatchResultRepository
 
     public IReadOnlyList<PlayerStatistics> GetStatisticsByMostWins(int maximumPlayers)
     {
-        List<PlayerStatisticsRow> statisticsRows = _databaseExecutor.Execute(
+        List<PlayerStatistics> statisticsByMostWins = _databaseExecutor.Execute(
             QueryStatisticsByMostWins,
             maximumPlayers);
-        IReadOnlyList<PlayerStatistics> statisticsByMostWins = ToStatistics(statisticsRows);
 
         return statisticsByMostWins;
+    }
+
+    public PlayerProfileStatistics GetProfileStatisticsByPlayerId(int playerId)
+    {
+        PlayerProfileStatistics statistics = _databaseExecutor.Execute(QueryProfileStatisticsByPlayerId, playerId);
+
+        return statistics;
+    }
+
+    private static PlayerProfileStatistics QueryProfileStatisticsByPlayerId(
+        DominoGameDBEntities context,
+        int playerId)
+    {
+        List<MatchResult> playerResults = context.MatchResults
+            .AsNoTracking()
+            .Where(matchResult => matchResult.PlayerId == playerId)
+            .Where(matchResult => matchResult.Player.IsGuest != GuestPlayerFlag)
+            .ToList();
+        PlayerProfileStatistics statistics = playerResults.Any()
+            ? ToProfileStatistics(playerResults)
+            : PlayerProfileStatistics.Empty;
+
+        return statistics;
+    }
+
+    private static PlayerProfileStatistics ToProfileStatistics(List<MatchResult> playerResults)
+    {
+        int wins = playerResults.Count(IsFirstRank);
+        int totalPoints = playerResults.Sum(matchResult => matchResult.TotalScore);
+        PlayerProfileStatistics statistics = new PlayerProfileStatistics(playerResults.Count, wins, totalPoints);
+
+        return statistics;
+    }
+
+    private static bool IsFirstRank(MatchResult matchResult)
+    {
+        bool isFirstRank = matchResult.FinalRank == MatchRanking.FirstRank;
+        return isFirstRank;
     }
 
     private static bool InsertFinishedMatch(DominoGameDBEntities context, FinishedMatchRecord finishedMatch)
@@ -67,9 +104,9 @@ public sealed class MatchResultRepository : IMatchResultRepository
 
     private static Lobby FindOrCreateLobby(DominoGameDBEntities context, string lobbyCode)
     {
-        List<Lobby> savedLobbies = (from lobby in context.Lobbies
-                                    where lobby.Token == lobbyCode
-                                    select lobby).ToList();
+        List<Lobby> savedLobbies = context.Lobbies
+            .Where(lobby => lobby.Token == lobbyCode)
+            .ToList();
         Lobby matchLobby = savedLobbies.Any() ? savedLobbies.First() : CreateLobby(lobbyCode);
 
         return matchLobby;
@@ -95,39 +132,31 @@ public sealed class MatchResultRepository : IMatchResultRepository
         return matchResult;
     }
 
-    private static List<PlayerStatisticsRow> QueryStatisticsByMostWins(
+    private static List<PlayerStatistics> QueryStatisticsByMostWins(
         DominoGameDBEntities context,
         int maximumPlayers)
     {
-        List<PlayerStatisticsRow> statisticsRows = (from player in context.Players
-                                                    where player.IsGuest != GuestPlayerFlag
-                                                        && player.MatchResults.Any()
-                                                    let wins = (from matchResult in player.MatchResults
-                                                                where matchResult.FinalRank == MatchRanking.FirstRank
-                                                                select matchResult).Count()
-                                                    let gamesPlayed = player.MatchResults.Count()
-                                                    orderby wins descending, gamesPlayed, player.Username
-                                                    select new PlayerStatisticsRow
-                                                    {
-                                                        Username = player.Username,
-                                                        Wins = wins,
-                                                        GamesPlayed = gamesPlayed
-                                                    }).Take(maximumPlayers).ToList();
-        return statisticsRows;
-    }
-
-    private static IReadOnlyList<PlayerStatistics> ToStatistics(List<PlayerStatisticsRow> statisticsRows)
-    {
-        List<PlayerStatistics> statisticsByMostWins = new List<PlayerStatistics>();
-
-        foreach (PlayerStatisticsRow statisticsRow in statisticsRows)
-        {
-            statisticsByMostWins.Add(new PlayerStatistics(
-                statisticsRow.Username,
-                statisticsRow.Wins,
-                statisticsRow.GamesPlayed));
-        }
+        List<PlayerStatistics> statisticsByMostWins = context.Players
+            .AsNoTracking()
+            .Include(player => player.MatchResults)
+            .Where(player => player.IsGuest != GuestPlayerFlag)
+            .Where(player => player.MatchResults.Any())
+            .AsEnumerable()
+            .Select(ToPlayerStatistics)
+            .OrderByDescending(statistics => statistics.Wins)
+            .ThenBy(statistics => statistics.GamesPlayed)
+            .ThenBy(statistics => statistics.Username, StringComparer.OrdinalIgnoreCase)
+            .Take(maximumPlayers)
+            .ToList();
 
         return statisticsByMostWins;
+    }
+
+    private static PlayerStatistics ToPlayerStatistics(Player player)
+    {
+        int wins = player.MatchResults.Count(IsFirstRank);
+        PlayerStatistics statistics = new PlayerStatistics(player.Username, wins, player.MatchResults.Count);
+
+        return statistics;
     }
 }
