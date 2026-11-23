@@ -114,6 +114,11 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(status, InviteFriendStatus.Success, MapInviteFaultCode);
     }
 
+    public void LogOut()
+    {
+        _lobbySessionManager.EndSession();
+    }
+
     private static LobbyResponse ToLobbyResponse(LobbyState lobby)
     {
         List<LobbyPlayer> players = new List<LobbyPlayer>();

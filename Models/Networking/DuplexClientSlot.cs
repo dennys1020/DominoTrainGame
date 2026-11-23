@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
@@ -66,18 +67,23 @@ internal sealed class DuplexClientSlot<TClient>
 
     public void Close()
     {
-        TClient closedClient;
-
-        lock (_clientSyncRoot)
+        foreach (TClient detachedClient in DetachClient())
         {
-            closedClient = _client;
-            _client = null;
-            _sessionToken = string.Empty;
+            _channelCloser.Close(detachedClient);
+        }
+    }
+
+    public void CloseAfter(Action<TClient> sendLastMessage)
+    {
+        if (sendLastMessage == null)
+        {
+            throw new ArgumentNullException(nameof(sendLastMessage));
         }
 
-        if (closedClient != null)
+        foreach (TClient detachedClient in DetachClient())
         {
-            _channelCloser.Close(closedClient);
+            sendLastMessage(detachedClient);
+            _channelCloser.Close(detachedClient);
         }
     }
 
@@ -98,6 +104,24 @@ internal sealed class DuplexClientSlot<TClient>
                 _channelCloser.Close(client);
             }
         }
+    }
+
+    private List<TClient> DetachClient()
+    {
+        List<TClient> detachedClients = new List<TClient>();
+
+        lock (_clientSyncRoot)
+        {
+            if (_client != null)
+            {
+                detachedClients.Add(_client);
+            }
+
+            _client = null;
+            _sessionToken = string.Empty;
+        }
+
+        return detachedClients;
     }
 
     private void Attach(TClient client, string sessionToken)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Server.Application.Ports;
 
 namespace DominoTrainGame.Server.Service.Sessions;
 
@@ -10,12 +11,16 @@ public sealed class SessionTokenRegistry
     private const int TokenByteLength = 32;
     private const int TokenLifetimeMinutes = 30;
 
+    private readonly IClock _clock;
     private readonly Dictionary<string, IssuedSession> _sessionsByToken;
+    private readonly Dictionary<int, string> _tokensByPlayerId;
     private readonly object _sessionsLock;
 
-    public SessionTokenRegistry()
+    public SessionTokenRegistry(IClock clock)
     {
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
         _sessionsByToken = new Dictionary<string, IssuedSession>(StringComparer.Ordinal);
+        _tokensByPlayerId = new Dictionary<int, string>();
         _sessionsLock = new object();
     }
 
@@ -27,7 +32,14 @@ public sealed class SessionTokenRegistry
         }
 
         string token = GenerateToken();
-        Store(token, player);
+
+        lock (_sessionsLock)
+        {
+            ForgetPlayerToken(player.PlayerId);
+            _sessionsByToken[token] = new IssuedSession(player, CalculateExpiration());
+            _tokensByPlayerId[player.PlayerId] = token;
+        }
+
         return token;
     }
 
@@ -38,25 +50,34 @@ public sealed class SessionTokenRegistry
 
         lock (_sessionsLock)
         {
-            if (_sessionsByToken.ContainsKey(normalizedToken))
+            if (IsActive(normalizedToken))
             {
-                player = ResolveStoredSession(normalizedToken);
+                player = _sessionsByToken[normalizedToken].Player;
             }
         }
 
         return player;
     }
 
-    public void Renew(string token, PlayerIdentity player)
+    public void Renew(string token)
     {
-        if (player == null)
-        {
-            throw new ArgumentNullException(nameof(player));
-        }
+        string normalizedToken = token ?? string.Empty;
 
-        if (!string.IsNullOrEmpty(token))
+        lock (_sessionsLock)
         {
-            Store(token, player);
+            if (_sessionsByToken.ContainsKey(normalizedToken))
+            {
+                PlayerIdentity player = _sessionsByToken[normalizedToken].Player;
+                _sessionsByToken[normalizedToken] = new IssuedSession(player, CalculateExpiration());
+            }
+        }
+    }
+
+    public void RevokePlayer(int playerId)
+    {
+        lock (_sessionsLock)
+        {
+            ForgetPlayerToken(playerId);
         }
     }
 
@@ -74,27 +95,25 @@ public sealed class SessionTokenRegistry
         return token;
     }
 
-    private PlayerIdentity ResolveStoredSession(string token)
+    private DateTime CalculateExpiration()
     {
-        IssuedSession session = _sessionsByToken[token];
-        bool isExpired = session.ExpiresAtUtc <= DateTime.UtcNow;
-        PlayerIdentity player = isExpired ? PlayerIdentity.Empty : session.Player;
-
-        if (isExpired)
-        {
-            _sessionsByToken.Remove(token);
-        }
-
-        return player;
+        DateTime expiresAtUtc = _clock.UtcNow.AddMinutes(TokenLifetimeMinutes);
+        return expiresAtUtc;
     }
 
-    private void Store(string token, PlayerIdentity player)
+    private bool IsActive(string token)
     {
-        DateTime expiresAtUtc = DateTime.UtcNow.AddMinutes(TokenLifetimeMinutes);
+        bool isActive = _sessionsByToken.ContainsKey(token)
+            && _sessionsByToken[token].ExpiresAtUtc > _clock.UtcNow;
+        return isActive;
+    }
 
-        lock (_sessionsLock)
+    private void ForgetPlayerToken(int playerId)
+    {
+        if (_tokensByPlayerId.ContainsKey(playerId))
         {
-            _sessionsByToken[token] = new IssuedSession(player, expiresAtUtc);
+            _sessionsByToken.Remove(_tokensByPlayerId[playerId]);
+            _tokensByPlayerId.Remove(playerId);
         }
     }
 

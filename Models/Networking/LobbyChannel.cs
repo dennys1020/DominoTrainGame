@@ -94,9 +94,29 @@ public sealed class LobbyChannel
         return commandTask;
     }
 
-    public void Close()
+    public void LogOut()
     {
-        _lobbyClientSlot.Close();
+        _lobbyClientSlot.CloseAfter(SendLogOut);
+    }
+
+    private static void SendLogOut(LobbyServiceClient lobbyClient)
+    {
+        try
+        {
+            lobbyClient.LogOut();
+        }
+        catch (TimeoutException exception)
+        {
+            _logger.Warn("The logout notice did not reach the server before the timeout.", exception);
+        }
+        catch (CommunicationException exception)
+        {
+            _logger.Warn("The logout notice could not reach the server because of a communication error.", exception);
+        }
+        catch (ObjectDisposedException exception)
+        {
+            _logger.Warn("The logout notice was not sent because the lobby channel was already closed.", exception);
+        }
     }
 
     private async Task<TResult> InvokeAsync<TResult>(

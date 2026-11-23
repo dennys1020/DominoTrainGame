@@ -65,6 +65,26 @@ public sealed class PlayerSessionManager<TCallback>
         ConnectPlayer(player, sessionToken);
     }
 
+    public void EndSession()
+    {
+        PlayerIdentity player = _sessions.FindPlayer(OperationContext.Current.SessionId);
+
+        if (player.IsEmpty)
+        {
+            _logger.WarnFormat(
+                "A logout was ignored because the channel has no player session. Channel: {0}.",
+                _channelName);
+        }
+        else
+        {
+            _sessionTokens.RevokePlayer(player.PlayerId);
+            _logger.InfoFormat(
+                "A player logged out and the session token was revoked. Channel: {0}. PlayerId: {1}.",
+                _channelName,
+                player.PlayerId);
+        }
+    }
+
     public PlayerIdentity ResolveCaller()
     {
         string sessionId = OperationContext.Current.SessionId;
@@ -112,8 +132,23 @@ public sealed class PlayerSessionManager<TCallback>
         return player;
     }
 
+    private void RejectBoundChannel()
+    {
+        PlayerIdentity boundPlayer = _sessions.FindPlayer(OperationContext.Current.SessionId);
+
+        if (!boundPlayer.IsEmpty)
+        {
+            _logger.WarnFormat(
+                "A second connection on the same channel was rejected. Channel: {0}. PlayerId: {1}.",
+                _channelName,
+                boundPlayer.PlayerId);
+            throw GameFaultFactory.Create(GameServiceFaultCode.AlreadyConnected);
+        }
+    }
+
     private void ConnectPlayer(PlayerIdentity player, string sessionToken)
     {
+        RejectBoundChannel();
         ReplacePreviousConnection(player.PlayerId);
         Register(player, sessionToken);
         OnPlayerConnected(new PlayerSessionEventArgs(player.PlayerId));
@@ -163,7 +198,7 @@ public sealed class PlayerSessionManager<TCallback>
                 "A player disconnected. Channel: {0}. PlayerId: {1}.",
                 _channelName,
                 session.Player.PlayerId);
-            _sessionTokens.Renew(sessionToken, session.Player);
+            _sessionTokens.Renew(sessionToken);
             OnPlayerDisconnected(new PlayerSessionEventArgs(session.Player.PlayerId));
         }
     }
