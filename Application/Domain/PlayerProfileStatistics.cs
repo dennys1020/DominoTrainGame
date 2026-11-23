@@ -2,9 +2,13 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class PlayerProfileStatistics
 {
+    private const int NoGames = 0;
+    private const int NoWins = 0;
+    private const int NoPoints = 0;
+
     static PlayerProfileStatistics()
     {
-        Empty = new PlayerProfileStatistics(0, 0, 0);
+        Empty = new PlayerProfileStatistics(NoGames, NoWins, NoPoints);
     }
 
     public PlayerProfileStatistics(int gamesPlayed, int wins, int totalPoints)

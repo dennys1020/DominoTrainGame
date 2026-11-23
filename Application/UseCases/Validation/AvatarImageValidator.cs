@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace DominoTrainGame.Server.Application.UseCases.Validation;
 
@@ -26,7 +25,7 @@ public static class AvatarImageValidator
         bool isPng = StartsWithSignature(imageBytes, _pngFileSignature);
         bool isJpg = StartsWithSignature(imageBytes, _jpgFileSignature);
 
-        if (!isPng || !isJpg)
+        if (!isPng && !isJpg)
         {
             throw new ArgumentException("The avatar image must be a PNG or JPG file.", nameof(imageBytes));
         }
@@ -42,23 +41,15 @@ public static class AvatarImageValidator
 
         if (!hasContent || imageBytes.Length > MaximumAvatarImageBytes)
         {
-            throw new ArgumentException("The avatar image is empty or exceeds the maximum allowed size.",
+            throw new ArgumentException(
+                "The avatar image is empty or exceeds the maximum allowed size.",
                 nameof(imageBytes));
         }
     }
 
     private static bool StartsWithSignature(byte[] imageBytes, byte[] fileSignature)
     {
-        bool isLongEnough = imageBytes.Length >= fileSignature.Length;
-        bool matchesSignature = isLongEnough;
-        int byteIndex = 0;
-
-        while (matchesSignature && byteIndex < fileSignature.Length)
-        {
-            matchesSignature = imageBytes[byteIndex] == fileSignature[byteIndex];
-            byteIndex++;
-        }
-
+        bool matchesSignature = imageBytes.Take(fileSignature.Length).SequenceEqual(fileSignature);
         return matchesSignature;
     }
 }

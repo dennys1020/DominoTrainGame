@@ -4,6 +4,7 @@ using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
+using DominoTrainGame.Server.Application.UseCases.Validation;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
