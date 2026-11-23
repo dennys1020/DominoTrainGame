@@ -1,10 +1,10 @@
 using System;
 
-namespace DominoTrainGame.Server.Application.UseCases;
+namespace DominoTrainGame.Server.Application.UseCases.Validation;
 
 public static class PlayerInputValidator
 {
-    private const int MaximumUsernameLength = 45;
+    public const int MaximumUsernameLength = 45;
     private const int MaximumPasswordLength = 128;
 
     public static string NormalizeUsername(string username)
