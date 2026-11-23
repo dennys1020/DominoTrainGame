@@ -45,6 +45,10 @@ public interface ILobbyService
     [FaultContract(typeof(GameServiceFault))]
     void InviteFriend(FriendUsernameRequest request);
 
+    [OperationContract(IsInitiating = false)]
+    [FaultContract(typeof(GameServiceFault))]
+    void Reconnect(ReconnectRequest request);
+
     [OperationContract(IsInitiating = false, IsOneWay = true)]
     void LogOut();
 }

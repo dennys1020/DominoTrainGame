@@ -70,6 +70,7 @@
     <Compile Include="Domain\PlayerSanction.cs" />
     <Compile Include="Domain\SanctionType.cs" />
     <Compile Include="Ports\IClock.cs" />
+    <Compile Include="Ports\IGracePeriodScheduler.cs" />
     <Compile Include="Security\VerificationCodeGenerator.cs" />
     <Compile Include="Ports\IEmailSender.cs" />
     <Compile Include="Errors\EmailUnavailableException.cs" />
@@ -97,7 +98,9 @@
     <Compile Include="Ports\IGameNotifier.cs" />
     <Compile Include="UseCases\ILobbyUseCases.cs" />
     <Compile Include="UseCases\IMatchUseCases.cs" />
+    <Compile Include="UseCases\IReconnectionUseCases.cs" />
     <Compile Include="UseCases\MatchUseCases.cs" />
+    <Compile Include="UseCases\ReconnectionUseCases.cs" />
     <Compile Include="UseCases\ILeaderboardUseCases.cs" />
     <Compile Include="UseCases\LeaderboardUseCases.cs" />
     <Compile Include="Domain\LobbyPlayerState.cs" />

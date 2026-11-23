@@ -45,6 +45,8 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
 
     public event EventHandler<EventArgs> MatchAbandoned;
 
+    public event EventHandler<EventArgs> MatchLost;
+
     public void ReceivePlayerJoined(PlayerJoinedMessage message)
     {
         if (message?.Player == null)
@@ -116,6 +118,7 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         else
         {
             _session.ClearRoundHistory();
+            _session.StoreMatchCode(message.Code);
             OnMatchStarting(new MatchStartingEventArgs(message.Code));
         }
     }
@@ -187,7 +190,27 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         {
             _logger.Warn("A match end notice without content was ignored.");
         }
-        else if (matchEndedMessage.EndReason == MatchEndReasonCode.NotEnoughPlayers)
+        else
+        {
+            _session.ForgetMatch();
+            PublishMatchEnd(matchEndedMessage.EndReason);
+        }
+    }
+
+    public void ReportConnectionState(ConnectionState connectionState)
+    {
+        OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
+    }
+
+    public void ReportMatchLost()
+    {
+        _session.ForgetMatch();
+        OnMatchLost(EventArgs.Empty);
+    }
+
+    private void PublishMatchEnd(MatchEndReasonCode endReason)
+    {
+        if (endReason == MatchEndReasonCode.NotEnoughPlayers)
         {
             OnMatchAbandoned(EventArgs.Empty);
         }
@@ -195,11 +218,6 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
         {
             OnMatchFinished(EventArgs.Empty);
         }
-    }
-
-    public void ReportConnectionState(ConnectionState connectionState)
-    {
-        OnConnectionStateChanged(new ConnectionStateChangedEventArgs(connectionState));
     }
 
     private void ApplyLobbyUpdate(long version, Func<LobbyResult, LobbyResult> update)
@@ -260,5 +278,10 @@ public sealed class GameClientCallback : ILobbyServiceCallback, ILobbyEvents, IM
     private void OnMatchAbandoned(EventArgs eventArgs)
     {
         MatchAbandoned?.Invoke(this, eventArgs);
+    }
+
+    private void OnMatchLost(EventArgs eventArgs)
+    {
+        MatchLost?.Invoke(this, eventArgs);
     }
 }

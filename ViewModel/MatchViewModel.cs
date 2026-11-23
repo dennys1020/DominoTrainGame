@@ -26,7 +26,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IMatchEvents _matchEvents;
-    private readonly AsyncRelayCommand _closeAbandonedMatchCommand;
+    private readonly ILobbyEvents _lobbyEvents;
+    private readonly AsyncParameterRelayCommand<string> _closeMatchCommand;
     private readonly AsyncRelayCommand _showRoundNoticeCommand;
 
     private int _enginePips;
@@ -35,6 +36,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private bool _isLocalPlayerTurn;
     private bool _hasRoundSummary;
     private bool _isRoundNoticeVisible;
+    private bool _isReconnecting;
     private string _turnPlayerUsername = string.Empty;
     private string _lastRoundWinnerUsername = string.Empty;
 
@@ -46,11 +48,12 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _matchServices = matchServices ?? throw new ArgumentNullException(nameof(matchServices));
         _matchEvents = _matchServices.MatchEvents;
+        _lobbyEvents = _gameServices.LobbyEvents;
 
         DrawTileCommand = new AsyncRelayCommand(DrawTileAsync);
         PassTurnCommand = new AsyncRelayCommand(PassTurnAsync);
         LeaveMatchCommand = new AsyncRelayCommand(LeaveMatchAsync);
-        _closeAbandonedMatchCommand = new AsyncRelayCommand(CloseAbandonedMatchAsync);
+        _closeMatchCommand = new AsyncParameterRelayCommand<string>(CloseMatchAsync);
         _showRoundNoticeCommand = new AsyncRelayCommand(ShowRoundNoticeAsync);
 
         ApplyCurrentMatch();
@@ -61,6 +64,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _matchEvents.RoundEnded += HandleRoundEnded;
         _matchEvents.MatchFinished += HandleMatchFinished;
         _matchEvents.MatchAbandoned += HandleMatchAbandoned;
+        _matchEvents.MatchLost += HandleMatchLost;
+        _lobbyEvents.ConnectionStateChanged += HandleConnectionStateChanged;
     }
 
     public ObservableCollection<TileSummary> HandTiles { get; } = new ObservableCollection<TileSummary>();
@@ -166,6 +171,18 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
+    public bool IsReconnecting
+    {
+        get
+        {
+            return _isReconnecting;
+        }
+        private set
+        {
+            SetProperty(ref _isReconnecting, value);
+        }
+    }
+
     public AsyncRelayCommand DrawTileCommand { get; }
 
     public AsyncRelayCommand PassTurnCommand { get; }
@@ -179,6 +196,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _matchEvents.RoundEnded -= HandleRoundEnded;
         _matchEvents.MatchFinished -= HandleMatchFinished;
         _matchEvents.MatchAbandoned -= HandleMatchAbandoned;
+        _matchEvents.MatchLost -= HandleMatchLost;
+        _lobbyEvents.ConnectionStateChanged -= HandleConnectionStateChanged;
     }
 
     private void ApplyCurrentMatch()
@@ -230,9 +249,24 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void HandleMatchAbandoned(object sender, EventArgs eventArgs)
     {
-        if (_closeAbandonedMatchCommand.CanExecute(null))
+        RequestMatchClose(MatchAbandonedMessageKey);
+    }
+
+    private void HandleMatchLost(object sender, EventArgs eventArgs)
+    {
+        RequestMatchClose(MatchMessageKeys.GetMessageKey(MatchMoveResult.MatchNotFound));
+    }
+
+    private void HandleConnectionStateChanged(object sender, ConnectionStateChangedEventArgs eventArgs)
+    {
+        IsReconnecting = eventArgs.State == ConnectionState.Reconnecting;
+    }
+
+    private void RequestMatchClose(string messageKey)
+    {
+        if (_closeMatchCommand.CanExecute(messageKey))
         {
-            _closeAbandonedMatchCommand.Execute(null);
+            _closeMatchCommand.Execute(messageKey);
         }
     }
 
@@ -271,9 +305,9 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         IsRoundNoticeVisible = false;
     }
 
-    private async Task CloseAbandonedMatchAsync()
+    private async Task CloseMatchAsync(string messageKey)
     {
-        WindowService.ShowMessage(MatchAbandonedMessageKey);
+        WindowService.ShowMessage(messageKey);
         await RunWhileBusyAsync(_gameServices.LeaveLobbyAsync);
         WindowService.Navigate(Screen.Main);
     }
