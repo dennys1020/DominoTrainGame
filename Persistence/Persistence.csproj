@@ -107,7 +107,6 @@
     <Compile Include="Data\Repositories\ConnectionRepository.cs" />
     <Compile Include="Data\Repositories\GuestPlayerCreation.cs" />
     <Compile Include="Data\Repositories\MatchResultRepository.cs" />
-    <Compile Include="Data\Repositories\PlayerStatisticsRow.cs" />
     <Compile Include="Data\Repositories\PlayerRepository.cs" />
     <Compile Include="Data\Repositories\SanctionRepository.cs" />
     <Compile Include="Email\SmtpEmailSender.cs" />
