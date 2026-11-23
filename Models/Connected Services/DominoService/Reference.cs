@@ -1013,6 +1013,51 @@ namespace DominoTrainGame.Client.Models.DominoService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReconnectRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class ReconnectRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MatchCodeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string MatchCode {
+            get {
+                return this.MatchCodeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MatchCodeField, value) != true)) {
+                    this.MatchCodeField = value;
+                    this.RaisePropertyChanged("MatchCode");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PlayerJoinedMessage", Namespace="http://dominotraingame/services")]
     [System.SerializableAttribute()]
     public partial class PlayerJoinedMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -2837,6 +2882,13 @@ namespace DominoTrainGame.Client.Models.DominoService {
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
         System.Threading.Tasks.Task InviteFriendAsync(DominoTrainGame.Client.Models.DominoService.FriendUsernameRequest request);
         
+        [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/Reconnect", ReplyAction="http://tempuri.org/ILobbyService/ReconnectResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/ILobbyService/ReconnectGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void Reconnect(DominoTrainGame.Client.Models.DominoService.ReconnectRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/Reconnect", ReplyAction="http://tempuri.org/ILobbyService/ReconnectResponse")]
+        System.Threading.Tasks.Task ReconnectAsync(DominoTrainGame.Client.Models.DominoService.ReconnectRequest request);
+        
         [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsInitiating=false, Action="http://tempuri.org/ILobbyService/LogOut")]
         void LogOut();
         
@@ -2979,6 +3031,14 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task InviteFriendAsync(DominoTrainGame.Client.Models.DominoService.FriendUsernameRequest request) {
             return base.Channel.InviteFriendAsync(request);
+        }
+        
+        public void Reconnect(DominoTrainGame.Client.Models.DominoService.ReconnectRequest request) {
+            base.Channel.Reconnect(request);
+        }
+        
+        public System.Threading.Tasks.Task ReconnectAsync(DominoTrainGame.Client.Models.DominoService.ReconnectRequest request) {
+            return base.Channel.ReconnectAsync(request);
         }
         
         public void LogOut() {

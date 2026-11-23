@@ -115,6 +115,15 @@
   <wsdl:message name="ILobbyService_InviteFriend_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q9="http://dominotraingame/services" name="detail" element="q9:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_Reconnect_InputMessage">
+    <wsdl:part name="parameters" element="tns:Reconnect" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_Reconnect_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReconnectResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILobbyService_Reconnect_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://dominotraingame/services" name="detail" element="q10:GameServiceFault" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_LogOut_InputMessage">
     <wsdl:part name="parameters" element="tns:LogOut" />
   </wsdl:message>
@@ -196,6 +205,11 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/InviteFriend" message="tns:ILobbyService_InviteFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendResponse" message="tns:ILobbyService_InviteFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_InviteFriend_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="Reconnect">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/Reconnect" message="tns:ILobbyService_Reconnect_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/ReconnectResponse" message="tns:ILobbyService_Reconnect_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/ReconnectGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_Reconnect_GameServiceFaultFault_FaultMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="LogOut">
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/LogOut" message="tns:ILobbyService_LogOut_InputMessage" />
@@ -335,6 +349,18 @@
     </wsdl:operation>
     <wsdl:operation name="InviteFriend">
       <soap12:operation soapAction="http://tempuri.org/ILobbyService/InviteFriend" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="Reconnect">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/Reconnect" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

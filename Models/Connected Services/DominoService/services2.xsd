@@ -113,6 +113,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FriendUsernameRequest" nillable="true" type="tns:FriendUsernameRequest" />
+  <xs:complexType name="ReconnectRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MatchCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReconnectRequest" nillable="true" type="tns:ReconnectRequest" />
   <xs:complexType name="PlayerJoinedMessage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Player" nillable="true" type="tns:LobbyPlayer" />

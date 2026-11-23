@@ -107,6 +107,18 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="Reconnect">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="request" nillable="true" type="q9:ReconnectRequest" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReconnectResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LogOut">
     <xs:complexType>
       <xs:sequence />
@@ -115,77 +127,77 @@
   <xs:element name="ReceivePlayerJoined">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q9="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q9:PlayerJoinedMessage" />
+        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerJoinedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerLeft">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q10="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q10:PlayerLeftMessage" />
+        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerLeftMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceivePlayerReadyChanged">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q11="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q11:PlayerReadyChangedMessage" />
+        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:PlayerReadyChangedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveDominoSetChanged">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q12:DominoSetChangedMessage" />
+        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:DominoSetChangedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveLobbyMessage">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q13:LobbyChatMessage" />
+        <xs:element xmlns:q14="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q14:LobbyChatMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveMatchStarting">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q14:MatchStartingMessage" />
+        <xs:element xmlns:q15="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q15:MatchStartingMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveLobbyInvitation">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q15="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q15:LobbyInvitationMessage" />
+        <xs:element xmlns:q16="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q16:LobbyInvitationMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveMatchUpdate">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q16="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q16:MatchSnapshotMessage" />
+        <xs:element xmlns:q17="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q17:MatchSnapshotMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveHand">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q17="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q17:HandMessage" />
+        <xs:element xmlns:q18="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q18:HandMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveRoundEnded">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q18="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q18:RoundEndedMessage" />
+        <xs:element xmlns:q19="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q19:RoundEndedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="ReceiveMatchEnded">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q19="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q19:MatchEndedMessage" />
+        <xs:element xmlns:q20="http://dominotraingame/services" minOccurs="0" name="message" nillable="true" type="q20:MatchEndedMessage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
