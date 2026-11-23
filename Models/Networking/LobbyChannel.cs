@@ -230,8 +230,10 @@ public sealed class LobbyChannel
         if (reconnectResult == ReconnectResult.Connected)
         {
             await RejoinLobbyAsync(lobbyCode);
+            LobbyActionResult matchResumeResult = await ResumeMatchAsync();
             _logger.InfoFormat("The lobby channel was restored. Attempts: {0}.", attemptCount);
             _callback.ReportConnectionState(ConnectionState.Reconnected);
+            ReportMatchResume(matchResumeResult);
         }
         else
         {
@@ -259,6 +261,47 @@ public sealed class LobbyChannel
                 lobbyClient => RequestJoinLobbyAsync(lobbyClient, lobbyCode),
                 LobbyResult.CreateFailure);
             _logger.InfoFormat("The lobby was rejoined after reconnecting. Status: {0}.", rejoinResult.Status);
+        }
+    }
+
+    private async Task<LobbyActionResult> ResumeMatchAsync()
+    {
+        LobbyActionResult resumeResult = LobbyActionResult.Success;
+        bool wasInMatch = !string.IsNullOrEmpty(_session.CurrentMatchCode);
+
+        if (wasInMatch)
+        {
+            resumeResult = await CallCurrentLobbyClientAsync<LobbyActionResult>(
+                RequestMatchReconnectionAsync,
+                RemoteCallGuard.KeepStatus<LobbyActionResult>).ConfigureAwait(false);
+            _logger.InfoFormat("The match reconnection finished. Status: {0}.", resumeResult);
+        }
+
+        return resumeResult;
+    }
+
+    private Task<LobbyActionResult> RequestMatchReconnectionAsync(LobbyServiceClient lobbyClient)
+    {
+        ReconnectRequest request = new ReconnectRequest
+        {
+            MatchCode = _session.CurrentMatchCode
+        };
+        Task<LobbyActionResult> reconnecting = RemoteCallGuard.CompleteCommandAsync(
+            lobbyClient.ReconnectAsync(request),
+            LobbyActionResult.Success);
+
+        return reconnecting;
+    }
+
+    private void ReportMatchResume(LobbyActionResult resumeResult)
+    {
+        bool isMatchLost = resumeResult != LobbyActionResult.Success
+            && resumeResult != LobbyActionResult.ServerUnavailable;
+
+        if (isMatchLost)
+        {
+            _logger.WarnFormat("The match seat could not be recovered after reconnecting. Status: {0}.", resumeResult);
+            _callback.ReportMatchLost();
         }
     }
 

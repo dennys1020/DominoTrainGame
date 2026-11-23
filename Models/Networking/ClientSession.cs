@@ -17,6 +17,7 @@ public sealed class ClientSession
     private bool _isGuest;
     private string _sessionToken = string.Empty;
     private string _pendingVerificationEmail = string.Empty;
+    private string _currentMatchCode = string.Empty;
     private SynchronizationContext _callerContext = new SynchronizationContext();
     private MatchSnapshot _matchSnapshot = MatchSnapshot.Empty;
     private PlayerHand _playerHand = PlayerHand.Empty;
@@ -64,6 +65,21 @@ public sealed class ClientSession
             }
 
             return playerHand;
+        }
+    }
+
+    public string CurrentMatchCode
+    {
+        get
+        {
+            string currentMatchCode;
+
+            lock (_sessionSyncRoot)
+            {
+                currentMatchCode = _currentMatchCode;
+            }
+
+            return currentMatchCode;
         }
     }
 
@@ -204,6 +220,22 @@ public sealed class ClientSession
         return currentLobby;
     }
 
+    public void StoreMatchCode(string matchCode)
+    {
+        lock (_sessionSyncRoot)
+        {
+            _currentMatchCode = matchCode ?? string.Empty;
+        }
+    }
+
+    public void ForgetMatch()
+    {
+        lock (_sessionSyncRoot)
+        {
+            _currentMatchCode = string.Empty;
+        }
+    }
+
     public void StoreMatch(MatchSnapshot matchSnapshot)
     {
         if (matchSnapshot == null)
@@ -271,6 +303,7 @@ public sealed class ClientSession
         lock (_sessionSyncRoot)
         {
             _currentLobby = LobbyResult.Empty;
+            _currentMatchCode = string.Empty;
             _matchSnapshot = MatchSnapshot.Empty;
             _playerHand = PlayerHand.Empty;
             _pendingLobbyUpdates.Clear();

@@ -316,6 +316,21 @@
                         </Border>
                     </Grid>
                 </Grid>
+                <Grid Visibility="{Binding IsReconnecting, Converter={StaticResource BoardVisibility}}">
+                    <Rectangle Fill="{StaticResource Ink}" Opacity="0.55" />
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Border Background="{StaticResource Ink}" Margin="8,8,0,0" />
+                        <Border Style="{StaticResource MatchCardStyle}" Margin="0,0,8,8" MinWidth="480">
+                            <TextBlock
+                                Text="{Binding [ReconnectingMessage], Source={StaticResource Localization}}"
+                                Style="{StaticResource MatchSectionStyle}"
+                                FontSize="16"
+                                TextAlignment="Center"
+                                Margin="0"
+                                AutomationProperties.LiveSetting="Assertive" />
+                        </Border>
+                    </Grid>
+                </Grid>
             </Grid>
         </Viewbox>
     </Grid>

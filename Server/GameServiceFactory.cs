@@ -67,6 +67,11 @@ internal static class GameServiceFactory
             gameNotifier,
             matchResultRepository);
         ILeaderboardUseCases leaderboardUseCases = new LeaderboardUseCases(matchResultRepository);
+        IGracePeriodScheduler gracePeriodScheduler = new GracePeriodScheduler();
+        IReconnectionUseCases reconnectionUseCases = new ReconnectionUseCases(
+            matchRegistry,
+            matchUseCases,
+            gracePeriodScheduler);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(
             lobbyRegistry,
             gameNotifier,
@@ -85,7 +90,6 @@ internal static class GameServiceFactory
         PlayerSessionManager<ISocialClientCallback> socialSessionManager =
             new PlayerSessionManager<ISocialClientCallback>(socialSessions, sessionTokens);
 
-        lobbySessionManager.PlayerDisconnected += (sender, eventArgs) => lobbyUseCases.LeaveLobby(eventArgs.PlayerId);
         socialSessionManager.PlayerConnected +=
             (sender, eventArgs) => friendUseCases.PublishStatus(eventArgs.PlayerId);
         socialSessionManager.PlayerDisconnected +=
@@ -102,6 +106,7 @@ internal static class GameServiceFactory
         LobbyService lobbyService = new LobbyService(
             lobbyUseCases,
             invitationUseCases,
+            reconnectionUseCases,
             lobbySessionManager,
             faultTranslator);
         FriendService friendService = new FriendService(friendUseCases, socialSessionManager, faultTranslator);

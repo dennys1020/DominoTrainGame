@@ -13,4 +13,6 @@ public interface IMatchEvents
     event EventHandler<EventArgs> MatchFinished;
 
     event EventHandler<EventArgs> MatchAbandoned;
+
+    event EventHandler<EventArgs> MatchLost;
 }

@@ -16,19 +16,24 @@ public sealed class LobbyService : ILobbyService
 {
     private readonly ILobbyUseCases _lobbyUseCases;
     private readonly IInvitationUseCases _invitationUseCases;
+    private readonly IReconnectionUseCases _reconnectionUseCases;
     private readonly PlayerSessionManager<IGameClientCallback> _lobbySessionManager;
     private readonly ServiceFaultTranslator _faultTranslator;
 
     public LobbyService(
         ILobbyUseCases lobbyUseCases,
         IInvitationUseCases invitationUseCases,
+        IReconnectionUseCases reconnectionUseCases,
         PlayerSessionManager<IGameClientCallback> lobbySessionManager,
         ServiceFaultTranslator faultTranslator)
     {
         _lobbyUseCases = lobbyUseCases ?? throw new ArgumentNullException(nameof(lobbyUseCases));
         _invitationUseCases = invitationUseCases ?? throw new ArgumentNullException(nameof(invitationUseCases));
+        _reconnectionUseCases = reconnectionUseCases
+            ?? throw new ArgumentNullException(nameof(reconnectionUseCases));
         _lobbySessionManager = lobbySessionManager ?? throw new ArgumentNullException(nameof(lobbySessionManager));
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
+        _lobbySessionManager.PlayerDisconnected += HandlePlayerDisconnected;
     }
 
     public void Connect(SessionTokenRequest connectRequest)
@@ -112,6 +117,23 @@ public sealed class LobbyService : ILobbyService
             () => _invitationUseCases.InviteFriend(caller, inviteFriendRequest?.Username));
 
         GameFaultFactory.ThrowIfRejected(status, InviteFriendStatus.Success, MapInviteFaultCode);
+    }
+
+    public void Reconnect(ReconnectRequest reconnectRequest)
+    {
+        PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
+        bool wasReconnected;
+
+        try
+        {
+            wasReconnected = _reconnectionUseCases.Reconnect(caller.PlayerId, reconnectRequest?.MatchCode);
+        }
+        catch (ArgumentException exception)
+        {
+            throw _faultTranslator.TranslateInvalidInput(exception, GameServiceFaultCode.InvalidInput);
+        }
+
+        GameFaultFactory.ThrowIfRejected(wasReconnected, GameServiceFaultCode.MatchNotFound);
     }
 
     public void LogOut()
@@ -293,5 +315,11 @@ public sealed class LobbyService : ILobbyService
         }
 
         return faultCode;
+    }
+
+    private void HandlePlayerDisconnected(object sender, PlayerSessionEventArgs eventArgs)
+    {
+        _reconnectionUseCases.HoldSeat(eventArgs.PlayerId);
+        _lobbyUseCases.LeaveLobby(eventArgs.PlayerId);
     }
 }

@@ -101,6 +101,7 @@
     <Compile Include="DataContracts\MatchPlayerData.cs" />
     <Compile Include="DataContracts\MatchSnapshotMessage.cs" />
     <Compile Include="DataContracts\PlayTileRequest.cs" />
+    <Compile Include="DataContracts\ReconnectRequest.cs" />
     <Compile Include="DataContracts\TileData.cs" />
     <Compile Include="DataContracts\TrainData.cs" />
     <Compile Include="DataContracts\HandMessage.cs" />
