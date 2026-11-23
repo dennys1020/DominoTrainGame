@@ -199,7 +199,7 @@ public sealed class MatchService : IMatchService
             throw GameFaultFactory.Create(GameServiceFaultCode.SessionNotFound);
         }
 
-        _sessionToken.Renew(sessionToken, caller);
+        _sessionToken.Renew(sessionToken);
 
         return caller;
     }

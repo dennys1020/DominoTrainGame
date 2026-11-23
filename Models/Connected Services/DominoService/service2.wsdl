@@ -4,6 +4,25 @@
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:SslTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
         <wsaw:UsingAddressing />
       </wsp:All>
     </wsp:ExactlyOne>
@@ -96,6 +115,9 @@
   <wsdl:message name="ILobbyService_InviteFriend_GameServiceFaultFault_FaultMessage">
     <wsdl:part xmlns:q9="http://dominotraingame/services" name="detail" element="q9:GameServiceFault" />
   </wsdl:message>
+  <wsdl:message name="ILobbyService_LogOut_InputMessage">
+    <wsdl:part name="parameters" element="tns:LogOut" />
+  </wsdl:message>
   <wsdl:message name="ILobbyService_ReceivePlayerJoined_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:ReceivePlayerJoined" />
   </wsdl:message>
@@ -174,6 +196,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/InviteFriend" message="tns:ILobbyService_InviteFriend_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendResponse" message="tns:ILobbyService_InviteFriend_OutputMessage" />
       <wsdl:fault wsaw:Action="http://tempuri.org/ILobbyService/InviteFriendGameServiceFaultFault" name="GameServiceFaultFault" message="tns:ILobbyService_InviteFriend_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation msc:isInitiating="false" msc:isTerminating="false" name="LogOut">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILobbyService/LogOut" message="tns:ILobbyService_LogOut_InputMessage" />
     </wsdl:operation>
     <wsdl:operation msc:isInitiating="true" msc:isTerminating="false" name="ReceivePlayerJoined">
       <wsdl:output wsaw:Action="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" message="tns:ILobbyService_ReceivePlayerJoined_OutputCallbackMessage" />
@@ -320,6 +345,12 @@
         <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
       </wsdl:fault>
     </wsdl:operation>
+    <wsdl:operation name="LogOut">
+      <soap12:operation soapAction="http://tempuri.org/ILobbyService/LogOut" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+    </wsdl:operation>
     <wsdl:operation name="ReceivePlayerJoined">
       <soap12:operation soapAction="http://tempuri.org/IGameClientCallback/ReceivePlayerJoined" style="document" />
       <wsdl:output>
@@ -392,6 +423,9 @@
       <soap12:address location="net.tcp://localhost:8090/LobbyService" />
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:8090/LobbyService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Dns>DominoTrainGameServer</Dns>
+        </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

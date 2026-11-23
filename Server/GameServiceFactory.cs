@@ -79,7 +79,7 @@ internal static class GameServiceFactory
             friendshipRepository,
             gameNotifier);
 
-        SessionTokenRegistry sessionTokens = new SessionTokenRegistry();
+        SessionTokenRegistry sessionTokens = new SessionTokenRegistry(clock);
         PlayerSessionManager<IGameClientCallback> lobbySessionManager =
             new PlayerSessionManager<IGameClientCallback>(lobbySessions, sessionTokens);
         PlayerSessionManager<ISocialClientCallback> socialSessionManager =

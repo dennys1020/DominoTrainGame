@@ -101,7 +101,7 @@ public sealed class RemoteAuthenticationServices : IRemoteAuthenticationServices
 
     public void LogOut()
     {
-        _lobbyChannel.Close();
+        _lobbyChannel.LogOut();
         _session.ClearLobby();
         _session.Forget();
     }

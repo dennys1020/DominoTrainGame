@@ -2836,6 +2836,12 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.ServiceModel.OperationContractAttribute(IsInitiating=false, Action="http://tempuri.org/ILobbyService/InviteFriend", ReplyAction="http://tempuri.org/ILobbyService/InviteFriendResponse")]
         System.Threading.Tasks.Task InviteFriendAsync(DominoTrainGame.Client.Models.DominoService.FriendUsernameRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsInitiating=false, Action="http://tempuri.org/ILobbyService/LogOut")]
+        void LogOut();
+        
+        [System.ServiceModel.OperationContractAttribute(IsOneWay=true, IsInitiating=false, Action="http://tempuri.org/ILobbyService/LogOut")]
+        System.Threading.Tasks.Task LogOutAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2973,6 +2979,14 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task InviteFriendAsync(DominoTrainGame.Client.Models.DominoService.FriendUsernameRequest request) {
             return base.Channel.InviteFriendAsync(request);
+        }
+        
+        public void LogOut() {
+            base.Channel.LogOut();
+        }
+        
+        public System.Threading.Tasks.Task LogOutAsync() {
+            return base.Channel.LogOutAsync();
         }
     }
     
