@@ -1,18 +1,18 @@
 using System;
+using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Guards;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases.Validation;
-using log4net.Ext.Trace;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
-public sealed class ProfileUseCase : IProfileUseCases
+public sealed class ProfileUseCases : IProfileUseCases
 {
     private const string BiographyFieldName = "biography";
-    private const string SocialLinksFieldName = "social";
+    private const string SocialLinksFieldName = "social links";
     private const string AvatarFieldName = "avatar";
 
     private static readonly ITraceLog _logger;
@@ -21,14 +21,14 @@ public sealed class ProfileUseCase : IProfileUseCases
     private readonly IProfileRepository _profileRepository;
     private readonly IAvatarStorage _avatarStorage;
 
-    static ProfileUseCase()
+    static ProfileUseCases()
     {
-        _logger = TraceLogManager.GetLogger(typeof(ProfileUseCase));
+        _logger = TraceLogManager.GetLogger(typeof(ProfileUseCases));
     }
 
-    public ProfileUseCase(
-        IMatchResultRepository matchResultRepository,
+    public ProfileUseCases(
         IProfileRepository profileRepository,
+        IMatchResultRepository matchResultRepository,
         IAvatarStorage avatarStorage)
     {
         _matchResultRepository = ArgumentGuard.NotNull(matchResultRepository, nameof(matchResultRepository), _logger);
