@@ -1,7 +1,6 @@
 using System;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
+using System.Transactions;
 using DominoTrainGame.Server.Application.Domain;
 
 namespace DominoTrainGame.Server.Persistence.Data.Repositories;
@@ -21,7 +20,7 @@ internal sealed class GuestPlayerCreation
     {
         PlayerIdentity guest = PlayerIdentity.Empty;
 
-        using (DbContextTransaction transaction = context.Database.BeginTransaction(IsolationLevel.Serializable))
+        using (TransactionScope transaction = SerializableTransaction.Begin())
         {
             bool isUsernameTaken = IsUsernameTaken(context);
 
@@ -30,7 +29,7 @@ internal sealed class GuestPlayerCreation
                 guest = InsertGuest(context);
             }
 
-            transaction.Commit();
+            transaction.Complete();
         }
 
         return guest;
