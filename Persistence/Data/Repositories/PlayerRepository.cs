@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Transactions;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 
@@ -79,7 +79,7 @@ public sealed class PlayerRepository : IPlayerRepository
     {
         bool isRegistered;
 
-        using (DbContextTransaction transaction = context.Database.BeginTransaction(IsolationLevel.Serializable))
+        using (TransactionScope transaction = SerializableTransaction.Begin())
         {
             isRegistered = !IsUsernameOrEmailInUse(context, registration.Username, registration.Email);
 
@@ -88,7 +88,7 @@ public sealed class PlayerRepository : IPlayerRepository
                 InsertPlayer(context, registration);
             }
 
-            transaction.Commit();
+            transaction.Complete();
         }
 
         return isRegistered;

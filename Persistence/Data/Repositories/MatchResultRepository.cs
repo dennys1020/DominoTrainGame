@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Transactions;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 
@@ -82,7 +82,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
     {
         bool wasSaved;
 
-        using (DbContextTransaction transaction = context.Database.BeginTransaction(IsolationLevel.Serializable))
+        using (TransactionScope transaction = SerializableTransaction.Begin())
         {
             Match match = new Match
             {
@@ -96,7 +96,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
 
             context.Matches.Add(match);
             wasSaved = context.SaveChanges() > NoSavedRows;
-            transaction.Commit();
+            transaction.Complete();
         }
 
         return wasSaved;

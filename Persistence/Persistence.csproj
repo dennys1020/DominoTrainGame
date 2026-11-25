@@ -62,6 +62,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +92,7 @@
       <DependentUpon>DominoGameModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Repositories\FriendshipRepository.cs" />
+    <Compile Include="Data\SerializableTransaction.cs" />
     <Compile Include="Data\SqlServerConfiguration.cs" />
     <Compile Include="Data\EntityFramework\Match.cs">
       <DependentUpon>DominoGameModel.tt</DependentUpon>
