@@ -28,14 +28,14 @@ public interface IProfileUseCases
     /// <summary>
     /// Loads the avatar image of a profile.
     /// </summary>
-    /// <param name="profile">The profile whose avatar is loaded.</param>
+    /// <param name="playerProfile">The profile whose avatar is loaded.</param>
     /// <returns>
     /// The content of the image, or an empty array when the profile has no avatar or the file cannot be read.
     /// </returns>
     /// <exception cref="System.ArgumentNullException">
-    /// Thrown when <paramref name="profile"/> is null.
+    /// Thrown when <paramref name="playerProfile"/> is null.
     /// </exception>
-    byte[] LoadProfileAvatarImage(PlayerProfileSummary profile);
+    byte[] LoadProfileAvatarImage(PlayerProfileSummary playerProfile);
 
     /// <summary>
     /// Replaces the biography of a player.

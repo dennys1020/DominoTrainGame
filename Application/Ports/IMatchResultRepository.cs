@@ -16,6 +16,12 @@ public interface IMatchResultRepository
     /// <exception cref="System.ArgumentNullException">
     /// Thrown when <paramref name="finishedMatch"/> is null.
     /// </exception>
+    /// <exception cref="Errors.DatabaseUnavailableException">
+    /// Thrown when the database cannot be reached.
+    /// </exception>
+    /// <exception cref="Errors.DataIntegrityException">
+    /// Thrown when the changes violate a database constraint.
+    /// </exception>
     bool SaveMatchResults(FinishedMatchRecord finishedMatch);
 
     /// <summary>
@@ -23,6 +29,9 @@ public interface IMatchResultRepository
     /// </summary>
     /// <param name="maximumPlayers">The maximum number of players to return.</param>
     /// <returns>The statistics of each player, or an empty list when no matches were saved.</returns>
+    /// <exception cref="Errors.DatabaseUnavailableException">
+    /// Thrown when the database cannot be reached.
+    /// </exception>
     IReadOnlyList<PlayerStatistics> GetStatisticsByMostWins(int maximumPlayers);
 
     /// <summary>
@@ -33,5 +42,8 @@ public interface IMatchResultRepository
     /// The statistics of the player, or <see cref="PlayerProfileStatistics.Empty"/> when the player
     /// has no finished matches or is a guest.
     /// </returns>
+    /// <exception cref="Errors.DatabaseUnavailableException">
+    /// Thrown when the database cannot be reached.
+    /// </exception>
     PlayerProfileStatistics GetProfileStatisticsByPlayerId(int playerId);
 }
