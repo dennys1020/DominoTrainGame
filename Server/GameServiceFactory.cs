@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Configuration;
 using System.ServiceModel;
 using System.ServiceModel.Dispatcher;
 using DominoTrainGame.Server.Application.Ports;
@@ -8,10 +9,12 @@ using DominoTrainGame.Server.Application.UseCases;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Persistence.Email;
+using DominoTrainGame.Server.Persistence.Storage;
 using DominoTrainGame.Server.Persistence.Time;
 using DominoTrainGame.Server.Service.Callbacks;
 using DominoTrainGame.Server.Service.Contracts;
 using DominoTrainGame.Server.Service.Faults;
+using DominoTrainGame.Server.Service.GameServices;
 using DominoTrainGame.Server.Service.Implementation;
 using DominoTrainGame.Server.Service.Sessions;
 
@@ -19,6 +22,8 @@ namespace DominoTrainGame.Server.Host;
 
 internal static class GameServiceFactory
 {
+    private const string AvatarFolderKey = "AvatarFolder";
+
     public static List<ServiceHost> CreateHosts()
     {
         DatabaseExecutor databaseExecutor = new DatabaseExecutor();
@@ -72,6 +77,12 @@ internal static class GameServiceFactory
             matchRegistry,
             matchUseCases,
             gracePeriodScheduler);
+        IProfileRepository profileRepository = new ProfileRepository(databaseExecutor);
+        IAvatarStorage avatarStorage = new FileSystemAvatarStorage(ReadAvatarFolderPath());
+        IProfileUseCases profileUseCases = new ProfileUseCases(
+            profileRepository,
+            matchResultRepository,
+            avatarStorage);
         ILobbyUseCases lobbyUseCases = new LobbyUseCases(
             lobbyRegistry,
             gameNotifier,
@@ -115,6 +126,7 @@ internal static class GameServiceFactory
             leaderboardUseCases,
             sessionTokens,
             faultTranslator);
+        ProfileService profileService = new ProfileService(profileUseCases, sessionTokens, faultTranslator);
 
         IErrorHandler errorHandler = new GameErrorHandler();
         List<ServiceHost> serviceHosts = new List<ServiceHost>
@@ -123,9 +135,22 @@ internal static class GameServiceFactory
             new GameServiceHost(authenticationService, errorHandler),
             new GameServiceHost(lobbyService, errorHandler),
             new GameServiceHost(friendService, errorHandler),
-            new GameServiceHost(matchService, errorHandler)
+            new GameServiceHost(matchService, errorHandler),
+            new GameServiceHost(profileService, errorHandler)
         };
 
         return serviceHosts;
+    }
+
+    private static string ReadAvatarFolderPath()
+    {
+        string avatarFolderPath = ConfigurationManager.AppSettings[AvatarFolderKey];
+
+        if (string.IsNullOrWhiteSpace(avatarFolderPath))
+        {
+            throw new ConfigurationErrorsException("The avatar folder setting is missing.");
+        }
+
+        return avatarFolderPath;
     }
 }

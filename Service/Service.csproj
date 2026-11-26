@@ -57,6 +57,14 @@
   <ItemGroup>
     <Compile Include="Contracts\IMatchService.cs" />
     <Compile Include="GameServices\MatchService.cs" />
+    <Compile Include="Contracts\IProfileService.cs" />
+    <Compile Include="DataContracts\AvatarUpdateRequest.cs" />
+    <Compile Include="DataContracts\BiographyUpdateRequest.cs" />
+    <Compile Include="DataContracts\ProfileRequest.cs" />
+    <Compile Include="DataContracts\ProfileResponse.cs" />
+    <Compile Include="DataContracts\SocialLinksUpdateRequest.cs" />
+    <Compile Include="DataContracts\UsernameChangeRequest.cs" />
+    <Compile Include="GameServices\ProfileService.cs" />
     <Compile Include="Sessions\PlayerSession.cs" />
     <Compile Include="Sessions\PlayerSessionEventArgs.cs" />
     <Compile Include="Sessions\PlayerSessionManager.cs" />
@@ -120,6 +128,7 @@
     <Compile Include="GameServices\FriendService.cs" />
     <Compile Include="GameServices\LobbyService.cs" />
     <Compile Include="Sessions\SessionTokenRegistry.cs" />
+    <Compile Include="Sessions\TokenCallerResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
