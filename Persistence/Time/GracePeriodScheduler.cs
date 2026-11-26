@@ -21,7 +21,7 @@ public sealed class GracePeriodScheduler : IGracePeriodScheduler
 
     public void Start(int playerId, TimeSpan gracePeriod, Action<int> expire)
     {
-        ArgumentGuard.ThrowIfFull(expire, nameof(expire), _logger);
+        ArgumentGuard.ThrowIfNull(expire, nameof(expire), _logger);
         GracePeriod newGracePeriod = new GracePeriod(this, playerId, expire);
 
         lock (_gracePeriodsLock)

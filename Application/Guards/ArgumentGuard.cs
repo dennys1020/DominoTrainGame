@@ -11,11 +11,11 @@ public static class ArgumentGuard
 
     public static T NotNull<T>(T argument, string parameterName, ILog logger) where T : class
     {
-        ThrowIfFull(argument, parameterName, logger);
+        ThrowIfNull(argument, parameterName, logger);
         return argument;
     }
 
-    public static void ThrowIfFull(object argument, string parameterName, ILog logger)
+    public static void ThrowIfNull(object argument, string parameterName, ILog logger)
     {
         if (argument == null)
         {
