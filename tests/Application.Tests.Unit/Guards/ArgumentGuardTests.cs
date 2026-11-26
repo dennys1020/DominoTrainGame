@@ -156,7 +156,7 @@ public sealed class ArgumentGuardTests
 
     private void GuardArrangedArgument()
     {
-        ArgumentGuard.ThrowIfFull(_argument, ParameterName, _logger);
+        ArgumentGuard.ThrowIfNull(_argument, ParameterName, _logger);
     }
 
     private void GuardArrangedText()
