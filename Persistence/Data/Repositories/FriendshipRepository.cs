@@ -18,10 +18,12 @@ public sealed class FriendshipRepository : IFriendshipRepository
     private const int MaximumSearchResults = 10;
 
     private readonly DatabaseExecutor _databaseExecutor;
+    private readonly IClock _clock;
 
-    public FriendshipRepository(DatabaseExecutor databaseExecutor)
+    public FriendshipRepository(DatabaseExecutor databaseExecutor, IClock clock)
     {
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
     public PlayerIdentity FindRegisteredPlayer(string username)
@@ -100,9 +102,8 @@ public sealed class FriendshipRepository : IFriendshipRepository
 
     private static List<int> FindRegisteredPlayerIds(DominoGameDBEntities context, string username)
     {
-        List<int> playerIds = context.Players
-            .AsNoTracking()
-            .Where(player => player.IsGuest == PlayerTypeFlags.Registered && player.Username == username)
+        List<int> playerIds = PlayerTypeFlags.OnlyRegistered(context.Players.AsNoTracking())
+            .Where(player => player.Username == username)
             .Select(player => player.PlayerId)
             .ToList();
         return playerIds;
@@ -113,9 +114,8 @@ public sealed class FriendshipRepository : IFriendshipRepository
         int playerId,
         string usernameFragment)
     {
-        List<PlayerIdentity> players = context.Players
-            .AsNoTracking()
-            .Where(player => player.IsGuest == PlayerTypeFlags.Registered && player.PlayerId != playerId)
+        List<PlayerIdentity> players = PlayerTypeFlags.OnlyRegistered(context.Players.AsNoTracking())
+            .Where(player => player.PlayerId != playerId)
             .Where(player => player.Username.Contains(usernameFragment))
             .OrderBy(player => player.Username)
             .Take(MaximumSearchResults)
@@ -185,7 +185,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return pair;
     }
 
-    private static bool InsertOrReopenRequest(
+    private bool InsertOrReopenRequest(
         DominoGameDBEntities context,
         int requesterPlayerId,
         int addresseePlayerId)
@@ -218,7 +218,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
         return isCreated;
     }
 
-    private static bool ReopenRejectedRequest(
+    private bool ReopenRejectedRequest(
         FriendshipRequest request,
         int requesterPlayerId,
         int addresseePlayerId)
@@ -230,20 +230,20 @@ public sealed class FriendshipRepository : IFriendshipRepository
             request.RequesterPlayerId = requesterPlayerId;
             request.AddresseePlayerId = addresseePlayerId;
             request.IdStatus = PendingStatusId;
-            request.RequestedAt = DateTime.UtcNow;
+            request.RequestedAt = _clock.UtcNow;
         }
 
         return isRejected;
     }
 
-    private static FriendshipRequest CreatePendingRequest(int requesterPlayerId, int addresseePlayerId)
+    private FriendshipRequest CreatePendingRequest(int requesterPlayerId, int addresseePlayerId)
     {
         FriendshipRequest request = new FriendshipRequest
         {
             RequesterPlayerId = requesterPlayerId,
             AddresseePlayerId = addresseePlayerId,
             IdStatus = PendingStatusId,
-            RequestedAt = DateTime.UtcNow
+            RequestedAt = _clock.UtcNow
         };
         return request;
     }

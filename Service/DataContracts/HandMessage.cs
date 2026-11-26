@@ -1,5 +1,5 @@
-using System.Runtime.Serialization;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace DominoTrainGame.Server.Service.DataContracts;
 

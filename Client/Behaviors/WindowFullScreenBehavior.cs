@@ -84,17 +84,17 @@ public static class WindowFullScreenBehavior
         }
     }
 
-    private static void OnWindowPreviewKeyDown(object sender, KeyEventArgs e)
+    private static void OnWindowPreviewKeyDown(object sender, KeyEventArgs eventArgs)
     {
         Window window = (Window)sender;
         bool isFullScreenActive = GetIsFullScreenActive(window);
-        bool isFullScreenToggleKey = e.Key == Key.F11;
-        bool isFullScreenExitKey = isFullScreenActive && e.Key == Key.Escape;
+        bool isFullScreenToggleKey = eventArgs.Key == Key.F11;
+        bool isFullScreenExitKey = isFullScreenActive && eventArgs.Key == Key.Escape;
 
         if (isFullScreenToggleKey || isFullScreenExitKey)
         {
             SetIsFullScreenActive(window, !isFullScreenActive);
-            e.Handled = true;
+            eventArgs.Handled = true;
         }
     }
 

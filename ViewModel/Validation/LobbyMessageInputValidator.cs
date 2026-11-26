@@ -1,9 +1,10 @@
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
+
 namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public static class LobbyMessageInputValidator
 {
-    public const int MaximumMessageLength = 200;
-
     public static LobbyMessageInputStatus Validate(string text)
     {
         string normalizedText = InputText.Normalize(text);
@@ -13,7 +14,7 @@ public static class LobbyMessageInputValidator
         {
             inputStatus = LobbyMessageInputStatus.EmptyMessage;
         }
-        else if (normalizedText.Length > MaximumMessageLength)
+        else if (GameRules.IsMessageTooLong(normalizedText))
         {
             inputStatus = LobbyMessageInputStatus.MessageTooLong;
         }

@@ -27,8 +27,8 @@ public sealed class ConnectionLossController
     private static string GetEndedConnectionMessageKey(ConnectionState state)
     {
         string messageKey = state == ConnectionState.Expired
-            ? CommonMessageKeys.SessionExpiredMessageKey
-            : CommonMessageKeys.ServerUnavailableMessageKey;
+            ? LocalizationViewModel.SessionExpiredMessageKey
+            : LocalizationViewModel.ServerUnavailableMessageKey;
         return messageKey;
     }
 

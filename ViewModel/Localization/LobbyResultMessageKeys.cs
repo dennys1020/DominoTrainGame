@@ -41,13 +41,13 @@ public static class LobbyResultMessageKeys
                 messageKey = LobbyConflictMessageKey;
                 break;
             case LobbyActionResult.SessionNotFound:
-                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
+                messageKey = LocalizationViewModel.SessionExpiredMessageKey;
                 break;
             case LobbyActionResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case LobbyActionResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             default:
                 messageKey = GetMatchStartMessageKey(status);
@@ -90,16 +90,16 @@ public static class LobbyResultMessageKeys
         switch (status)
         {
             case LobbyActionResult.PlayerNotFound:
-                messageKey = CommonMessageKeys.FriendPlayerNotFoundMessageKey;
+                messageKey = LocalizationViewModel.FriendPlayerNotFoundMessageKey;
                 break;
             case LobbyActionResult.NotFriends:
-                messageKey = CommonMessageKeys.NotFriendsMessageKey;
+                messageKey = LocalizationViewModel.NotFriendsMessageKey;
                 break;
             case LobbyActionResult.PlayerOffline:
                 messageKey = PlayerOfflineMessageKey;
                 break;
             case LobbyActionResult.GuestNotAllowed:
-                messageKey = CommonMessageKeys.GuestNotAllowedMessageKey;
+                messageKey = LocalizationViewModel.GuestNotAllowedMessageKey;
                 break;
             default:
                 messageKey = GetChatMessageKey(status);

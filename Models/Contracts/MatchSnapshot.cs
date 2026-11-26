@@ -5,10 +5,15 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class MatchSnapshot
 {
+    private const int EmptyTableValue = 0;
+
     static MatchSnapshot()
     {
-        MatchTurnSummary emptyTurn = new MatchTurnSummary(0, 0);
-        MatchTableSummary emptyTable = new MatchTableSummary(0, 0, new List<TrainSummary>());
+        MatchTurnSummary emptyTurn = new MatchTurnSummary(LobbyRoster.EmptyVersion, PlayerSummary.EmptyPlayerId);
+        MatchTableSummary emptyTable = new MatchTableSummary(
+            EmptyTableValue,
+            EmptyTableValue,
+            new List<TrainSummary>());
 
         Empty = new MatchSnapshot(emptyTurn, emptyTable, new List<MatchPlayerSummary>());
     }

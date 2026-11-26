@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
 public sealed class TileShuffler : ITileShuffler
 {
     private const int RandomValueSize = sizeof(uint);
-    private const int FirstIndex = 0;
     private const int IndexToCountOffset = 1;
 
     public IReadOnlyList<Tile> Shuffle(IReadOnlyList<Tile> tiles)
@@ -24,10 +24,12 @@ public sealed class TileShuffler : ITileShuffler
 
         using (RandomNumberGenerator generator = RandomNumberGenerator.Create())
         {
-            for (int tileIndex = shuffledTiles.Count - IndexToCountOffset; tileIndex > FirstIndex; tileIndex--)
+            for (int tileIndex = shuffledTiles.Count - IndexToCountOffset;
+                tileIndex > CollectionIndex.First;
+                tileIndex--)
             {
                 generator.GetBytes(randomBytes);
-                uint randomValue = BitConverter.ToUInt32(randomBytes, FirstIndex);
+                uint randomValue = BitConverter.ToUInt32(randomBytes, CollectionIndex.First);
                 int swapIndex = (int)(randomValue % (uint)(tileIndex + IndexToCountOffset));
                 Tile currentTile = shuffledTiles[tileIndex];
                 shuffledTiles[tileIndex] = shuffledTiles[swapIndex];

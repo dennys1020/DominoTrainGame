@@ -1,11 +1,12 @@
 using System;
 using System.Net.Mail;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public static class SignUpInputValidator
 {
-    private const int MinimumPasswordLength = 8;
 
     public static SignUpInputStatus Validate(string username, string email, string password)
     {
@@ -18,11 +19,11 @@ public static class SignUpInputValidator
         {
             inputStatus = SignUpInputStatus.EmptyFields;
         }
-        else if (normalizedUsername.Length > PlayerInputLimits.MaximumUsernameLength)
+        else if (GameRules.IsUsernameTooLong(normalizedUsername))
         {
             inputStatus = SignUpInputStatus.UsernameTooLong;
         }
-        else if (normalizedEmail.Length > PlayerInputLimits.MaximumEmailLength)
+        else if (GameRules.IsEmailTooLong(normalizedEmail))
         {
             inputStatus = SignUpInputStatus.EmailTooLong;
         }
@@ -51,11 +52,11 @@ public static class SignUpInputValidator
     {
         SignUpInputStatus inputStatus = SignUpInputStatus.Valid;
 
-        if (password.Length < MinimumPasswordLength)
+        if (GameRules.IsPasswordTooShort(password))
         {
             inputStatus = SignUpInputStatus.PasswordTooShort;
         }
-        else if (password.Length > PlayerInputLimits.MaximumPasswordLength)
+        else if (GameRules.IsPasswordTooLong(password))
         {
             inputStatus = SignUpInputStatus.PasswordTooLong;
         }

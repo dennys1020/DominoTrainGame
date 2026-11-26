@@ -38,10 +38,10 @@ public static class SignUpMessageKeys
                 messageKey = PasswordTooShortMessageKey;
                 break;
             case SignUpInputStatus.PasswordTooLong:
-                messageKey = CommonMessageKeys.PasswordTooLongMessageKey;
+                messageKey = LocalizationViewModel.PasswordTooLongMessageKey;
                 break;
             default:
-                messageKey = CommonMessageKeys.RequiredFieldsMessageKey;
+                messageKey = LocalizationViewModel.RequiredFieldsMessageKey;
                 break;
         }
 
@@ -61,10 +61,10 @@ public static class SignUpMessageKeys
                 messageKey = SignUpFailedMessageKey;
                 break;
             case SignUpResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case SignUpResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             case SignUpResult.EmailUnavailable:
                 messageKey = EmailUnavailableMessageKey;
@@ -105,10 +105,10 @@ public static class SignUpMessageKeys
                 messageKey = AccountAlreadyExistsMessageKey;
                 break;
             case EmailVerificationResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case EmailVerificationResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             default:
                 messageKey = SignUpSystemErrorMessageKey;

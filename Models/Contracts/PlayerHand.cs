@@ -7,7 +7,7 @@ public sealed class PlayerHand
 {
     static PlayerHand()
     {
-        Empty = new PlayerHand(0, new List<TileSummary>());
+        Empty = new PlayerHand(LobbyRoster.EmptyVersion, new List<TileSummary>());
     }
 
     public PlayerHand(long version, IReadOnlyList<TileSummary> tiles)

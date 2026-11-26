@@ -4,7 +4,7 @@
     xmlns:controls="clr-namespace:DominoTrainGame.Client.View.Views.Controls"
     xmlns:strings="clr-namespace:DominoTrainGame.Client.Models.Resources.Localization;assembly=Models"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:viewModels="clr-namespace:DominoTrainGame.Client.ViewModel;assembly=ViewModel"
+    xmlns:rules="clr-namespace:DominoTrainGame.Shared.Rules;assembly=Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="DominoTrainGame.Client.View.Views.RoomWindow"
@@ -195,7 +195,7 @@
                                                     Mode=OneWay}"
                                                 Command="{Binding DataContext.SelectDominoSetCommand,
                                                     RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleSixPips}"
+                                                CommandParameter="{x:Static rules:MatchRules.DoubleSixPips}"
                                                 d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [DoubleNineOptionLabel],
@@ -210,7 +210,7 @@
                                                     Mode=OneWay}"
                                                 Command="{Binding DataContext.SelectDominoSetCommand,
                                                     RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleNinePips}"
+                                                CommandParameter="{x:Static rules:MatchRules.DoubleNinePips}"
                                                 d:IsChecked="False" />
                                             <RadioButton
                                                 Content="{Binding [DoubleTwelveOptionLabel],
@@ -225,7 +225,7 @@
                                                     Mode=OneWay}"
                                                 Command="{Binding DataContext.SelectDominoSetCommand,
                                                     RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{x:Static viewModels:RoomViewModel.DoubleTwelvePips}"
+                                                CommandParameter="{x:Static rules:MatchRules.DoubleTwelvePips}"
                                                 d:IsChecked="True" />
                                         </UniformGrid>
                                         <Border

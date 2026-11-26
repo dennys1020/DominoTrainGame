@@ -9,14 +9,12 @@ using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
 using DominoTrainGame.Client.ViewModel.Validation;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
-    public const int DoubleSixPips = 6;
-    public const int DoubleNinePips = 9;
-    public const int DoubleTwelvePips = 12;
     private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayersToStart = 2;
@@ -35,7 +33,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private int _maximumPlayers;
     private string _messageText = string.Empty;
     private string _chatNotice = string.Empty;
-    private int _highestDouble = DoubleTwelvePips;
+    private int _highestDouble = MatchRules.DoubleTwelvePips;
 
     public RoomViewModel(
         IWindowService windowService,
@@ -171,13 +169,13 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    public bool IsDoubleSixSelected => HighestDouble == DoubleSixPips;
+    public bool IsDoubleSixSelected => HighestDouble == MatchRules.DoubleSixPips;
 
-    public bool IsDoubleNineSelected => HighestDouble == DoubleNinePips;
+    public bool IsDoubleNineSelected => HighestDouble == MatchRules.DoubleNinePips;
 
-    public bool IsDoubleTwelveSelected => HighestDouble == DoubleTwelvePips;
+    public bool IsDoubleTwelveSelected => HighestDouble == MatchRules.DoubleTwelvePips;
 
-    public int MaximumMessageLength => LobbyMessageInputValidator.MaximumMessageLength;
+    public int MaximumMessageLength => GameRules.MaximumMessageLength;
 
     public InviteFriendsViewModel InviteFriends { get; }
 

@@ -5,12 +5,11 @@ namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class LobbyRoster
 {
-    private const long EmptyVersion = 0;
-    private const int NoHostPlayerId = 0;
+    public const long EmptyVersion = 0;
 
     static LobbyRoster()
     {
-        Empty = new LobbyRoster(EmptyVersion, NoHostPlayerId, Array.Empty<LobbyPlayerResult>());
+        Empty = new LobbyRoster(EmptyVersion, PlayerSummary.EmptyPlayerId, Array.Empty<LobbyPlayerResult>());
     }
 
     public LobbyRoster(long version, int hostPlayerId, IReadOnlyList<LobbyPlayerResult> players)

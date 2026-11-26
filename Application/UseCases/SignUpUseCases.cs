@@ -5,12 +5,13 @@ using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases.Validation;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class SignUpUseCases : ISignUpUseCases
 {
-    private const int MinimumPasswordLength = 8;
 
     private static readonly ITraceLog _logger;
 
@@ -50,7 +51,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
         string normalizedEmail = InputText.Normalize(details.Email);
 
         ValidateEmail(normalizedEmail);
-        PlayerInputValidator.ValidatePassword(details.Password, MinimumPasswordLength);
+        PlayerInputValidator.ValidatePassword(details.Password, GameRules.MinimumPasswordLength);
 
         bool isAvailable = !_playerRepository.IsRegistrationTaken(normalizedUsername, normalizedEmail);
 
@@ -101,7 +102,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
     private static void ValidateEmail(string email)
     {
         bool isEmailValid = !string.IsNullOrWhiteSpace(email)
-            && email.Length <= PlayerInputValidator.MaximumEmailLength
+            && !GameRules.IsEmailTooLong(email)
             && IsWellFormedEmail(email);
 
         if (!isEmailValid)

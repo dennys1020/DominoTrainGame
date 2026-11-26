@@ -48,10 +48,8 @@ public sealed class MatchResultRepository : IMatchResultRepository
         DominoGameDBEntities context,
         int playerId)
     {
-        List<MatchResult> playerResults = context.MatchResults
-            .AsNoTracking()
+        List<MatchResult> playerResults = PlayerTypeFlags.WithoutGuests(context.MatchResults.AsNoTracking())
             .Where(matchResult => matchResult.PlayerId == playerId)
-            .Where(matchResult => matchResult.Player.IsGuest != PlayerTypeFlags.Guest)
             .ToList();
         PlayerProfileStatistics statistics = playerResults.Any()
             ? ToProfileStatistics(playerResults)
@@ -133,10 +131,10 @@ public sealed class MatchResultRepository : IMatchResultRepository
         DominoGameDBEntities context,
         int maximumPlayers)
     {
-        List<PlayerStatistics> statisticsByMostWins = context.Players
+        IQueryable<Player> playersWithResults = context.Players
             .AsNoTracking()
-            .Include(player => player.MatchResults)
-            .Where(player => player.IsGuest != PlayerTypeFlags.Guest)
+            .Include(player => player.MatchResults);
+        List<PlayerStatistics> statisticsByMostWins = PlayerTypeFlags.OnlyRegistered(playersWithResults)
             .Where(player => player.MatchResults.Any())
             .AsEnumerable()
             .Select(ToPlayerStatistics)

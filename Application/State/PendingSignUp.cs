@@ -1,6 +1,7 @@
 using System;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.State;
 
@@ -8,7 +9,6 @@ public sealed class PendingSignUp
 {
     private const int MaximumFailedAttempts = 5;
     private const int CodeLifetimeMinutes = 10;
-    private const int ResendCooldownSeconds = 60;
 
     private readonly string _verificationCode;
     private readonly DateTime _expiresAt;
@@ -29,7 +29,7 @@ public sealed class PendingSignUp
         Registration = playerRegistration ?? throw new ArgumentNullException(nameof(playerRegistration));
         _verificationCode = verificationCode ?? string.Empty;
         _expiresAt = sentAt.AddMinutes(CodeLifetimeMinutes);
-        _resendAvailableAt = sentAt.AddSeconds(ResendCooldownSeconds);
+        _resendAvailableAt = GameRules.CalculateResendAvailableAt(sentAt);
     }
 
     public static PendingSignUp Empty { get; }

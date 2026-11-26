@@ -77,10 +77,10 @@ public static class MatchMessageKeys
         switch (status)
         {
             case MatchMoveResult.SessionNotFound:
-                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
+                messageKey = LocalizationViewModel.SessionExpiredMessageKey;
                 break;
             case MatchMoveResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             default:
                 messageKey = MatchServerErrorMessageKey;

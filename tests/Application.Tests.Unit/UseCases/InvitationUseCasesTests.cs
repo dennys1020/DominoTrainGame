@@ -6,6 +6,7 @@ using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Shared.Rules;
 using NSubstitute;
 using NSubstitute.Core;
 using NSubstitute.ExceptionExtensions;
@@ -21,8 +22,7 @@ public sealed class InvitationUseCasesTests
     private const int PlayerWithoutLobbyId = 23;
     private const int FirstMemberPlayerId = 30;
     private const int ExpectedCallCount = 1;
-    private const int MaximumUsernameLength = 45;
-    private const int TooLongUsernameLength = MaximumUsernameLength + 1;
+    private const int TooLongUsernameLength = GameRules.MaximumUsernameLength + 1;
     private const char FillerCharacter = 'a';
     private const string LobbyCode = "ABC123";
     private const string InviterUsername = "samuel";

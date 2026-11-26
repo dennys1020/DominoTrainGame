@@ -1,15 +1,12 @@
 using System;
 using log4net.Ext.Trace;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.UseCases.Validation;
 
 public static class PlayerInputValidator
 {
-    public const int MaximumUsernameLength = 45;
-    public const int MaximumEmailLength = 255;
-
-    private const int MaximumPasswordLength = 128;
-
     private static readonly ITraceLog _logger;
 
     static PlayerInputValidator()
@@ -21,7 +18,7 @@ public static class PlayerInputValidator
     {
         string normalizedUsername = InputText.Normalize(username);
         bool isUsernameValid = !string.IsNullOrEmpty(normalizedUsername)
-            && normalizedUsername.Length <= MaximumUsernameLength;
+            && !GameRules.IsUsernameTooLong(normalizedUsername);
 
         if (!isUsernameValid)
         {
@@ -38,7 +35,7 @@ public static class PlayerInputValidator
     {
         string enteredPassword = password ?? string.Empty;
         bool isLongEnough = enteredPassword.Length >= minimumLength;
-        bool isShortEnough = enteredPassword.Length <= MaximumPasswordLength;
+        bool isShortEnough = !GameRules.IsPasswordTooLong(enteredPassword);
 
         if (!isLongEnough || !isShortEnough)
         {

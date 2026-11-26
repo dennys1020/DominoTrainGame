@@ -2,6 +2,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
@@ -9,7 +10,6 @@ public sealed class LobbyCodeGenerator : ILobbyCodeGenerator
 {
     private const string Alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
     private const int CodeLength = 6;
-    private const int InvalidCharacterIndex = -1;
 
     public string Generate()
     {
@@ -39,7 +39,7 @@ public sealed class LobbyCodeGenerator : ILobbyCodeGenerator
 
     private static bool IsAllowedCharacter(char codeCharacter)
     {
-        bool isAllowed = Alphabet.IndexOf(codeCharacter) > InvalidCharacterIndex;
+        bool isAllowed = CollectionIndex.IsFound(Alphabet.IndexOf(codeCharacter));
         return isAllowed;
     }
 }

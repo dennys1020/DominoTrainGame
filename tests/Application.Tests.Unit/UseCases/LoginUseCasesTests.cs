@@ -3,6 +3,7 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Shared.Rules;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
@@ -16,8 +17,7 @@ public sealed class LoginUseCasesTests
     private const int ExpectedCallCount = 1;
     private const int MaximumIdentifierLength = 255;
     private const int TooLongIdentifierLength = MaximumIdentifierLength + 1;
-    private const int MaximumPasswordLength = 128;
-    private const int TooLongPasswordLength = MaximumPasswordLength + 1;
+    private const int TooLongPasswordLength = GameRules.MaximumPasswordLength + 1;
     private const char FillerCharacter = 'a';
     private const string ExistingUsername = "samuel";
     private const string ExistingEmail = "samuel@uv.mx";
@@ -168,7 +168,7 @@ public sealed class LoginUseCasesTests
     [Test]
     public void Test_LogIn_MaximumLengthPassword_VerifiesPassword()
     {
-        string maximumLengthPassword = CreateText(MaximumPasswordLength);
+        string maximumLengthPassword = CreateText(GameRules.MaximumPasswordLength);
 
         _loginUseCases.LogIn(ExistingUsername, maximumLengthPassword);
 

@@ -6,6 +6,7 @@ using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Shared.Rules;
 using NSubstitute;
 using NSubstitute.Core;
 using NSubstitute.ExceptionExtensions;
@@ -22,8 +23,7 @@ public sealed class FriendUseCasesTests
     private const int UnknownRequestId = 99;
     private const int ExpectedCallCount = 1;
     private const int NoticeArgumentIndex = 0;
-    private const int MaximumUsernameLength = 45;
-    private const int TooLongUsernameLength = MaximumUsernameLength + 1;
+    private const int TooLongUsernameLength = GameRules.MaximumUsernameLength + 1;
     private const char FillerCharacter = 'a';
     private const string PlayerUsername = "samuel";
     private const string FriendUsername = "denisse";

@@ -9,6 +9,15 @@ namespace DominoTrainGame.Client.ViewModel.Localization;
 
 public sealed class LocalizationViewModel : INotifyPropertyChanged
 {
+    public const string RequiredFieldsMessageKey = "RequiredFieldsMessage";
+    public const string PasswordTooLongMessageKey = "PasswordTooLongMessage";
+    public const string ServerUnavailableMessageKey = "ServerUnavailableMessage";
+    public const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
+    public const string SessionExpiredMessageKey = "LobbySessionExpiredMessage";
+    public const string GuestNotAllowedMessageKey = "GuestNotAllowedMessage";
+    public const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
+    public const string NotFriendsMessageKey = "NotFriendsMessage";
+
     private const string IndexerPropertyName = "Item[]";
     private const string SpanishCultureName = "es-MX";
     private const string EnglishCultureName = "en-US";

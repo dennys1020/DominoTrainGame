@@ -7,6 +7,7 @@ using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.Tests.Unit.UseCases;
 
@@ -14,17 +15,12 @@ namespace DominoTrainGame.Server.Application.Tests.Unit.UseCases;
 public sealed class SignUpUseCasesTests
 {
     private const int ExpectedCallCount = 1;
-    private const int MaximumUsernameLength = 45;
-    private const int TooLongUsernameLength = MaximumUsernameLength + 1;
-    private const int MaximumEmailLength = 255;
-    private const int TooLongEmailLength = MaximumEmailLength + 1;
-    private const int MinimumPasswordLength = 8;
-    private const int ShortPasswordLength = MinimumPasswordLength - 1;
-    private const int MaximumPasswordLength = 128;
-    private const int TooLongPasswordLength = MaximumPasswordLength + 1;
+    private const int TooLongUsernameLength = GameRules.MaximumUsernameLength + 1;
+    private const int TooLongEmailLength = GameRules.MaximumEmailLength + 1;
+    private const int ShortPasswordLength = GameRules.MinimumPasswordLength - 1;
+    private const int TooLongPasswordLength = GameRules.MaximumPasswordLength + 1;
     private const int CodeLifetimeMinutes = 10;
     private const int MaximumFailedAttempts = 5;
-    private const int ResendCooldownSeconds = 60;
     private const char FillerCharacter = 'a';
     private const string NewUsername = "samuel";
     private const string PaddedUsername = "  samuel  ";
@@ -203,7 +199,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MaximumLengthUsername_ReturnsTrue()
     {
-        bool isPending = SignUpWith(CreateText(MaximumUsernameLength), NewEmail, ValidPassword);
+        bool isPending = SignUpWith(CreateText(GameRules.MaximumUsernameLength), NewEmail, ValidPassword);
 
         Assert.That(isPending, Is.True);
     }
@@ -211,7 +207,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MaximumLengthEmail_ReturnsTrue()
     {
-        string maximumLengthEmail = CreateEmail(MaximumEmailLength);
+        string maximumLengthEmail = CreateEmail(GameRules.MaximumEmailLength);
 
         bool isPending = SignUpWith(NewUsername, maximumLengthEmail, ValidPassword);
 
@@ -221,7 +217,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MinimumLengthPassword_ReturnsTrue()
     {
-        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(MinimumPasswordLength));
+        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(GameRules.MinimumPasswordLength));
 
         Assert.That(isPending, Is.True);
     }
@@ -229,7 +225,7 @@ public sealed class SignUpUseCasesTests
     [Test]
     public void Test_SignUp_MaximumLengthPassword_ReturnsTrue()
     {
-        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(MaximumPasswordLength));
+        bool isPending = SignUpWith(NewUsername, NewEmail, CreateText(GameRules.MaximumPasswordLength));
 
         Assert.That(isPending, Is.True);
     }
@@ -605,7 +601,7 @@ public sealed class SignUpUseCasesTests
 
     private void WaitForResendCooldown()
     {
-        _clock.UtcNow.Returns(_currentTime.AddSeconds(ResendCooldownSeconds));
+        _clock.UtcNow.Returns(_currentTime.AddSeconds(GameRules.ResendCooldownSeconds));
     }
 
     private void GivenRegistrationTaken()

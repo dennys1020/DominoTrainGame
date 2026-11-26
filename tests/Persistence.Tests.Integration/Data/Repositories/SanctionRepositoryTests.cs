@@ -5,6 +5,7 @@ using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Time;
 using NUnit.Framework;
 
 namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories;
@@ -42,7 +43,7 @@ public sealed class SanctionRepositoryTests
         _transaction = new TransactionScope();
         _databaseExecutor = new DatabaseExecutor();
         _sanctionRepository = new SanctionRepository(_databaseExecutor);
-        PlayerRepository playerRepository = new PlayerRepository(_databaseExecutor);
+        PlayerRepository playerRepository = new PlayerRepository(_databaseExecutor, new SystemClock());
 
         playerRepository.CreatePlayer(new PlayerRegistration(Username, Email, PasswordHash));
         _playerId = playerRepository.FindCredentials(Username).PlayerId;

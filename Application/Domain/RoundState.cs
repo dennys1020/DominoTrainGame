@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DominoTrainGame.Server.Application.Results;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class RoundState
 {
     private const int TurnStep = 1;
-    private const int FirstIndex = 0;
-    private const int TileNotFoundIndex = -1;
 
     private readonly List<int> _playerIds;
     private readonly Dictionary<int, List<Tile>> _handsByPlayerId;
@@ -211,7 +211,7 @@ public sealed class RoundState
     private PlayTileStatus ValidatePlay(int playerId, int tileIndex, Train train)
     {
         bool isPlayerTurn = playerId == CurrentPlayerId;
-        bool hasTile = tileIndex != TileNotFoundIndex;
+        bool hasTile = CollectionIndex.IsFound(tileIndex);
         bool isOpenDoubleTrain = train.HasOpenDouble;
         bool mustSatisfyDouble = !isOpenDoubleTrain && HasAnyOpenDouble();
         bool canUseTrain = isOpenDoubleTrain || train.CanBePlayedBy(playerId);
@@ -258,9 +258,11 @@ public sealed class RoundState
 
     private static int FindTileIndex(List<Tile> hand, Tile tile)
     {
-        int tileIndex = TileNotFoundIndex;
+        int tileIndex = CollectionIndex.NotFound;
 
-        for (int handIndex = FirstIndex; handIndex < hand.Count && tileIndex == TileNotFoundIndex; handIndex++)
+        for (int handIndex = CollectionIndex.First;
+            handIndex < hand.Count && !CollectionIndex.IsFound(tileIndex);
+            handIndex++)
         {
             if (hand[handIndex].IsSameTile(tile))
             {
@@ -312,7 +314,7 @@ public sealed class RoundState
 
     private void DealHands(List<Tile> tiles, int handSize)
     {
-        for (int playerIndex = FirstIndex; playerIndex < _playerIds.Count; playerIndex++)
+        for (int playerIndex = CollectionIndex.First; playerIndex < _playerIds.Count; playerIndex++)
         {
             List<Tile> hand = tiles.GetRange(playerIndex * handSize, handSize);
             _handsByPlayerId.Add(_playerIds[playerIndex], hand);
@@ -328,7 +330,7 @@ public sealed class RoundState
             _trainsByOwnerId.Add(playerId, new Train(playerId, enginePips));
         }
 
-        _trainsByOwnerId.Add(Train.MexicanTrainOwnerId, new Train(Train.MexicanTrainOwnerId, enginePips));
+        _trainsByOwnerId.Add(MatchRules.MexicanTrainOwnerId, new Train(MatchRules.MexicanTrainOwnerId, enginePips));
     }
 
     private void ApplyPlay(List<Tile> hand, int tileIndex, Train train)

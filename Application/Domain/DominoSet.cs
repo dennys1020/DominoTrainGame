@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
@@ -7,9 +8,6 @@ public sealed class DominoSet
 {
     public const int MinimumPlayerCount = 2;
     private const int LastHandSizeOffset = 1;
-    private const int DoubleSixPips = 6;
-    private const int DoubleNinePips = 9;
-    private const int DoubleTwelvePips = 12;
     private const int StandardHandSize = 15;
     private const int DoubleNineThreePlayerHandSize = 13;
     private const int DoubleNineFourPlayerHandSize = 10;
@@ -23,19 +21,19 @@ public sealed class DominoSet
     static DominoSet()
     {
         DoubleSix = new DominoSet(
-            DoubleSixPips,
+            MatchRules.DoubleSixPips,
             new[] { DoubleSixTwoPlayerHandSize, DoubleSixGroupHandSize, DoubleSixGroupHandSize });
         DoubleNine = new DominoSet(
-            DoubleNinePips,
+            MatchRules.DoubleNinePips,
             new[] { StandardHandSize, DoubleNineThreePlayerHandSize, DoubleNineFourPlayerHandSize });
         DoubleTwelve = new DominoSet(
-            DoubleTwelvePips,
+            MatchRules.DoubleTwelvePips,
             new[] { StandardHandSize, StandardHandSize, StandardHandSize });
         _setsByHighestDouble = new Dictionary<int, DominoSet>
         {
-            { DoubleSixPips, DoubleSix },
-            { DoubleNinePips, DoubleNine },
-            { DoubleTwelvePips, DoubleTwelve }
+            { MatchRules.DoubleSixPips, DoubleSix },
+            { MatchRules.DoubleNinePips, DoubleNine },
+            { MatchRules.DoubleTwelvePips, DoubleTwelve }
         };
     }
 

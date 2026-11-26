@@ -10,12 +10,12 @@ public sealed partial class MessageWindow : Window
         InitializeComponent();
     }
 
-    private void OnYesButtonClick(object sender, RoutedEventArgs e)
+    private void OnYesButtonClick(object sender, RoutedEventArgs eventArgs)
     {
         DialogResult = true;
     }
 
-    private void OnWindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void OnWindowMouseLeftButtonDown(object sender, MouseButtonEventArgs eventArgs)
     {
         DragMove();
     }

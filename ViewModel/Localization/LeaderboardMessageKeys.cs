@@ -13,13 +13,13 @@ public static class LeaderboardMessageKeys
         switch (status)
         {
             case LeaderboardStatus.SessionNotFound:
-                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
+                messageKey = LocalizationViewModel.SessionExpiredMessageKey;
                 break;
             case LeaderboardStatus.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             case LeaderboardStatus.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             default:
                 messageKey = LeaderboardServerErrorMessageKey;

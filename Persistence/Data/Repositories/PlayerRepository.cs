@@ -5,19 +5,21 @@ using System.Linq;
 using System.Transactions;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class PlayerRepository : IPlayerRepository
 {
     private const int MaximumMatches = 1;
-    private const int FirstMatchIndex = 0;
 
     private readonly DatabaseExecutor _databaseExecutor;
+    private readonly IClock _clock;
 
-    public PlayerRepository(DatabaseExecutor databaseExecutor)
+    public PlayerRepository(DatabaseExecutor databaseExecutor, IClock clock)
     {
         _databaseExecutor = databaseExecutor ?? throw new ArgumentNullException(nameof(databaseExecutor));
+        _clock = clock ?? throw new ArgumentNullException(nameof(clock));
     }
 
     public PlayerCredentials FindCredentials(string identifier)
@@ -25,7 +27,7 @@ public sealed class PlayerRepository : IPlayerRepository
         List<PlayerCredentials> matches = _databaseExecutor.Execute(
             context => QueryCredentials(context, identifier));
         bool isFound = matches.Count == MaximumMatches;
-        PlayerCredentials credentials = isFound ? matches[FirstMatchIndex] : PlayerCredentials.Empty;
+        PlayerCredentials credentials = isFound ? matches[CollectionIndex.First] : PlayerCredentials.Empty;
 
         return credentials;
     }
@@ -62,9 +64,7 @@ public sealed class PlayerRepository : IPlayerRepository
 
     private static List<PlayerCredentials> QueryCredentials(DominoGameDBEntities context, string identifier)
     {
-        List<PlayerCredentials> matches = context.Players
-            .AsNoTracking()
-            .Where(player => player.IsGuest == PlayerTypeFlags.Registered)
+        List<PlayerCredentials> matches = PlayerTypeFlags.OnlyRegistered(context.Players.AsNoTracking())
             .Where(player => player.Username == identifier || player.Email == identifier)
             .Select(player => new { player.PlayerId, player.Username, player.PasswordHash })
             .Take(MaximumMatches)
@@ -74,7 +74,7 @@ public sealed class PlayerRepository : IPlayerRepository
         return matches;
     }
 
-    private static bool RegisterPlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    private bool RegisterPlayer(DominoGameDBEntities context, PlayerRegistration registration)
     {
         bool isRegistered;
 
@@ -101,7 +101,7 @@ public sealed class PlayerRepository : IPlayerRepository
         return isInUse;
     }
 
-    private static void InsertPlayer(DominoGameDBEntities context, PlayerRegistration registration)
+    private void InsertPlayer(DominoGameDBEntities context, PlayerRegistration registration)
     {
         Player player = new Player
         {
@@ -111,7 +111,7 @@ public sealed class PlayerRepository : IPlayerRepository
             IsGuest = PlayerTypeFlags.Registered,
             PlayerProfile = new PlayerProfile
             {
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = _clock.UtcNow
             }
         };
 

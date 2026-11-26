@@ -1,3 +1,6 @@
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
+
 namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public static class LoginInputValidator
@@ -12,11 +15,11 @@ public static class LoginInputValidator
         {
             inputStatus = LoginInputStatus.EmptyFields;
         }
-        else if (normalizedIdentifier.Length > PlayerInputLimits.MaximumEmailLength)
+        else if (GameRules.IsEmailTooLong(normalizedIdentifier))
         {
             inputStatus = LoginInputStatus.IdentifierTooLong;
         }
-        else if (enteredPassword.Length > PlayerInputLimits.MaximumPasswordLength)
+        else if (GameRules.IsPasswordTooLong(enteredPassword))
         {
             inputStatus = LoginInputStatus.PasswordTooLong;
         }

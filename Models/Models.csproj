@@ -92,6 +92,18 @@
     <Compile Include="Contracts\LobbyInvitationReceivedEventArgs.cs" />
     <Compile Include="Contracts\ConnectionCheckResult.cs" />
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
+    <Compile Include="..\Shared\Common\CollectionIndex.cs">
+      <Link>Shared\CollectionIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Common\InputText.cs">
+      <Link>Shared\InputText.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Rules\GameRules.cs">
+      <Link>Shared\GameRules.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Rules\MatchRules.cs">
+      <Link>Shared\MatchRules.cs</Link>
+    </Compile>
     <Compile Include="..\Shared\Networking\GameChannelCloser.cs">
       <Link>Networking\GameChannelCloser.cs</Link>
     </Compile>

@@ -10,6 +10,7 @@ using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Validation;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.ViewModel;
 

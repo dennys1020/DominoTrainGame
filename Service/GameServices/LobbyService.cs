@@ -36,9 +36,9 @@ public sealed class LobbyService : ILobbyService
         _lobbySessionManager.PlayerDisconnected += HandlePlayerDisconnected;
     }
 
-    public void Connect(SessionTokenRequest connectRequest)
+    public void Connect(SessionTokenRequest request)
     {
-        string sessionToken = connectRequest?.SessionToken ?? string.Empty;
+        string sessionToken = request?.SessionToken ?? string.Empty;
         _lobbySessionManager.Connect(sessionToken);
     }
 
@@ -54,11 +54,11 @@ public sealed class LobbyService : ILobbyService
         return response;
     }
 
-    public LobbyResponse JoinLobby(JoinLobbyRequest joinLobbyRequest)
+    public LobbyResponse JoinLobby(JoinLobbyRequest request)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         LobbyOutcome<JoinLobbyStatus> lobbyJoin = _faultTranslator.Execute(
-            () => _lobbyUseCases.JoinLobby(caller, joinLobbyRequest?.Code),
+            () => _lobbyUseCases.JoinLobby(caller, request?.Code),
             GameServiceFaultCode.InvalidLobbyRequest);
 
         GameFaultFactory.ThrowIfRejected(lobbyJoin.Status, JoinLobbyStatus.Success, MapJoinFaultCode);
@@ -72,18 +72,18 @@ public sealed class LobbyService : ILobbyService
         _lobbyUseCases.LeaveLobby(caller.PlayerId);
     }
 
-    public void SetReady(SetReadyRequest setReadyRequest)
+    public void SetReady(SetReadyRequest request)
     {
-        bool isReady = setReadyRequest?.IsReady ?? false;
+        bool isReady = request?.IsReady ?? false;
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         bool wasUpdated = _faultTranslator.Execute(() => _lobbyUseCases.TrySetReady(caller.PlayerId, isReady));
 
         GameFaultFactory.ThrowIfRejected(wasUpdated, GameServiceFaultCode.LobbyNotFound);
     }
 
-    public void SelectDominoSet(SelectDominoSetRequest selectDominoSetRequest)
+    public void SelectDominoSet(SelectDominoSetRequest request)
     {
-        int highestDouble = selectDominoSetRequest?.HighestDouble ?? default;
+        int highestDouble = request?.HighestDouble ?? default;
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         SelectDominoSetStatus status = _faultTranslator.Execute(
             () => _lobbyUseCases.SelectDominoSet(caller.PlayerId, highestDouble));
@@ -91,11 +91,11 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(status, SelectDominoSetStatus.Success, MapSelectDominoSetFaultCode);
     }
 
-    public void SendLobbyMessage(SendLobbyMessageRequest sendMessageRequest)
+    public void SendLobbyMessage(SendLobbyMessageRequest request)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         SendMessageStatus status = _faultTranslator.Execute(
-            () => _lobbyUseCases.SendMessage(caller.PlayerId, sendMessageRequest?.Text));
+            () => _lobbyUseCases.SendMessage(caller.PlayerId, request?.Text));
 
         GameFaultFactory.ThrowIfRejected(status, SendMessageStatus.Success, MapSendMessageFaultCode);
     }
@@ -110,23 +110,23 @@ public sealed class LobbyService : ILobbyService
         GameFaultFactory.ThrowIfRejected(status, StartMatchStatus.Success, MapStartFaultCode);
     }
 
-    public void InviteFriend(FriendUsernameRequest inviteFriendRequest)
+    public void InviteFriend(FriendUsernameRequest request)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         InviteFriendStatus status = _faultTranslator.Execute(
-            () => _invitationUseCases.InviteFriend(caller, inviteFriendRequest?.Username));
+            () => _invitationUseCases.InviteFriend(caller, request?.Username));
 
         GameFaultFactory.ThrowIfRejected(status, InviteFriendStatus.Success, MapInviteFaultCode);
     }
 
-    public void Reconnect(ReconnectRequest reconnectRequest)
+    public void Reconnect(ReconnectRequest request)
     {
         PlayerIdentity caller = _lobbySessionManager.ResolveCaller();
         bool wasReconnected;
 
         try
         {
-            wasReconnected = _reconnectionUseCases.Reconnect(caller.PlayerId, reconnectRequest?.MatchCode);
+            wasReconnected = _reconnectionUseCases.Reconnect(caller.PlayerId, request?.MatchCode);
         }
         catch (ArgumentException exception)
         {

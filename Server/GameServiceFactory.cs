@@ -22,15 +22,15 @@ internal static class GameServiceFactory
     public static List<ServiceHost> CreateHosts()
     {
         DatabaseExecutor databaseExecutor = new DatabaseExecutor();
+        IClock clock = new SystemClock();
         IConnectionRepository connectionRepository = new ConnectionRepository(databaseExecutor);
-        IPlayerRepository playerRepository = new PlayerRepository(databaseExecutor);
+        IPlayerRepository playerRepository = new PlayerRepository(databaseExecutor, clock);
         IPasswordHasher passwordHasher = new PasswordHasher();
 
         IConnectionUseCases connectionUseCases = new ConnectionUseCases(connectionRepository);
         ILoginUseCases loginUseCases = new LoginUseCases(playerRepository, passwordHasher);
         IGuestUsernameGenerator guestUsernameGenerator = new GuestUsernameGenerator();
         IGuestLoginUseCases guestLoginUseCases = new GuestLoginUseCases(playerRepository, guestUsernameGenerator);
-        IClock clock = new SystemClock();
         PendingSignUpRegistry pendingSignUps = new PendingSignUpRegistry(clock);
         ISignUpUseCases signUpUseCases = new SignUpUseCases(
             playerRepository,
@@ -52,7 +52,7 @@ internal static class GameServiceFactory
             chatInfractions,
             clock);
 
-        IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor);
+        IFriendshipRepository friendshipRepository = new FriendshipRepository(databaseExecutor, clock);
         PlayerSessionRegistry<ISocialClientCallback> socialSessions =
             new PlayerSessionRegistry<ISocialClientCallback>();
         ISocialNotifier socialNotifier = new CallbackSocialNotifier(socialSessions);

@@ -3,19 +3,15 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using DominoTrainGame.Client.ViewModel;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.View.Views;
 
 public sealed partial class VerificationCodeWindow : Window
 {
-    private const int SingleDigitInputLength = 1;
-    private const int DigitTextBoxNavigationStep = 1;
-    private const int FirstDigitTextBoxIndex = 0;
-    private const int LastDigitTextBoxIndex = VerificationCodeViewModel.CodeLength - 1;
-    private const int FirstCharacterIndex = 0;
-    private const int FirstPastedDigitOffset = 0;
-    private const int EmptyTextLength = 0;
+    private const int SingleDigit = 1;
+    private const int LastDigitTextBoxIndex = GameRules.VerificationCodeLength - SingleDigit;
     private const char FirstAsciiDigit = '0';
     private const char LastAsciiDigit = '9';
 
@@ -41,20 +37,20 @@ public sealed partial class VerificationCodeWindow : Window
 
         int index = GetFocusedIndex();
 
-        bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
-        bool canAcceptInput = hasFocusedTextBox && eventArgs.Text.Length == SingleDigitInputLength;
+        bool hasFocusedTextBox = index >= CollectionIndex.First;
+        bool canAcceptInput = hasFocusedTextBox && eventArgs.Text.Length == SingleDigit;
 
-        if (canAcceptInput && IsAsciiDigit(eventArgs.Text[FirstCharacterIndex]))
+        if (canAcceptInput && IsAsciiDigit(eventArgs.Text[CollectionIndex.First]))
         {
             SetDigit(index, eventArgs.Text);
-            FocusDigitTextBox(index + DigitTextBoxNavigationStep);
+            FocusDigitTextBox(index + SingleDigit);
         }
     }
 
     private void OnDigitTextBoxPreviewKeyDown(object sender, KeyEventArgs eventArgs)
     {
         int index = GetFocusedIndex();
-        bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
+        bool hasFocusedTextBox = index >= CollectionIndex.First;
         bool isHandled = hasFocusedTextBox && HandleDigitKey(eventArgs.Key, index);
 
         if (isHandled)
@@ -74,8 +70,8 @@ public sealed partial class VerificationCodeWindow : Window
 
         int index = GetFocusedIndex();
         string pastedText = eventArgs.DataObject.GetData(DataFormats.UnicodeText) as string ?? string.Empty;
-        bool hasFocusedTextBox = index >= FirstDigitTextBoxIndex;
-        bool hasPastedText = pastedText.Length > EmptyTextLength;
+        bool hasFocusedTextBox = index >= CollectionIndex.First;
+        bool hasPastedText = pastedText.Length > InputText.EmptyLength;
 
         if (hasFocusedTextBox && hasPastedText)
         {
@@ -98,10 +94,10 @@ public sealed partial class VerificationCodeWindow : Window
                 SetDigit(index, string.Empty);
                 break;
             case Key.Left:
-                FocusDigitTextBox(index - DigitTextBoxNavigationStep);
+                FocusDigitTextBox(index - SingleDigit);
                 break;
             case Key.Right:
-                FocusDigitTextBox(index + DigitTextBoxNavigationStep);
+                FocusDigitTextBox(index + SingleDigit);
                 break;
             default:
                 isHandled = false;
@@ -114,10 +110,10 @@ public sealed partial class VerificationCodeWindow : Window
     private void PasteDigits(int focusedIndex, string pastedText)
     {
         string digits = new string(pastedText.Where(IsAsciiDigit).ToArray());
-        int firstIndex = digits.Length >= VerificationCodeViewModel.CodeLength ? FirstDigitTextBoxIndex : focusedIndex;
+        int firstIndex = digits.Length >= GameRules.VerificationCodeLength ? CollectionIndex.First : focusedIndex;
 
-        for (int offset = FirstPastedDigitOffset;
-            offset < digits.Length && firstIndex + offset < VerificationCodeViewModel.CodeLength;
+        for (int offset = CollectionIndex.First;
+            offset < digits.Length && firstIndex + offset < GameRules.VerificationCodeLength;
             offset++)
         {
             SetDigit(firstIndex + offset, digits[offset].ToString());
@@ -134,7 +130,7 @@ public sealed partial class VerificationCodeWindow : Window
 
     private void FocusDigitTextBox(int index)
     {
-        bool isInsideRange = index >= FirstDigitTextBoxIndex && index <= LastDigitTextBoxIndex;
+        bool isInsideRange = index >= CollectionIndex.First && index <= LastDigitTextBoxIndex;
 
         if (isInsideRange)
         {
@@ -148,10 +144,10 @@ public sealed partial class VerificationCodeWindow : Window
         {
             SetDigit(index, string.Empty);
         }
-        else if (index > FirstDigitTextBoxIndex)
+        else if (index > CollectionIndex.First)
         {
-            SetDigit(index - DigitTextBoxNavigationStep, string.Empty);
-            FocusDigitTextBox(index - DigitTextBoxNavigationStep);
+            SetDigit(index - SingleDigit, string.Empty);
+            FocusDigitTextBox(index - SingleDigit);
         }
     }
 
