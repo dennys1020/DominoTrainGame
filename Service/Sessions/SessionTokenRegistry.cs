@@ -36,7 +36,7 @@ public sealed class SessionTokenRegistry
         lock (_sessionsLock)
         {
             ForgetPlayerToken(player.PlayerId);
-            _sessionsByToken[token] = new IssuedSession(player, CalculateExpiration());
+            StoreRenewedSession(token, player);
             _tokensByPlayerId[player.PlayerId] = token;
         }
 
@@ -67,8 +67,19 @@ public sealed class SessionTokenRegistry
         {
             if (_sessionsByToken.ContainsKey(normalizedToken))
             {
-                PlayerIdentity player = _sessionsByToken[normalizedToken].Player;
-                _sessionsByToken[normalizedToken] = new IssuedSession(player, CalculateExpiration());
+                StoreRenewedSession(normalizedToken, _sessionsByToken[normalizedToken].Player);
+            }
+        }
+    }
+
+    public void UpdateUsername(int playerId, string newUsername)
+    {
+        lock (_sessionsLock)
+        {
+            if (_tokensByPlayerId.ContainsKey(playerId))
+            {
+                PlayerIdentity renamedPlayer = new PlayerIdentity(playerId, newUsername);
+                StoreRenewedSession(_tokensByPlayerId[playerId], renamedPlayer);
             }
         }
     }
@@ -99,6 +110,11 @@ public sealed class SessionTokenRegistry
     {
         DateTime expiresAtUtc = _clock.UtcNow.AddMinutes(TokenLifetimeMinutes);
         return expiresAtUtc;
+    }
+
+    private void StoreRenewedSession(string token, PlayerIdentity player)
+    {
+        _sessionsByToken[token] = new IssuedSession(player, CalculateExpiration());
     }
 
     private bool IsActive(string token)

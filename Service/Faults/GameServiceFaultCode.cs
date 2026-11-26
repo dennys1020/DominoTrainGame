@@ -126,5 +126,11 @@ public enum GameServiceFaultCode
     AccountAlreadyExists,
 
     [EnumMember]
-    ResendTooSoon
+    ResendTooSoon,
+
+    [EnumMember]
+    UsernameAlreadyTaken,
+
+    [EnumMember]
+    AvatarStorageUnavailable
 }

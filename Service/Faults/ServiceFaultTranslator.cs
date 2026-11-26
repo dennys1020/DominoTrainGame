@@ -16,6 +16,8 @@ public sealed class ServiceFaultTranslator
         "A request failed because the verification email could not be sent. Operation: {0}.";
     private const string DataIntegrityMessageFormat =
         "A request was rejected because its data violates the database rules. Operation: {0}.";
+    private const string AvatarStorageUnavailableMessageFormat =
+        "A request failed because the avatar folder is unavailable. Operation: {0}.";
 
     private static readonly ITraceLog _logger;
 
@@ -58,6 +60,13 @@ public sealed class ServiceFaultTranslator
         catch (DataIntegrityException exception)
         {
             throw CreateLoggedFault(DataIntegrityMessageFormat, exception, invalidInputFaultCode);
+        }
+        catch (AvatarStorageUnavailableException exception)
+        {
+            throw CreateLoggedFault(
+                AvatarStorageUnavailableMessageFormat,
+                exception,
+                GameServiceFaultCode.AvatarStorageUnavailable);
         }
 
         return result;
