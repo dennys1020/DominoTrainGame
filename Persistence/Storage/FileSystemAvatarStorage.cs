@@ -100,7 +100,11 @@ public sealed class FileSystemAvatarStorage : IAvatarStorage
     private static bool RemoveAvatarFile(string avatarFilePath)
     {
         bool fileExists = File.Exists(avatarFilePath);
-        File.Delete(avatarFilePath);
+
+        if (fileExists)
+        {
+            File.Delete(avatarFilePath);
+        }
 
         return fileExists;
     }
