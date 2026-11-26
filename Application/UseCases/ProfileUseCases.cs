@@ -31,15 +31,15 @@ public sealed class ProfileUseCases : IProfileUseCases
         IMatchResultRepository matchResultRepository,
         IAvatarStorage avatarStorage)
     {
-        _matchResultRepository = ArgumentGuard.NotNull(matchResultRepository, nameof(matchResultRepository), _logger);
         _profileRepository = ArgumentGuard.NotNull(profileRepository, nameof(profileRepository), _logger);
+        _matchResultRepository = ArgumentGuard.NotNull(matchResultRepository, nameof(matchResultRepository), _logger);
         _avatarStorage = ArgumentGuard.NotNull(avatarStorage, nameof(avatarStorage), _logger);
     }
 
     public PlayerProfileSummary FindProfileByUsername(string username)
     {
-        string normalizadedUsername = PlayerInputValidator.NormalizeUsername(username);
-        PlayerProfileSummary profile = _profileRepository.FindProfileByUsername(normalizadedUsername);
+        string normalizedUsername = PlayerInputValidator.NormalizeUsername(username);
+        PlayerProfileSummary profile = _profileRepository.FindProfileByUsername(normalizedUsername);
 
         return profile;
     }
@@ -76,8 +76,8 @@ public sealed class ProfileUseCases : IProfileUseCases
 
     public ChangeUsernameStatus ChangeProfileUsername(int playerId, string newUsername)
     {
-        string normalizadedUsername = ProfileInputValidator.NormalizeNewUsername(newUsername);
-        ChangeUsernameStatus usernameStatus = SaveNewUsername(playerId, normalizadedUsername);
+        string normalizedUsername = ProfileInputValidator.NormalizeNewUsername(newUsername);
+        ChangeUsernameStatus usernameStatus = SaveNewUsername(playerId, normalizedUsername);
 
         LogUsernameChange(playerId, usernameStatus);
 
@@ -86,8 +86,8 @@ public sealed class ProfileUseCases : IProfileUseCases
 
     public bool UpdateProfileSocialLinks(int playerId, SocialLinks socialLinks)
     {
-        SocialLinks normalizadedSocialLinks = ProfileInputValidator.NormalizeSocialLinks(socialLinks);
-        bool isUpdateSocialLinks = _profileRepository.UpdateSocialLinks(playerId, normalizadedSocialLinks);
+        SocialLinks normalizedSocialLinks = ProfileInputValidator.NormalizeSocialLinks(socialLinks);
+        bool isUpdateSocialLinks = _profileRepository.UpdateSocialLinks(playerId, normalizedSocialLinks);
 
         LogProfileUpdate(SocialLinksFieldName, playerId, isUpdateSocialLinks);
 

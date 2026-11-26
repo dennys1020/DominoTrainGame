@@ -7,7 +7,6 @@ namespace DominoTrainGame.Server.Application.UseCases.Validation;
 
 public static class PlayerInputValidator
 {
-
     private static readonly ITraceLog _logger;
 
     static PlayerInputValidator()
@@ -40,8 +39,10 @@ public static class PlayerInputValidator
 
         if (!isLongEnough || !isShortEnough)
         {
-            _logger.Warn("A password shorter or longer than allowed length was rejected.");
-            throw new ArgumentException("The password is shorter or longer than the allowed length.", nameof(password));
+            _logger.Warn("A password shorter or longer than the allowed length was rejected.");
+            throw new ArgumentException(
+                "The password is shorter or longer than the allowed length.",
+                nameof(password));
         }
     }
 }
