@@ -23,6 +23,7 @@ public sealed class SessionTokenRegistryTests
     private const int IssueDay = 24;
     private const string PlayerUsername = "samuel";
     private const string OtherPlayerUsername = "denisse";
+    private const string RenamedPlayerUsername = "samuel_uv";
     private const string GuestUsername = "Guest123456";
     private const string UnknownToken = "bm90LWFuLWlzc3VlZC10b2tlbg==";
     private const string EmptyText = "";
@@ -227,6 +228,38 @@ public sealed class SessionTokenRegistryTests
         _player = new PlayerIdentity(OtherPlayerId, OtherPlayerUsername);
 
         Assert.DoesNotThrow(RevokeArrangedPlayer);
+    }
+
+    [Test]
+    public void Test_UpdateUsername_IssuedToken_ResolvesNewUsername()
+    {
+        _sessionTokens.UpdateUsername(PlayerId, RenamedPlayerUsername);
+
+        PlayerIdentity player = _sessionTokens.Resolve(_sessionToken);
+
+        Assert.That(player.Username, Is.EqualTo(RenamedPlayerUsername));
+    }
+
+    [Test]
+    public void Test_UpdateUsername_IssuedToken_RenewsExpiration()
+    {
+        MoveClockTo(RenewalMinute);
+        _sessionTokens.UpdateUsername(PlayerId, RenamedPlayerUsername);
+        MoveClockTo(MinuteAfterFirstExpiration);
+
+        PlayerIdentity player = _sessionTokens.Resolve(_sessionToken);
+
+        Assert.That(player.PlayerId, Is.EqualTo(PlayerId));
+    }
+
+    [Test]
+    public void Test_UpdateUsername_OtherPlayer_KeepsUsername()
+    {
+        _sessionTokens.UpdateUsername(OtherPlayerId, RenamedPlayerUsername);
+
+        PlayerIdentity player = _sessionTokens.Resolve(_sessionToken);
+
+        Assert.That(player.Username, Is.EqualTo(PlayerUsername));
     }
 
     private void CreateSessionTokenRegistry()
