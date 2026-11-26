@@ -10,7 +10,6 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class SignUpUseCases : ISignUpUseCases
 {
-    private const int MaximumEmailLength = 255;
     private const int MinimumPasswordLength = 8;
 
     private static readonly ITraceLog _logger;
@@ -48,12 +47,12 @@ public sealed class SignUpUseCases : ISignUpUseCases
         }
 
         string normalizedUsername = PlayerInputValidator.NormalizeUsername(details.Username);
-        string normalizedEmail = NormalizeEmail(details.Email);
+        string normalizedEmail = InputText.Normalize(details.Email);
 
         ValidateEmail(normalizedEmail);
         PlayerInputValidator.ValidatePassword(details.Password, MinimumPasswordLength);
 
-        bool isAvailable = IsUsernameAndEmailAvailable(normalizedUsername, normalizedEmail);
+        bool isAvailable = !_playerRepository.IsRegistrationTaken(normalizedUsername, normalizedEmail);
 
         if (isAvailable)
         {
@@ -69,8 +68,8 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     public VerifyEmailStatus VerifyEmail(string email, string verificationCode)
     {
-        string normalizedEmail = NormalizeEmail(email);
-        string normalizedCode = verificationCode?.Trim() ?? string.Empty;
+        string normalizedEmail = InputText.Normalize(email);
+        string normalizedCode = InputText.Normalize(verificationCode);
         VerifyEmailStatus emailStatus = _pendingSignUps.VerifyPendingSignUpCode(normalizedEmail, normalizedCode);
         bool isCodeAccepted = emailStatus == VerifyEmailStatus.Success;
 
@@ -85,7 +84,7 @@ public sealed class SignUpUseCases : ISignUpUseCases
 
     public ResendVerificationCodeStatus ResendVerificationCode(string email, string language)
     {
-        string normalizedEmail = NormalizeEmail(email);
+        string normalizedEmail = InputText.Normalize(email);
         PendingSignUp pendingSignUp = _pendingSignUps.FindPendingSignUpByEmail(normalizedEmail);
         ResendVerificationCodeStatus resendStatus = GetResendStatus(pendingSignUp);
         bool canResend = resendStatus == ResendVerificationCodeStatus.Success;
@@ -99,16 +98,10 @@ public sealed class SignUpUseCases : ISignUpUseCases
         return resendStatus;
     }
 
-    private static string NormalizeEmail(string email)
-    {
-        string normalizedEmail = email?.Trim() ?? string.Empty;
-        return normalizedEmail;
-    }
-
     private static void ValidateEmail(string email)
     {
         bool isEmailValid = !string.IsNullOrWhiteSpace(email)
-            && email.Length <= MaximumEmailLength
+            && email.Length <= PlayerInputValidator.MaximumEmailLength
             && IsWellFormedEmail(email);
 
         if (!isEmailValid)
@@ -167,12 +160,6 @@ public sealed class SignUpUseCases : ISignUpUseCases
         }
 
         return resendStatus;
-    }
-
-    private bool IsUsernameAndEmailAvailable(string username, string email)
-    {
-        bool isAvailable = !_playerRepository.IsRegistrationTaken(username, email);
-        return isAvailable;
     }
 
     private VerifyEmailStatus RegisterVerifiedPlayer(string email)

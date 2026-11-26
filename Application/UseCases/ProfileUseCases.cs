@@ -59,7 +59,6 @@ public sealed class ProfileUseCases : IProfileUseCases
         if (playerProfile.Details.HasAvatar)
         {
             avatarImage = LoadStoredAvatarImage(playerProfile.Details.AvatarFileName);
-
         }
 
         return avatarImage;

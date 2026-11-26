@@ -13,8 +13,6 @@ namespace DominoTrainGame.Client.ViewModel;
 public sealed class MatchResultsViewModel : ScreenViewModel
 {
     private const int NoScore = 0;
-    private const string WinnerSeparator = ", ";
-
     private readonly IRemoteGameServices _gameServices;
 
     public MatchResultsViewModel(
@@ -39,7 +37,7 @@ public sealed class MatchResultsViewModel : ScreenViewModel
 
         RoundLabels = roundHistory.Select(round => round.EnginePips).ToList();
         Players = CreatePlayerResults(matchServices.CurrentMatch.Players, roundHistory);
-        WinnerUsernames = string.Join(WinnerSeparator, Players.Where(row => row.IsWinner).Select(row => row.Username));
+        WinnerUsernames = UsernameList.Join(Players.Where(row => row.IsWinner).Select(row => row.Username));
 
         BackCommand = new RelayCommand(() => WindowService.Navigate(previousScreen));
         MainMenuCommand = new AsyncRelayCommand(ReturnToMainMenuAsync);

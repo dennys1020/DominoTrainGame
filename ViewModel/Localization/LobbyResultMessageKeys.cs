@@ -14,8 +14,6 @@ public static class LobbyResultMessageKeys
     private const string PlayersNotReadyMessageKey = "PlayersNotReadyMessage";
     private const string MatchAlreadyStartedMessageKey = "MatchAlreadyStartedMessage";
     private const string DominoSetTooSmallMessageKey = "DominoSetTooSmallMessage";
-    private const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
-    private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string PlayerOfflineMessageKey = "PlayerOfflineMessage";
     private const string ChatWarningMessageKey = "ChatWarningMessage";
     private const string ChatBlockedMessageKey = "ChatBlockedMessage";
@@ -92,10 +90,10 @@ public static class LobbyResultMessageKeys
         switch (status)
         {
             case LobbyActionResult.PlayerNotFound:
-                messageKey = FriendPlayerNotFoundMessageKey;
+                messageKey = CommonMessageKeys.FriendPlayerNotFoundMessageKey;
                 break;
             case LobbyActionResult.NotFriends:
-                messageKey = NotFriendsMessageKey;
+                messageKey = CommonMessageKeys.NotFriendsMessageKey;
                 break;
             case LobbyActionResult.PlayerOffline:
                 messageKey = PlayerOfflineMessageKey;

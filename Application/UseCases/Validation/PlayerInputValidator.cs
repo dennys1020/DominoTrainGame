@@ -6,18 +6,19 @@ namespace DominoTrainGame.Server.Application.UseCases.Validation;
 public static class PlayerInputValidator
 {
     public const int MaximumUsernameLength = 45;
+    public const int MaximumEmailLength = 255;
     private const int MaximumPasswordLength = 128;
 
     private static readonly ITraceLog _logger;
 
-    static PlayerInputValidator() {
-
+    static PlayerInputValidator()
+    {
         _logger = TraceLogManager.GetLogger(typeof(PlayerInputValidator));
     }
 
     public static string NormalizeUsername(string username)
     {
-        string normalizedUsername = username?.Trim() ?? string.Empty;
+        string normalizedUsername = InputText.Normalize(username);
         bool isUsernameValid = !string.IsNullOrEmpty(normalizedUsername)
             && normalizedUsername.Length <= MaximumUsernameLength;
 

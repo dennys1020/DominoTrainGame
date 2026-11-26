@@ -8,4 +8,6 @@ public static class CommonMessageKeys
     public const string DatabaseErrorMessageKey = "DatabaseErrorMessage";
     public const string SessionExpiredMessageKey = "LobbySessionExpiredMessage";
     public const string GuestNotAllowedMessageKey = "GuestNotAllowedMessage";
+    public const string FriendPlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
+    public const string NotFriendsMessageKey = "NotFriendsMessage";
 }

@@ -33,14 +33,13 @@ internal static class ChatTextNormalizer
 
     public static List<ChatToken> Tokenize(string text)
     {
-        string sourceText = text ?? string.Empty;
         List<ChatToken> tokens = new List<ChatToken>();
         StringBuilder currentToken = new StringBuilder();
         int tokenStart = EmptyLength;
 
-        for (int index = EmptyLength; index < sourceText.Length; index++)
+        for (int index = EmptyLength; index < text.Length; index++)
         {
-            char character = sourceText[index];
+            char character = text[index];
 
             if (IsWordCharacter(character))
             {
@@ -59,7 +58,7 @@ internal static class ChatTextNormalizer
 
     public static string Normalize(string word)
     {
-        string decomposedWord = (word ?? string.Empty).ToLowerInvariant().Normalize(NormalizationForm.FormD);
+        string decomposedWord = word.ToLowerInvariant().Normalize(NormalizationForm.FormD);
         StringBuilder normalizedWord = new StringBuilder(decomposedWord.Length);
 
         foreach (char character in decomposedWord)

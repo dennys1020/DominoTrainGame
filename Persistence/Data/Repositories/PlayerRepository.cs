@@ -10,7 +10,6 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class PlayerRepository : IPlayerRepository
 {
-    private const byte RegisteredPlayerFlag = 0;
     private const int MaximumMatches = 1;
     private const int FirstMatchIndex = 0;
 
@@ -65,7 +64,7 @@ public sealed class PlayerRepository : IPlayerRepository
     {
         List<PlayerCredentials> matches = context.Players
             .AsNoTracking()
-            .Where(player => player.IsGuest == RegisteredPlayerFlag)
+            .Where(player => player.IsGuest == PlayerTypeFlags.Registered)
             .Where(player => player.Username == identifier || player.Email == identifier)
             .Select(player => new { player.PlayerId, player.Username, player.PasswordHash })
             .Take(MaximumMatches)
@@ -109,7 +108,7 @@ public sealed class PlayerRepository : IPlayerRepository
             Username = registration.Username,
             Email = registration.Email,
             PasswordHash = registration.PasswordHash,
-            IsGuest = RegisteredPlayerFlag,
+            IsGuest = PlayerTypeFlags.Registered,
             PlayerProfile = new PlayerProfile
             {
                 CreatedAt = DateTime.UtcNow

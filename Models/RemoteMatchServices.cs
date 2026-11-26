@@ -6,6 +6,7 @@ using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
 using DominoTrainGame.Client.Models.Networking;
+using DominoTrainGame.Shared.Networking;
 
 namespace DominoTrainGame.Client.Models;
 

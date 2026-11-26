@@ -8,7 +8,6 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class SanctionRepository : ISanctionRepository
 {
-    private const int NoSavedRows = 0;
     private const string ChatMuteBanType = "ChatMute";
     private const string GameBanType = "GameBan";
     private const string ChatMuteReason = "Repeated offensive language in the lobby chat.";
@@ -77,7 +76,7 @@ public sealed class SanctionRepository : ISanctionRepository
         };
 
         context.Bans.Add(ban);
-        bool wasSaved = context.SaveChanges() > NoSavedRows;
+        bool wasSaved = ContextChanges.Save(context);
         return wasSaved;
     }
 

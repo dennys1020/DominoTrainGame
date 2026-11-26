@@ -46,12 +46,11 @@ public sealed class LobbyRegistry
             throw new ArgumentNullException(nameof(member));
         }
 
-        string lobbyCode = code ?? string.Empty;
         LobbyOutcome<JoinLobbyStatus> lobbyJoin;
 
         lock (_lobbiesLock)
         {
-            lobbyJoin = AddPlayer(member, lobbyCode);
+            lobbyJoin = AddPlayer(member, code);
         }
 
         return lobbyJoin;

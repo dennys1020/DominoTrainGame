@@ -83,7 +83,7 @@ public sealed class LoginViewModel : ScreenViewModel
     private async Task SubmitLogInAsync()
     {
         LoginResult loginResult = await RunWhileBusyAsync(
-            () => _authenticationServices.LogInAsync(UsernameOrEmail.Trim(), Password));
+            () => _authenticationServices.LogInAsync(UsernameOrEmail, Password));
         HandleLoginResult(loginResult);
     }
 

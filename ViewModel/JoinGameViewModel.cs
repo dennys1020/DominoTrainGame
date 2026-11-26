@@ -42,7 +42,7 @@ public sealed class JoinGameViewModel : ScreenViewModel
 
     private async Task JoinLobbyAsync()
     {
-        LobbyResult joinResult = await RunWhileBusyAsync(() => _gameServices.JoinLobbyAsync(LobbyCode.Trim()));
+        LobbyResult joinResult = await RunWhileBusyAsync(() => _gameServices.JoinLobbyAsync(LobbyCode));
 
         if (joinResult.Status == LobbyActionResult.Success)
         {

@@ -5,12 +5,14 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
+using DominoTrainGame.Server.Application.UseCases.Validation;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class LobbyUseCases : ILobbyUseCases
 {
     private const int MaximumMessageLength = 200;
+    private const int EmptyMessageLength = 0;
 
     private static readonly ITraceLog _logger;
 
@@ -160,7 +162,7 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
     public SendMessageStatus SendMessage(int playerId, string text)
     {
-        string normalizedText = text?.Trim() ?? string.Empty;
+        string normalizedText = InputText.Normalize(text);
         ValidateMessageText(normalizedText);
 
         LobbyState lobby = _lobbyRegistry.FindLobbyOfPlayer(playerId);
@@ -224,11 +226,12 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
     private static void ValidateMessageText(string text)
     {
-        bool isEmpty = string.IsNullOrEmpty(text);
+        bool isEmpty = text.Length == EmptyMessageLength;
         bool isTooLong = text.Length > MaximumMessageLength;
 
         if (isEmpty || isTooLong)
         {
+            _logger.Warn("A lobby message that is empty or longer than the allowed length was rejected.");
             throw new ArgumentException(
                 "The lobby message is empty or longer than the allowed length.",
                 nameof(text));

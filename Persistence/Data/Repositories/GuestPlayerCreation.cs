@@ -7,8 +7,6 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 internal sealed class GuestPlayerCreation
 {
-    private const byte GuestPlayerFlag = 1;
-
     private readonly string _username;
 
     public GuestPlayerCreation(string username)
@@ -46,7 +44,7 @@ internal sealed class GuestPlayerCreation
         Player player = new Player
         {
             Username = _username,
-            IsGuest = GuestPlayerFlag
+            IsGuest = PlayerTypeFlags.Guest
         };
 
         context.Players.Add(player);

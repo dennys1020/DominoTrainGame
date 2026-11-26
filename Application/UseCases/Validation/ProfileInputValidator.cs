@@ -16,6 +16,7 @@ public static class ProfileInputValidator
     public const int MaximumTwitterUsernameLength = 15;
 
     private const int RegexTimeoutMilliseconds = 100;
+    private const int EmptyUsernameLength = 0;
     private const string UsernamePattern = "^[A-Za-z0-9_]+$";
     private const string InstagramUsernamePattern = "^[A-Za-z0-9._]+$";
     private const string FacebookUsernamePattern = "^[A-Za-z0-9.]+$";
@@ -39,7 +40,7 @@ public static class ProfileInputValidator
 
     public static string NormalizeBiography(string biography)
     {
-        string normalizedBiography = biography?.Trim() ?? string.Empty;
+        string normalizedBiography = InputText.Normalize(biography);
 
         if (normalizedBiography.Length > MaximumBiographyLength)
         {
@@ -52,7 +53,7 @@ public static class ProfileInputValidator
 
     public static string NormalizeNewUsername(string newUsername)
     {
-        string normalizedUsername = newUsername?.Trim() ?? string.Empty;
+        string normalizedUsername = InputText.Normalize(newUsername);
         bool isLongEnough = normalizedUsername.Length >= MinimumUsernameLength;
         bool isFormatValid = IsFormatValid(
             normalizedUsername,
@@ -98,7 +99,7 @@ public static class ProfileInputValidator
             facebookUsername,
             _facebookUsernameRegex,
             MaximumFacebookUsernameLength);
-        bool isRemoved = string.IsNullOrEmpty(normalizedUsername);
+        bool isRemoved = normalizedUsername.Length == EmptyUsernameLength;
         bool isTooShort = normalizedUsername.Length < MinimumFacebookUsernameLength;
 
         if (!isRemoved && isTooShort)
@@ -114,12 +115,12 @@ public static class ProfileInputValidator
 
     private static string NormalizeSocialUsername(string socialUsername, Regex usernameRegex, int maximumLength)
     {
-        string trimmedUsername = socialUsername?.Trim() ?? string.Empty;
+        string trimmedUsername = InputText.Normalize(socialUsername);
         bool hasPrefix = trimmedUsername.StartsWith(SocialUsernamePrefix, StringComparison.Ordinal);
         string normalizedUsername = hasPrefix
             ? trimmedUsername.Substring(SocialUsernamePrefix.Length)
             : trimmedUsername;
-        bool isRemoved = string.IsNullOrEmpty(normalizedUsername);
+        bool isRemoved = normalizedUsername.Length == EmptyUsernameLength;
 
         if (!isRemoved && !IsFormatValid(normalizedUsername, usernameRegex, maximumLength))
         {

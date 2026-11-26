@@ -5,13 +5,11 @@ namespace DominoTrainGame.Client.ViewModel.Localization;
 public static class FriendMessageKeys
 {
     private const string InvalidInputMessageKey = "FriendInvalidInputMessage";
-    private const string PlayerNotFoundMessageKey = "FriendPlayerNotFoundMessage";
     private const string CannotTargetSelfMessageKey = "FriendCannotTargetSelfMessage";
     private const string AlreadyFriendsMessageKey = "AlreadyFriendsMessage";
     private const string RequestAlreadyExistsMessageKey = "FriendRequestAlreadyExistsMessage";
     private const string PlayerBlockedMessageKey = "FriendPlayerBlockedMessage";
     private const string RequestNotFoundMessageKey = "FriendRequestNotFoundMessage";
-    private const string NotFriendsMessageKey = "NotFriendsMessage";
     private const string ServerErrorMessageKey = "FriendServerErrorMessage";
 
     public static string GetMessageKey(FriendActionResult status)
@@ -50,7 +48,7 @@ public static class FriendMessageKeys
         switch (status)
         {
             case FriendActionResult.PlayerNotFound:
-                messageKey = PlayerNotFoundMessageKey;
+                messageKey = CommonMessageKeys.FriendPlayerNotFoundMessageKey;
                 break;
             case FriendActionResult.CannotTargetSelf:
                 messageKey = CannotTargetSelfMessageKey;
@@ -68,7 +66,7 @@ public static class FriendMessageKeys
                 messageKey = RequestNotFoundMessageKey;
                 break;
             case FriendActionResult.NotFriends:
-                messageKey = NotFriendsMessageKey;
+                messageKey = CommonMessageKeys.NotFriendsMessageKey;
                 break;
             default:
                 messageKey = ServerErrorMessageKey;

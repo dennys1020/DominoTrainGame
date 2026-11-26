@@ -2,7 +2,7 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class PlayerIdentity
 {
-    private const int EmptyPlayerId = 0;
+    public const int EmptyPlayerId = 0;
 
     static PlayerIdentity()
     {

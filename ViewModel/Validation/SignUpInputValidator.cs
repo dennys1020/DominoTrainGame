@@ -5,16 +5,12 @@ namespace DominoTrainGame.Client.ViewModel.Validation;
 
 public static class SignUpInputValidator
 {
-    private const int MaximumUsernameLength = 45;
-    private const int MaximumEmailLength = 255;
     private const int MinimumPasswordLength = 8;
-    private const int MaximumPasswordLength = 128;
-    private const int EmptyLength = 0;
 
     public static SignUpInputStatus Validate(string username, string email, string password)
     {
-        string normalizedUsername = NormalizeIdentifier(username);
-        string normalizedEmail = NormalizeIdentifier(email);
+        string normalizedUsername = InputText.Normalize(username);
+        string normalizedEmail = InputText.Normalize(email);
         string enteredPassword = password ?? string.Empty;
         SignUpInputStatus inputStatus = SignUpInputStatus.Valid;
 
@@ -22,11 +18,11 @@ public static class SignUpInputValidator
         {
             inputStatus = SignUpInputStatus.EmptyFields;
         }
-        else if (normalizedUsername.Length > MaximumUsernameLength)
+        else if (normalizedUsername.Length > PlayerInputLimits.MaximumUsernameLength)
         {
             inputStatus = SignUpInputStatus.UsernameTooLong;
         }
-        else if (normalizedEmail.Length > MaximumEmailLength)
+        else if (normalizedEmail.Length > PlayerInputLimits.MaximumEmailLength)
         {
             inputStatus = SignUpInputStatus.EmailTooLong;
         }
@@ -42,17 +38,11 @@ public static class SignUpInputValidator
         return inputStatus;
     }
 
-    private static string NormalizeIdentifier(string identifier)
-    {
-        string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
-        return normalizedIdentifier;
-    }
-
     private static bool HasEmptyField(string username, string email, string password)
     {
-        bool isUsernameEmpty = username.Length == EmptyLength;
-        bool isEmailEmpty = email.Length == EmptyLength;
-        bool isPasswordEmpty = password.Length == EmptyLength;
+        bool isUsernameEmpty = username.Length == InputText.EmptyLength;
+        bool isEmailEmpty = email.Length == InputText.EmptyLength;
+        bool isPasswordEmpty = password.Length == InputText.EmptyLength;
         bool hasEmptyField = isUsernameEmpty || isEmailEmpty || isPasswordEmpty;
         return hasEmptyField;
     }
@@ -65,7 +55,7 @@ public static class SignUpInputValidator
         {
             inputStatus = SignUpInputStatus.PasswordTooShort;
         }
-        else if (password.Length > MaximumPasswordLength)
+        else if (password.Length > PlayerInputLimits.MaximumPasswordLength)
         {
             inputStatus = SignUpInputStatus.PasswordTooLong;
         }

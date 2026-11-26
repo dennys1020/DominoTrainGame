@@ -344,9 +344,8 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     private async Task SubmitMessageAsync()
     {
-        string normalizedText = LobbyMessageInputValidator.Normalize(MessageText);
         LobbyActionResult sendResult = await RunLobbyRequestAsync(
-            () => _gameServices.SendLobbyMessageAsync(normalizedText));
+            () => _gameServices.SendLobbyMessageAsync(MessageText));
 
         bool wasDelivered = sendResult == LobbyActionResult.Success || sendResult == LobbyActionResult.ChatWarning;
 

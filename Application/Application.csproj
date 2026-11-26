@@ -69,6 +69,7 @@
     <Compile Include="UseCases\IProfileUseCases.cs" />
     <Compile Include="UseCases\ProfileUseCases.cs" />
     <Compile Include="UseCases\Validation\AvatarImageValidator.cs" />
+    <Compile Include="UseCases\Validation\InputText.cs" />
     <Compile Include="UseCases\Validation\PlayerInputValidator.cs" />
     <Compile Include="Domain\PlayerIdentity.cs" />
     <Compile Include="Domain\PlayerSanction.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using DominoTrainGame.Shared.Networking;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
