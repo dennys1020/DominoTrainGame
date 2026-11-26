@@ -1,12 +1,12 @@
+using DominoTrainGame.Server.Application.Domain;
+
 namespace DominoTrainGame.Server.Application.Ports;
 
 public sealed class PlayerCredentials
 {
-    private const int EmptyPlayerId = 0;
-
     static PlayerCredentials()
     {
-        Empty = new PlayerCredentials(EmptyPlayerId, string.Empty, string.Empty);
+        Empty = new PlayerCredentials(PlayerIdentity.EmptyPlayerId, string.Empty, string.Empty);
     }
 
     public PlayerCredentials(int playerId, string username, string passwordHash)

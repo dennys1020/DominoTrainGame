@@ -77,15 +77,14 @@ public sealed class PendingSignUpRegistry
     {
         lock (_pendingSignUpsLock)
         {
-            _pendingSignUpsByEmail.Remove(email ?? string.Empty);
+            _pendingSignUpsByEmail.Remove(email);
         }
     }
 
     private PendingSignUp GetPendingSignUpOrEmpty(string email)
     {
-        string emailKey = email ?? string.Empty;
-        PendingSignUp pendingSignUp = _pendingSignUpsByEmail.ContainsKey(emailKey)
-            ? _pendingSignUpsByEmail[emailKey]
+        PendingSignUp pendingSignUp = _pendingSignUpsByEmail.ContainsKey(email)
+            ? _pendingSignUpsByEmail[email]
             : PendingSignUp.Empty;
         return pendingSignUp;
     }

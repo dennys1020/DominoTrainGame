@@ -31,10 +31,9 @@ public sealed class ChatMessageFilter : IChatMessageFilter
 
     public string Filter(string text)
     {
-        string originalText = text ?? string.Empty;
-        StringBuilder filteredText = new StringBuilder(originalText);
+        StringBuilder filteredText = new StringBuilder(text);
 
-        foreach (ChatToken token in ChatTextNormalizer.Tokenize(originalText))
+        foreach (ChatToken token in ChatTextNormalizer.Tokenize(text))
         {
             if (IsForbidden(token.Text))
             {
@@ -58,7 +57,7 @@ public sealed class ChatMessageFilter : IChatMessageFilter
 
     private void AddForbiddenEntry(string forbiddenEntry)
     {
-        string trimmedEntry = forbiddenEntry?.Trim() ?? string.Empty;
+        string trimmedEntry = forbiddenEntry.Trim();
         bool isPrefix = trimmedEntry.EndsWith(PrefixMarker.ToString(), StringComparison.Ordinal);
         string normalizedEntry = ChatTextNormalizer.Normalize(trimmedEntry);
 

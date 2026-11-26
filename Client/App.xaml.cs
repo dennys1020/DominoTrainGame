@@ -1,9 +1,7 @@
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using log4net.Config;
 using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models;
 using DominoTrainGame.Client.Models.Callbacks;
@@ -12,12 +10,13 @@ using DominoTrainGame.Client.Models.Networking;
 using DominoTrainGame.Client.View.Navigation;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
+using DominoTrainGame.Shared.Logging;
+using DominoTrainGame.Shared.Networking;
 
 namespace DominoTrainGame.Client.View;
 
 public sealed partial class App : Application
 {
-    private const string LogConfigurationFileName = "log4net.config";
     private const string UnexpectedErrorMessageKey = "UnexpectedErrorMessage";
 
     private static readonly ITraceLog _logger;
@@ -31,7 +30,7 @@ public sealed partial class App : Application
 
     protected override void OnStartup(StartupEventArgs eventArgs)
     {
-        ConfigureLogging();
+        LogConfigurator.Configure();
         RegisterUnhandledErrorLogging();
         base.OnStartup(eventArgs);
 
@@ -74,14 +73,6 @@ public sealed partial class App : Application
             socialServices,
             matchServices);
         return remoteServices;
-    }
-
-    private static void ConfigureLogging()
-    {
-        string logConfigurationPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
-            LogConfigurationFileName);
-        XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
     }
 
     private static void HandleUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs eventArgs)

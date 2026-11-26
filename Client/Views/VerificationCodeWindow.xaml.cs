@@ -3,16 +3,16 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using DominoTrainGame.Client.ViewModel;
 
 namespace DominoTrainGame.Client.View.Views;
 
 public sealed partial class VerificationCodeWindow : Window
 {
-    private const int CodeLength = 6;
     private const int SingleDigitInputLength = 1;
     private const int DigitTextBoxNavigationStep = 1;
     private const int FirstDigitTextBoxIndex = 0;
-    private const int LastDigitTextBoxIndex = CodeLength - 1;
+    private const int LastDigitTextBoxIndex = VerificationCodeViewModel.CodeLength - 1;
     private const int FirstCharacterIndex = 0;
     private const int FirstPastedDigitOffset = 0;
     private const int EmptyTextLength = 0;
@@ -114,9 +114,11 @@ public sealed partial class VerificationCodeWindow : Window
     private void PasteDigits(int focusedIndex, string pastedText)
     {
         string digits = new string(pastedText.Where(IsAsciiDigit).ToArray());
-        int firstIndex = digits.Length >= CodeLength ? FirstDigitTextBoxIndex : focusedIndex;
+        int firstIndex = digits.Length >= VerificationCodeViewModel.CodeLength ? FirstDigitTextBoxIndex : focusedIndex;
 
-        for (int offset = FirstPastedDigitOffset; offset < digits.Length && firstIndex + offset < CodeLength; offset++)
+        for (int offset = FirstPastedDigitOffset;
+            offset < digits.Length && firstIndex + offset < VerificationCodeViewModel.CodeLength;
+            offset++)
         {
             SetDigit(firstIndex + offset, digits[offset].ToString());
         }

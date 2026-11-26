@@ -6,6 +6,7 @@ using log4net.Ext.Trace;
 using DominoTrainGame.Client.Models.Callbacks;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
+using DominoTrainGame.Shared.Networking;
 
 namespace DominoTrainGame.Client.Models.Networking;
 

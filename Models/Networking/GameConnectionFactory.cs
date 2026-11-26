@@ -52,7 +52,6 @@ public sealed class GameConnectionFactory : IGameConnectionFactory
 
     public MatchServiceClient CreateMatchClient()
     {
-
         MatchServiceClient matchClient = new MatchServiceClient(MatchEndpointName);
         return matchClient;
     }

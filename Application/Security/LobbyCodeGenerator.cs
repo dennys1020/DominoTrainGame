@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using DominoTrainGame.Server.Application.Ports;
@@ -32,25 +33,13 @@ public sealed class LobbyCodeGenerator : ILobbyCodeGenerator
 
     public bool IsValid(string code)
     {
-        bool isValidCode = true;
-        string normalizedCode = code ?? string.Empty;
-        bool hasValidLength = normalizedCode.Length == CodeLength;
-
-        if (!hasValidLength)
-        {
-            isValidCode = false;
-        }
-
-        foreach (char codeCharacter in normalizedCode)
-        {
-            bool isCharacterAllowed = Alphabet.IndexOf(codeCharacter) > InvalidCharacterIndex;
-
-            if (!isCharacterAllowed)
-            {
-                isValidCode = false;
-            }
-        }
-
+        bool isValidCode = code.Length == CodeLength && code.All(IsAllowedCharacter);
         return isValidCode;
+    }
+
+    private static bool IsAllowedCharacter(char codeCharacter)
+    {
+        bool isAllowed = Alphabet.IndexOf(codeCharacter) > InvalidCharacterIndex;
+        return isAllowed;
     }
 }

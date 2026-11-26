@@ -19,8 +19,6 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private const string MatchAbandonedMessageKey = "MatchAbandonedMessage";
     private const int FirstTrainIndex = 0;
     private const int RoundNoticeSeconds = 3;
-    private const string WinnerSeparator = ", ";
-
     private static readonly TimeSpan _roundNoticeDuration = TimeSpan.FromSeconds(RoundNoticeSeconds);
 
     private readonly IRemoteGameServices _gameServices;
@@ -273,7 +271,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     private void ShowRoundSummary(RoundSummary roundSummary)
     {
         LastRoundEnginePips = roundSummary.EnginePips;
-        LastRoundWinnerUsername = string.Join(WinnerSeparator, FindRoundWinnerUsernames(roundSummary));
+        LastRoundWinnerUsername = UsernameList.Join(FindRoundWinnerUsernames(roundSummary));
         HasRoundSummary = true;
 
         if (_showRoundNoticeCommand.CanExecute(null))

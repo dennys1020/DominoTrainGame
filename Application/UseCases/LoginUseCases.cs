@@ -8,7 +8,6 @@ namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class LoginUseCases : ILoginUseCases
 {
-    private const int MaximumIdentifierLength = 255;
     private const int MinimumPasswordLength = 1;
 
     private static readonly ITraceLog _logger;
@@ -29,7 +28,7 @@ public sealed class LoginUseCases : ILoginUseCases
 
     public PlayerIdentity LogIn(string identifier, string password)
     {
-        string normalizedIdentifier = identifier?.Trim() ?? string.Empty;
+        string normalizedIdentifier = InputText.Normalize(identifier);
 
         ValidateIdentifier(normalizedIdentifier);
         PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
@@ -41,7 +40,7 @@ public sealed class LoginUseCases : ILoginUseCases
     private static void ValidateIdentifier(string identifier)
     {
         bool isIdentifierValid = !string.IsNullOrWhiteSpace(identifier)
-            && identifier.Length <= MaximumIdentifierLength;
+            && identifier.Length <= PlayerInputValidator.MaximumEmailLength;
 
         if (!isIdentifierValid)
         {

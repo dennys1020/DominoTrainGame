@@ -10,9 +10,6 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class MatchResultRepository : IMatchResultRepository
 {
-    private const int NoSavedRows = 0;
-    private const byte GuestPlayerFlag = 1;
-
     private readonly DatabaseExecutor _databaseExecutor;
 
     public MatchResultRepository(DatabaseExecutor databaseExecutor)
@@ -54,7 +51,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
         List<MatchResult> playerResults = context.MatchResults
             .AsNoTracking()
             .Where(matchResult => matchResult.PlayerId == playerId)
-            .Where(matchResult => matchResult.Player.IsGuest != GuestPlayerFlag)
+            .Where(matchResult => matchResult.Player.IsGuest != PlayerTypeFlags.Guest)
             .ToList();
         PlayerProfileStatistics statistics = playerResults.Any()
             ? ToProfileStatistics(playerResults)
@@ -95,7 +92,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
             }
 
             context.Matches.Add(match);
-            wasSaved = context.SaveChanges() > NoSavedRows;
+            wasSaved = ContextChanges.Save(context);
             transaction.Complete();
         }
 
@@ -139,7 +136,7 @@ public sealed class MatchResultRepository : IMatchResultRepository
         List<PlayerStatistics> statisticsByMostWins = context.Players
             .AsNoTracking()
             .Include(player => player.MatchResults)
-            .Where(player => player.IsGuest != GuestPlayerFlag)
+            .Where(player => player.IsGuest != PlayerTypeFlags.Guest)
             .Where(player => player.MatchResults.Any())
             .AsEnumerable()
             .Select(ToPlayerStatistics)

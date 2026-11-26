@@ -189,7 +189,6 @@ public sealed class MatchService : IMatchService
         return faultCode;
     }
 
-
     private PlayerIdentity ResolveCaller(string sessionToken)
     {
         PlayerIdentity caller = _sessionToken.Resolve(sessionToken);

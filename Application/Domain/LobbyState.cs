@@ -4,8 +4,6 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class LobbyState
 {
-    private const int NoPlayers = 0;
-
     static LobbyState()
     {
         Empty = new LobbyState(string.Empty, LobbyRoster.Empty, DominoSet.DoubleTwelve);
@@ -32,7 +30,7 @@ public sealed class LobbyState
 
     public bool IsEmpty => ReferenceEquals(this, Empty);
 
-    public bool HasPlayers => Roster.Count > NoPlayers;
+    public bool HasPlayers => Roster.HasPlayers;
 
     public bool HasMinimumPlayers => Roster.Count >= DominoSet.MinimumPlayerCount;
 

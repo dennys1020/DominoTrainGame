@@ -79,7 +79,7 @@ public sealed class SmtpEmailSender : IEmailSender
 
     private static void Send(MailMessage message)
     {
-        using (SmtpClient smtpClient = new SmtpClient())
+        using (SmtpClient smtpClient = new SmtpClient { EnableSsl = true })
         {
             try
             {

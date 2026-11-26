@@ -11,7 +11,6 @@ namespace DominoTrainGame.Server.Persistence.Data.Repositories;
 
 public sealed class FriendshipRepository : IFriendshipRepository
 {
-    private const byte RegisteredPlayerFlag = 0;
     private const int PendingStatusId = 1;
     private const int AcceptedStatusId = 2;
     private const int RejectedStatusId = 3;
@@ -27,11 +26,10 @@ public sealed class FriendshipRepository : IFriendshipRepository
 
     public PlayerIdentity FindRegisteredPlayer(string username)
     {
-        string normalizedUsername = username ?? string.Empty;
         List<int> playerIds = _databaseExecutor.Execute(
-            context => FindRegisteredPlayerIds(context, normalizedUsername));
+            context => FindRegisteredPlayerIds(context, username));
         PlayerIdentity player = playerIds.Any()
-            ? new PlayerIdentity(playerIds.First(), normalizedUsername)
+            ? new PlayerIdentity(playerIds.First(), username)
             : PlayerIdentity.Empty;
 
         return player;
@@ -53,9 +51,8 @@ public sealed class FriendshipRepository : IFriendshipRepository
 
     public IReadOnlyList<PlayerIdentity> SearchRegisteredPlayers(int playerId, string usernameFragment)
     {
-        string normalizedFragment = usernameFragment ?? string.Empty;
         List<PlayerIdentity> players = _databaseExecutor.Execute(
-            context => FindPlayersByUsername(context, playerId, normalizedFragment));
+            context => FindPlayersByUsername(context, playerId, usernameFragment));
         return players;
     }
 
@@ -105,7 +102,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
     {
         List<int> playerIds = context.Players
             .AsNoTracking()
-            .Where(player => player.IsGuest == RegisteredPlayerFlag && player.Username == username)
+            .Where(player => player.IsGuest == PlayerTypeFlags.Registered && player.Username == username)
             .Select(player => player.PlayerId)
             .ToList();
         return playerIds;
@@ -118,7 +115,7 @@ public sealed class FriendshipRepository : IFriendshipRepository
     {
         List<PlayerIdentity> players = context.Players
             .AsNoTracking()
-            .Where(player => player.IsGuest == RegisteredPlayerFlag && player.PlayerId != playerId)
+            .Where(player => player.IsGuest == PlayerTypeFlags.Registered && player.PlayerId != playerId)
             .Where(player => player.Username.Contains(usernameFragment))
             .OrderBy(player => player.Username)
             .Take(MaximumSearchResults)

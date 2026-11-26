@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Threading;
-using log4net.Config;
 using log4net.Ext.Trace;
+using DominoTrainGame.Shared.Logging;
+using DominoTrainGame.Shared.Networking;
 
 namespace DominoTrainGame.Server.Host;
 
@@ -14,7 +14,6 @@ internal static class Program
 {
     private const int SuccessExitCode = 0;
     private const int FailureExitCode = 1;
-    private const string LogConfigurationFileName = "log4net.config";
 
     private static readonly ITraceLog _logger;
 
@@ -25,7 +24,7 @@ internal static class Program
 
     private static int Main()
     {
-        ConfigureLogging();
+        LogConfigurator.Configure();
         AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
         int exitCode = FailureExitCode;
 
@@ -52,14 +51,6 @@ internal static class Program
         }
 
         return exitCode;
-    }
-
-    private static void ConfigureLogging()
-    {
-        string logConfigurationPath = Path.Combine(
-            AppDomain.CurrentDomain.BaseDirectory,
-            LogConfigurationFileName);
-        XmlConfigurator.Configure(new FileInfo(logConfigurationPath));
     }
 
     private static void LogUnhandledException(object sender, UnhandledExceptionEventArgs eventArgs)

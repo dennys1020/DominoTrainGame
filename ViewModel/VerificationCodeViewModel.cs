@@ -16,7 +16,8 @@ namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class VerificationCodeViewModel : ScreenViewModel
 {
-    private const int CodeLength = 6;
+    public const int CodeLength = 6;
+
     private const int ResendCooldownSeconds = 60;
     private const string CountdownTimeFormat = @"m\:ss";
     private const string InstructionFormatKey = "VerificationInstructionFormat";

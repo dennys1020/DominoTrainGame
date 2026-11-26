@@ -205,9 +205,8 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (inputStatus == FriendUsernameInputStatus.Valid)
         {
-            string username = FriendUsernameInputValidator.Normalize(FriendUsername);
             FriendActionResult actionResult = await RunWhileBusyAsync(
-                () => _socialServices.SendFriendRequestAsync(username));
+                () => _socialServices.SendFriendRequestAsync(FriendUsername));
             ShowSendResult(actionResult);
         }
         else
@@ -227,7 +226,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
     private async Task SearchPlayersAsync()
     {
         CancellationToken cancellationToken = _searchCancellation.Token;
-        string usernameFragment = FriendUsernameInputValidator.Normalize(FriendUsername);
+        string usernameFragment = InputText.Normalize(FriendUsername);
         bool isLongEnough = usernameFragment.Length >= MinimumSearchLength;
         FriendUsernameInputStatus inputStatus = FriendUsernameInputValidator.Validate(usernameFragment);
         bool isValidUsername = inputStatus == FriendUsernameInputStatus.Valid;
@@ -246,7 +245,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
     private void ShowSearchResults(string usernameFragment, PlayerSearchResult searchResult)
     {
-        string currentFragment = FriendUsernameInputValidator.Normalize(FriendUsername);
+        string currentFragment = InputText.Normalize(FriendUsername);
         bool isCurrentSearch = string.Equals(usernameFragment, currentFragment, StringComparison.Ordinal);
 
         if (isCurrentSearch)

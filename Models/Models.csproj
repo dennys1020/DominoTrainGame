@@ -92,7 +92,9 @@
     <Compile Include="Contracts\LobbyInvitationReceivedEventArgs.cs" />
     <Compile Include="Contracts\ConnectionCheckResult.cs" />
     <Compile Include="Contracts\IGameConnectionFactory.cs" />
-    <Compile Include="Networking\GameChannelCloser.cs" />
+    <Compile Include="..\Shared\Networking\GameChannelCloser.cs">
+      <Link>Networking\GameChannelCloser.cs</Link>
+    </Compile>
     <Compile Include="Networking\GameConnectionFactory.cs" />
     <Compile Include="Networking\ServiceFailureMapping.cs" />
     <Compile Include="Networking\RemoteCallGuard.cs" />

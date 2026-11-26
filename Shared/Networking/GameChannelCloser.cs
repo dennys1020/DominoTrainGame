@@ -2,7 +2,7 @@ using System;
 using System.ServiceModel;
 using log4net.Ext.Trace;
 
-namespace DominoTrainGame.Client.Models.Networking;
+namespace DominoTrainGame.Shared.Networking;
 
 public sealed class GameChannelCloser
 {

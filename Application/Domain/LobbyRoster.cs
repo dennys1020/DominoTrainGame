@@ -10,7 +10,6 @@ public sealed class LobbyRoster
     private const long VersionStep = 1;
     private const int NoPlayers = 0;
     private const int HostIndex = 0;
-    private const int NoHostPlayerId = 0;
     private const bool InitialReadyState = false;
 
     static LobbyRoster()
@@ -39,7 +38,9 @@ public sealed class LobbyRoster
 
     public bool AreAllPlayersReady => Players.All(player => player.IsReady);
 
-    public int HostPlayerId => Players.Count > NoPlayers ? Players[HostIndex].PlayerId : NoHostPlayerId;
+    public bool HasPlayers => Players.Count > NoPlayers;
+
+    public int HostPlayerId => HasPlayers ? Players[HostIndex].PlayerId : PlayerIdentity.EmptyPlayerId;
 
     public bool Contains(int playerId)
     {
