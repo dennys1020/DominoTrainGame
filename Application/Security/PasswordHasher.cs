@@ -2,23 +2,20 @@ using System;
 using System.Security.Cryptography;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
 public sealed class PasswordHasher : IPasswordHasher
 {
     private const byte SupportedFormatMarker = 1;
-    private const int FormatMarkerIndex = 0;
     private const int SaltSize = 16;
     private const int SubkeySize = 32;
     private const int IterationCount = 600000;
-    private const int SaltOffset = 1;
+    private const int SaltOffset = sizeof(byte);
     private const int SubkeyOffset = SaltOffset + SaltSize;
     private const int HashSize = SubkeyOffset + SubkeySize;
-    private const int DestinationOffset = 0;
     private const int NoDifference = 0;
-    private const int FirstByteIndex = 0;
-    private const int EmptyLength = 0;
 
     private static readonly ITraceLog _logger;
 
@@ -38,9 +35,9 @@ public sealed class PasswordHasher : IPasswordHasher
         byte[] subkey = DeriveSubkey(password, salt);
         byte[] encodedHash = new byte[HashSize];
 
-        encodedHash[FormatMarkerIndex] = SupportedFormatMarker;
-        Buffer.BlockCopy(salt, DestinationOffset, encodedHash, SaltOffset, SaltSize);
-        Buffer.BlockCopy(subkey, DestinationOffset, encodedHash, SubkeyOffset, SubkeySize);
+        encodedHash[CollectionIndex.First] = SupportedFormatMarker;
+        Buffer.BlockCopy(salt, CollectionIndex.First, encodedHash, SaltOffset, SaltSize);
+        Buffer.BlockCopy(subkey, CollectionIndex.First, encodedHash, SubkeyOffset, SubkeySize);
 
         string hashedPassword = Convert.ToBase64String(encodedHash);
         return hashedPassword;
@@ -51,7 +48,7 @@ public sealed class PasswordHasher : IPasswordHasher
         bool isMatch = false;
         string storedHash = hashedPassword ?? string.Empty;
         string enteredPassword = password ?? string.Empty;
-        bool canVerify = storedHash.Length > EmptyLength && enteredPassword.Length > EmptyLength;
+        bool canVerify = storedHash.Length > InputText.EmptyLength && enteredPassword.Length > InputText.EmptyLength;
 
         if (canVerify)
         {
@@ -69,7 +66,7 @@ public sealed class PasswordHasher : IPasswordHasher
         {
             byte[] decodedHash = Convert.FromBase64String(hashedPassword);
             bool isSupportedFormat = decodedHash.Length == HashSize
-                && decodedHash[FormatMarkerIndex] == SupportedFormatMarker;
+                && decodedHash[CollectionIndex.First] == SupportedFormatMarker;
 
             if (isSupportedFormat)
             {
@@ -89,8 +86,8 @@ public sealed class PasswordHasher : IPasswordHasher
         byte[] salt = new byte[SaltSize];
         byte[] storedSubkey = new byte[SubkeySize];
 
-        Buffer.BlockCopy(decodedHash, SaltOffset, salt, DestinationOffset, SaltSize);
-        Buffer.BlockCopy(decodedHash, SubkeyOffset, storedSubkey, DestinationOffset, SubkeySize);
+        Buffer.BlockCopy(decodedHash, SaltOffset, salt, CollectionIndex.First, SaltSize);
+        Buffer.BlockCopy(decodedHash, SubkeyOffset, storedSubkey, CollectionIndex.First, SubkeySize);
 
         byte[] computedSubkey = DeriveSubkey(password, salt);
         bool isMatch = AreEqualInConstantTime(storedSubkey, computedSubkey);
@@ -101,7 +98,7 @@ public sealed class PasswordHasher : IPasswordHasher
     {
         int difference = firstValue.Length ^ secondValue.Length;
 
-        for (int index = FirstByteIndex; index < firstValue.Length && index < secondValue.Length; index++)
+        for (int index = CollectionIndex.First; index < firstValue.Length && index < secondValue.Length; index++)
         {
             difference |= firstValue[index] ^ secondValue[index];
         }

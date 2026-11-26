@@ -69,12 +69,10 @@
     <Compile Include="Navigation\ConnectionLossController.cs" />
     <Compile Include="Localization\FriendUsernameInputMessageKeys.cs" />
     <Compile Include="TrainViewModel.cs" />
-    <Compile Include="Validation\InputText.cs" />
     <Compile Include="Validation\LoginInputStatus.cs" />
     <Compile Include="Validation\LoginInputValidator.cs" />
     <Compile Include="Validation\LobbyMessageInputStatus.cs" />
     <Compile Include="Validation\LobbyMessageInputValidator.cs" />
-    <Compile Include="Localization\CommonMessageKeys.cs" />
     <Compile Include="Localization\LobbyResultMessageKeys.cs" />
     <Compile Include="Localization\LoginMessageKeys.cs" />
     <Compile Include="Localization\SignUpMessageKeys.cs" />
@@ -95,7 +93,6 @@
     <Compile Include="RoomChatMessageViewModel.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
-    <Compile Include="Validation\PlayerInputLimits.cs" />
     <Compile Include="Validation\SignUpInputStatus.cs" />
     <Compile Include="Validation\SignUpInputValidator.cs" />
     <Compile Include="VerificationCodeViewModel.cs" />

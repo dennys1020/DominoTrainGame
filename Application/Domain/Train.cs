@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class Train
 {
-    public const int MexicanTrainOwnerId = 0;
     private const int EmptyValue = -1;
 
     private readonly List<Tile> _tiles;
@@ -32,7 +32,7 @@ public sealed class Train
 
     public bool IsOpen { get; private set; }
 
-    public bool IsMexicanTrain => OwnerId == MexicanTrainOwnerId;
+    public bool IsMexicanTrain => MatchRules.IsMexicanTrain(OwnerId);
 
     public bool HasOpenDouble => _tiles.Any() && _tiles.Last().IsDouble;
 

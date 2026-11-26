@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
 internal static class MatchSnapshotMapper
 {
-    private const int MexicanTrainOwnerId = 0;
     private const int PipValueCount = 13;
 
     public static MatchSnapshot ToMatchSnapshot(MatchSnapshotMessage message, LobbyResult lobby)
@@ -90,7 +90,7 @@ internal static class MatchSnapshotMapper
     {
         TrainStatus status = TrainStatus.Closed;
 
-        if (train.OwnerId == MexicanTrainOwnerId)
+        if (MatchRules.IsMexicanTrain(train.OwnerId))
         {
             status = TrainStatus.Mexican;
         }

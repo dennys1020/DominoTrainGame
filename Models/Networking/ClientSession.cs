@@ -7,7 +7,6 @@ namespace DominoTrainGame.Client.Models.Networking;
 
 public sealed class ClientSession
 {
-    private const int NoPlayerId = 0;
 
     private readonly object _sessionSyncRoot = new object();
     private readonly List<Func<LobbyResult, LobbyResult>> _pendingLobbyUpdates =
@@ -190,7 +189,7 @@ public sealed class ClientSession
         lock (_sessionSyncRoot)
         {
             _sessionToken = string.Empty;
-            _currentPlayerId = NoPlayerId;
+            _currentPlayerId = PlayerSummary.EmptyPlayerId;
             _isGuest = false;
         }
     }
@@ -352,7 +351,7 @@ public sealed class ClientSession
 
             if (!canReconnect)
             {
-                _currentPlayerId = NoPlayerId;
+                _currentPlayerId = PlayerSummary.EmptyPlayerId;
             }
         }
 

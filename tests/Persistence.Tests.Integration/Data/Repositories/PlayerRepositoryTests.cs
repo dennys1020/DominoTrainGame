@@ -5,6 +5,7 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Time;
 using NUnit.Framework;
 
 namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories;
@@ -26,6 +27,7 @@ public sealed class PlayerRepositoryTests
 
     private TransactionScope _transaction;
     private DatabaseExecutor _databaseExecutor;
+    private IClock _clock;
     private PlayerRepository _playerRepository;
     private PlayerRegistration _registration;
     private string _guestUsername;
@@ -35,7 +37,8 @@ public sealed class PlayerRepositoryTests
     {
         _transaction = new TransactionScope();
         _databaseExecutor = new DatabaseExecutor();
-        _playerRepository = new PlayerRepository(_databaseExecutor);
+        _clock = new SystemClock();
+        _playerRepository = new PlayerRepository(_databaseExecutor, _clock);
         _registration = new PlayerRegistration(Username, Email, PasswordHash);
         _guestUsername = GuestUsername;
     }
@@ -50,6 +53,14 @@ public sealed class PlayerRepositoryTests
     public void Test_Constructor_NullDatabaseExecutor_ThrowsArgumentNullException()
     {
         _databaseExecutor = null;
+
+        Assert.Throws<ArgumentNullException>(CreatePlayerRepository);
+    }
+
+    [Test]
+    public void Test_Constructor_NullClock_ThrowsArgumentNullException()
+    {
+        _clock = null;
 
         Assert.Throws<ArgumentNullException>(CreatePlayerRepository);
     }
@@ -235,7 +246,7 @@ public sealed class PlayerRepositoryTests
 
     private void CreatePlayerRepository()
     {
-        _playerRepository = new PlayerRepository(_databaseExecutor);
+        _playerRepository = new PlayerRepository(_databaseExecutor, _clock);
     }
 
     private void CreateArrangedPlayer()

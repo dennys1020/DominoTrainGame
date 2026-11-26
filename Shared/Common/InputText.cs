@@ -1,4 +1,4 @@
-namespace DominoTrainGame.Client.ViewModel.Validation;
+namespace DominoTrainGame.Shared.Common;
 
 public static class InputText
 {

@@ -1,11 +1,11 @@
 using System;
 using System.Security.Cryptography;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
 internal static class SecureRandomNumber
 {
-    private const int RandomValueStartIndex = 0;
 
     public static uint Next(uint exclusiveUpperBound)
     {
@@ -16,7 +16,7 @@ internal static class SecureRandomNumber
             generator.GetBytes(randomBytes);
         }
 
-        uint randomValue = BitConverter.ToUInt32(randomBytes, RandomValueStartIndex);
+        uint randomValue = BitConverter.ToUInt32(randomBytes, CollectionIndex.First);
         uint boundedValue = randomValue % exclusiveUpperBound;
         return boundedValue;
     }

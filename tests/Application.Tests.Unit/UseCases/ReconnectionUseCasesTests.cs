@@ -21,7 +21,6 @@ public sealed class ReconnectionUseCasesTests
     private const int GracePeriodSeconds = 60;
     private const int ExpireArgumentIndex = 2;
     private const int DealtTileCount = 14;
-    private const int EnginePipsStep = 1;
     private const int FirstPassNumber = 0;
     private const string MatchCode = "ABC123";
     private const string OtherMatchCode = "XYZ789";
@@ -286,7 +285,8 @@ public sealed class ReconnectionUseCasesTests
 
         while (_matchState.HasNextRound)
         {
-            int nextEnginePips = _matchState.CurrentRound.EngineTile.LeftPips - EnginePipsStep;
+            int nextEnginePips = _matchState.CurrentRound.EngineTile.LeftPips;
+            nextEnginePips--;
             _matchState.StartNextRound(CreateBlockedRoundTiles(nextEnginePips));
             BlockCurrentRound();
         }

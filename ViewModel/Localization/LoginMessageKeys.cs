@@ -22,10 +22,10 @@ public static class LoginMessageKeys
                 messageKey = IdentifierTooLongMessageKey;
                 break;
             case LoginInputStatus.PasswordTooLong:
-                messageKey = CommonMessageKeys.PasswordTooLongMessageKey;
+                messageKey = LocalizationViewModel.PasswordTooLongMessageKey;
                 break;
             default:
-                messageKey = CommonMessageKeys.RequiredFieldsMessageKey;
+                messageKey = LocalizationViewModel.RequiredFieldsMessageKey;
                 break;
         }
 
@@ -51,10 +51,10 @@ public static class LoginMessageKeys
                 messageKey = GuestLoginUnavailableMessageKey;
                 break;
             case LoginResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case LoginResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             default:
                 messageKey = LoginSystemErrorMessageKey;
@@ -71,10 +71,10 @@ public static class LoginMessageKeys
         switch (connectionResult)
         {
             case ConnectionCheckResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case ConnectionCheckResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             default:
                 messageKey = LoginSystemErrorMessageKey;

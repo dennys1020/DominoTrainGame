@@ -3,12 +3,14 @@ using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.UseCases.Validation;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class LoginUseCases : ILoginUseCases
 {
-    private const int MinimumPasswordLength = 1;
+    private const int MinimumLoginPasswordLength = 1;
 
     private static readonly ITraceLog _logger;
 
@@ -31,7 +33,7 @@ public sealed class LoginUseCases : ILoginUseCases
         string normalizedIdentifier = InputText.Normalize(identifier);
 
         ValidateIdentifier(normalizedIdentifier);
-        PlayerInputValidator.ValidatePassword(password, MinimumPasswordLength);
+        PlayerInputValidator.ValidatePassword(password, MinimumLoginPasswordLength);
 
         PlayerIdentity player = VerifyCredentials(normalizedIdentifier, password);
         return player;
@@ -40,7 +42,7 @@ public sealed class LoginUseCases : ILoginUseCases
     private static void ValidateIdentifier(string identifier)
     {
         bool isIdentifierValid = !string.IsNullOrWhiteSpace(identifier)
-            && identifier.Length <= PlayerInputValidator.MaximumEmailLength;
+            && !GameRules.IsEmailTooLong(identifier);
 
         if (!isIdentifierValid)
         {

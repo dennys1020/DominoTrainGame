@@ -11,14 +11,15 @@ using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class VerificationCodeViewModel : ScreenViewModel
 {
-    public const int CodeLength = 6;
-
-    private const int ResendCooldownSeconds = 60;
+    private const int CountdownStepSeconds = 1;
+    private const int NoRemainingSeconds = 0;
     private const string CountdownTimeFormat = @"m\:ss";
     private const string InstructionFormatKey = "VerificationInstructionFormat";
     private const string IncompleteCodeMessageKey = "VerificationCodeIncompleteMessage";
@@ -38,7 +39,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
 
     static VerificationCodeViewModel()
     {
-        _countdownStep = TimeSpan.FromSeconds(1);
+        _countdownStep = TimeSpan.FromSeconds(CountdownStepSeconds);
     }
 
     public VerificationCodeViewModel(
@@ -51,7 +52,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
 
         List<VerificationDigitViewModel> digits = Enumerable
-            .Range(0, CodeLength)
+            .Range(CollectionIndex.First, GameRules.VerificationCodeLength)
             .Select(digitIndex => new VerificationDigitViewModel())
             .ToList();
         Digits = new ReadOnlyCollection<VerificationDigitViewModel>(digits);
@@ -102,7 +103,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
         }
     }
 
-    public bool CanResend => RemainingResendSeconds == 0;
+    public bool CanResend => RemainingResendSeconds == NoRemainingSeconds;
 
     public string ResendLabel
     {
@@ -124,7 +125,7 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
     private async Task VerifyAsync()
     {
         string verificationCode = string.Concat(Digits.Select(digit => digit.Text.Trim()));
-        bool isCodeComplete = verificationCode.Length == CodeLength;
+        bool isCodeComplete = GameRules.IsVerificationCodeComplete(verificationCode);
 
         if (isCodeComplete)
         {
@@ -160,9 +161,9 @@ public sealed class VerificationCodeViewModel : ScreenViewModel
     private async Task RunResendCountdownAsync()
     {
         CancellationToken cancellationToken = _countdownCancellation.Token;
-        RemainingResendSeconds = ResendCooldownSeconds;
+        RemainingResendSeconds = GameRules.ResendCooldownSeconds;
 
-        while (RemainingResendSeconds > 0)
+        while (RemainingResendSeconds > NoRemainingSeconds)
         {
             await Task.Delay(_countdownStep, cancellationToken);
             RemainingResendSeconds--;

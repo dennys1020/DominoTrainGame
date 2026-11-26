@@ -4,13 +4,13 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
 public sealed class ForbiddenWordSource : IForbiddenWordSource
 {
     private const string ResourceFolder = ".Security.ForbiddenWords.";
-    private const int NotFoundIndex = -1;
 
     private static readonly char[] _lineSeparators;
 
@@ -26,7 +26,7 @@ public sealed class ForbiddenWordSource : IForbiddenWordSource
 
         foreach (string resourceName in assembly.GetManifestResourceNames())
         {
-            if (resourceName.IndexOf(ResourceFolder, StringComparison.Ordinal) > NotFoundIndex)
+            if (CollectionIndex.IsFound(resourceName.IndexOf(ResourceFolder, StringComparison.Ordinal)))
             {
                 forbiddenEntries.AddRange(ReadEntries(assembly, resourceName));
             }

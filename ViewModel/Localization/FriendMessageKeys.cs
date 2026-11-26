@@ -22,16 +22,16 @@ public static class FriendMessageKeys
                 messageKey = InvalidInputMessageKey;
                 break;
             case FriendActionResult.SessionNotFound:
-                messageKey = CommonMessageKeys.SessionExpiredMessageKey;
+                messageKey = LocalizationViewModel.SessionExpiredMessageKey;
                 break;
             case FriendActionResult.DatabaseUnavailable:
-                messageKey = CommonMessageKeys.DatabaseErrorMessageKey;
+                messageKey = LocalizationViewModel.DatabaseErrorMessageKey;
                 break;
             case FriendActionResult.ServerUnavailable:
-                messageKey = CommonMessageKeys.ServerUnavailableMessageKey;
+                messageKey = LocalizationViewModel.ServerUnavailableMessageKey;
                 break;
             case FriendActionResult.GuestNotAllowed:
-                messageKey = CommonMessageKeys.GuestNotAllowedMessageKey;
+                messageKey = LocalizationViewModel.GuestNotAllowedMessageKey;
                 break;
             default:
                 messageKey = GetFriendshipMessageKey(status);
@@ -48,7 +48,7 @@ public static class FriendMessageKeys
         switch (status)
         {
             case FriendActionResult.PlayerNotFound:
-                messageKey = CommonMessageKeys.FriendPlayerNotFoundMessageKey;
+                messageKey = LocalizationViewModel.FriendPlayerNotFoundMessageKey;
                 break;
             case FriendActionResult.CannotTargetSelf:
                 messageKey = CannotTargetSelfMessageKey;
@@ -66,7 +66,7 @@ public static class FriendMessageKeys
                 messageKey = RequestNotFoundMessageKey;
                 break;
             case FriendActionResult.NotFriends:
-                messageKey = CommonMessageKeys.NotFriendsMessageKey;
+                messageKey = LocalizationViewModel.NotFriendsMessageKey;
                 break;
             default:
                 messageKey = ServerErrorMessageKey;

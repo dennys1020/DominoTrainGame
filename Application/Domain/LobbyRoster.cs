@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Domain;
 
@@ -8,8 +9,6 @@ public sealed class LobbyRoster
 {
     private const long EmptyVersion = 0;
     private const long VersionStep = 1;
-    private const int NoPlayers = 0;
-    private const int HostIndex = 0;
     private const bool InitialReadyState = false;
 
     static LobbyRoster()
@@ -38,9 +37,9 @@ public sealed class LobbyRoster
 
     public bool AreAllPlayersReady => Players.All(player => player.IsReady);
 
-    public bool HasPlayers => Players.Count > NoPlayers;
+    public bool HasPlayers => Players.Any();
 
-    public int HostPlayerId => HasPlayers ? Players[HostIndex].PlayerId : PlayerIdentity.EmptyPlayerId;
+    public int HostPlayerId => HasPlayers ? Players[CollectionIndex.First].PlayerId : PlayerIdentity.EmptyPlayerId;
 
     public bool Contains(int playerId)
     {

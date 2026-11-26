@@ -2,15 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
 internal static class ChatTextNormalizer
 {
-    private const int EmptyLength = 0;
     private const int FirstRepetition = 1;
-    private const int RepetitionStep = 1;
-    private const int NotFoundIndex = -1;
 
     private static readonly char[] _joinerCharacters;
     private static readonly Dictionary<char, char> _lookAlikeCharacters;
@@ -35,15 +33,15 @@ internal static class ChatTextNormalizer
     {
         List<ChatToken> tokens = new List<ChatToken>();
         StringBuilder currentToken = new StringBuilder();
-        int tokenStart = EmptyLength;
+        int tokenStart = CollectionIndex.First;
 
-        for (int index = EmptyLength; index < text.Length; index++)
+        for (int index = CollectionIndex.First; index < text.Length; index++)
         {
             char character = text[index];
 
             if (IsWordCharacter(character))
             {
-                tokenStart = currentToken.Length == EmptyLength ? index : tokenStart;
+                tokenStart = currentToken.Length == InputText.EmptyLength ? index : tokenStart;
                 currentToken.Append(character);
             }
             else
@@ -77,16 +75,28 @@ internal static class ChatTextNormalizer
     {
         StringBuilder limitedWord = new StringBuilder(word.Length);
         int repetitions = FirstRepetition;
+        char previousCharacter = char.MinValue;
 
-        for (int index = EmptyLength; index < word.Length; index++)
+        for (int index = CollectionIndex.First; index < word.Length; index++)
         {
-            bool isRepeated = index > EmptyLength && word[index] == word[index - RepetitionStep];
-            repetitions = isRepeated ? repetitions + RepetitionStep : FirstRepetition;
+            char character = word[index];
+            bool isRepeated = index > CollectionIndex.First && character == previousCharacter;
+
+            if (isRepeated)
+            {
+                repetitions++;
+            }
+            else
+            {
+                repetitions = FirstRepetition;
+            }
 
             if (repetitions <= maximumRepetitions)
             {
-                limitedWord.Append(word[index]);
+                limitedWord.Append(character);
             }
+
+            previousCharacter = character;
         }
 
         string limitedText = limitedWord.ToString();
@@ -100,7 +110,7 @@ internal static class ChatTextNormalizer
         string tokenText = tokenWithoutLeadingJoiners.TrimEnd(_joinerCharacters);
         int trimmedStart = tokenStart + rawToken.Length - tokenWithoutLeadingJoiners.Length;
 
-        if (tokenText.Length > EmptyLength)
+        if (tokenText.Length > InputText.EmptyLength)
         {
             tokens.Add(new ChatToken(trimmedStart, tokenText));
         }
@@ -124,7 +134,7 @@ internal static class ChatTextNormalizer
 
     private static bool IsJoiner(char character)
     {
-        bool isJoiner = Array.IndexOf(_joinerCharacters, character) > NotFoundIndex;
+        bool isJoiner = CollectionIndex.IsFound(Array.IndexOf(_joinerCharacters, character));
         return isJoiner;
     }
 

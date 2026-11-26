@@ -31,31 +31,31 @@ public sealed class MatchService : IMatchService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public void PlayTile(PlayTileRequest playTileRequest)
+    public void PlayTile(PlayTileRequest request)
     {
-        if (playTileRequest == null)
+        if (request == null)
         {
-            throw new ArgumentNullException(nameof(playTileRequest));
+            throw new ArgumentNullException(nameof(request));
         }
 
-        PlayerIdentity caller = ResolveCaller(playTileRequest.SessionToken);
+        PlayerIdentity caller = ResolveCaller(request.SessionToken);
         PlayTileStatus status = _faultTranslator.Execute(
-            () => _matchUseCases.PlayTile(caller.PlayerId, ToTile(playTileRequest.Tile), playTileRequest.TrainOwnerId));
+            () => _matchUseCases.PlayTile(caller.PlayerId, ToTile(request.Tile), request.TrainOwnerId));
 
         GameFaultFactory.ThrowIfRejected(status, PlayTileStatus.Success, MapPlayTileFaultCode);
     }
 
-    public void DrawTile(SessionTokenRequest drawTileRequest)
+    public void DrawTile(SessionTokenRequest request)
     {
-        PlayerIdentity caller = ResolveCaller(drawTileRequest?.SessionToken);
+        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
         DrawTileStatus status = _faultTranslator.Execute(() => _matchUseCases.DrawTile(caller.PlayerId));
 
         GameFaultFactory.ThrowIfRejected(status, DrawTileStatus.Success, MapDrawTileFaultCode);
     }
 
-    public void PassTurn(SessionTokenRequest passTurnRequest)
+    public void PassTurn(SessionTokenRequest request)
     {
-        PlayerIdentity caller = ResolveCaller(passTurnRequest?.SessionToken);
+        PlayerIdentity caller = ResolveCaller(request?.SessionToken);
         PassTurnStatus status = _faultTranslator.Execute(() => _matchUseCases.PassTurn(caller.PlayerId));
 
         GameFaultFactory.ThrowIfRejected(status, PassTurnStatus.Success, MapPassTurnFaultCode);

@@ -7,6 +7,7 @@ using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Time;
 using NUnit.Framework;
 
 namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories;
@@ -14,16 +15,12 @@ namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories
 [TestFixture]
 public sealed class MatchResultRepositoryTests
 {
-    private const int SecondRank = 2;
-    private const int ThirdRank = 3;
     private const int WinnerScore = 15;
     private const int LoserScore = 48;
     private const int GuestScore = 63;
     private const int WinnerPointsAfterTwoMatches = WinnerScore * ExpectedMatchCount;
     private const int ExpectedMatchCount = 2;
-    private const int ExpectedWinCount = 1;
-    private const int ExpectedLobbyCount = 1;
-    private const int SingleEntryLimit = 1;
+    private const int SingleCount = 1;
     private const int LeaderboardLimit = 10;
     private const int UnknownPlayerId = -1;
     private const string LobbyCode = "ABC123";
@@ -49,20 +46,19 @@ public sealed class MatchResultRepositoryTests
     {
         _transaction = new TransactionScope();
         _databaseExecutor = new DatabaseExecutor();
-        _playerRepository = new PlayerRepository(_databaseExecutor);
+        _playerRepository = new PlayerRepository(_databaseExecutor, new SystemClock());
         _matchResultRepository = new MatchResultRepository(_databaseExecutor);
 
         _winnerPlayerId = CreateRegisteredPlayer(WinnerUsername, WinnerEmail);
         _loserPlayerId = CreateRegisteredPlayer(LoserUsername, LoserEmail);
         _guestPlayerId = _playerRepository.CreateGuest(GuestUsername).PlayerId;
-        _finishedMatch = new FinishedMatchRecord(
-            LobbyCode,
-            new List<PlayerMatchResult>
-            {
-                new PlayerMatchResult(_winnerPlayerId, MatchRanking.FirstRank, WinnerScore),
-                new PlayerMatchResult(_loserPlayerId, SecondRank, LoserScore),
-                new PlayerMatchResult(_guestPlayerId, ThirdRank, GuestScore)
-            });
+        Dictionary<int, int> totalScoresByPlayerId = new Dictionary<int, int>
+        {
+            { _winnerPlayerId, WinnerScore },
+            { _loserPlayerId, LoserScore },
+            { _guestPlayerId, GuestScore }
+        };
+        _finishedMatch = new FinishedMatchRecord(LobbyCode, MatchRanking.RankByLowestScore(totalScoresByPlayerId));
     }
 
     [TearDown]
@@ -95,7 +91,7 @@ public sealed class MatchResultRepositoryTests
         _matchResultRepository.SaveMatchResults(_finishedMatch);
 
         int lobbyCount = _databaseExecutor.Execute(CountLobbiesByCode, LobbyCode);
-        Assert.That(lobbyCount, Is.EqualTo(ExpectedLobbyCount));
+        Assert.That(lobbyCount, Is.EqualTo(SingleCount));
     }
 
     [Test]
@@ -194,7 +190,7 @@ public sealed class MatchResultRepositoryTests
 
         IReadOnlyList<PlayerStatistics> leaderboard = _matchResultRepository.GetStatisticsByMostWins(LeaderboardLimit);
 
-        Assert.That(leaderboard.First().Wins, Is.EqualTo(ExpectedWinCount));
+        Assert.That(leaderboard.First().Wins, Is.EqualTo(SingleCount));
     }
 
     [Test]
@@ -212,9 +208,9 @@ public sealed class MatchResultRepositoryTests
     {
         _matchResultRepository.SaveMatchResults(_finishedMatch);
 
-        IReadOnlyList<PlayerStatistics> leaderboard = _matchResultRepository.GetStatisticsByMostWins(SingleEntryLimit);
+        IReadOnlyList<PlayerStatistics> leaderboard = _matchResultRepository.GetStatisticsByMostWins(SingleCount);
 
-        Assert.That(leaderboard, Has.Count.EqualTo(SingleEntryLimit));
+        Assert.That(leaderboard, Has.Count.EqualTo(SingleCount));
     }
 
     private static int CountLobbiesByCode(DominoGameDBEntities context, string lobbyCode)

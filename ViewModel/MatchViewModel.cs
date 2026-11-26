@@ -10,6 +10,7 @@ using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.ViewModel;
 
@@ -17,7 +18,6 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 {
     private const string LeaveConfirmationMessageKey = "MatchLeaveConfirmationMessage";
     private const string MatchAbandonedMessageKey = "MatchAbandonedMessage";
-    private const int FirstTrainIndex = 0;
     private const int RoundNoticeSeconds = 3;
     private static readonly TimeSpan _roundNoticeDuration = TimeSpan.FromSeconds(RoundNoticeSeconds);
 
@@ -348,7 +348,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
 
             if (isLocalPlayerTrain)
             {
-                Trains.Insert(FirstTrainIndex, trainViewModel);
+                Trains.Insert(CollectionIndex.First, trainViewModel);
             }
             else
             {

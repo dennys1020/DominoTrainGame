@@ -5,14 +5,13 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Application.State;
-using DominoTrainGame.Server.Application.UseCases.Validation;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.UseCases;
 
 public sealed class LobbyUseCases : ILobbyUseCases
 {
-    private const int MaximumMessageLength = 200;
-    private const int EmptyMessageLength = 0;
 
     private static readonly ITraceLog _logger;
 
@@ -226,8 +225,8 @@ public sealed class LobbyUseCases : ILobbyUseCases
 
     private static void ValidateMessageText(string text)
     {
-        bool isEmpty = text.Length == EmptyMessageLength;
-        bool isTooLong = text.Length > MaximumMessageLength;
+        bool isEmpty = text.Length == InputText.EmptyLength;
+        bool isTooLong = GameRules.IsMessageTooLong(text);
 
         if (isEmpty || isTooLong)
         {

@@ -6,6 +6,7 @@ using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
+using DominoTrainGame.Server.Persistence.Time;
 using NUnit.Framework;
 
 namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories;
@@ -25,6 +26,7 @@ public sealed class FriendshipRepositoryTests
 
     private TransactionScope _transaction;
     private DatabaseExecutor _databaseExecutor;
+    private IClock _clock;
     private PlayerRepository _playerRepository;
     private FriendshipRepository _friendshipRepository;
     private int _requesterPlayerId;
@@ -35,8 +37,9 @@ public sealed class FriendshipRepositoryTests
     {
         _transaction = new TransactionScope();
         _databaseExecutor = new DatabaseExecutor();
-        _playerRepository = new PlayerRepository(_databaseExecutor);
-        _friendshipRepository = new FriendshipRepository(_databaseExecutor);
+        _clock = new SystemClock();
+        _playerRepository = new PlayerRepository(_databaseExecutor, _clock);
+        _friendshipRepository = new FriendshipRepository(_databaseExecutor, _clock);
 
         _requesterPlayerId = CreateRegisteredPlayer(RequesterUsername, RequesterEmail);
         _addresseePlayerId = CreateRegisteredPlayer(AddresseeUsername, AddresseeEmail);
@@ -52,6 +55,14 @@ public sealed class FriendshipRepositoryTests
     public void Test_Constructor_NullDatabaseExecutor_ThrowsArgumentNullException()
     {
         _databaseExecutor = null;
+
+        Assert.Throws<ArgumentNullException>(CreateFriendshipRepository);
+    }
+
+    [Test]
+    public void Test_Constructor_NullClock_ThrowsArgumentNullException()
+    {
+        _clock = null;
 
         Assert.Throws<ArgumentNullException>(CreateFriendshipRepository);
     }
@@ -306,7 +317,7 @@ public sealed class FriendshipRepositoryTests
 
     private void CreateFriendshipRepository()
     {
-        _friendshipRepository = new FriendshipRepository(_databaseExecutor);
+        _friendshipRepository = new FriendshipRepository(_databaseExecutor, _clock);
     }
 
     private int FindPendingRequestId()

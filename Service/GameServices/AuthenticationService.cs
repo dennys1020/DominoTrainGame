@@ -33,10 +33,10 @@ public sealed class AuthenticationService : IAuthenticationService
         _faultTranslator = faultTranslator ?? throw new ArgumentNullException(nameof(faultTranslator));
     }
 
-    public LoginResponse LogIn(LoginRequest logInRequest)
+    public LoginResponse LogIn(LoginRequest request)
     {
         PlayerIdentity player = _faultTranslator.Execute(
-            () => _loginUseCases.LogIn(logInRequest?.Identifier, logInRequest?.Password));
+            () => _loginUseCases.LogIn(request?.Identifier, request?.Password));
 
         LoginResponse response = CreateLoginResponse(player);
         return response;
@@ -49,29 +49,29 @@ public sealed class AuthenticationService : IAuthenticationService
         return response;
     }
 
-    public bool SignUp(SignUpRequest signUpRequest)
+    public bool SignUp(SignUpRequest request)
     {
         SignUpDetails details = new SignUpDetails(
-            signUpRequest?.Username,
-            signUpRequest?.Email,
-            signUpRequest?.Password);
-        bool isRegistered = _faultTranslator.Execute(() => _signUpUseCases.SignUp(details, signUpRequest?.Language));
+            request?.Username,
+            request?.Email,
+            request?.Password);
+        bool isRegistered = _faultTranslator.Execute(() => _signUpUseCases.SignUp(details, request?.Language));
 
         return isRegistered;
     }
 
-    public void VerifyEmail(VerifyEmailRequest verifyEmailRequest)
+    public void VerifyEmail(VerifyEmailRequest request)
     {
         VerifyEmailStatus status = _faultTranslator.Execute(
-            () => _signUpUseCases.VerifyEmail(verifyEmailRequest?.Email, verifyEmailRequest?.VerificationCode));
+            () => _signUpUseCases.VerifyEmail(request?.Email, request?.VerificationCode));
 
         GameFaultFactory.ThrowIfRejected(status, VerifyEmailStatus.Success, MapVerifyEmailFaultCode);
     }
 
-    public void ResendVerificationCode(ResendVerificationCodeRequest resendRequest)
+    public void ResendVerificationCode(ResendVerificationCodeRequest request)
     {
         ResendVerificationCodeStatus resendStatus = _faultTranslator.Execute(
-            () => _signUpUseCases.ResendVerificationCode(resendRequest?.Email, resendRequest?.Language));
+            () => _signUpUseCases.ResendVerificationCode(request?.Email, request?.Language));
 
         GameFaultFactory.ThrowIfRejected(resendStatus, ResendVerificationCodeStatus.Success, MapResendFaultCode);
     }

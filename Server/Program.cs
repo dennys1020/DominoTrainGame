@@ -25,7 +25,7 @@ internal static class Program
     private static int Main()
     {
         LogConfigurator.Configure();
-        AppDomain.CurrentDomain.UnhandledException += LogUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += HandleUnhandledException;
         int exitCode = FailureExitCode;
 
         try
@@ -53,7 +53,7 @@ internal static class Program
         return exitCode;
     }
 
-    private static void LogUnhandledException(object sender, UnhandledExceptionEventArgs eventArgs)
+    private static void HandleUnhandledException(object sender, UnhandledExceptionEventArgs eventArgs)
     {
         _logger.FatalFormat("An unhandled error is stopping the server. Error: {0}", eventArgs.ExceptionObject);
     }

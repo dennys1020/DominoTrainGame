@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 using log4net.Ext.Trace;
 using DominoTrainGame.Server.Application.Domain;
 using DominoTrainGame.Server.Application.Guards;
+using DominoTrainGame.Shared.Common;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Server.Application.UseCases.Validation;
 
@@ -16,26 +18,22 @@ public static class ProfileInputValidator
     public const int MaximumTwitterUsernameLength = 15;
 
     private const int RegexTimeoutMilliseconds = 100;
-    private const int EmptyUsernameLength = 0;
-    private const string UsernamePattern = "^[A-Za-z0-9_]+$";
+    private const string LettersDigitsUnderscorePattern = "^[A-Za-z0-9_]+$";
     private const string InstagramUsernamePattern = "^[A-Za-z0-9._]+$";
     private const string FacebookUsernamePattern = "^[A-Za-z0-9.]+$";
-    private const string TwitterUsernamePattern = "^[A-Za-z0-9_]+$";
     private const string SocialUsernamePrefix = "@";
 
     private static readonly ITraceLog _logger;
-    private static readonly Regex _usernameRegex;
+    private static readonly Regex _lettersDigitsUnderscoreRegex;
     private static readonly Regex _instagramUsernameRegex;
     private static readonly Regex _facebookUsernameRegex;
-    private static readonly Regex _twitterUsernameRegex;
 
     static ProfileInputValidator()
     {
         _logger = TraceLogManager.GetLogger(typeof(ProfileInputValidator));
-        _usernameRegex = CreateRegex(UsernamePattern);
+        _lettersDigitsUnderscoreRegex = CreateRegex(LettersDigitsUnderscorePattern);
         _instagramUsernameRegex = CreateRegex(InstagramUsernamePattern);
         _facebookUsernameRegex = CreateRegex(FacebookUsernamePattern);
-        _twitterUsernameRegex = CreateRegex(TwitterUsernamePattern);
     }
 
     public static string NormalizeBiography(string biography)
@@ -57,8 +55,8 @@ public static class ProfileInputValidator
         bool isLongEnough = normalizedUsername.Length >= MinimumUsernameLength;
         bool isFormatValid = IsFormatValid(
             normalizedUsername,
-            _usernameRegex,
-            PlayerInputValidator.MaximumUsernameLength);
+            _lettersDigitsUnderscoreRegex,
+            GameRules.MaximumUsernameLength);
 
         if (!isLongEnough || !isFormatValid)
         {
@@ -80,7 +78,7 @@ public static class ProfileInputValidator
             NormalizeFacebookUsername(socialLinks.FacebookUsername),
             NormalizeSocialUsername(
                 socialLinks.TwitterUsername,
-                _twitterUsernameRegex,
+                _lettersDigitsUnderscoreRegex,
                 MaximumTwitterUsernameLength));
 
         return normalizedSocialLinks;
@@ -99,7 +97,7 @@ public static class ProfileInputValidator
             facebookUsername,
             _facebookUsernameRegex,
             MaximumFacebookUsernameLength);
-        bool isRemoved = normalizedUsername.Length == EmptyUsernameLength;
+        bool isRemoved = normalizedUsername.Length == InputText.EmptyLength;
         bool isTooShort = normalizedUsername.Length < MinimumFacebookUsernameLength;
 
         if (!isRemoved && isTooShort)
@@ -120,7 +118,7 @@ public static class ProfileInputValidator
         string normalizedUsername = hasPrefix
             ? trimmedUsername.Substring(SocialUsernamePrefix.Length)
             : trimmedUsername;
-        bool isRemoved = normalizedUsername.Length == EmptyUsernameLength;
+        bool isRemoved = normalizedUsername.Length == InputText.EmptyLength;
 
         if (!isRemoved && !IsFormatValid(normalizedUsername, usernameRegex, maximumLength))
         {

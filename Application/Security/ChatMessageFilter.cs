@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Security;
 
@@ -11,7 +12,6 @@ public sealed class ChatMessageFilter : IChatMessageFilter
     private const char PrefixMarker = '*';
     private const int SingleRepetition = 1;
     private const int DoubleRepetition = 2;
-    private const int EmptyLength = 0;
 
     private readonly HashSet<string> _forbiddenWords = new HashSet<string>(StringComparer.Ordinal);
     private readonly List<string> _forbiddenPrefixes = new List<string>();
@@ -61,7 +61,7 @@ public sealed class ChatMessageFilter : IChatMessageFilter
         bool isPrefix = trimmedEntry.EndsWith(PrefixMarker.ToString(), StringComparison.Ordinal);
         string normalizedEntry = ChatTextNormalizer.Normalize(trimmedEntry);
 
-        if (normalizedEntry.Length > EmptyLength)
+        if (normalizedEntry.Length > InputText.EmptyLength)
         {
             if (isPrefix)
             {
