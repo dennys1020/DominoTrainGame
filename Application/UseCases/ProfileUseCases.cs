@@ -53,7 +53,7 @@ public sealed class ProfileUseCases : IProfileUseCases
 
     public byte[] LoadProfileAvatarImage(PlayerProfileSummary playerProfile)
     {
-        ArgumentGuard.ThrowIfFull(playerProfile, nameof(playerProfile), _logger);
+        ArgumentGuard.ThrowIfNull(playerProfile, nameof(playerProfile), _logger);
         byte[] avatarImage = Array.Empty<byte>();
 
         if (playerProfile.Details.HasAvatar)

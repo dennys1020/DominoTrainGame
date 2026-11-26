@@ -71,7 +71,7 @@ public static class ProfileInputValidator
 
     public static SocialLinks NormalizeSocialLinks(SocialLinks socialLinks)
     {
-        ArgumentGuard.ThrowIfFull(socialLinks, nameof(socialLinks), _logger);
+        ArgumentGuard.ThrowIfNull(socialLinks, nameof(socialLinks), _logger);
         SocialLinks normalizedSocialLinks = new SocialLinks(
             NormalizeSocialUsername(
                 socialLinks.InstagramUsername,
