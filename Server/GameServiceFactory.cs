@@ -6,6 +6,7 @@ using DominoTrainGame.Server.Application.Ports;
 using DominoTrainGame.Server.Application.Security;
 using DominoTrainGame.Server.Application.State;
 using DominoTrainGame.Server.Application.UseCases;
+using DominoTrainGame.Server.Host.Properties;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Persistence.Email;
@@ -22,8 +23,6 @@ namespace DominoTrainGame.Server.Host;
 
 internal static class GameServiceFactory
 {
-    private const string AvatarFolderKey = "AvatarFolder";
-
     public static List<ServiceHost> CreateHosts()
     {
         DatabaseExecutor databaseExecutor = new DatabaseExecutor();
@@ -144,7 +143,7 @@ internal static class GameServiceFactory
 
     private static string ReadAvatarFolderPath()
     {
-        string avatarFolderPath = ConfigurationManager.AppSettings[AvatarFolderKey];
+        string avatarFolderPath = Settings.Default.AvatarFolder;
 
         if (string.IsNullOrWhiteSpace(avatarFolderPath))
         {
