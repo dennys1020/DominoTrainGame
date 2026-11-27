@@ -9,13 +9,13 @@ using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
 using DominoTrainGame.Client.ViewModel.Validation;
+using DominoTrainGame.Shared.Common;
 using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
-    private const int OldestMessageIndex = 0;
     private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayersToStart = 2;
     private const string RoomLostAfterReconnectMessageKey = "RoomLostAfterReconnectMessage";
@@ -250,7 +250,7 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         if (Messages.Count > MaximumVisibleMessages)
         {
-            Messages.RemoveAt(OldestMessageIndex);
+            Messages.RemoveAt(CollectionIndex.First);
         }
     }
 

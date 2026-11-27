@@ -8,13 +8,12 @@ using DominoTrainGame.Client.ViewModel.Commands;
 using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class LeaderboardViewModel : ScreenViewModel
 {
-    private const int UsernameNotFoundIndex = -1;
-
     private readonly IRemoteMatchServices _matchServices;
     private readonly List<LeaderboardEntryResult> _leaderboard = new List<LeaderboardEntryResult>();
 
@@ -97,7 +96,7 @@ public sealed class LeaderboardViewModel : ScreenViewModel
     private bool MatchesFilter(LeaderboardEntryResult entry)
     {
         int filterIndex = entry.Username.IndexOf(_playerFilter.Trim(), StringComparison.OrdinalIgnoreCase);
-        bool matchesFilter = filterIndex != UsernameNotFoundIndex;
+        bool matchesFilter = CollectionIndex.IsFound(filterIndex);
 
         return matchesFilter;
     }

@@ -129,8 +129,8 @@ internal sealed class DuplexClientSlot<TClient>
     {
         TClient previousClient;
 
-        client.Faulted += (sender, eventArgs) => ReleaseEndedClient(client);
-        client.Closed += (sender, eventArgs) => ReleaseEndedClient(client);
+        client.Faulted += HandleClientEnded;
+        client.Closed += HandleClientEnded;
 
         lock (_clientSyncRoot)
         {
@@ -145,13 +145,15 @@ internal sealed class DuplexClientSlot<TClient>
         }
     }
 
-    private void ReleaseEndedClient(TClient endedClient)
+    private void HandleClientEnded(object sender, EventArgs eventArgs)
     {
+        TClient endedClient;
         bool isCurrentClient;
 
         lock (_clientSyncRoot)
         {
-            isCurrentClient = ReferenceEquals(endedClient, _client);
+            endedClient = _client;
+            isCurrentClient = ReferenceEquals(sender, endedClient);
 
             if (isCurrentClient)
             {
