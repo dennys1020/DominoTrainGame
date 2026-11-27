@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
+using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
 public sealed class LobbyResult
 {
     private const int EmptyMaximumPlayers = 0;
-    private const int DefaultHighestDouble = 12;
 
     static LobbyResult()
     {
@@ -51,7 +51,7 @@ public sealed class LobbyResult
             status,
             string.Empty,
             EmptyMaximumPlayers,
-            DefaultHighestDouble,
+            MatchRules.DoubleTwelvePips,
             LobbyRoster.Empty);
         return failure;
     }
