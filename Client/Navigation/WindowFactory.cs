@@ -77,7 +77,7 @@ internal sealed class WindowFactory
             [Screen.NewGame] = windowService => new NewGameViewModel(windowService, _gameServices),
             [Screen.JoinGame] = windowService => new JoinGameViewModel(windowService, _gameServices),
             [Screen.Room] = CreateRoomViewModel,
-            [Screen.Match] = windowService => new MatchViewModel(windowService, _gameServices, _matchServices),
+            [Screen.Match] = CreateMatchViewModel,
             [Screen.MatchResults] = CreateMatchResultsViewModel,
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
             [Screen.Leaderboard] = CreateLeaderboardViewModel,
@@ -147,8 +147,24 @@ internal sealed class WindowFactory
             windowService,
             _gameServices,
             inviteFriendsViewModel,
-            _localization);
+            CreateLobbyChatViewModel(windowService));
         return viewModel;
+    }
+
+    private ScreenViewModel CreateMatchViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new MatchViewModel(
+            windowService,
+            _gameServices,
+            _matchServices,
+            CreateLobbyChatViewModel(windowService));
+        return viewModel;
+    }
+
+    private LobbyChatViewModel CreateLobbyChatViewModel(IWindowService windowService)
+    {
+        LobbyChatViewModel chatViewModel = new LobbyChatViewModel(windowService, _gameServices, _localization);
+        return chatViewModel;
     }
 
     private ScreenViewModel CreateMatchResultsViewModel(IWindowService windowService)

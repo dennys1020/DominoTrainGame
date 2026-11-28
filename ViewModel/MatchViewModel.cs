@@ -41,10 +41,12 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
     public MatchViewModel(
         IWindowService windowService,
         IRemoteGameServices gameServices,
-        IRemoteMatchServices matchServices) : base(windowService)
+        IRemoteMatchServices matchServices,
+        LobbyChatViewModel chat) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _matchServices = matchServices ?? throw new ArgumentNullException(nameof(matchServices));
+        Chat = chat ?? throw new ArgumentNullException(nameof(chat));
         _matchEvents = _matchServices.MatchEvents;
         _lobbyEvents = _gameServices.LobbyEvents;
 
@@ -65,6 +67,8 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _matchEvents.MatchLost += HandleMatchLost;
         _lobbyEvents.ConnectionStateChanged += HandleConnectionStateChanged;
     }
+
+    public LobbyChatViewModel Chat { get; }
 
     public ObservableCollection<TileSummary> HandTiles { get; } = new ObservableCollection<TileSummary>();
 
@@ -196,6 +200,7 @@ public sealed class MatchViewModel : ScreenViewModel, ISubscribingViewModel
         _matchEvents.MatchAbandoned -= HandleMatchAbandoned;
         _matchEvents.MatchLost -= HandleMatchLost;
         _lobbyEvents.ConnectionStateChanged -= HandleConnectionStateChanged;
+        Chat.Unsubscribe();
     }
 
     private void ApplyCurrentMatch()
