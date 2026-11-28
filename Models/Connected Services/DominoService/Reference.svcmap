@@ -24,6 +24,7 @@
     <MetadataSource Address="http://localhost:8080/LobbyService/mex" Protocol="mex" SourceId="3" />
     <MetadataSource Address="http://localhost:8080/FriendService/mex" Protocol="mex" SourceId="4" />
     <MetadataSource Address="http://localhost:8080/MatchService/mex" Protocol="mex" SourceId="5" />
+    <MetadataSource Address="http://localhost:8080/ProfileService/mex" Protocol="mex" SourceId="6" />
   </MetadataSources>
   <Metadata>
     <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="70929501-a74b-4450-937c-e66df86e8533" SourceId="1" SourceUrl="http://localhost:8080/ConnectionService/mex" />

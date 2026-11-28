@@ -15,6 +15,7 @@ public sealed class ClientSession
     private int _currentPlayerId;
     private bool _isGuest;
     private string _sessionToken = string.Empty;
+    private string _currentUsername = string.Empty;
     private string _pendingVerificationEmail = string.Empty;
     private string _currentMatchCode = string.Empty;
     private SynchronizationContext _callerContext = new SynchronizationContext();
@@ -112,6 +113,21 @@ public sealed class ClientSession
         }
     }
 
+    public string CurrentUsername
+    {
+        get
+        {
+            string currentUsername;
+
+            lock (_sessionSyncRoot)
+            {
+                currentUsername = _currentUsername;
+            }
+
+            return currentUsername;
+        }
+    }
+
     public bool IsGuest
     {
         get
@@ -168,6 +184,14 @@ public sealed class ClientSession
         }
     }
 
+    public void StoreUsername(string username)
+    {
+        lock (_sessionSyncRoot)
+        {
+            _currentUsername = username ?? string.Empty;
+        }
+    }
+
     public void StorePendingVerificationEmail(string email)
     {
         lock (_sessionSyncRoot)
@@ -189,6 +213,7 @@ public sealed class ClientSession
         lock (_sessionSyncRoot)
         {
             _sessionToken = string.Empty;
+            _currentUsername = string.Empty;
             _currentPlayerId = PlayerSummary.EmptyPlayerId;
             _isGuest = false;
         }

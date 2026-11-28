@@ -13,4 +13,7 @@ public sealed class LoginResponse
 
     [DataMember]
     public string SessionToken { get; set; }
+
+    [DataMember]
+    public string Username { get; set; }
 }
