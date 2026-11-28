@@ -40,14 +40,17 @@ public sealed class ProfileService : IProfileService
     {
         string username = profileRequest?.Username;
         TokenCallerResolver.ResolveRegisteredCaller(_sessionTokens, profileRequest?.SessionToken);
-        PlayerProfileSummary profile = _faultTranslator.Execute(() => _profileUseCases.FindProfileByUsername(username));
+        ProfileResponse response = FindProfileResponseByUsername(username);
 
-        GameFaultFactory.ThrowIfRejected(!profile.IsEmpty, GameServiceFaultCode.PlayerNotFound);
+        return response;
+    }
 
-        PlayerProfileStatistics statistics = _faultTranslator.Execute(
-            () => _profileUseCases.GetProfileStatistics(profile.Player.PlayerId));
-        byte[] avatarImage = _faultTranslator.Execute(() => _profileUseCases.LoadProfileAvatarImage(profile));
-        ProfileResponse response = ToProfileResponse(profile, statistics, avatarImage);
+    public ProfileResponse GetOwnProfile(SessionTokenRequest ownProfileRequest)
+    {
+        PlayerIdentity caller = TokenCallerResolver.ResolveRegisteredCaller(
+            _sessionTokens,
+            ownProfileRequest?.SessionToken);
+        ProfileResponse response = FindProfileResponseByUsername(caller.Username);
 
         return response;
     }
@@ -102,6 +105,20 @@ public sealed class ProfileService : IProfileService
             () => _profileUseCases.UpdateProfileAvatar(caller.PlayerId, imageBytes));
 
         GameFaultFactory.ThrowIfRejected(isUpdated, GameServiceFaultCode.GuestNotAllowed);
+    }
+
+    private ProfileResponse FindProfileResponseByUsername(string username)
+    {
+        PlayerProfileSummary profile = _faultTranslator.Execute(() => _profileUseCases.FindProfileByUsername(username));
+
+        GameFaultFactory.ThrowIfRejected(!profile.IsEmpty, GameServiceFaultCode.PlayerNotFound);
+
+        PlayerProfileStatistics statistics = _faultTranslator.Execute(
+            () => _profileUseCases.GetProfileStatistics(profile.Player.PlayerId));
+        byte[] avatarImage = _faultTranslator.Execute(() => _profileUseCases.LoadProfileAvatarImage(profile));
+        ProfileResponse response = ToProfileResponse(profile, statistics, avatarImage);
+
+        return response;
     }
 
     private static ProfileResponse ToProfileResponse(
