@@ -1,4 +1,5 @@
 using DominoTrainGame.Server.Application.Domain;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Application.Ports;
 
@@ -6,7 +7,7 @@ public sealed class PlayerCredentials
 {
     static PlayerCredentials()
     {
-        Empty = new PlayerCredentials(PlayerIdentity.EmptyPlayerId, string.Empty, string.Empty);
+        Empty = new PlayerCredentials(StateIdentifiers.EmptyPlayerId, string.Empty, string.Empty);
     }
 
     public PlayerCredentials(int playerId, string username, string passwordHash)

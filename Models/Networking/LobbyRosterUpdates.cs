@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DominoTrainGame.Client.Models.Contracts;
 using DominoTrainGame.Client.Models.DominoService;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
@@ -11,7 +12,7 @@ internal static class LobbyRosterUpdates
     public static LobbyResult ApplyIfNewer(LobbyResult lobby, long version, Func<LobbyResult, LobbyResult> update)
     {
         LobbyResult updatedLobby = lobby;
-        bool isNewerVersion = version > lobby.Version;
+        bool isNewerVersion = StateIdentifiers.IsNewerVersion(version, lobby.Version);
 
         if (isNewerVersion)
         {

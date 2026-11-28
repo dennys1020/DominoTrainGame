@@ -98,7 +98,7 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
-        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
+        window.Closed += OnWindowClosed;
         return window;
     }
 
@@ -165,6 +165,12 @@ internal sealed class WindowFactory
     {
         ScreenViewModel screenViewModel = new SettingsViewModel(windowService);
         return screenViewModel;
+    }
+
+    private void OnWindowClosed(object sender, EventArgs eventArgs)
+    {
+        Window closedWindow = (Window)sender;
+        UnsubscribeViewModel(closedWindow.DataContext);
     }
 
     private static void UnsubscribeViewModel(object viewModel)

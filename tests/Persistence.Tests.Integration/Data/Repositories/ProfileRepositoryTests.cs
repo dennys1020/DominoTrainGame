@@ -7,6 +7,7 @@ using DominoTrainGame.Server.Application.Results;
 using DominoTrainGame.Server.Persistence.Data;
 using DominoTrainGame.Server.Persistence.Data.Repositories;
 using DominoTrainGame.Server.Persistence.Time;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Persistence.Tests.Integration.Data.Repositories;
 
@@ -221,6 +222,6 @@ public sealed class ProfileRepositoryTests
 
     private void UpdateSocialLinksWithNullLinks()
     {
-        _profileRepository.UpdateSocialLinks(PlayerIdentity.EmptyPlayerId, null);
+        _profileRepository.UpdateSocialLinks(StateIdentifiers.EmptyPlayerId, null);
     }
 }

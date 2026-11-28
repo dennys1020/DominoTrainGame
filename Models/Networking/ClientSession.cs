@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using DominoTrainGame.Client.Models.Contracts;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.Models.Networking;
 
@@ -214,7 +215,7 @@ public sealed class ClientSession
         {
             _sessionToken = string.Empty;
             _currentUsername = string.Empty;
-            _currentPlayerId = PlayerSummary.EmptyPlayerId;
+            _currentPlayerId = StateIdentifiers.EmptyPlayerId;
             _isGuest = false;
         }
     }
@@ -376,7 +377,7 @@ public sealed class ClientSession
 
             if (!canReconnect)
             {
-                _currentPlayerId = PlayerSummary.EmptyPlayerId;
+                _currentPlayerId = StateIdentifiers.EmptyPlayerId;
             }
         }
 

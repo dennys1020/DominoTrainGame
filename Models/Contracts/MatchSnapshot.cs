@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
@@ -9,7 +10,7 @@ public sealed class MatchSnapshot
 
     static MatchSnapshot()
     {
-        MatchTurnSummary emptyTurn = new MatchTurnSummary(LobbyRoster.EmptyVersion, PlayerSummary.EmptyPlayerId);
+        MatchTurnSummary emptyTurn = new MatchTurnSummary(StateIdentifiers.EmptyVersion, StateIdentifiers.EmptyPlayerId);
         MatchTableSummary emptyTable = new MatchTableSummary(
             EmptyTableValue,
             EmptyTableValue,

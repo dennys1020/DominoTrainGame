@@ -7,13 +7,12 @@ namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class LobbyRoster
 {
-    private const long EmptyVersion = 0;
     private const long VersionStep = 1;
     private const bool InitialReadyState = false;
 
     static LobbyRoster()
     {
-        Empty = new LobbyRoster(EmptyVersion, new List<LobbyPlayerState>());
+        Empty = new LobbyRoster(StateIdentifiers.EmptyVersion, new List<LobbyPlayerState>());
     }
 
     public LobbyRoster(long version, IReadOnlyList<LobbyPlayerState> players)
@@ -39,7 +38,7 @@ public sealed class LobbyRoster
 
     public bool HasPlayers => Players.Any();
 
-    public int HostPlayerId => HasPlayers ? Players[CollectionIndex.First].PlayerId : PlayerIdentity.EmptyPlayerId;
+    public int HostPlayerId => HasPlayers ? Players[CollectionIndex.First].PlayerId : StateIdentifiers.EmptyPlayerId;
 
     public bool Contains(int playerId)
     {

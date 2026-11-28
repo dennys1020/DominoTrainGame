@@ -5,6 +5,7 @@ using log4net;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Guards;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Persistence.Storage;
 
@@ -12,7 +13,6 @@ public sealed class FileSystemAvatarStorage : IAvatarStorage
 {
     private const string AvatarFileNamePattern = @"^[0-9a-f]+\.(png|jpg)$";
     private const string GuidFileNameFormat = "N";
-    private const int RegexTimeoutMilliseconds = 100;
     private const int AvatarFileNameLength = 36;
 
     private static readonly ILog _logger;
@@ -23,8 +23,7 @@ public sealed class FileSystemAvatarStorage : IAvatarStorage
     static FileSystemAvatarStorage()
     {
         _logger = LogManager.GetLogger(typeof(FileSystemAvatarStorage));
-        TimeSpan matchTimeout = TimeSpan.FromMilliseconds(RegexTimeoutMilliseconds);
-        _avatarFileNameRegex = new Regex(AvatarFileNamePattern, RegexOptions.CultureInvariant, matchTimeout);
+        _avatarFileNameRegex = InputText.CreateRegex(AvatarFileNamePattern);
     }
 
     public FileSystemAvatarStorage(string avatarFolderPath)

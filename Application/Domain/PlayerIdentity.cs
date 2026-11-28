@@ -1,12 +1,12 @@
+using DominoTrainGame.Shared.Common;
+
 namespace DominoTrainGame.Server.Application.Domain;
 
 public sealed class PlayerIdentity
 {
-    public const int EmptyPlayerId = 0;
-
     static PlayerIdentity()
     {
-        Empty = new PlayerIdentity(EmptyPlayerId, string.Empty);
+        Empty = new PlayerIdentity(StateIdentifiers.EmptyPlayerId, string.Empty);
     }
 
     public PlayerIdentity(int playerId, string username)

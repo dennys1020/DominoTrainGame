@@ -75,6 +75,12 @@
     <Compile Include="..\Shared\Common\InputText.cs">
       <Link>Shared\InputText.cs</Link>
     </Compile>
+    <Compile Include="..\Shared\Common\GameLanguage.cs">
+      <Link>Shared\GameLanguage.cs</Link>
+    </Compile>
+    <Compile Include="..\Shared\Common\StateIdentifiers.cs">
+      <Link>Shared\StateIdentifiers.cs</Link>
+    </Compile>
     <Compile Include="..\Shared\Rules\GameRules.cs">
       <Link>Shared\GameRules.cs</Link>
     </Compile>

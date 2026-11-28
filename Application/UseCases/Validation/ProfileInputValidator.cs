@@ -17,7 +17,6 @@ public static class ProfileInputValidator
     public const int MaximumFacebookUsernameLength = 50;
     public const int MaximumTwitterUsernameLength = 15;
 
-    private const int RegexTimeoutMilliseconds = 100;
     private const string LettersDigitsUnderscorePattern = "^[A-Za-z0-9_]+$";
     private const string InstagramUsernamePattern = "^[A-Za-z0-9._]+$";
     private const string FacebookUsernamePattern = "^[A-Za-z0-9.]+$";
@@ -31,9 +30,9 @@ public static class ProfileInputValidator
     static ProfileInputValidator()
     {
         _logger = TraceLogManager.GetLogger(typeof(ProfileInputValidator));
-        _lettersDigitsUnderscoreRegex = CreateRegex(LettersDigitsUnderscorePattern);
-        _instagramUsernameRegex = CreateRegex(InstagramUsernamePattern);
-        _facebookUsernameRegex = CreateRegex(FacebookUsernamePattern);
+        _lettersDigitsUnderscoreRegex = InputText.CreateRegex(LettersDigitsUnderscorePattern);
+        _instagramUsernameRegex = InputText.CreateRegex(InstagramUsernamePattern);
+        _facebookUsernameRegex = InputText.CreateRegex(FacebookUsernamePattern);
     }
 
     public static string NormalizeBiography(string biography)
@@ -82,13 +81,6 @@ public static class ProfileInputValidator
                 MaximumTwitterUsernameLength));
 
         return normalizedSocialLinks;
-    }
-
-    private static Regex CreateRegex(string pattern)
-    {
-        TimeSpan matchTimeout = TimeSpan.FromMilliseconds(RegexTimeoutMilliseconds);
-        Regex regex = new Regex(pattern, RegexOptions.CultureInvariant, matchTimeout);
-        return regex;
     }
 
     private static string NormalizeFacebookUsername(string facebookUsername)

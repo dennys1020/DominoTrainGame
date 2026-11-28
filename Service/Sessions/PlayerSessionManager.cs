@@ -183,8 +183,9 @@ public sealed class PlayerSessionManager<TCallback>
 
         ICommunicationObject channel = context.Channel;
 
-        channel.Closed += (sender, eventArgs) => HandleDisconnection(session, sessionToken);
-        channel.Faulted += (sender, eventArgs) => HandleDisconnection(session, sessionToken);
+        ChannelDisconnectionWatcher disconnectionWatcher = new ChannelDisconnectionWatcher(this, session, sessionToken);
+        channel.Closed += disconnectionWatcher.OnChannelEnded;
+        channel.Faulted += disconnectionWatcher.OnChannelEnded;
         _logger.InfoFormat("A player connected. Channel: {0}. PlayerId: {1}.", _channelName, player.PlayerId);
     }
 
@@ -211,5 +212,27 @@ public sealed class PlayerSessionManager<TCallback>
     private void OnPlayerDisconnected(PlayerSessionEventArgs eventArgs)
     {
         PlayerDisconnected?.Invoke(this, eventArgs);
+    }
+
+    private sealed class ChannelDisconnectionWatcher
+    {
+        private readonly PlayerSessionManager<TCallback> _sessionManager;
+        private readonly PlayerSession<TCallback> _session;
+        private readonly string _sessionToken;
+
+        public ChannelDisconnectionWatcher(
+            PlayerSessionManager<TCallback> sessionManager,
+            PlayerSession<TCallback> session,
+            string sessionToken)
+        {
+            _sessionManager = sessionManager;
+            _session = session;
+            _sessionToken = sessionToken;
+        }
+
+        public void OnChannelEnded(object sender, EventArgs eventArgs)
+        {
+            _sessionManager.HandleDisconnection(_session, _sessionToken);
+        }
     }
 }
