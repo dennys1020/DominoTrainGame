@@ -1153,6 +1153,14 @@ public class UiStrings
         }
     }
 
+    public static string ViewProfileButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ViewProfileButtonLabel", _resourceCulture);
+        }
+    }
+
     public static string VolumePercentageFormat
     {
         get

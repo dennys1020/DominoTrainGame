@@ -105,6 +105,15 @@ internal sealed class WindowFactory
         return window;
     }
 
+    public Window CreatePlayerProfileDialog(string username)
+    {
+        Window window = CreateWindow(Screen.Profile);
+        IWindowService windowService = new WindowService(window, this, _localization);
+        ProfileOwner profileOwner = ProfileOwner.CreateOtherPlayer(username);
+        window.DataContext = new ProfileViewModel(windowService, _profileServices, profileOwner);
+        return window;
+    }
+
     public Window CreateMessageWindow(string message, MessageKind kind)
     {
         Window window = new MessageWindow();

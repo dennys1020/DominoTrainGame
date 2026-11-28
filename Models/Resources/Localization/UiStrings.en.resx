@@ -892,4 +892,7 @@ on the train</value>
   <data name="TwitterLabel" xml:space="preserve">
     <value>X (Twitter)</value>
   </data>
+  <data name="ViewProfileButtonLabel" xml:space="preserve">
+    <value>Profile</value>
+  </data>
 </root>

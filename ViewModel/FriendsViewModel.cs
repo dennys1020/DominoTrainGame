@@ -52,6 +52,7 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
 
         AddFriendCommand = new AsyncRelayCommand(SendFriendRequestAsync);
         RefreshCommand = new AsyncRelayCommand(RefreshFriendsAsync);
+        ShowFriendProfileCommand = new AsyncParameterRelayCommand<string>(ShowFriendProfileAsync);
         _searchCommand = new AsyncRelayCommand(SearchPlayersAsync);
         _socialServices.FriendEvents.FriendStatusChanged += HandleFriendStatusChanged;
         _socialServices.FriendEvents.FriendsChanged += HandleFriendsChanged;
@@ -108,6 +109,8 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
             }
         }
     }
+
+    public AsyncParameterRelayCommand<string> ShowFriendProfileCommand { get; }
 
     public ObservableCollection<FriendItemViewModel> Friends { get; } =
         new ObservableCollection<FriendItemViewModel>();
@@ -286,6 +289,12 @@ public sealed class FriendsViewModel : ScreenViewModel, ISubscribingViewModel
         {
             ShowFailure(sendResult);
         }
+    }
+
+    private Task ShowFriendProfileAsync(string friendUsername)
+    {
+        WindowService.ShowPlayerProfile(friendUsername);
+        return Task.CompletedTask;
     }
 
     private async Task RemoveFriendAsync(FriendResult friend)
