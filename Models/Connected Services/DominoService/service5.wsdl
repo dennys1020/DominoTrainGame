@@ -1,0 +1,184 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" name="ProfileService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="ProfileService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1" />
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:SslTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://dominotraingame/services" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IProfileService_GetProfile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfile" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_GetProfile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetProfileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_GetProfile_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://dominotraingame/services" name="detail" element="q1:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateBiography_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateBiography" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateBiography_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateBiographyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateBiography_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://dominotraingame/services" name="detail" element="q2:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_ChangeUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsername" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_ChangeUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_ChangeUsername_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://dominotraingame/services" name="detail" element="q3:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateSocialLinks_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSocialLinks" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateSocialLinks_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSocialLinksResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateSocialLinks_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://dominotraingame/services" name="detail" element="q4:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateAvatar_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAvatar" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateAvatar_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAvatarResponse" />
+  </wsdl:message>
+  <wsdl:message name="IProfileService_UpdateAvatar_GameServiceFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://dominotraingame/services" name="detail" element="q5:GameServiceFault" />
+  </wsdl:message>
+  <wsdl:portType name="IProfileService">
+    <wsdl:operation name="GetProfile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/GetProfile" message="tns:IProfileService_GetProfile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/GetProfileResponse" message="tns:IProfileService_GetProfile_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IProfileService/GetProfileGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IProfileService_GetProfile_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBiography">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/UpdateBiography" message="tns:IProfileService_UpdateBiography_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/UpdateBiographyResponse" message="tns:IProfileService_UpdateBiography_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IProfileService/UpdateBiographyGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IProfileService_UpdateBiography_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/ChangeUsername" message="tns:IProfileService_ChangeUsername_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/ChangeUsernameResponse" message="tns:IProfileService_ChangeUsername_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IProfileService/ChangeUsernameGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IProfileService_ChangeUsername_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSocialLinks">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/UpdateSocialLinks" message="tns:IProfileService_UpdateSocialLinks_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/UpdateSocialLinksResponse" message="tns:IProfileService_UpdateSocialLinks_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IProfileService/UpdateSocialLinksGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IProfileService_UpdateSocialLinks_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAvatar">
+      <wsdl:input wsaw:Action="http://tempuri.org/IProfileService/UpdateAvatar" message="tns:IProfileService_UpdateAvatar_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IProfileService/UpdateAvatarResponse" message="tns:IProfileService_UpdateAvatar_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/IProfileService/UpdateAvatarGameServiceFaultFault" name="GameServiceFaultFault" message="tns:IProfileService_UpdateAvatar_GameServiceFaultFault_FaultMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ProfileService" type="tns:IProfileService">
+    <wsp:PolicyReference URI="#ProfileService_policy" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetProfile">
+      <soap12:operation soapAction="http://tempuri.org/IProfileService/GetProfile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateBiography">
+      <soap12:operation soapAction="http://tempuri.org/IProfileService/UpdateBiography" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="ChangeUsername">
+      <soap12:operation soapAction="http://tempuri.org/IProfileService/ChangeUsername" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSocialLinks">
+      <soap12:operation soapAction="http://tempuri.org/IProfileService/UpdateSocialLinks" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAvatar">
+      <soap12:operation soapAction="http://tempuri.org/IProfileService/UpdateAvatar" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="GameServiceFaultFault">
+        <soap12:fault use="literal" name="GameServiceFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ProfileService">
+    <wsdl:port name="ProfileService" binding="tns:ProfileService">
+      <soap12:address location="net.tcp://localhost:8090/ProfileService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:8090/ProfileService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Dns>DominoTrainGameServer</Dns>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

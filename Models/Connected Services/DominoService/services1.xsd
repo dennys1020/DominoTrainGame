@@ -12,6 +12,7 @@
       <xs:element minOccurs="0" name="IsAuthenticated" type="xs:boolean" />
       <xs:element minOccurs="0" name="PlayerId" type="xs:int" />
       <xs:element minOccurs="0" name="SessionToken" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Username" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LoginResponse" nillable="true" type="tns:LoginResponse" />
@@ -64,6 +65,8 @@
       <xs:enumeration value="TooManyVerificationAttempts" />
       <xs:enumeration value="AccountAlreadyExists" />
       <xs:enumeration value="ResendTooSoon" />
+      <xs:enumeration value="UsernameAlreadyTaken" />
+      <xs:enumeration value="AvatarStorageUnavailable" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />

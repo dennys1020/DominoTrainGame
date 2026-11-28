@@ -184,6 +184,12 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         ResendTooSoon = 40,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UsernameAlreadyTaken = 41,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        AvatarStorageUnavailable = 42,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -265,6 +271,9 @@ namespace DominoTrainGame.Client.Models.DominoService {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string SessionTokenField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -310,6 +319,19 @@ namespace DominoTrainGame.Client.Models.DominoService {
                 if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
                     this.SessionTokenField = value;
                     this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
                 }
             }
         }
@@ -2658,6 +2680,532 @@ namespace DominoTrainGame.Client.Models.DominoService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ProfileRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class ProfileRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ProfileResponse", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class ProfileResponse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] AvatarImageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BiographyField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FacebookUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int GamesPlayedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string InstagramUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime MemberSinceField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int TotalPointsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TwitterUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string UsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int WinsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] AvatarImage {
+            get {
+                return this.AvatarImageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.AvatarImageField, value) != true)) {
+                    this.AvatarImageField = value;
+                    this.RaisePropertyChanged("AvatarImage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Biography {
+            get {
+                return this.BiographyField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BiographyField, value) != true)) {
+                    this.BiographyField = value;
+                    this.RaisePropertyChanged("Biography");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FacebookUsername {
+            get {
+                return this.FacebookUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FacebookUsernameField, value) != true)) {
+                    this.FacebookUsernameField = value;
+                    this.RaisePropertyChanged("FacebookUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int GamesPlayed {
+            get {
+                return this.GamesPlayedField;
+            }
+            set {
+                if ((this.GamesPlayedField.Equals(value) != true)) {
+                    this.GamesPlayedField = value;
+                    this.RaisePropertyChanged("GamesPlayed");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string InstagramUsername {
+            get {
+                return this.InstagramUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.InstagramUsernameField, value) != true)) {
+                    this.InstagramUsernameField = value;
+                    this.RaisePropertyChanged("InstagramUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime MemberSince {
+            get {
+                return this.MemberSinceField;
+            }
+            set {
+                if ((this.MemberSinceField.Equals(value) != true)) {
+                    this.MemberSinceField = value;
+                    this.RaisePropertyChanged("MemberSince");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int TotalPoints {
+            get {
+                return this.TotalPointsField;
+            }
+            set {
+                if ((this.TotalPointsField.Equals(value) != true)) {
+                    this.TotalPointsField = value;
+                    this.RaisePropertyChanged("TotalPoints");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TwitterUsername {
+            get {
+                return this.TwitterUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TwitterUsernameField, value) != true)) {
+                    this.TwitterUsernameField = value;
+                    this.RaisePropertyChanged("TwitterUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Username {
+            get {
+                return this.UsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.UsernameField, value) != true)) {
+                    this.UsernameField = value;
+                    this.RaisePropertyChanged("Username");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Wins {
+            get {
+                return this.WinsField;
+            }
+            set {
+                if ((this.WinsField.Equals(value) != true)) {
+                    this.WinsField = value;
+                    this.RaisePropertyChanged("Wins");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BiographyUpdateRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class BiographyUpdateRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BiographyField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Biography {
+            get {
+                return this.BiographyField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BiographyField, value) != true)) {
+                    this.BiographyField = value;
+                    this.RaisePropertyChanged("Biography");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UsernameChangeRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class UsernameChangeRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NewUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string NewUsername {
+            get {
+                return this.NewUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NewUsernameField, value) != true)) {
+                    this.NewUsernameField = value;
+                    this.RaisePropertyChanged("NewUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SocialLinksUpdateRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class SocialLinksUpdateRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FacebookUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string InstagramUsernameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TwitterUsernameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FacebookUsername {
+            get {
+                return this.FacebookUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FacebookUsernameField, value) != true)) {
+                    this.FacebookUsernameField = value;
+                    this.RaisePropertyChanged("FacebookUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string InstagramUsername {
+            get {
+                return this.InstagramUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.InstagramUsernameField, value) != true)) {
+                    this.InstagramUsernameField = value;
+                    this.RaisePropertyChanged("InstagramUsername");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string TwitterUsername {
+            get {
+                return this.TwitterUsernameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TwitterUsernameField, value) != true)) {
+                    this.TwitterUsernameField = value;
+                    this.RaisePropertyChanged("TwitterUsername");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AvatarUpdateRequest", Namespace="http://dominotraingame/services")]
+    [System.SerializableAttribute()]
+    public partial class AvatarUpdateRequest : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] ImageBytesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SessionTokenField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] ImageBytes {
+            get {
+                return this.ImageBytesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImageBytesField, value) != true)) {
+                    this.ImageBytesField = value;
+                    this.RaisePropertyChanged("ImageBytes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SessionToken {
+            get {
+                return this.SessionTokenField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SessionTokenField, value) != true)) {
+                    this.SessionTokenField = value;
+                    this.RaisePropertyChanged("SessionToken");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoService.IConnectionService")]
     public interface IConnectionService {
@@ -3319,6 +3867,114 @@ namespace DominoTrainGame.Client.Models.DominoService {
         
         public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.LeaderboardEntryData[]> GetLeaderboardAsync(DominoTrainGame.Client.Models.DominoService.SessionTokenRequest leaderboardRequest) {
             return base.Channel.GetLeaderboardAsync(leaderboardRequest);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="DominoService.IProfileService")]
+    public interface IProfileService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetProfile", ReplyAction="http://tempuri.org/IProfileService/GetProfileResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IProfileService/GetProfileGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        DominoTrainGame.Client.Models.DominoService.ProfileResponse GetProfile(DominoTrainGame.Client.Models.DominoService.ProfileRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/GetProfile", ReplyAction="http://tempuri.org/IProfileService/GetProfileResponse")]
+        System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.ProfileResponse> GetProfileAsync(DominoTrainGame.Client.Models.DominoService.ProfileRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateBiography", ReplyAction="http://tempuri.org/IProfileService/UpdateBiographyResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IProfileService/UpdateBiographyGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void UpdateBiography(DominoTrainGame.Client.Models.DominoService.BiographyUpdateRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateBiography", ReplyAction="http://tempuri.org/IProfileService/UpdateBiographyResponse")]
+        System.Threading.Tasks.Task UpdateBiographyAsync(DominoTrainGame.Client.Models.DominoService.BiographyUpdateRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/ChangeUsername", ReplyAction="http://tempuri.org/IProfileService/ChangeUsernameResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IProfileService/ChangeUsernameGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void ChangeUsername(DominoTrainGame.Client.Models.DominoService.UsernameChangeRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/ChangeUsername", ReplyAction="http://tempuri.org/IProfileService/ChangeUsernameResponse")]
+        System.Threading.Tasks.Task ChangeUsernameAsync(DominoTrainGame.Client.Models.DominoService.UsernameChangeRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateSocialLinks", ReplyAction="http://tempuri.org/IProfileService/UpdateSocialLinksResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IProfileService/UpdateSocialLinksGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void UpdateSocialLinks(DominoTrainGame.Client.Models.DominoService.SocialLinksUpdateRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateSocialLinks", ReplyAction="http://tempuri.org/IProfileService/UpdateSocialLinksResponse")]
+        System.Threading.Tasks.Task UpdateSocialLinksAsync(DominoTrainGame.Client.Models.DominoService.SocialLinksUpdateRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateAvatar", ReplyAction="http://tempuri.org/IProfileService/UpdateAvatarResponse")]
+        [System.ServiceModel.FaultContractAttribute(typeof(DominoTrainGame.Client.Models.DominoService.GameServiceFault), Action="http://tempuri.org/IProfileService/UpdateAvatarGameServiceFaultFault", Name="GameServiceFault", Namespace="http://dominotraingame/services")]
+        void UpdateAvatar(DominoTrainGame.Client.Models.DominoService.AvatarUpdateRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IProfileService/UpdateAvatar", ReplyAction="http://tempuri.org/IProfileService/UpdateAvatarResponse")]
+        System.Threading.Tasks.Task UpdateAvatarAsync(DominoTrainGame.Client.Models.DominoService.AvatarUpdateRequest request);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface IProfileServiceChannel : DominoTrainGame.Client.Models.DominoService.IProfileService, System.ServiceModel.IClientChannel {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public partial class ProfileServiceClient : System.ServiceModel.ClientBase<DominoTrainGame.Client.Models.DominoService.IProfileService>, DominoTrainGame.Client.Models.DominoService.IProfileService {
+        
+        public ProfileServiceClient() {
+        }
+        
+        public ProfileServiceClient(string endpointConfigurationName) : 
+                base(endpointConfigurationName) {
+        }
+        
+        public ProfileServiceClient(string endpointConfigurationName, string remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ProfileServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(endpointConfigurationName, remoteAddress) {
+        }
+        
+        public ProfileServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress) {
+        }
+        
+        public DominoTrainGame.Client.Models.DominoService.ProfileResponse GetProfile(DominoTrainGame.Client.Models.DominoService.ProfileRequest request) {
+            return base.Channel.GetProfile(request);
+        }
+        
+        public System.Threading.Tasks.Task<DominoTrainGame.Client.Models.DominoService.ProfileResponse> GetProfileAsync(DominoTrainGame.Client.Models.DominoService.ProfileRequest request) {
+            return base.Channel.GetProfileAsync(request);
+        }
+        
+        public void UpdateBiography(DominoTrainGame.Client.Models.DominoService.BiographyUpdateRequest request) {
+            base.Channel.UpdateBiography(request);
+        }
+        
+        public System.Threading.Tasks.Task UpdateBiographyAsync(DominoTrainGame.Client.Models.DominoService.BiographyUpdateRequest request) {
+            return base.Channel.UpdateBiographyAsync(request);
+        }
+        
+        public void ChangeUsername(DominoTrainGame.Client.Models.DominoService.UsernameChangeRequest request) {
+            base.Channel.ChangeUsername(request);
+        }
+        
+        public System.Threading.Tasks.Task ChangeUsernameAsync(DominoTrainGame.Client.Models.DominoService.UsernameChangeRequest request) {
+            return base.Channel.ChangeUsernameAsync(request);
+        }
+        
+        public void UpdateSocialLinks(DominoTrainGame.Client.Models.DominoService.SocialLinksUpdateRequest request) {
+            base.Channel.UpdateSocialLinks(request);
+        }
+        
+        public System.Threading.Tasks.Task UpdateSocialLinksAsync(DominoTrainGame.Client.Models.DominoService.SocialLinksUpdateRequest request) {
+            return base.Channel.UpdateSocialLinksAsync(request);
+        }
+        
+        public void UpdateAvatar(DominoTrainGame.Client.Models.DominoService.AvatarUpdateRequest request) {
+            base.Channel.UpdateAvatar(request);
+        }
+        
+        public System.Threading.Tasks.Task UpdateAvatarAsync(DominoTrainGame.Client.Models.DominoService.AvatarUpdateRequest request) {
+            return base.Channel.UpdateAvatarAsync(request);
         }
     }
 }
