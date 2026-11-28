@@ -24,6 +24,19 @@ public interface IProfileService
     ProfileResponse GetProfile(ProfileRequest request);
 
     /// <summary>
+    /// Gets the profile, the avatar image and the statistics of the caller.
+    /// </summary>
+    /// <param name="request">The session token of the caller.</param>
+    /// <returns>The profile of the caller.</returns>
+    /// <exception cref="FaultException{GameServiceFault}">
+    /// Thrown with <c>SessionNotFound</c>, <c>GuestNotAllowed</c>, <c>PlayerNotFound</c>
+    /// or <c>DatabaseUnavailable</c>.
+    /// </exception>
+    [OperationContract]
+    [FaultContract(typeof(GameServiceFault))]
+    ProfileResponse GetOwnProfile(SessionTokenRequest request);
+
+    /// <summary>
     /// Replaces the biography of the caller.
     /// </summary>
     /// <param name="request">The session token of the caller and the new biography.</param>

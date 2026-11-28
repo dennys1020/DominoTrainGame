@@ -8,6 +8,7 @@
     ShowInTaskbar="False"
     Style="{StaticResource AppWindowStyle}">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="ProfileVisibility" />
         <Style x:Key="ProfileLabelStyle" TargetType="TextBlock" BasedOn="{StaticResource PixelTextStyle}">
             <Setter Property="Foreground" Value="{StaticResource Ink}" />
         </Style>
@@ -302,20 +303,30 @@
                                                 BorderBrush="{StaticResource Ink}"
                                                 BorderThickness="3"
                                                 Margin="0,0,4,4">
-                                                <Rectangle
-                                                    Width="160"
-                                                    Height="160"
-                                                    RenderOptions.BitmapScalingMode="NearestNeighbor"
-                                                    Fill="{StaticResource DefaultAvatarBrush}"
-                                                    Style="{StaticResource PixelArtStyle}" />
+                                                <Grid>
+                                                    <Rectangle
+                                                        Width="160"
+                                                        Height="160"
+                                                        RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                        Fill="{StaticResource DefaultAvatarBrush}"
+                                                        Style="{StaticResource PixelArtStyle}" />
+                                                    <Image
+                                                        Width="160"
+                                                        Height="160"
+                                                        Stretch="UniformToFill"
+                                                        Source="{Binding AvatarImage}"
+                                                        Visibility="{Binding HasAvatarImage,
+                                                            Converter={StaticResource ProfileVisibility}}" />
+                                                </Grid>
                                             </Border>
                                             <Button
                                                 Style="{StaticResource ProfileIconButtonStyle}"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Bottom"
                                                 Margin="0,0,-14,-12"
-                                                Command="{Binding DataContext.EditCommand,
-                                                    RelativeSource={RelativeSource AncestorType=Window}}">
+                                                Visibility="{Binding CanEditProfile,
+                                                    Converter={StaticResource ProfileVisibility}}"
+                                                Command="{Binding ChangeAvatarCommand}">
                                                 <Rectangle
                                                     Width="20"
                                                     Height="20"
@@ -341,13 +352,15 @@
                                             <TextBox
                                                 Width="360"
                                                 Style="{StaticResource ProfileTextBoxStyle}"
-                                                IsReadOnly="True" />
+                                                Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                                IsReadOnly="{Binding IsViewing}" />
                                             <Button
                                                 Grid.Column="1"
                                                 Margin="14,0,0,0"
                                                 Style="{StaticResource ProfileIconButtonStyle}"
-                                                Command="{Binding DataContext.EditCommand,
-                                                    RelativeSource={RelativeSource AncestorType=Window}}">
+                                                Visibility="{Binding IsEditButtonVisible,
+                                                    Converter={StaticResource ProfileVisibility}}"
+                                                Command="{Binding EditCommand}">
                                                 <Rectangle
                                                     Width="20"
                                                     Height="20"
@@ -358,8 +371,9 @@
                                                 <Button
                                                     Style="{StaticResource ProfileIconButtonStyle}"
                                                     Margin="0,0,14,0"
-                                                    Command="{Binding DataContext.InstagramCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                                    ToolTip="{Binding [InstagramLabel],
+                                                        Source={StaticResource Localization}}"
+                                                    Command="{Binding InstagramCommand}">
                                                     <Rectangle
                                                         Width="22"
                                                         Height="22"
@@ -369,8 +383,9 @@
                                                 <Button
                                                     Style="{StaticResource ProfileIconButtonStyle}"
                                                     Margin="0,0,14,0"
-                                                    Command="{Binding DataContext.EditCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                                    ToolTip="{Binding [TwitterLabel],
+                                                        Source={StaticResource Localization}}"
+                                                    Command="{Binding XCommand}">
                                                     <Rectangle
                                                         Width="20"
                                                         Height="20"
@@ -379,8 +394,9 @@
                                                 </Button>
                                                 <Button
                                                     Style="{StaticResource ProfileIconButtonStyle}"
-                                                    Command="{Binding DataContext.FacebookCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}">
+                                                    ToolTip="{Binding [FacebookLabel],
+                                                        Source={StaticResource Localization}}"
+                                                    Command="{Binding FacebookCommand}">
                                                     <Rectangle
                                                         Width="22"
                                                         Height="22"
@@ -391,8 +407,8 @@
                                             <Button
                                                 Grid.Column="4"
                                                 Style="{StaticResource ProfileIconButtonStyle}"
-                                                Command="{Binding DataContext.CloseCommand,
-                                                    RelativeSource={RelativeSource AncestorType=Window}}">
+                                                IsCancel="True"
+                                                Command="{Binding CloseCommand}">
                                                 <Rectangle
                                                     Width="16"
                                                     Height="16"
@@ -409,7 +425,8 @@
                                         <TextBox
                                             Grid.Row="2"
                                             Style="{StaticResource ProfileBiographyTextBoxStyle}"
-                                            IsReadOnly="True" />
+                                            Text="{Binding Biography, UpdateSourceTrigger=PropertyChanged}"
+                                            IsReadOnly="{Binding IsViewing}" />
                                     </Grid>
                                 </Grid>
                                 <Rectangle Grid.Row="1" Fill="{StaticResource Ink}" />
@@ -426,7 +443,7 @@
                                         </Grid.RowDefinitions>
                                         <DockPanel>
                                             <TextBlock
-                                                Text="{Binding [AvatarSectionLabel],
+                                                Text="{Binding [SocialLinksSectionLabel],
                                                     Source={StaticResource Localization}}"
                                                 Style="{StaticResource PixelTextStyle}"
                                                 FontSize="10"
@@ -438,13 +455,56 @@
                                                 Height="2"
                                                 VerticalAlignment="Center" />
                                         </DockPanel>
-                                        <ListBox
-                                            Grid.Row="1"
-                                            Style="{StaticResource AvatarListBoxStyle}"
-                                            VerticalAlignment="Top"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,10,0,0"
-                                            ItemTemplate="{StaticResource AvatarPreviewTemplate}" />
+                                        <Grid Grid.Row="1" Margin="0,14,0,0" VerticalAlignment="Top">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="44" />
+                                                <RowDefinition Height="16" />
+                                                <RowDefinition Height="44" />
+                                                <RowDefinition Height="16" />
+                                                <RowDefinition Height="44" />
+                                            </Grid.RowDefinitions>
+                                            <TextBlock
+                                                Text="{Binding [InstagramLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource ProfileLabelStyle}"
+                                                FontSize="9"
+                                                VerticalAlignment="Center" />
+                                            <TextBox
+                                                Grid.Column="1"
+                                                Style="{StaticResource ProfileTextBoxStyle}"
+                                                Text="{Binding InstagramUsername, UpdateSourceTrigger=PropertyChanged}"
+                                                IsReadOnly="{Binding IsViewing}" />
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Text="{Binding [FacebookLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource ProfileLabelStyle}"
+                                                FontSize="9"
+                                                VerticalAlignment="Center" />
+                                            <TextBox
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Style="{StaticResource ProfileTextBoxStyle}"
+                                                Text="{Binding FacebookUsername, UpdateSourceTrigger=PropertyChanged}"
+                                                IsReadOnly="{Binding IsViewing}" />
+                                            <TextBlock
+                                                Grid.Row="4"
+                                                Text="{Binding [TwitterLabel],
+                                                    Source={StaticResource Localization}}"
+                                                Style="{StaticResource ProfileLabelStyle}"
+                                                FontSize="9"
+                                                VerticalAlignment="Center" />
+                                            <TextBox
+                                                Grid.Row="4"
+                                                Grid.Column="1"
+                                                Style="{StaticResource ProfileTextBoxStyle}"
+                                                Text="{Binding XUsername, UpdateSourceTrigger=PropertyChanged}"
+                                                IsReadOnly="{Binding IsViewing}" />
+                                        </Grid>
                                     </Grid>
                                     <Rectangle Grid.Column="1" Fill="{StaticResource Ink}" />
                                     <Border Grid.Column="2" Background="{StaticResource Aqua}">
@@ -475,23 +535,36 @@
                                                     Style="{StaticResource ProfileLabelStyle}"
                                                     FontSize="9" />
                                                 <TextBlock
+                                                    Text="{Binding GamesPlayed}"
                                                     Style="{StaticResource PixelTextStyle}"
                                                     FontSize="18"
-                                                    Margin="0,8,0,20" />
+                                                    Margin="0,8,0,14" />
                                                 <TextBlock
                                                     Text="{Binding [WinsLabel], Source={StaticResource Localization}}"
                                                     Style="{StaticResource ProfileLabelStyle}"
                                                     FontSize="9" />
                                                 <TextBlock
+                                                    Text="{Binding Wins}"
                                                     Style="{StaticResource PixelTextStyle}"
                                                     FontSize="18"
-                                                    Margin="0,8,0,20" />
+                                                    Margin="0,8,0,14" />
+                                                <TextBlock
+                                                    Text="{Binding [TotalPointsLabel],
+                                                        Source={StaticResource Localization}}"
+                                                    Style="{StaticResource ProfileLabelStyle}"
+                                                    FontSize="9" />
+                                                <TextBlock
+                                                    Text="{Binding TotalPoints}"
+                                                    Style="{StaticResource PixelTextStyle}"
+                                                    FontSize="18"
+                                                    Margin="0,8,0,14" />
                                                 <TextBlock
                                                     Text="{Binding [MemberSinceLabel],
                                                         Source={StaticResource Localization}}"
                                                     Style="{StaticResource ProfileLabelStyle}"
                                                     FontSize="9" />
                                                 <TextBlock
+                                                    Text="{Binding MemberSince}"
                                                     Style="{StaticResource PixelTextStyle}"
                                                     FontSize="18"
                                                     Margin="0,8,0,0" />
@@ -507,23 +580,24 @@
                                                     Content="{Binding [EditButtonLabel],
                                                         Source={StaticResource Localization}}"
                                                     Style="{StaticResource ProfilePrimaryButtonStyle}"
-                                                    Command="{Binding DataContext.EditCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                    Visibility="{Binding IsEditButtonVisible,
+                                                        Converter={StaticResource ProfileVisibility}}"
+                                                    Command="{Binding EditCommand}" />
                                                 <Button
                                                     Content="{Binding [CancelButtonLabel],
                                                         Source={StaticResource Localization}}"
                                                     Style="{StaticResource ProfileButtonStyle}"
-                                                    Visibility="Collapsed"
-                                                    Command="{Binding DataContext.CancelEditingCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                    Visibility="{Binding IsEditing,
+                                                        Converter={StaticResource ProfileVisibility}}"
+                                                    Command="{Binding CancelEditingCommand}" />
                                                 <Button
                                                     Grid.Column="2"
                                                     Content="{Binding [SaveButtonLabel],
                                                         Source={StaticResource Localization}}"
                                                     Style="{StaticResource ProfilePrimaryButtonStyle}"
-                                                    Visibility="Collapsed"
-                                                    Command="{Binding DataContext.SaveCommand,
-                                                        RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                    Visibility="{Binding IsEditing,
+                                                        Converter={StaticResource ProfileVisibility}}"
+                                                    Command="{Binding SaveCommand}" />
                                             </Grid>
                                         </Grid>
                                     </Border>

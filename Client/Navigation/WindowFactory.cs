@@ -20,6 +20,7 @@ internal sealed class WindowFactory
     private readonly IRemoteGameServices _gameServices;
     private readonly IRemoteMatchServices _matchServices;
     private readonly IRemoteSocialServices _socialServices;
+    private readonly IRemoteProfileServices _profileServices;
     private readonly LocalizationViewModel _localization;
     private readonly LobbyInvitationController _invitationController;
     private readonly ConnectionLossController _connectionLossController;
@@ -62,6 +63,7 @@ internal sealed class WindowFactory
         _gameServices = remoteServices.GameServices;
         _socialServices = remoteServices.SocialServices;
         _matchServices = remoteServices.MatchServices;
+        _profileServices = remoteServices.ProfileServices;
         _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         _invitationController = new LobbyInvitationController(_gameServices, _localization);
         _connectionLossController = new ConnectionLossController(_gameServices);
@@ -79,7 +81,8 @@ internal sealed class WindowFactory
             [Screen.MatchResults] = CreateMatchResultsViewModel,
             [Screen.Friends] = windowService => new FriendsViewModel(windowService, _socialServices, _localization),
             [Screen.Leaderboard] = CreateLeaderboardViewModel,
-            [Screen.Settings] = CreateSettingsViewModel
+            [Screen.Settings] = CreateSettingsViewModel,
+            [Screen.Profile] = CreateOwnProfileViewModel
         };
     }
 
@@ -99,6 +102,15 @@ internal sealed class WindowFactory
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
         window.Closed += OnWindowClosed;
+        return window;
+    }
+
+    public Window CreatePlayerProfileDialog(string username)
+    {
+        Window window = CreateWindow(Screen.Profile);
+        IWindowService windowService = new WindowService(window, this, _localization);
+        ProfileOwner profileOwner = ProfileOwner.CreateOtherPlayer(username);
+        window.DataContext = new ProfileViewModel(windowService, _profileServices, profileOwner);
         return window;
     }
 
@@ -165,6 +177,12 @@ internal sealed class WindowFactory
     {
         ScreenViewModel screenViewModel = new SettingsViewModel(windowService);
         return screenViewModel;
+    }
+
+        private ScreenViewModel CreateOwnProfileViewModel(IWindowService windowService)
+    {
+        ScreenViewModel viewModel = new ProfileViewModel(windowService, _profileServices, ProfileOwner.SignedInPlayer);
+        return viewModel;
     }
 
     private void OnWindowClosed(object sender, EventArgs eventArgs)

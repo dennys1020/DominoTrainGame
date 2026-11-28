@@ -8,6 +8,8 @@ public interface IWindowService
 
     void ShowDialog(Screen screen);
 
+    void ShowPlayerProfile(string username);
+
     void ShowMessage(string messageKey);
 
     void ShowMessageError(string messageKey);
@@ -15,6 +17,10 @@ public interface IWindowService
     bool ConfirmMessage(string messageKey);
     
     bool Confirm(string message);
+
+    byte[] SelectAvatarImageFile();
+
+    void OpenWebPage(string address);
 
     void Close();
 }

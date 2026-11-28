@@ -289,6 +289,14 @@ public class UiStrings
         }
     }
 
+    public static string FacebookLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("FacebookLabel", _resourceCulture);
+        }
+    }
+
     public static string ForgotPasswordLabel
     {
         get
@@ -358,6 +366,14 @@ public class UiStrings
         get
         {
             return ResourceManager.GetString("InformationMessageTitle", _resourceCulture);
+        }
+    }
+
+    public static string InstagramLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("InstagramLabel", _resourceCulture);
         }
     }
 
@@ -673,11 +689,99 @@ public class UiStrings
         }
     }
 
+    public static string ProfileAvatarFileFilter
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileAvatarFileFilter", _resourceCulture);
+        }
+    }
+
+    public static string ProfileAvatarInvalidMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileAvatarInvalidMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileAvatarStorageUnavailableMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileAvatarStorageUnavailableMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileAvatarUpdateMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileAvatarUpdateMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileGuestNotAllowedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileGuestNotAllowedMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileInvalidInputMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileInvalidInputMessage", _resourceCulture);
+        }
+    }
+
     public static string ProfileLabel
     {
         get
         {
             return ResourceManager.GetString("ProfileLabel", _resourceCulture);
+        }
+    }
+
+    public static string ProfilePlayerNotFoundMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfilePlayerNotFoundMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileSavedMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileSavedMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileServerErrorMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileServerErrorMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileSocialLinkMissingMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileSocialLinkMissingMessage", _resourceCulture);
+        }
+    }
+
+    public static string ProfileUsernameTakenMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("ProfileUsernameTakenMessage", _resourceCulture);
         }
     }
 
@@ -961,6 +1065,14 @@ public class UiStrings
         }
     }
 
+    public static string SocialLinksSectionLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("SocialLinksSectionLabel", _resourceCulture);
+        }
+    }
+
     public static string SoundEffectsVolumeLabel
     {
         get
@@ -1001,6 +1113,22 @@ public class UiStrings
         }
     }
 
+    public static string TotalPointsLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("TotalPointsLabel", _resourceCulture);
+        }
+    }
+
+    public static string TwitterLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("TwitterLabel", _resourceCulture);
+        }
+    }
+
     public static string UsernameLabel
     {
         get
@@ -1025,11 +1153,27 @@ public class UiStrings
         }
     }
 
+    public static string ViewProfileButtonLabel
+    {
+        get
+        {
+            return ResourceManager.GetString("ViewProfileButtonLabel", _resourceCulture);
+        }
+    }
+
     public static string VolumePercentageFormat
     {
         get
         {
             return ResourceManager.GetString("VolumePercentageFormat", _resourceCulture);
+        }
+    }
+
+    public static string WebPageUnavailableMessage
+    {
+        get
+        {
+            return ResourceManager.GetString("WebPageUnavailableMessage", _resourceCulture);
         }
     }
 
