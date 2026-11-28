@@ -16,5 +16,9 @@ public interface IWindowService
     
     bool Confirm(string message);
 
+    byte[] SelectAvatarImageFile();
+
+    void OpenWebPage(string address);
+
     void Close();
 }

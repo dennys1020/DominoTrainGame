@@ -841,4 +841,55 @@ on the train</value>
   <data name="FullScreenOptionLabel" xml:space="preserve">
     <value>Full screen</value>
   </data>
+  <data name="ProfileSavedMessage" xml:space="preserve">
+    <value>Your profile was saved.</value>
+  </data>
+  <data name="ProfileAvatarUpdateMessage" xml:space="preserve">
+    <value>Your avatar was updated.</value>
+  </data>
+  <data name="ProfileSocialLinkMissingMessage" xml:space="preserve">
+    <value>This player has not added that social network.</value>
+  </data>
+  <data name="ProfileInvalidInputMessage" xml:space="preserve">
+    <value>Check your data: the username needs at least 3 characters, the biography up to 255, Instagram up to 30 (letters, digits, dot or underscore), Facebook 5 to 50 (letters, digits or dot) and X up to 15 (letters, digits or underscore).</value>
+  </data>
+  <data name="ProfileUsernameTakenMessage" xml:space="preserve">
+    <value>That username is already taken. Choose another one.</value>
+  </data>
+  <data name="ProfilePlayerNotFoundMessage" xml:space="preserve">
+    <value>We could not find that player's profile.</value>
+  </data>
+  <data name="ProfileGuestNotAllowedMessage" xml:space="preserve">
+    <value>Guests do not have a profile. Create an account to get one.</value>
+  </data>
+  <data name="ProfileAvatarStorageUnavailableMessage" xml:space="preserve">
+    <value>The server could not store the image. Try again later.</value>
+  </data>
+  <data name="ProfileAvatarInvalidMessage" xml:space="preserve">
+    <value>The image must be a PNG or JPG file of at most 1 MB.</value>
+  </data>
+  <data name="ProfileServerErrorMessage" xml:space="preserve">
+    <value>The profile operation could not be completed. Try again.</value>
+  </data>
+  <data name="ProfileAvatarFileFilter" xml:space="preserve">
+    <value>PNG or JPG images (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg</value>
+  </data>
+  <data name="WebPageUnavailableMessage" xml:space="preserve">
+    <value>The browser could not be opened.</value>
+  </data>
+  <data name="TotalPointsLabel" xml:space="preserve">
+    <value>Total points</value>
+  </data>
+  <data name="SocialLinksSectionLabel" xml:space="preserve">
+    <value>Social networks</value>
+  </data>
+  <data name="InstagramLabel" xml:space="preserve">
+    <value>Instagram</value>
+  </data>
+  <data name="FacebookLabel" xml:space="preserve">
+    <value>Facebook</value>
+  </data>
+  <data name="TwitterLabel" xml:space="preserve">
+    <value>X (Twitter)</value>
+  </data>
 </root>

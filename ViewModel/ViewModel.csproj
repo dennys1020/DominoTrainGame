@@ -91,6 +91,9 @@
     <Compile Include="InvitableFriendViewModel.cs" />
     <Compile Include="RoomPlayerViewModel.cs" />
     <Compile Include="RoomChatMessageViewModel.cs" />
+    <Compile Include="Localization\ProfileMessageKeys.cs" />
+    <Compile Include="Navigation\ProfileOwner.cs" />
+    <Compile Include="ProfileViewModel.cs" />
     <Compile Include="SettingsViewModel.cs" />
     <Compile Include="SignUpViewModel.cs" />
     <Compile Include="Validation\SignUpInputStatus.cs" />
