@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Resources;
 using DominoTrainGame.Server.Application.Errors;
 using DominoTrainGame.Server.Application.Ports;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Server.Persistence.Email;
 
@@ -12,7 +13,6 @@ public sealed class SmtpEmailSender : IEmailSender
     private const string TemplatesBaseName = "DominoTrainGame.Server.Persistence.Email.EmailTemplates";
     private const string VerificationSubjectKey = "VerificationEmailSubject";
     private const string VerificationBodyFormatKey = "VerificationEmailBodyFormat";
-    private const string EnglishLanguageCode = "en";
 
     private static readonly ResourceManager _emailTemplates;
     private static readonly CultureInfo _englishCulture;
@@ -20,7 +20,7 @@ public sealed class SmtpEmailSender : IEmailSender
     static SmtpEmailSender()
     {
         _emailTemplates = new ResourceManager(TemplatesBaseName, typeof(SmtpEmailSender).Assembly);
-        _englishCulture = CultureInfo.GetCultureInfo(EnglishLanguageCode);
+        _englishCulture = CultureInfo.GetCultureInfo(GameLanguage.EnglishCode);
     }
 
     public void SendVerificationCode(string recipientEmail, string verificationCode, string language)
@@ -45,7 +45,7 @@ public sealed class SmtpEmailSender : IEmailSender
 
     private static CultureInfo ResolveCulture(string language)
     {
-        bool isEnglish = (language ?? string.Empty).StartsWith(EnglishLanguageCode, StringComparison.OrdinalIgnoreCase);
+        bool isEnglish = GameLanguage.IsEnglish(language);
         CultureInfo emailCulture = isEnglish ? _englishCulture : CultureInfo.InvariantCulture;
         return emailCulture;
     }

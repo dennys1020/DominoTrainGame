@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.Models.Contracts;
 
@@ -7,7 +8,7 @@ public sealed class PlayerHand
 {
     static PlayerHand()
     {
-        Empty = new PlayerHand(LobbyRoster.EmptyVersion, new List<TileSummary>());
+        Empty = new PlayerHand(StateIdentifiers.EmptyVersion, new List<TileSummary>());
     }
 
     public PlayerHand(long version, IReadOnlyList<TileSummary> tiles)

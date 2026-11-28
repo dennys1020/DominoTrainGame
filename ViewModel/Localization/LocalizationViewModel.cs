@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using DominoTrainGame.Client.Models.Resources.Localization;
 using DominoTrainGame.Client.ViewModel.Commands;
+using DominoTrainGame.Shared.Common;
 
 namespace DominoTrainGame.Client.ViewModel.Localization;
 
@@ -21,7 +22,6 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
     private const string IndexerPropertyName = "Item[]";
     private const string SpanishCultureName = "es-MX";
     private const string EnglishCultureName = "en-US";
-    private const string EnglishLanguageCode = "en";
 
     static LocalizationViewModel()
     {
@@ -57,10 +57,7 @@ public sealed class LocalizationViewModel : INotifyPropertyChanged
 
     private static CultureInfo CurrentCulture => UiStrings.Culture ?? CultureInfo.CurrentUICulture;
 
-    private static bool IsEnglishCulture => string.Equals(
-        CurrentCulture.TwoLetterISOLanguageName,
-        EnglishLanguageCode,
-        StringComparison.OrdinalIgnoreCase);
+    private static bool IsEnglishCulture => GameLanguage.IsEnglish(CurrentCulture.TwoLetterISOLanguageName);
 
     private void SelectLanguage(string cultureName)
     {

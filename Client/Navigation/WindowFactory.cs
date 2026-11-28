@@ -101,7 +101,7 @@ internal sealed class WindowFactory
         Window window = CreateWindow(screen);
         IWindowService windowService = new WindowService(window, this, _localization);
         window.DataContext = CreateViewModel(screen, windowService);
-        window.Closed += (sender, eventArgs) => UnsubscribeViewModel(window.DataContext);
+        window.Closed += OnWindowClosed;
         return window;
     }
 
@@ -179,10 +179,16 @@ internal sealed class WindowFactory
         return screenViewModel;
     }
 
-    private ScreenViewModel CreateOwnProfileViewModel(IWindowService windowService)
+        private ScreenViewModel CreateOwnProfileViewModel(IWindowService windowService)
     {
         ScreenViewModel viewModel = new ProfileViewModel(windowService, _profileServices, ProfileOwner.SignedInPlayer);
         return viewModel;
+    }
+
+    private void OnWindowClosed(object sender, EventArgs eventArgs)
+    {
+        Window closedWindow = (Window)sender;
+        UnsubscribeViewModel(closedWindow.DataContext);
     }
 
     private static void UnsubscribeViewModel(object viewModel)
