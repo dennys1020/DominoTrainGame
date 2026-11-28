@@ -2,6 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behaviors="clr-namespace:DominoTrainGame.Client.View.Behaviors"
+    xmlns:controls="clr-namespace:DominoTrainGame.Client.View.Views.Controls"
     xmlns:componentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
     x:Class="DominoTrainGame.Client.View.Views.MatchWindow"
     Title="{Binding [MatchTitle], Source={StaticResource Localization}}"
@@ -88,11 +89,6 @@
                         </ItemsControl>
                     </StackPanel>
                 </Grid>
-            </Border>
-        </DataTemplate>
-        <DataTemplate x:Key="MatchPlayerTemplate">
-            <Border Style="{StaticResource MatchPlayerCardStyle}">
-                <TextBlock Text="{Binding Username}" Style="{StaticResource TrainLabelStyle}" />
             </Border>
         </DataTemplate>
         <DataTemplate x:Key="ScoreboardRowTemplate">
@@ -241,11 +237,7 @@
                                                 ItemTemplate="{StaticResource ScoreboardRowTemplate}" />
                                         </StackPanel>
                                     </Border>
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
-                                        <ItemsControl
-                                            ItemsSource="{Binding Players}"
-                                            ItemTemplate="{StaticResource MatchPlayerTemplate}" />
-                                    </ScrollViewer>
+                                    <controls:LobbyChatPanel Margin="0,16,0,16" DataContext="{Binding Chat}" />
                                 </DockPanel>
                             </Border>
                         </Grid>

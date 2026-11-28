@@ -8,47 +8,38 @@ using DominoTrainGame.Client.ViewModel.Common;
 using DominoTrainGame.Client.ViewModel.Contracts;
 using DominoTrainGame.Client.ViewModel.Localization;
 using DominoTrainGame.Client.ViewModel.Navigation;
-using DominoTrainGame.Client.ViewModel.Validation;
-using DominoTrainGame.Shared.Common;
 using DominoTrainGame.Shared.Rules;
 
 namespace DominoTrainGame.Client.ViewModel;
 
 public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 {
-    private const int MaximumVisibleMessages = 100;
     private const int MinimumPlayersToStart = 2;
     private const string RoomLostAfterReconnectMessageKey = "RoomLostAfterReconnectMessage";
-    private const string ChatMessageEmptyMessageKey = "ChatMessageEmptyMessage";
-    private const string ChatMessageTooLongMessageKey = "ChatMessageTooLongMessage";
 
     private readonly IRemoteGameServices _gameServices;
     private readonly ILobbyEvents _lobbyEvents;
-    private readonly LocalizationViewModel _localization;
     private readonly Screen _previousScreen;
     private bool _canStartMatch;
     private bool _isHost;
     private bool _isReconnecting;
     private string _lobbyCode = string.Empty;
     private int _maximumPlayers;
-    private string _messageText = string.Empty;
-    private string _chatNotice = string.Empty;
     private int _highestDouble = MatchRules.DoubleTwelvePips;
 
     public RoomViewModel(
         IWindowService windowService,
         IRemoteGameServices gameServices,
         InviteFriendsViewModel inviteFriends,
-        LocalizationViewModel localization) : base(windowService)
+        LobbyChatViewModel chat) : base(windowService)
     {
         _gameServices = gameServices ?? throw new ArgumentNullException(nameof(gameServices));
         _lobbyEvents = _gameServices.LobbyEvents;
-        _localization = localization ?? throw new ArgumentNullException(nameof(localization));
         InviteFriends = inviteFriends ?? throw new ArgumentNullException(nameof(inviteFriends));
+        Chat = chat ?? throw new ArgumentNullException(nameof(chat));
 
         BackCommand = new AsyncRelayCommand(LeaveRoomAsync);
         ToggleReadyCommand = new AsyncRelayCommand(ToggleReadyAsync);
-        SendMessageCommand = new AsyncRelayCommand(SendMessageAsync);
         StartMatchCommand = new AsyncRelayCommand(StartMatchAsync);
         SelectDominoSetCommand = new AsyncParameterRelayCommand<int>(SelectDominoSetAsync);
 
@@ -57,7 +48,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
         _lobbyEvents.LobbyChanged += HandleLobbyChanged;
         _lobbyEvents.ConnectionStateChanged += HandleConnectionStateChanged;
-        _lobbyEvents.LobbyMessageReceived += HandleLobbyMessageReceived;
         _lobbyEvents.MatchStarting += HandleMatchStarting;
     }
 
@@ -121,37 +111,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         }
     }
 
-    public string MessageText
-    {
-        get
-        {
-            return _messageText;
-        }
-        set
-        {
-            SetProperty(ref _messageText, value);
-        }
-    }
-
-    public string ChatNotice
-    {
-        get
-        {
-            return _chatNotice;
-        }
-        private set
-        {
-            bool hasChanged = SetProperty(ref _chatNotice, value);
-
-            if (hasChanged)
-            {
-                OnPropertyChanged(nameof(HasChatNotice));
-            }
-        }
-    }
-
-    public bool HasChatNotice => !string.IsNullOrEmpty(ChatNotice);
-
     public int HighestDouble
     {
         get
@@ -175,21 +134,16 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
 
     public bool IsDoubleTwelveSelected => HighestDouble == MatchRules.DoubleTwelvePips;
 
-    public int MaximumMessageLength => GameRules.MaximumMessageLength;
-
     public InviteFriendsViewModel InviteFriends { get; }
+
+    public LobbyChatViewModel Chat { get; }
 
     public ObservableCollection<RoomPlayerViewModel> Players { get; } =
         new ObservableCollection<RoomPlayerViewModel>();
 
-    public ObservableCollection<RoomChatMessageViewModel> Messages { get; } =
-        new ObservableCollection<RoomChatMessageViewModel>();
-
     public AsyncRelayCommand BackCommand { get; }
 
     public AsyncRelayCommand ToggleReadyCommand { get; }
-
-    public AsyncRelayCommand SendMessageCommand { get; }
 
     public AsyncRelayCommand StartMatchCommand { get; }
 
@@ -199,8 +153,8 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     {
         _lobbyEvents.LobbyChanged -= HandleLobbyChanged;
         _lobbyEvents.ConnectionStateChanged -= HandleConnectionStateChanged;
-        _lobbyEvents.LobbyMessageReceived -= HandleLobbyMessageReceived;
         _lobbyEvents.MatchStarting -= HandleMatchStarting;
+        Chat.Unsubscribe();
     }
 
     private bool TryApplyCurrentLobby()
@@ -240,18 +194,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
     private void HandleLobbyChanged(object sender, EventArgs eventArgs)
     {
         TryApplyCurrentLobby();
-    }
-
-    private void HandleLobbyMessageReceived(object sender, LobbyMessageReceivedEventArgs eventArgs)
-    {
-        RoomChatMessageViewModel message = new RoomChatMessageViewModel(eventArgs.Sender.Username, eventArgs.Text);
-
-        Messages.Add(message);
-
-        if (Messages.Count > MaximumVisibleMessages)
-        {
-            Messages.RemoveAt(CollectionIndex.First);
-        }
     }
 
     private void HandleMatchStarting(object sender, MatchStartingEventArgs eventArgs)
@@ -326,43 +268,6 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         await RunLobbyRequestAsync(() => _gameServices.StartMatchAsync());
     }
 
-    private async Task SendMessageAsync()
-    {
-        LobbyMessageInputStatus inputStatus = LobbyMessageInputValidator.Validate(MessageText);
-
-        if (inputStatus == LobbyMessageInputStatus.Valid)
-        {
-            await SubmitMessageAsync();
-        }
-        else
-        {
-            WindowService.ShowMessageError(GetInputMessageKey(inputStatus));
-        }
-    }
-
-    private async Task SubmitMessageAsync()
-    {
-        LobbyActionResult sendResult = await RunLobbyRequestAsync(
-            () => _gameServices.SendLobbyMessageAsync(MessageText));
-
-        bool wasDelivered = sendResult == LobbyActionResult.Success || sendResult == LobbyActionResult.ChatWarning;
-
-        if (wasDelivered)
-        {
-            MessageText = string.Empty;
-        }
-
-        ChatNotice = GetChatNotice(sendResult);
-    }
-
-    private string GetChatNotice(LobbyActionResult sendResult)
-    {
-        string chatNotice = IsChatSanction(sendResult)
-            ? _localization[LobbyResultMessageKeys.GetMessageKey(sendResult)]
-            : string.Empty;
-        return chatNotice;
-    }
-
     private async Task SelectDominoSetAsync(int highestDouble)
     {
         bool isNewSelection = highestDouble != HighestDouble;
@@ -385,44 +290,18 @@ public sealed class RoomViewModel : ScreenViewModel, ISubscribingViewModel
         OnPropertyChanged(nameof(IsDoubleTwelveSelected));
     }
 
-    private async Task<LobbyActionResult> RunLobbyRequestAsync(Func<Task<LobbyActionResult>> sendRequest)
+    private async Task RunLobbyRequestAsync(Func<Task<LobbyActionResult>> sendRequest)
     {
         LobbyActionResult requestResult = await RunWhileBusyAsync(sendRequest);
         ShowRequestFailure(requestResult);
-        return requestResult;
     }
 
     private void ShowRequestFailure(LobbyActionResult requestResult)
     {
-        bool isFailure = requestResult != LobbyActionResult.Success && !IsChatSanction(requestResult);
-
-        if (isFailure)
+        if (requestResult != LobbyActionResult.Success)
         {
             WindowService.ShowMessageError(LobbyResultMessageKeys.GetMessageKey(requestResult));
         }
     }
 
-    private static bool IsChatSanction(LobbyActionResult actionResult)
-    {
-        bool isChatSanction = actionResult == LobbyActionResult.ChatWarning
-            || actionResult == LobbyActionResult.ChatBlocked;
-        return isChatSanction;
-    }
-
-    private static string GetInputMessageKey(LobbyMessageInputStatus inputStatus)
-    {
-        string messageKey;
-
-        switch (inputStatus)
-        {
-            case LobbyMessageInputStatus.MessageTooLong:
-                messageKey = ChatMessageTooLongMessageKey;
-                break;
-            default:
-                messageKey = ChatMessageEmptyMessageKey;
-                break;
-        }
-
-        return messageKey;
-    }
 }

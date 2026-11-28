@@ -75,6 +75,9 @@
     <Compile Include="Views\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Controls\LobbyChatPanel.xaml.cs">
+      <DependentUpon>LobbyChatPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Controls\SettingsButton.xaml.cs">
       <DependentUpon>SettingsButton.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ChangePasswordWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\LobbyChatPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

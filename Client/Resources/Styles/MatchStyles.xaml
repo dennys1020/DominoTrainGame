@@ -260,18 +260,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="MatchPlayerCardStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource Mist}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Ink}" />
-        <Setter Property="BorderThickness" Value="2" />
-        <Setter Property="Padding" Value="12" />
-        <Setter Property="Margin" Value="0,0,0,10" />
-        <Style.Triggers>
-            <DataTrigger Binding="{Binding HasTurn}" Value="True">
-                <Setter Property="Background" Value="{StaticResource Aqua}" />
-            </DataTrigger>
-        </Style.Triggers>
-    </Style>
     <Style x:Key="TurnBannerStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource Frost}" />
         <Setter Property="BorderBrush" Value="{StaticResource Ink}" />
@@ -297,6 +285,11 @@
         <Setter Property="BorderBrush" Value="{StaticResource Ink}" />
         <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="Padding" Value="0,6" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding HasTurn}" Value="True">
+                <Setter Property="Background" Value="{StaticResource Aqua}" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     <Style x:Key="ScoreboardScoreTextStyle" TargetType="TextBlock" BasedOn="{StaticResource MatchBodyStyle}">
         <Setter Property="FontSize" Value="15" />

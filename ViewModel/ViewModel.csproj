@@ -90,6 +90,7 @@
     <Compile Include="InviteFriendsViewModel.cs" />
     <Compile Include="InvitableFriendViewModel.cs" />
     <Compile Include="RoomPlayerViewModel.cs" />
+    <Compile Include="LobbyChatViewModel.cs" />
     <Compile Include="RoomChatMessageViewModel.cs" />
     <Compile Include="Localization\ProfileMessageKeys.cs" />
     <Compile Include="Navigation\ProfileOwner.cs" />
