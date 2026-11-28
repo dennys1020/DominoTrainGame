@@ -8,6 +8,8 @@ public interface IWindowService
 
     void ShowDialog(Screen screen);
 
+    void ShowPlayerProfile(string username);
+
     void ShowMessage(string messageKey);
 
     void ShowMessageError(string messageKey);

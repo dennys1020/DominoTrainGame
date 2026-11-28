@@ -44,11 +44,13 @@ internal sealed class WindowService : IWindowService
     public void ShowDialog(Screen screen)
     {
         Window dialog = _windowFactory.CreateDialog(screen);
+        ShowOwnedDialog(dialog);
+    }
 
-        dialog.Owner = _window;
-        dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-        dialog.ShowInTaskbar = false;
-        dialog.ShowDialog();
+    public void ShowPlayerProfile(string username)
+    {
+        Window profileDialog = _windowFactory.CreatePlayerProfileDialog(username);
+        ShowOwnedDialog(profileDialog);
     }
 
     public void ShowMessage(string messageKey)
@@ -130,6 +132,14 @@ internal sealed class WindowService : IWindowService
         }
 
         return imageBytes;
+    }
+
+    private void ShowOwnedDialog(Window dialog)
+    {
+        dialog.Owner = _window;
+        dialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        dialog.ShowInTaskbar = false;
+        dialog.ShowDialog();
     }
 
     private bool ShowMessageWindow(string message, MessageKind kind)

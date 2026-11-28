@@ -84,22 +84,31 @@
                                             Margin="6,0,0,0"
                                             VerticalAlignment="Center" />
                                     </StackPanel>
-                                    <Button
-                                        Grid.Column="1"
-                                        Style="{StaticResource DangerPixelButtonStyle}"
-                                        Command="{Binding RemoveCommand}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Rectangle
-                                                Width="14"
-                                                Height="14"
-                                                Margin="0,0,6,0"
-                                                Fill="{StaticResource TrashBrush}"
-                                                Style="{StaticResource PixelArtStyle}" />
-                                            <TextBlock
-                                                Text="{Binding [RemoveButtonLabel],
-                                                    Source={StaticResource Localization}}" />
-                                        </StackPanel>
-                                    </Button>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button
+                                            Style="{StaticResource PixelButtonStyle}"
+                                            Margin="0,0,10,0"
+                                            Command="{Binding DataContext.ShowFriendProfileCommand,
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding Username}"
+                                            Content="{Binding [ViewProfileButtonLabel],
+                                                Source={StaticResource Localization}}" />
+                                        <Button
+                                            Style="{StaticResource DangerPixelButtonStyle}"
+                                            Command="{Binding RemoveCommand}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Rectangle
+                                                    Width="14"
+                                                    Height="14"
+                                                    Margin="0,0,6,0"
+                                                    Fill="{StaticResource TrashBrush}"
+                                                    Style="{StaticResource PixelArtStyle}" />
+                                                <TextBlock
+                                                    Text="{Binding [RemoveButtonLabel],
+                                                        Source={StaticResource Localization}}" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
                             </Border>
                         </DataTemplate>
