@@ -67,11 +67,16 @@ public sealed partial class App : Application
             channelCloser,
             clientSession,
             lobbyCallback);
+        IRemoteProfileServices profileServices = new RemoteProfileServices(
+            connectionFactory,
+            channelCloser,
+            clientSession);
         RemoteServices remoteServices = new RemoteServices(
             authenticationServices,
             gameServices,
             socialServices,
-            matchServices);
+            matchServices,
+            profileServices);
         return remoteServices;
     }
 

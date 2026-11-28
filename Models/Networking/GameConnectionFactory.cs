@@ -13,6 +13,7 @@ public sealed class GameConnectionFactory : IGameConnectionFactory
     private const string LobbyEndpointName = "NetTcpBinding_ILobbyService";
     private const string FriendEndpointName = "NetTcpBinding_IFriendService";
     private const string MatchEndpointName = "NetTcpBinding_IMatchService";
+    private const string ProfileEndpointName = "NetTcpBinding_IProfileService";
 
     public ConnectionServiceClient CreateConnectionClient()
     {
@@ -54,5 +55,11 @@ public sealed class GameConnectionFactory : IGameConnectionFactory
     {
         MatchServiceClient matchClient = new MatchServiceClient(MatchEndpointName);
         return matchClient;
+    }
+
+    public ProfileServiceClient CreateProfileClient()
+    {
+        ProfileServiceClient profileClient = new ProfileServiceClient(ProfileEndpointName);
+        return profileClient;
     }
 }

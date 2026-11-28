@@ -176,6 +176,7 @@ public sealed class RemoteAuthenticationServices : IRemoteAuthenticationServices
         if (isAuthenticated)
         {
             _session.Store(response.PlayerId, response.SessionToken, callerContext);
+            _session.StoreUsername(response.Username);
             await _lobbyChannel.OpenAsync(response.SessionToken);
         }
 

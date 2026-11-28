@@ -130,7 +130,8 @@ public sealed class AuthenticationService : IAuthenticationService
         LoginResponse response = new LoginResponse
         {
             IsAuthenticated = false,
-            SessionToken = string.Empty
+            SessionToken = string.Empty,
+            Username = string.Empty
         };
 
         return response;
@@ -152,7 +153,8 @@ public sealed class AuthenticationService : IAuthenticationService
         {
             IsAuthenticated = true,
             PlayerId = player.PlayerId,
-            SessionToken = sessionToken
+            SessionToken = sessionToken,
+            Username = player.Username
         };
 
         return response;

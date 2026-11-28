@@ -14,4 +14,6 @@ public interface IGameConnectionFactory
     FriendServiceClient CreateFriendClient(SocialClientCallback callback);
 
     MatchServiceClient CreateMatchClient();
+
+    ProfileServiceClient CreateProfileClient();
 }
