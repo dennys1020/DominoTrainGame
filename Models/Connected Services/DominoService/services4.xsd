@@ -64,6 +64,8 @@
       <xs:enumeration value="TooManyVerificationAttempts" />
       <xs:enumeration value="AccountAlreadyExists" />
       <xs:enumeration value="ResendTooSoon" />
+      <xs:enumeration value="UsernameAlreadyTaken" />
+      <xs:enumeration value="AvatarStorageUnavailable" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="GameServiceFaultCode" nillable="true" type="tns:GameServiceFaultCode" />

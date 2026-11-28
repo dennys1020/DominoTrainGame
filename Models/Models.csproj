@@ -144,6 +144,9 @@
     <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.PlayerSearchResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\DominoService\DominoTrainGame.Client.Models.DominoService.ProfileResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\DominoService\service.wsdl" />
     <None Include="Connected Services\DominoService\service.xsd">
       <SubType>Designer</SubType>
@@ -164,6 +167,7 @@
     <None Include="Connected Services\DominoService\service4.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\DominoService\service5.wsdl" />
     <None Include="Connected Services\DominoService\service5.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -179,6 +183,12 @@
     <None Include="Connected Services\DominoService\service81.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\DominoService\service9.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\service91.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Connected Services\DominoService\services.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -192,6 +202,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Connected Services\DominoService\services4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\DominoService\services5.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />

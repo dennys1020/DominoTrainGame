@@ -47,6 +47,10 @@
     <MetadataFile FileName="service8.xsd" MetadataType="Schema" ID="5436febe-f3b1-4a99-b637-4c36f8d39010" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
     <MetadataFile FileName="service81.xsd" MetadataType="Schema" ID="978bdaca-8ff0-486a-baa6-79334ecc7641" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
     <MetadataFile FileName="services4.xsd" MetadataType="Schema" ID="245b3de9-6286-4cad-b181-f83a46d3b8e1" SourceId="5" SourceUrl="http://localhost:8080/MatchService/mex" />
+    <MetadataFile FileName="service5.wsdl" MetadataType="Wsdl" ID="4935d1fa-f46b-46ce-9d5d-a05ad1c79858" SourceId="6" SourceUrl="http://localhost:8080/ProfileService/mex" />
+    <MetadataFile FileName="service9.xsd" MetadataType="Schema" ID="10a4baaa-6745-4ee3-8742-952b9529192c" SourceId="6" SourceUrl="http://localhost:8080/ProfileService/mex" />
+    <MetadataFile FileName="service91.xsd" MetadataType="Schema" ID="da7dd5d3-93d7-4316-95e1-cb55c46a8ab4" SourceId="6" SourceUrl="http://localhost:8080/ProfileService/mex" />
+    <MetadataFile FileName="services5.xsd" MetadataType="Schema" ID="4f03d11c-7a11-4045-9b6a-0983ce49b008" SourceId="6" SourceUrl="http://localhost:8080/ProfileService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
